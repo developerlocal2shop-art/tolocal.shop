@@ -1,0 +1,255 @@
+<?php
+//French
+return [
+
+    'all_category_text'         =>  'Toutes Catégories',
+
+    /*  ----------  MENU PAGE TEXT  ---------------------  */
+    'menu_text_home'            =>  'Maison',
+    'menu_text_listing'         =>  'Annonces',
+    'menu_text_shop'            =>  'Produit',
+    'menu_text_blog'            =>  'Blog',
+    'menu_text_event'           =>  'Événements',
+    'menu_text_contact'         =>  'Contact',
+    'menu_text_cart'            =>  'Chariot',
+    'menu_text_myaccount'       =>  'Mon compte',
+    'menu_text_logout'          =>  'Se déconnecter',
+    'menu_text_login'           =>  'Connexion',
+    // header search text
+    'header_search_text'                    =>  "Qu'est-ce que tu cherches...",
+    'header_search_catogory_text'           =>  'Toutes catégories',
+    'header_search_text_city'               =>  'Sélectionnez une ville',
+    'header_search_text_search_btn'         =>  'Rechercher',
+    //footer text
+    'footer_text_quick_links'               =>  'Liens rapides',
+    'footer_text_about'                     =>  'Sur',
+    'footer_text_terms_and_conditions'      =>  'Termes et conditions',
+    'footer_text_privacy_policy'            =>  'Politique de confidentialité',
+    'footer_text_faq'                       =>  'FAQ',
+    'footer_text_categories'                =>  'Catégories',
+    'footer_text_contacts'                  =>  'Contacts',
+    'footer_text_follow_us'                 =>  'Suivez-nous',
+/*  ----------  HOME PAGE TEXT  ---------------------  */
+    'banner_title'                  =>  'ToLocal.SHOP RÉPERTOIRE DES ENTREPRISES!',
+    'banner_sub_title'              =>  'Trouvez vos endroits locaux, vous aimez le plus vous promener',
+    'category_title'                => 'Catégories populaires',
+    'category_sub_text'             => 'Les catégories populaires sont progressivement ci-dessous.',
+    'popular_companies_text'        => 'Entreprises populaires',
+    'shopping_card_text'            => 'Carte de shopping',
+    'offers_text'                           =>  'Offres',
+    'event_text'                            =>  'Événements',
+    'advertisement_text'                    =>  'Annonces',
+    'outgoingdeals_text'                    =>  'Offres sortantes',
+
+    'special_offers_text'           => 'Offres spéciales',
+    'polular_event_text'            => 'Événements populaires',
+    'blog_text'                     => 'Blog',
+    'view_all'                      => 'Voir tout',
+    'read_more'                     => 'Lire la suite',
+    'more'                          => 'Suite',
+
+    /*  ----------  VENDOR HEADER TEXT  ---------------------  */
+    'vendor_menu_seo' => 'Référencement',
+
+    'vendor_menu_status' => 'Statut',
+    'vendor_menu_reports' => 'Rapports',
+    'vendor_menu_offline_reports' => 'Rapports hors ligne',
+    'vendor_menu_company_details' => "Ouvrir la page de l'entreprise",
+
+    'vendor_menu_action' => 'Aktion',
+    'vendor_menu_reviews' => 'Avis',
+    'vendor_menu_offline_orders' => 'Ordres',
+    'vendor_menu_company_booking' => 'Réservation',
+
+    'vendor_menu_administration' => 'Administration',
+    'vendor_menu_staff_permissions' => 'Autorisations du personnel',
+    'vendor_menu_role_permissions' => 'Autorisations de rôle',
+    'vendor_menu_open_ticket' => 'Billet ouvert',
+    'vendor_menu_mail' => 'Mail',
+
+    'vendor_menu_content' => 'Contenu',
+    'vendor_menu_company_info' => "Informations sur l'entreprise",
+    'vendor_menu_basic' => 'Basique',
+    'vendor_menu_location' => 'Emplacement',
+    'vendor_menu_type' => 'Taper',
+    'vendor_menu_aminities' => 'Équipements',
+    'vendor_menu_media' => 'Médias',
+    'vendor_menu_seo' => '<span class="notranslate">Référencement</span>',
+    'vendor_menu_schedule' => 'Calendrier',
+    'vendor_menu_links' => 'Links',
+    'vendor_menu_claim' => 'Réclamer',
+    'vendor_menu_services' => 'Services',
+
+    'vendor_menu_communicate' => 'Communiquer',
+        'vendor_menu_shopping_card' => "Carte d'achat",
+        'vendor_menu_offers' => 'Offres',
+        'vendor_menu_coupons' => 'Coupons',
+        'vendor_menu_gift_vouchers' => 'Chèques cadeaux',
+        'vendor_menu_free_products' => 'Produits gratuits',
+
+    'vendor_menu_marketing' => 'Commercialisation',
+        'vendor_menu_products' => "Produits",
+        'vendor_menu_events' => 'Événements',
+        'vendor_menu_blogs' => 'Blogues',
+        'vendor_menu_advertisement' => 'Publicité',
+        'vendor_menu_customer_club' => 'Club Client',
+
+    'vendor_menu_profile' => 'Profil',
+        'vendor_menu_upgrade_profile' => "Profil de mise à niveau",
+        'vendor_menu_connect_stripe'  => 'Connecter la bande',
+        'vendor_menu_update_stripe'   => 'Mettre à jour la bande',
+        'vendor_menu_my_profile'      => 'Mon profil',
+
+
+    /*  ----------  REGISTRATION PAGE TEXT  ---------------------  */
+    'register_title'                        =>  "S'inscrire",
+    'first_name_text'                       =>  'Prénom',
+    'placeholder_first_name_text'           =>  'entrez votre prénom',
+    'last_name_text'                        =>  'Nom de famille',
+    'placeholder_last_name_text'            =>  'Entrer le nom de famille',
+    'email_text'                            =>  'E-mail',
+    'placeholder_email_text'                =>  "Entrez l'e-mail",
+    'phone_no_text'                         =>  'Pas de téléphone',
+    'placeholder_phone_no_text'             =>  'Entrez le numéro de téléphone',
+    'password_text'                         =>  'Mot de passe',
+    'placeholder_password_text'             =>  'Entrer le mot de passe',
+    'confirm_password_text'                 =>  'Confirmez le mot de passe',
+    'placeholder_confirm_password_text'     =>  'Confirmez le mot de passe',
+    'register_a_company_text'               =>  "Voulez-vous vous inscrire en tant qu'entreprise?",
+    'submit_button'                         =>  'Nous faire parvenir',
+
+    /*  ----------  LISTING PAGE TEXT  ---------------------  */
+    'watch_details_text'                    => 'Détails de la montre',
+    'closed_text'                           => 'Fermée',
+    'awesome_text'                          => 'Impressionnante',
+    'reviews_text'                          => '2 Commentaires',
+    'no_record_found_text'                  => 'Aucun Enregistrement Trouvé!',
+
+    /*  ----------  LISTING DETAILS PAGE TEXT  ---------------------  */
+    'description_title'                     => 'La description',
+    'trademark_title'                       => 'Marque déposée',
+    'offer_title'                           => 'Offrir',
+    'assortment_links'                      => "Liens d'assortiment",
+    'website_links'                         => 'Liens vers le site Web',
+    'agent_details'                         => "Détails de l'agent",
+    'location'                              => 'Lieu',
+    'video_text'                            => 'Vidéo',
+    'related_category'                      => 'Catégories associées',
+    'related_product'                       => 'Produit connexe',
+    'contact_us_title'                      => 'Nous contacter',
+    'placeholder_name_text'                 => 'Entrez le nom',
+    'placeholder_no_of_adult'               => "Nombre d'adultes",
+    'placeholder_no_of_child'               => "Nombre d'enfants",
+    'message_label_text'                    => 'Un message',
+    'listing_count'                         => '27 annonces au total',
+    'website_contactdata'                   => 'Site Internet',
+    'email_us_contactdata'                  => 'Envoyez-nous un email',
+    'call_now_contactdata'                  => 'Appelle maintenant',
+    'add_to_cart_btn'                       => 'Ajouter au panier',
+    'contact_us_form_text'                  => "Pas d'argent facturé à cette étape",
+
+    /*  ----------  BLOG PAGE TEXT  ---------------------  */
+    'post_title'                           => 'Poster',
+    'title_search'                         => 'Titres',
+    'placeholder_search'                   => 'Rechercher..',
+    'user_name'                            => 'Jean Doe',
+    'latest_post'                          => 'Dernier message',
+
+    /*  ----------  BLOG DETAILS PAGE TEXT  ---------------------  */
+    'comment_text'                          => 'Commentaires',
+    'comment_form_title'                    => 'Laissez un commentaire',
+    'placeholder_comment'                   => 'Commenter',
+
+    /*  ----------  EVENT PAGE TEXT  ---------------------  */
+    'event_title'                           => 'Événements',
+
+    /*  ----------  CONTACT PAGE TEXT  ---------------------  */
+    'contact_form_subtitle'                 => "Veuillez remplir le formulaire ci-dessous et nous l'envoyer.",
+    'mobile_text'                           => 'Mobile',
+    'question_text'                         => 'Des questions?',
+    'address_text'                          => 'Adresse',
+
+     /*  ----------  FILTER PAGE TEXT  ---------------------  */
+    'filters_title'                         => 'Filtres',
+    'filters_category_subtitle'             => 'Catégorie',
+    'filters_amenities_subtitle'            => 'Agréments',
+    'show_more'                             => 'Montre plus',
+    'price_limit_filter'                    => 'Limite de prix',
+    'price_within_filter'                   => 'Prix ​​dans',
+
+    /*  ---------- OFFER DETAILS PAGE TEXT  ---------------------  */
+    'product_text'                          => 'Produit',
+    'expire_date_text'                      => 'Expirer',
+    'hotel_text'                            => 'Hôtel',
+
+    /*  ---------- SEARCH PAGE TEXT  ---------------------  */
+    'search_result_text'                    => 'Résultat de la recherche',
+    'featured_text'                         => 'Mis en exergue',
+    'show_on_map_text'                      => 'Afficher sur la carte',
+
+    /*  ---------- CART PAGE TEXT  ---------------------  */
+    'price_text'                            => 'Prix',
+    'quantity_text'                         => 'Quantité',
+    'subtotal_text'                         => 'Total',
+    'tax_text'                              => 'Impôt',
+    'grand_total_text'                      => 'Total:',
+    'placeholder_coupon_code_text'          => 'Entrer le code promotionnel',
+    'apply_coupon_btn'                      => 'Appliquer Coupon',
+    'continue_shopping_btn'                 => 'Continuer vos achats',
+    'checkout_btn'                          => 'Vérifier',
+    'clear_cart_btn'                        => 'Vider le panier',
+    'no_item_in_cart_text'                  => 'Aucun article dans le panier',
+
+    /*  ---------- LOGIN PAGE TEXT  ---------------------  */
+    'login_title'                            => 'Connexion',
+    'email_id_text'                          => 'Identifiant de messagerie:',
+    'forgot_password'                        => 'Mot de passe oublié?',
+
+    /*  ---------- SHOP DETAILS PAGE TEXT  ---------------------  */
+    'shop_details_title'                      => 'Détails de la boutique',
+    'availability_text'                       => 'Disponibilité:',
+    'hurry_up_only_text'                      => 'Dépêche-toi! seulement',
+    'product_left_in_stock_text'              => 'produits restant en stock!',
+    'vendor_details_text'                     => 'Détails du vendeur',
+    'vendor_name_text'                        => 'Nom',
+    'vendor_address_text'                     => 'Adresse',
+    'buy_now_btn'                             => 'Acheter maintenant',
+    'product_code'                            => 'Code produit:',
+    'quantity'                                => 'Quantité',
+    'added_to_wishlist_text'                  => 'Ajouté à la liste de souhaits',
+    'this_item_is_already_in_wishlist_text'   => 'Cet article est déjà dans la liste de souhaits',
+    'removed_from_the_wishlist_text'          => 'Supprimé de la liste de souhaits',
+    'please_login_first_text'                 => "S'il vous plait Connectez-vous d'abord",
+
+    /*  ---------- CHECKOUT PAGE TEXT  ---------------------  */
+    'checkout_title'                            => 'Vérifier',
+    'checking_out_subtitle'                     => 'Vous payez en tant que',
+    'shipping_address'                          => 'Adresse de livraison',
+    'enter_shipping_address'                    => 'Veuillez saisir votre adresse de livraison dans le formulaire ci-dessous.',
+    'address1_text'                             => 'Adresse 1',
+    'address2_text'                             => 'Adresse 2',
+    'zip_code_text'                             => 'Code Postal',
+    'country_text'                              => 'De campagne',
+    'state_text'                                => 'État',
+    'city_text'                                 => 'Ville',
+    'check_box_text'                            => "Votre adresse de facturation est la même que l'adresse de livraison!",
+    'billing_address'                           => 'Adresse de facturation',
+    'enter_billing_address_text'                => 'Veuillez entrer votre adresse de facturation dans le formulaire ci-dessous.',
+    'place_order_text'                          => 'Passer la commande',
+    'order_summary_text'                        => 'Récapitulatif de la commande',
+    'items_text'                                => 'Articles',
+    'discount_text'                             => 'Rabais:',
+    'payment_details_title'                     => 'Détails de paiement',
+    'stripe_payment_text'                       => 'Paiement Stripe',
+    'name_on_card_text'                         => 'Nom sur la carte',
+    'card_number_text'                          => 'Numéro de carte',
+    'placeholder_card_number_text'              => 'Entrez le numéro de la carte',
+    'cvc_text'                                  => 'CVC',
+    'placeholder_cvc_text'                      => 'ex. 311',
+    'expiration_month_text'                     => "Mois d'expiration",
+    'placeholder_expiration_month_text'         => 'MM',
+    'expiration_year_text'                      => "Année d'expiration",
+    'placeholder_expiration_year_text'          => 'AAAA',
+    'place_order_now_btn'                       => 'Faites votre commande maintenant',
+    
+];

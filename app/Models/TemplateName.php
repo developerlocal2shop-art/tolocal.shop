@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class TemplateName extends Model
+{
+    use HasFactory;
+    protected $table = 'normaltemplate_name';
+    protected $fillable = [
+        'name', 
+        'status', 
+        'deleted', 
+        'created_by'
+    ];
+}

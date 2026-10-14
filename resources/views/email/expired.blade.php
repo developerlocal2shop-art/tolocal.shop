@@ -1,0 +1,146 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<meta http-equiv="content-type" content="text/html;charset=UTF-8">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <title></title>
+    
+     <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet">
+	<style type="text/css">
+        body,
+        table,
+        td,
+        p,
+        a,
+        li,
+        blockquote {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        table,
+        td {
+            border-collapse: collapse;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+        }
+
+        img {
+            -ms-interpolation-mode: bicubic;
+        }
+
+        #button a {
+            color: #FFFFFF;
+        }
+
+        a:link img {
+            display: block;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            text-align: left !important;
+        }
+
+        img {
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        a img {
+            border: none !important;
+        }
+
+        body {
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            -webkit-font-smoothing: antialiased;
+            margin: 0 !important;
+            padding: 0 !important;
+            width: 100% !important;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <table style="border: 0px solid #ddd;-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;padding:0 30px;" width="600" cellspacing="0" cellpadding="0" border="0" align="center" bgcolor="#fff" class="main">
+        <tbody>
+            <!--==============banner start here===============-->
+            <tr>
+                <td style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                        <tbody>
+                            <tr>
+
+                                <td align="center" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                                    <a target="_blank" href="#" style="border-bottom: 1px solid #19a7d6;color: #4D008D;text-decoration: none;text-transform: uppercase;font-size: 31px;padding: 20px;display: block;font-weight: 600;letter-spacing: 2px;">
+                                        <img style="width:100px;" src="https://tolocal.shop/peter/assets/client/images/dark_logo.png">
+                                    </a>
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+
+            <tr style="background: #f1f1f1;">
+                <td style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                    <table width="100%" cellspacing="0" cellpadding="0" border="0" style="-webkit-text-size-adjust: 100%;-ms-text-size-adjust: 100%;border-collapse: collapse;mso-table-lspace: 0pt;mso-table-rspace: 0pt;">
+                        <tbody>
+                            <tr>
+
+                                <td align="center" style="padding: 0;">
+                                    <h2 style="font-size: 20px;font-weight: 400;">
+                                     {{$data['username'] ?? ''}}, your package has been expired
+                                    </h2>
+                                </td>
+                            </tr>
+
+                            <tr>
+
+                                <td align="center" style="padding: 0;">
+                                    Dear {{$data['username'] ?? 'N/A'}},<br>
+                                    A friendly reminder that your package {{$data['plan'] ?? 'N/A'}} has been expired on {{$data['effectiveDate'] ?? 'N/A'}}. <br>
+
+                                    To renew your package log in to your profile with your email and password.<br><br>
+                                    <h3>Package details:</h3><br>
+                                    Package name : {{$data['plan'] ?? 'N/A'}} <br>
+                                    SignUp Date  : {{$data['created_at'] ?? 'N/A'}} <br>
+                                    Expiry Date : {{$data['effectiveDate'] ?? 'N/A'}} <br>
+                                    Fee : {{$data['currency'] }}{{$data['price'] ?? ''}} <br>
+
+                                </td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+            
+
+            <tr>
+                <!--==============logo start here===============-->
+                <td style="background: #203864;font-size: 12px;color: #fff;text-align: center;border-top: 1px solid #19a7d6;">
+                    <p style="display: inline-block;padding-right: 30px;"><b>Contacts</b> : <a style="color: #fff;" href="{{ route('contact') }}">+{{ env('APP_CONTACT') }} </a></p>
+                    <p style="display: inline-block;"><b>Email </b>: {{ env('APP_EMAIL') }} </p>
+                </td>
+                <!--==============logo end here===============-->
+            </tr>
+
+            <!--==============footer end here===============-->
+    </table>
+
+</body>
+
+</html>

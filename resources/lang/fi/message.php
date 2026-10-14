@@ -1,0 +1,253 @@
+<?php
+//Finnish
+return [
+
+     'all_category_text'                     =>  'Kaikki Kategoriat',
+    /*  ----------  MENU PAGE TEXT  ---------------------  */
+    'menu_text_home'                        =>  'Koti',
+    'menu_text_listing'                     =>  'Listaukset',
+    'menu_text_shop'                        =>  'Kaupat',
+    'menu_text_blog'                        =>  'Blogi',
+    'menu_text_event'                       =>  'Tapahtumat',
+    'menu_text_contact'                     =>  'Ottaa yhteyttä',
+    'menu_text_cart'                        =>  'Kärry',
+    'menu_text_myaccount'                   =>  'Tilini',
+    'menu_text_logout'                      =>  'Kirjautua ulos',
+    'menu_text_login'                       =>  'Kirjaudu sisään',
+    /*  ----------  HEADER SEARCH PAGE TEXT  ---------------------  */
+    'header_search_text'                    =>  'Mitä etsit...',
+    'header_search_catogory_text'           =>  'Kaikki kategoriat',
+    'header_search_text_city'               =>  'Valitse Kaupunki',
+    'header_search_text_search_btn'         =>  'Hae',
+    /*  ----------  FOOTER PAGE TEXT  ---------------------  */
+    'footer_text_quick_links'               =>  'Pikalinkit',
+    'footer_text_about'                     =>  'Noin',
+    'footer_text_terms_and_conditions'      =>  'Käyttöehdot',
+    'footer_text_privacy_policy'            =>  'Tietosuojakäytäntö',
+    'footer_text_faq'                       =>  'FAQ',
+    'footer_text_categories'                =>  'Luokat',
+    'footer_text_contacts'                  =>  'Yhteystiedot',
+    'footer_text_follow_us'                 =>  'Seuraa meitä',
+    /*  ----------  HOME PAGE TEXT  ---------------------  */
+    'banner_title'                          =>  'ToLocal.shop YRITYSHAKEMISTOLUETTELO!',
+    'banner_sub_title'                      =>  'Löydä paikalliset paikat, joissa rakastat eniten vaeltaa',
+    'category_title'                        =>  'Suositut luokat',
+    'category_sub_text'                     =>  'Suositut luokat ovat asteittain alla.',
+    'popular_companies_text'                =>  'Suosittuja yrityksiä',
+    'shopping_card_text'                    =>  'Ostoskortti',
+    'offers_text'                           =>  'Tarjoukset',
+    'event_text'                            =>  'Tapahtumat',
+    'advertisement_text'                    =>  'Mainokset',
+    'outgoingdeals_text'                    =>  'Ulosmenevät tarjoukset',
+
+    'special_offers_text'                   =>  'Erikoistarjouksia',
+    'polular_event_text'                    =>  'Suosittuja tapahtumia',
+    'blog_text'                             =>  'Blogi',
+    'view_all'                              =>  'Näytä kaikki',
+    'read_more'                             =>  'Lue lisää',
+    'more'                                  =>  'lisää',
+
+    /*  ----------  VENDOR HEADER TEXT  ---------------------  */
+    
+    'vendor_menu_status' => 'Status',
+    'vendor_menu_reports' => 'Raportit',
+    'vendor_menu_offline_reports' => 'Offline raportit',
+    'vendor_menu_company_details' => 'Avaa yrityssivu',
+
+    'vendor_menu_action' => 'Toiminta',
+    'vendor_menu_reviews' => 'Arvostelut',
+    'vendor_menu_offline_orders' => 'Tilaukset',
+    'vendor_menu_company_booking' => 'Varaus',
+    
+    'vendor_menu_administration' => 'Hallinto',
+    'vendor_menu_staff_permissions' => 'Henkilökunnan käyttöoikeudet',
+    'vendor_menu_role_permissions' => 'Roolin käyttöoikeudet',
+    'vendor_menu_open_ticket' => 'Avaa Ticket',
+    'vendor_menu_mail' => 'Mail',
+
+    'vendor_menu_content' => 'Sisältö',
+    'vendor_menu_company_info' => 'Yrityksen tiedot',
+    'vendor_menu_basic' => 'Perus',
+    'vendor_menu_location' => 'Sijainti',
+    'vendor_menu_type' => 'Tyyppi',
+    'vendor_menu_aminities' => 'Palvelut',
+    'vendor_menu_media' => 'Media',
+    'vendor_menu_seo' => '<span class="notranslate">SEO</span>',
+    'vendor_menu_schedule' => 'Ajoittaa',
+    'vendor_menu_links' => 'Linkit',
+    'vendor_menu_claim' => 'Väite',
+    'vendor_menu_services' => 'Palvelut',
+
+    
+    'vendor_menu_communicate' => 'Kommunikoi',
+        'vendor_menu_shopping_card' => "Carte d'achat",
+        'vendor_menu_offers' => 'Offres',
+        'vendor_menu_coupons' => 'Coupons',
+        'vendor_menu_gift_vouchers' => 'Chèques cadeaux',
+        'vendor_menu_free_products' => 'Produits gratuits',
+
+    'vendor_menu_marketing' => 'markkinointi',
+        'vendor_menu_products' => "Tuotteet",
+        'vendor_menu_events'   => 'Tapahtumat',
+        'vendor_menu_blogs'    => 'Blogit',
+        'vendor_menu_advertisement' => 'Mainos',
+        'vendor_menu_customer_club' => 'Asiakasklubi',
+
+    'vendor_menu_profile' => 'profiili',
+        'vendor_menu_upgrade_profile' => "Päivitä profiili",
+        'vendor_menu_connect_stripe'  => 'Yhdistä Stripe',
+        'vendor_menu_update_stripe'   => 'Päivitä Stripe',
+         'vendor_menu_my_profile'      => 'Oma profiili',
+
+    /*  ----------  REGISTRATION PAGE TEXT  ---------------------  */
+    'register_title'                        =>  'Rekisteröidy',
+    'first_name_text'                       =>  'Etunimi',
+    'placeholder_first_name_text'           =>  'Kirjoita etunimi',
+    'last_name_text'                        =>  'Sukunimi',
+    'placeholder_last_name_text'            =>  'Kirjoita sukunimi',
+    'email_text'                            =>  'Sähköposti',
+    'placeholder_email_text'                =>  'Syötä sähköposti',
+    'phone_no_text'                         =>  'Puhelin ei',
+    'placeholder_phone_no_text'             =>  'Anna puhelinnumero',
+    'password_text'                         =>  'Salasana',
+    'placeholder_password_text'             =>  'Kirjoita salasana',
+    'confirm_password_text'                 =>  'Vahvista salasana',
+    'placeholder_confirm_password_text'     =>  'Vahvista salasana',
+    'register_a_company_text'               =>  'Haluatko rekisteröityä yritykseksi?',
+    'submit_button'                         =>  'Lähetä',
+
+    /*  ----------  LISTING PAGE TEXT  ---------------------  */
+    'watch_details_text'                    => 'Kellon tiedot',
+    'closed_text'                           => 'Suljettu',
+    'awesome_text'                          => 'Mahtava',
+    'reviews_text'                          => '2 Arvostelut',
+    'no_record_found_text'                  => 'Tietuetta ei löydy!',
+
+    /*  ----------  LISTING DETAILS PAGE TEXT  ---------------------  */
+    'description_title'                     => 'Kuvaus',
+    'trademark_title'                       => 'Tavaramerkki',
+    'offer_title'                           => 'Tarjous',
+    'assortment_links'                      => 'Valikoima linkit',
+    'website_links'                         => 'Verkkosivujen linkit',
+    'agent_details'                         => 'Agentin tiedot',
+    'location'                              => 'Sijainti',
+    'video_text'                            => 'Video',
+    'related_category'                      => 'Liittyvät kategoriat',
+    'related_product'                       => 'Aiheeseen liittyvä tuote',
+    'contact_us_title'                      => 'Ota meihin yhteyttä',
+    'placeholder_name_text'                 => 'Kirjoita Nimi',
+    'placeholder_no_of_adult'               => 'Aikuisten lukumäärä',
+    'placeholder_no_of_child'               => 'Lapsen numero',
+    'message_label_text'                    => 'Viesti',
+    'listing_count'                         => 'Yhteensä 27 listaa',
+    'website_contactdata'                   => 'Verkkosivusto',
+    'email_us_contactdata'                  => 'Lähetä meille sähköpostia',
+    'call_now_contactdata'                  => 'Soita nyt',
+    'add_to_cart_btn'                       => 'Lisää ostoskoriin',
+    'contact_us_form_text'                  => 'Tässä vaiheessa ei veloiteta rahaa',
+
+    /*  ----------  BLOG PAGE TEXT  ---------------------  */
+    'post_title'                           => 'Lähettää',
+    'title_search'                         => 'Otsikot',
+    'placeholder_search'                   => 'Hae..',
+    'user_name'                            => 'John Doe',
+    'latest_post'                          => 'Viimeisin postaus',
+
+    /*  ----------  BLOG DETAILS PAGE TEXT  ---------------------  */
+    'comment_text'                          => 'Kommentit',
+    'comment_form_title'                    => 'Jätä kommentti',
+    'placeholder_comment'                   => 'Kommentti',
+
+    /*  ----------  EVENT PAGE TEXT  ---------------------  */
+    'event_title'                           => 'Tapahtumat',
+
+    /*  ----------  CONTACT PAGE TEXT  ---------------------  */
+    'contact_form_subtitle'                 => 'Ole hyvä ja täytä alla oleva lomake ja lähetä se meille.',
+    'mobile_text'                           => 'Mobiili',
+    'question_text'                         => 'Kysymyksiä?',
+    'address_text'                          => 'Osoite',
+
+     /*  ----------  FILTER PAGE TEXT  ---------------------  */
+    'filters_title'                         => 'Suodattimet',
+    'filters_category_subtitle'             => 'Kategoria',
+    'filters_amenities_subtitle'            => 'Palvelut',
+    'show_more'                             => 'Näytä lisää',
+    'price_limit_filter'                    => 'Hintaraja',
+    'price_within_filter'                   => 'Hinta sisällä',
+
+    /*  ---------- OFFER DETAILS PAGE TEXT  ---------------------  */
+    'product_text'                          => 'Tuote',
+    'expire_date_text'                      => 'Mennä umpeen',
+    'hotel_text'                            => 'Hotelli',
+
+    /*  ---------- SEARCH PAGE TEXT  ---------------------  */
+    'search_result_text'                    => 'Hakutulos',
+    'featured_text'                         => 'Esittelyssä',
+    'show_on_map_text'                      => 'Näytä kartalla',
+
+    /*  ---------- CART PAGE TEXT  ---------------------  */
+    'price_text'                            => 'Hinta',
+    'quantity_text'                         => 'Määrä',
+    'subtotal_text'                         => 'Välisumma',
+    'tax_text'                              => 'Verottaa',
+    'grand_total_text'                      => 'Loppusumma:',
+    'placeholder_coupon_code_text'          => 'Syötä kupongin koodi',
+    'apply_coupon_btn'                      => 'Käytä Kuponki',
+    'continue_shopping_btn'                 => 'Jatka Ostoksia',
+    'checkout_btn'                          => 'Tarkista',
+    'clear_cart_btn'                        => 'Tyhjennä kori',
+    'no_item_in_cart_text'                  => 'Ei tuotetta ostoskorissa',
+
+    /*  ---------- LOGIN PAGE TEXT  ---------------------  */
+    'login_title'                            => 'Kirjaudu Sisään',
+    'email_id_text'                          => 'Sähköposti Tunnus:',
+    'forgot_password'                        => 'Unohtuiko Salasana?',
+
+    /*  ---------- SHOP DETAILS PAGE TEXT  ---------------------  */
+    'shop_details_title'                      => 'Kaupan Tiedot',
+    'availability_text'                       => 'Saatavuus:',
+    'hurry_up_only_text'                      => 'Kiirehdi! vain',
+    'product_left_in_stock_text'              => 'tuotteita jäljellä varastossa!',
+    'vendor_details_text'                     => 'Myyjän tiedot',
+    'vendor_name_text'                        => 'Nimi',
+    'vendor_address_text'                     => 'Osoite',
+    'buy_now_btn'                             => 'Osta nyt',
+    'product_code'                            => 'Tuotekoodi:',
+    'quantity'                                => 'Määrä',
+    'added_to_wishlist_text'                  => 'Lisätty toivelistalle',
+    'this_item_is_already_in_wishlist_text'   => 'Tämä tuote on jo toivelistalla',
+    'removed_from_the_wishlist_text'          => 'Poistettu toivelistalta',
+    'please_login_first_text'                 => 'Kirjaudu sisään ensin',
+
+    /*  ---------- CHECKOUT PAGE TEXT  ---------------------  */
+    'checkout_title'                            => 'Tarkista',
+    'checking_out_subtitle'                     => 'Olet kirjautumassa ulos nimellä',
+    'shipping_address'                          => 'Toimitusosoite',
+    'enter_shipping_address'                    => 'Syötä toimitusosoitteesi alla olevaan lomakkeeseen.',
+    'address1_text'                             => 'Osoite 1',
+    'address2_text'                             => 'Osoite 2',
+    'zip_code_text'                             => 'Postinumero',
+    'country_text'                              => 'Maa',
+    'state_text'                                => 'Osavaltio',
+    'city_text'                                 => 'Kaupunki',
+    'check_box_text'                            => 'Laskutusosoitteesi on sama kuin toimitusosoite!',
+    'billing_address'                           => 'Postitusosoite',
+    'enter_billing_address_text'                => 'Syötä laskutusosoitteesi alla olevaan lomakkeeseen.',
+    'place_order_text'                          => 'Tee tilaus',
+    'order_summary_text'                        => 'Tilauksen Yhteenveto',
+    'items_text'                                => 'Tuotteet',
+    'discount_text'                             => 'Alennus:',
+    'payment_details_title'                     => 'Maksutiedot',
+    'stripe_payment_text'                       => 'Stripe Maksu',
+    'name_on_card_text'                         => 'Nimi kortissa',
+    'card_number_text'                          => 'Kortin Numero',
+    'placeholder_card_number_text'              => 'Anna Kortin Numero',
+    'cvc_text'                                  => 'CVC',
+    'placeholder_cvc_text'                      => 'ex. 311',
+    'expiration_month_text'                     => 'Päättymiskuukausi',
+    'placeholder_expiration_month_text'         => 'MM',
+    'expiration_year_text'                      => 'Vanhenemisvuosi',
+    'placeholder_expiration_year_text'          => 'YYYY',
+    'place_order_now_btn'                       => 'Tilaa Nyt',
+    
+];

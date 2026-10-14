@@ -1,0 +1,1 @@
+@php $user = auth()->guard('webadmin')->user(); @endphp

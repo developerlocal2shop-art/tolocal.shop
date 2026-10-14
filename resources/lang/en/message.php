@@ -1,0 +1,277 @@
+<?php
+
+return [
+
+    'all_category_text'                     =>  'All Categories',
+    /*  ----------  MENU PAGE TEXT  ---------------------  */
+    'menu_text_home'                        =>  'Home',
+    'menu_text_listing'                     =>  'Companies',
+    'menu_text_shop'                        =>  'Products',
+    'menu_text_blog'                        =>  'Blog',
+    'menu_text_event'                       =>  'Events',
+    'menu_text_contact'                     =>  'Contact',
+    'menu_text_cart'                        =>  'Cart',
+    'menu_text_myaccount'                   =>  'My Account',
+    'menu_text_logout'                      =>  'Logout',
+    'menu_text_login'                       =>  'Login',
+    'competition_text_login'                =>  'Competition',
+
+    /*  ----------  USER ACCOUNT TEXT  ---------------------  */
+    'expired'                               =>  'Expired',
+    'used'                                  =>  'Used',
+    'use'                                   =>  'Use',
+
+    /*  ----------  HEADER SEARCH PAGE TEXT  ---------------------  */
+    'header_search_text'                    =>  'What are you looking for...',
+    'header_search_catogory_text'           =>  'All categories',
+    'header_search_text_city'               =>  'Select City',
+    'header_search_text_search_btn'         =>  'Search',
+
+    /*  ----------  VENDOR HEADER TEXT  ---------------------  */
+
+    'vendor_menu_status' => 'Status',
+    'vendor_menu_reports' => 'Reports',
+    'vendor_menu_offline_reports' => 'Offline reports',
+    'vendor_menu_company_details' => 'Open Company Page',
+
+    'vendor_menu_action' => 'Action',
+    'vendor_menu_reviews' => 'Reviews',
+    'vendor_menu_offline_orders' => 'Orders',
+    'vendor_menu_company_booking' => 'Booking',
+
+    'vendor_menu_administration' => 'Administration',
+    'vendor_menu_staff_permissions' => 'Staff Permissions',
+    'vendor_menu_role_permissions' => 'Role Permissions',
+    'vendor_menu_open_ticket' => 'Open Ticket',
+    'vendor_menu_mail' => 'Mail',
+
+    'vendor_menu_content' => 'Content',
+        'vendor_menu_company_info' => 'Company Info',
+        'vendor_menu_basic' => 'Basic',
+        'vendor_menu_location' => 'Location',
+        'vendor_menu_type' => 'Type',
+        'vendor_menu_aminities' => 'Aminities',
+        'vendor_menu_media' => 'Media',
+        'vendor_menu_seo' => '<span class="notranslate">SEO</span>',
+        'vendor_menu_schedule' => 'Schedule',
+        'vendor_menu_links' => 'Links',
+        'vendor_menu_claim' => 'Claim',
+        'vendor_menu_services' => 'Services',
+
+    'vendor_menu_communicate' => 'Communicate',
+        'vendor_menu_shopping_card' => 'Shopping Card',
+        'vendor_menu_offers' => 'Offers',
+        'vendor_menu_coupons' => 'Coupons',
+        'vendor_menu_gift_vouchers' => 'Gift Vouchers',
+        'vendor_menu_free_products' => 'Free Products',
+
+    'vendor_menu_marketing' => 'Marketing',
+        'vendor_menu_products' => "Products",
+        'vendor_menu_events' => 'Events',
+        'vendor_menu_blogs' => 'Blogs',
+        'vendor_menu_advertisement' => 'Competition',
+        'vendor_menu_customer_club' => 'Customer Club',
+
+    'vendor_menu_profile' => 'Profile',
+        'vendor_menu_upgrade_profile' => "Upgrade Profile",
+        'vendor_menu_connect_stripe'  => 'Connect Stripe',
+        'vendor_menu_update_stripe'   => 'Update Stripe',
+        'vendor_menu_my_profile'      => 'My Profile',
+
+    /*  ----------  FOOTER PAGE TEXT  ---------------------  */
+    'footer_text_quick_links'               =>  'Quick links',
+    'footer_text_about'                     =>  'About',
+    'footer_text_terms_and_conditions'      =>  'Terms and conditions',
+    'footer_text_privacy_policy'            =>  'Privacy policy',
+    'footer_text_faq'                       =>  'FAQ',
+    'footer_text_categories'                =>  'Categories',
+    'footer_text_contacts'                  =>  'Contacts',
+    'footer_text_follow_us'                 =>  'Follow us',
+    /*  ----------  HOME PAGE TEXT  ---------------------  */
+    'banner_title'                          =>  'ToLocal.SHOP BUSINESS DIRECTORY LISTING!',
+    'banner_sub_title'                      =>  'Find your local places, you love most to roam around',
+    'category_title'                        =>  'Popular Categories',
+    'category_sub_text'                     =>  'The popular categories are progressively below.',
+    'popular_companies_text'                =>  'Popular Companies',
+
+    'competition_text'                      =>  'You need to fill in your details (Name, Mobile and Email) so that we can ensure that you receive any prices and discounts to your email or SMS. If you have already registered, log in as usual.',
+    'competition_before_login_text'         =>  'You need to fill in your details (Name, Mobile and Email) so that we can ensure that you receive any prices and discounts to your email or SMS. If you have already registered, log in as usual.',
+    'shopping_card_text'                    =>  'Shopping Card',
+    'offers_text'                           =>  'Offers',
+    'event_text'                            =>  'Events',
+    'advertisement_text'                    =>  'Advertisements',
+    'outgoingdeals_text'                    =>  'Outgoing Deals',
+
+    'special_offers_text'                   =>  'Special offers',
+    'polular_event_text'                    =>  'Popular Events',
+    'blog_text'                             =>  'Blog',
+    'view_all'                              =>  'View all',
+    'read_more'                             =>  'Read more',
+    'more'                                  =>  'more',
+    /*  ----------  REGISTRATION PAGE TEXT  ---------------------  */
+    'register_title'                        =>  'Register',
+    'first_name_text'                       =>  'First Name',
+    'placeholder_first_name_text'           =>  'Enter first name',
+    'last_name_text'                        =>  'Last Name',
+    'placeholder_last_name_text'            =>  'Enter last name',
+    'email_text'                            =>  'Email',
+    'placeholder_email_text'                =>  'Enter e-mail address',
+    'phone_no_text'                         =>  'Phone No',
+    'placeholder_phone_no_text'             =>  'Enter phone number',
+    'password_text'                         =>  'Password',
+    'placeholder_password_text'             =>  'Enter password',
+    'confirm_password_text'                 =>  'Confirm Password',
+    'placeholder_confirm_password_text'     =>  'Confirm password',
+    'register_a_company_text'               =>  'Registrera dig som företag',
+    'submit_button'                         =>  'Submit',
+                    /* ----- error text --------------------*/
+    'please_enter_valid_email_text'         => 'Please enter valid email',
+    'please_enter_only_letters'             => 'Please enter only letters',
+    'password_error_text'                   => 'Password is not strong enough. It contain at least one numeric digit, one uppercase , one lowercase letter and one special character.',
+    'please_enter_your_first_name'          => 'Please enter your first name',
+    'please_enter_your_last_name'           => 'Please enter your last name',
+    'email_error_text'                      => 'The email should be in the format:',
+    'please_enter_password'                 => 'Please enter password',
+    'Please enter confirm password'         => 'Please enter confirm password',
+    'error_on_password_confirm_password'    => 'Your password and confirm password not same',
+    'enter_phone_number'                    => 'Please enter phone no.',
+    'enter_number_only_error'               => 'Please enter number only',
+    'enter_valid_number'                    => 'Please enter valid number',
+
+    /*  ----------  LISTING PAGE TEXT  ---------------------  */
+    'watch_details_text'                    => 'Watch details',
+    'closed_text'                           => 'Closed',
+    'open_text'                             => 'Open',
+    'awesome_text'                          => 'Awesome',
+    'reviews_text'                          => '2 Reviews',
+    'no_record_found_text'                  => 'No Record Found!',
+
+    /*  ----------  LISTING DETAILS PAGE TEXT  ---------------------  */
+    'description_title'                     => 'Description',
+    'trademark_title'                       => 'Trademark',
+    'offer_title'                           => 'Offer',
+    'assortment_links'                      => 'Web Shop Link',
+    'website_links'                         => 'Website Links',
+    'agent_details'                         => 'Agent Details',
+    'location'                              => 'Location',
+    'video_text'                            => 'Video',
+    'related_category'                      => 'Related Categories',
+    'related_product'                       => 'Related Products',
+    'contact_us_title'                      => 'Contact Us',
+    'placeholder_name_text'                 => 'Enter Name',
+    'placeholder_no_of_adult'               => 'No. of Adult',
+    'placeholder_no_of_child'               => 'No. of Child',
+    'message_label_text'                    => 'Message',
+    'listing_count'                         => 'Total 27 Listings',
+    'website_contactdata'                   => 'Website',
+    'email_us_contactdata'                  => 'Email us',
+    'call_now_contactdata'                  => 'Call now',
+    'add_to_cart_btn'                       => 'Add To Cart',
+    'contact_us_form_text'                  => 'No money charged in this step',
+
+    /*  ----------  BLOG PAGE TEXT  ---------------------  */
+    'post_title'                           => 'Post',
+    'title_search'                         => 'Titles',
+    'placeholder_search'                   => 'Search..',
+    'user_name'                            => 'John Doe',
+    'latest_post'                          => 'Latest post',
+
+    /*  ----------  BLOG DETAILS PAGE TEXT  ---------------------  */
+    'comment_text'                    => 'Comments',
+    'comment_form_title'              => 'Leave a comment',
+    'placeholder_comment'             => 'Comment',
+
+    /*  ----------  EVENT PAGE TEXT  ---------------------  */
+    'event_title'                           => 'Events',
+
+    /*  ----------  CONTACT PAGE TEXT  ---------------------  */
+    'contact_form_subtitle'                 => 'Please complete the form below and send it to us.',
+    'mobile_text'                           => 'Mobile',
+    'question_text'                         => 'Any questions?',
+    'address_text'                          => 'Address',
+
+    /*  ---------- SIDE FILTER PAGE TEXT  ---------------------  */
+    'filters_title'                         => 'Filters',
+    'filters_category_subtitle'             => 'Category',
+    'filters_amenities_subtitle'            => 'Amenities',
+    'show_more'                             => 'Show more',
+    'price_limit_filter'                    => 'Price limit',
+    'price_within_filter'                   => 'Price within',
+
+    /*  ---------- OFFER DETAILS PAGE TEXT  ---------------------  */
+    'product_text'                          => 'Offer Products',
+    'expire_date_text'                      => 'Expire',
+    'hotel_text'                            => 'Hotel',
+
+   /*  ---------- SEARCH PAGE TEXT  ---------------------  */
+    'search_result_text'                    => 'Search Result',
+    'featured_text'                         => 'Featured',
+    'show_on_map_text'                      => 'Show on map',
+
+    /*  ---------- CART PAGE TEXT  ---------------------  */
+    'price_text'                            => 'Price',
+    'quantity_text'                         => 'Quantity',
+    'subtotal_text'                         => 'Subtotal',
+    'tax_text'                              => 'Tax',
+    'grand_total_text'                      => 'Grand Total:',
+    'placeholder_coupon_code_text'          => 'Enter Coupon Code',
+    'apply_coupon_btn'                      => 'Apply Coupon',
+    'continue_shopping_btn'                 => 'Continue Shopping',
+    'checkout_btn'                          => 'Checkout',
+    'clear_cart_btn'                        => 'Clear Cart',
+    'no_item_in_cart_text'                  => 'No Item in Cart',
+
+    /*  ---------- LOGIN PAGE TEXT  ---------------------  */
+    'login_title'                            => 'Log In',
+    'email_id_text'                          => 'Email Id:',
+    'forgot_password'                        => 'Forgot Password?',
+
+    /*  ---------- SHOP DETAILS PAGE TEXT  ---------------------  */
+    'shop_details_title'                      => 'Shop Details',
+    'availability_text'                       => 'Availability:',
+    'hurry_up_only_text'                      => 'Hurry up! only',
+    'product_left_in_stock_text'              => 'products left in stock!',
+    'vendor_details_text'                     => 'Seller details',
+    'vendor_name_text'                        => 'Name',
+    'vendor_address_text'                     => 'Address',
+    'buy_now_btn'                             => 'Buy now',
+    'product_code'                            => 'Product code:',
+    'quantity'                                => 'Quantity',
+    'added_to_wishlist_text'                  => 'Added to wishlist',
+    'this_item_is_already_in_wishlist_text'   => 'This item is already in wishlist',
+    'removed_from_the_wishlist_text'          => 'Removed from the wishlist',
+    'please_login_first_text'                 => 'Please login first',
+
+
+    /*  ---------- CHECKOUT PAGE TEXT  ---------------------  */
+    'checkout_title'                            => 'Checkout',
+    'checking_out_subtitle'                     => 'You are checking out as',
+    'shipping_address'                          => 'Shipping Address',
+    'enter_shipping_address'                    => 'Please enter your shipping address in the form below.',
+    'address1_text'                             => 'Address 1',
+    'address2_text'                             => 'Address 2',
+    'zip_code_text'                             => 'Zip Code',
+    'country_text'                              => 'Country',
+    'state_text'                                => 'State',
+    'city_text'                                 => 'City',
+    'check_box_text'                            => 'Your Billing address is same as Shipping address!',
+    'billing_address'                           => 'Billing Address',
+    'enter_billing_address_text'                => 'Please enter your billing address in the form below.',
+    'place_order_text'                          => 'Place Order',
+    'order_summary_text'                        => 'Order Summary',
+    'items_text'                                => 'Items',
+    'discount_text'                             => 'Discount:',
+    'payment_details_title'                     => 'Payment Details',
+    'stripe_payment_text'                       => 'Stripe Payment',
+    'name_on_card_text'                         => 'Name on Card',
+    'card_number_text'                          => 'Card Number',
+    'placeholder_card_number_text'              => 'Enter Card Number',
+    'cvc_text'                                  => 'CVC',
+    'placeholder_cvc_text'                      => 'ex. 311',
+    'expiration_month_text'                     => 'Expiration Month',
+    'placeholder_expiration_month_text'         => 'MM',
+    'expiration_year_text'                      => 'Expiration Year',
+    'placeholder_expiration_year_text'          => 'YYYY',
+    'place_order_now_btn'                       => 'Place Order Now',
+
+];
