@@ -8,152 +8,138 @@
     </div>
 </a>
 <nav id="menu" class="main-menu" >
-
     <ul>
-
-            <li class="company_detail_menu title-text-main notranslate"><span>
-                <a href="{{ URL::to('/') }}">{{__("message.menu_text_home")}}</a></span>
-            </li>
-
-            <li class="company_detail_menu nav-item dropdown">
-                <span class>
-                    <a class="nav-link dropdown-toggle desktop title-text-main notranslate" id="navbarDropdownMenuLink" href="{{ route('listing') }}">
-                        {{-- {{__("message.menu_text_listing")}}  --}}
-                        Companies <span class="caret"></span>
-                    </a>
-
-                    {{-- <a class="nav-link mobile" href="{{ route('listing') }}">
-                        {{__("message.menu_text_listing")}}
-                    </a> --}}
-                    <span class="nav-link dropdown-toggle mobile" id="navbarDropdown" aria-haspopup="true" href="{{ route('listing') }}">
-                        {{__("message.menu_text_listing")}}
-                    </span>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown" aria-labelledby="navbarDropdown" x-placement="bottom-start" style="position: absolute; transform: translate3d(95px, 129px, 0px); top: 0px; left: 0px; will-change: transform;">
-                        <div class="container2">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <a class="nav-link mobile" href="{{ route('listing') }}" style=" color: #1f2d3d !important; margin: -6px 0px -20px 0px; text-align: center; text-decoration: underline; padding: 0;">
-                                        {{__("message.menu_text_listing")}}
-                                        <hr>
+        <li class="company_detail_menu title-text-main notranslate"><span>
+            <a href="{{ URL::to('/') }}">{{__("message.menu_text_home")}}</a></span>
+        </li>
+        <li class="company_detail_menu nav-item dropdown">
+            <span class>
+                <a class="nav-link dropdown-toggle desktop title-text-main notranslate" id="navbarDropdownMenuLink" href="{{ route('listing') }}">
+                    Companies <span class="caret"></span>
+                </a>
+                <span class="nav-link dropdown-toggle mobile" id="navbarDropdown" aria-haspopup="true" href="{{ route('listing') }}">
+                    {{__("message.menu_text_listing")}}
+                </span>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" aria-labelledby="navbarDropdown" x-placement="bottom-start" style="position: absolute; transform: translate3d(95px, 129px, 0px); top: 0px; left: 0px; will-change: transform;">
+                    <div class="container2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="nav-link mobile" href="{{ route('listing') }}" style=" color: #1f2d3d !important; margin: -6px 0px -20px 0px; text-align: center; text-decoration: underline; padding: 0;">
+                                    {{__("message.menu_text_listing")}}
+                                    <hr>
+                                </a>
+                                <?php foreach($data['categories'] as $parentcat){ ?>
+                                    @php
+                                        $count_p_cat = Helper::getExistingCatByDirectory($parentcat->id);
+                                    @endphp
+                                @if($count_p_cat > 0)
+                                <div class="menu-list">
+                                    <a href="{{ url('listings?cat='.$parentcat->id.'') }}" class="notranslate">
+                                        <h5>
+                                            <span>
+                                                @if($parentcat->icon_class != '')
+                                                    <i class="{{ $parentcat->icon_class }}" aria-hidden="true"></i>
+                                                    @else
+                                                    <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                @endif
+                                            </span>
+                                            {{ ($parentcat->title!='')?$parentcat->title:$parentcat->name }}
+                                        </h5>
                                     </a>
-                                    <?php foreach($data['categories'] as $parentcat){ ?>
-                                        @php
-                                            $count_p_cat = Helper::getExistingCatByDirectory($parentcat->id);
-                                        @endphp
-                                    @if($count_p_cat > 0)
-                                    <div class="menu-list">
-                                        <a href="{{ url('listings?cat='.$parentcat->id.'') }}" class="notranslate">
-                                            <h5>
-
+                                    <ul>
+                                    <?php
+                                    foreach($data['subcategories'] as $subcat){
+                                    $count_s_cat = Helper::getExistingSubCatByDirectory($subcat->id);
+                                    if($count_s_cat > 0){
+                                    if($subcat->parent_id == $parentcat->id){
+                                    ?>
+                                        <li>
+                                            <a href="{{ url('listings?subcat='.$subcat->id.'') }}">
                                                 <span>
-                                                    @if($parentcat->icon_class != '')
-                                                        <i class="{{ $parentcat->icon_class }}" aria-hidden="true"></i>
+                                                    @if($subcat->icon_class != '')
+                                                        <i class="{{ $subcat->icon_class }}" aria-hidden="true"></i>
                                                         @else
                                                         <i class="fa fa-caret-right" aria-hidden="true"></i>
                                                     @endif
                                                 </span>
-                                                {{ ($parentcat->title!='')?$parentcat->title:$parentcat->name }}
-                                            </h5>
-                                        </a>
-                                        <ul>
-                                        <?php
-                                        foreach($data['subcategories'] as $subcat){
-                                        $count_s_cat = Helper::getExistingSubCatByDirectory($subcat->id);
-                                        if($count_s_cat > 0){
-                                        if($subcat->parent_id == $parentcat->id){
-                                        ?>
-                                            <li>
-                                                <a href="{{ url('listings?subcat='.$subcat->id.'') }}">
-                                                    <span>
-                                                        @if($subcat->icon_class != '')
-                                                            <i class="{{ $subcat->icon_class }}" aria-hidden="true"></i>
-                                                            @else
-                                                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                                                        @endif
-                                                    </span>
-                                                    {{ ($subcat->title!='')?$subcat->title:$subcat->name }}
-                                                </a>
-                                            </li>
-                                            <?php } } } ?>
-                                        </ul>
-                                    </div>
-                                    @endif
-                                    <?php } ?>
+                                                {{ ($subcat->title!='')?$subcat->title:$subcat->name }}
+                                            </a>
+                                        </li>
+                                        <?php } } } ?>
+                                    </ul>
                                 </div>
+                                @endif
+                                <?php } ?>
                             </div>
                         </div>
-                        <!--  /.container  -->
                     </div>
-                </span>
-            </li>
+                    <!--  /.container  -->
+                </div>
+            </span>
+        </li>
 
-            <li class="company_detail_menu nav-item dropdown">
-                <span>
-                    <a class="nav-link dropdown-toggle desktop" id="navbarDropdown" href="{{ route('shop') }}">
-                        <span>
-                            {{-- {{ ucfirst(__("message.menu_text_shop")) }} --}}
-                            Products
-                        </span>
-                    </a>
-                    {{-- <a class="nav-link mobile" href="{{ route('shop') }}">
+        {{-- <li class="company_detail_menu nav-item dropdown">
+            <span>
+                <a class="nav-link dropdown-toggle desktop" id="navbarDropdown" href="{{ route('shop') }}">
+                    <span>
                         Products
-                    </a> --}}
-                    <span class="nav-link dropdown-toggle mobile" id="navbarDropdown" aria-haspopup="true" href="{{ route('shop') }}">
-                    Products
                     </span>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <div class="container2">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <a class="nav-link mobile" href="{{ route('shop') }}" style=" color: #1f2d3d !important; margin: -6px 0px -20px 0px; text-align: center; text-decoration: underline; padding: 0;">
-                                        Products
-                                        <hr>
+                </a>
+                <span class="nav-link dropdown-toggle mobile" id="navbarDropdown" aria-haspopup="true" href="{{ route('shop') }}">
+                Products
+                </span>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <div class="container2">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <a class="nav-link mobile" href="{{ route('shop') }}" style=" color: #1f2d3d !important; margin: -6px 0px -20px 0px; text-align: center; text-decoration: underline; padding: 0;">
+                                    Products
+                                    <hr>
+                                </a>
+                                <?php foreach($data['procategories'] as $parentcat){ ?>
+                                @php
+                                    $count_pro_cat = Helper::getExistingCatByProduct($parentcat->id);
+                                @endphp
+                                @if($count_pro_cat > 0)
+                                <div class="menu-list">
+                                    <a href="{{ url('shop?cat='.$parentcat->id.'') }}" class="notranslate">
+                                        <h5>
+                                            <span> <i class="{{ $parentcat->icon_class }}" aria-hidden="true"></i> </span>
+                                            {{ ($parentcat->name!='')?$parentcat->name:$parentcat->name }} </h5>
                                     </a>
-                                    <?php foreach($data['procategories'] as $parentcat){ ?>
-                                    @php
-                                        $count_pro_cat = Helper::getExistingCatByProduct($parentcat->id);
-                                    @endphp
-                                    @if($count_pro_cat > 0)
-                                    <div class="menu-list">
-                                        <a href="{{ url('shop?cat='.$parentcat->id.'') }}" class="notranslate">
-                                            <h5>
-                                                <span> <i class="{{ $parentcat->icon_class }}" aria-hidden="true"></i> </span>
-                                                {{ ($parentcat->name!='')?$parentcat->name:$parentcat->name }} </h5>
-                                        </a>
-                                        <ul>
-                                            <?php foreach($data['prosubcategories'] as $subcat){
-                                        $count_pro_sub_cat = Helper::getExistingSubCatByProduct($subcat->id);
-                                        if($count_pro_sub_cat > 0){
-                                        if($subcat->parent_id == $parentcat->id){
-                                        ?>
-                                            <li>
-                                                <a href="{{ url('shop?subcat='.$subcat->id.'') }}">
-                                                    <span>
-                                                        @if($subcat->icon_class != '')
-                                                            <i class="{{ $subcat->icon_class }}" aria-hidden="true"></i>
-                                                        @else
-                                                            <i class="fa fa-caret-right" aria-hidden="true"></i>
-                                                        @endif
-                                                    </span>
-                                                    {{ ($subcat->name!='')?$subcat->name:$subcat->name }}
-                                                </a>
-                                            </li>
-                                            <?php } } } ?>
-                                        </ul>
-                                    </div>
-                                    @endif
-                                    <?php } ?>
+                                    <ul>
+                                    <?php foreach($data['prosubcategories'] as $subcat){
+                                    $count_pro_sub_cat = Helper::getExistingSubCatByProduct($subcat->id);
+                                    if($count_pro_sub_cat > 0){
+                                    if($subcat->parent_id == $parentcat->id){
+                                    ?>
+                                        <li>
+                                            <a href="{{ url('shop?subcat='.$subcat->id.'') }}">
+                                                <span>
+                                                    @if($subcat->icon_class != '')
+                                                        <i class="{{ $subcat->icon_class }}" aria-hidden="true"></i>
+                                                    @else
+                                                        <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                                    @endif
+                                                </span>
+                                                {{ ($subcat->name!='')?$subcat->name:$subcat->name }}
+                                            </a>
+                                        </li>
+                                        <?php } } } ?>
+                                    </ul>
                                 </div>
+                                @endif
+                                <?php } ?>
                             </div>
                         </div>
-                        <!--  /.container  -->
                     </div>
-                </span>
-            </li>
-            <li class="company_detail_menu"><span><a class="notranslate" href="{{ route('blog') }}">{{ ucfirst(__("message.menu_text_blog"))}}</a></span></li>
-            <li class="company_detail_menu"><span><a class="notranslate" href="{{ route('event') }}">{{ ucfirst(__("message.menu_text_event")) }}</a></span></li>
-            <li class="company_detail_menu"><span><a class="notranslate" href="{{ route('contact') }}">{{ ucfirst(__("message.menu_text_contact"))}}</a></span></li>
+                </div>
+            </span>
+        </li> --}}
 
+        <li class="company_detail_menu"><span><a class="notranslate" href="{{ route('blog') }}">{{ ucfirst(__("message.menu_text_blog"))}}</a></span></li>
+        <li class="company_detail_menu"><span><a class="notranslate" href="{{ route('event') }}">{{ ucfirst(__("message.menu_text_event")) }}</a></span></li>
+        <li class="company_detail_menu"><span><a class="notranslate" href="{{ route('contact') }}">{{ ucfirst(__("message.menu_text_contact"))}}</a></span></li>
         <li class="languageselectbox">
             <b id="google_translate_element"></b>
         </li>
@@ -224,7 +210,6 @@
             </span>
         </li>
         <?php } ?>
-
         {{-- @if($cartdata > 0) --}}
             <li>
                 <span>
@@ -237,8 +222,6 @@
                 </span>
             </li>
         {{-- @endif --}}
-
-
         <li class="user notification">
             @if (Auth::check())
             <span>
@@ -265,7 +248,7 @@
                                     <p>
                                         @if($notification->created_at->diffInMinutes(Carbon\Carbon::now()) < 60 && $notification->created_at->diffInMinutes(Carbon\Carbon::now()) > 1)
                                             {{$notification->created_at->diffInMinutes(Carbon\Carbon::now())}} Minutes Ago
-                                            @endif
+                                        @endif
                                     </p>
                                     <p>
                                     @if($notification->created_at->diffInHours(Carbon\Carbon::now()) >= 1 && $notification->created_at->diffInHours(Carbon\Carbon::now()) < 24) {{$notification->created_at->diffInHours(Carbon\Carbon::now())}} Hours Ago @endif </p>
@@ -273,7 +256,7 @@
                                             @if($notification->created_at->diffInHours(Carbon\Carbon::now()) > 24 ) {{$notification->created_at->diffInDays(Carbon\Carbon::now())}} Days Ago
                                             @endif
                                         </p>
-                                        <hr>
+                                    <hr>
                         </div>
                     </a>
                 </li>

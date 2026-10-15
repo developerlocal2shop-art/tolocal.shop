@@ -1,12 +1,9 @@
-{{-- @extends('layouts.client.common_footer') --}}
+@extends('layouts.client.listingdetails')
+@section('title','Shop | Company')
+@section('content')
 @php
 	$data['mainDirectoryDetails'] = $mainDirectoryDetails;
 @endphp
-
-@extends('layouts.client.listingdetails')
-@section('title','Shop | Company')
-
-@section('content')
 <?php
 	if(isset($data)){
         $productData = $data;
@@ -23,7 +20,6 @@
 	foreach($wishlists as $wishid){
 		$wislistProductId[]=$wishid['product_id'];
 	}
-
 	$AddToCompareProductId=array();
 	foreach($AddToCompare as $addtc){
 		$AddToCompareProductId[]=$addtc['product_id'];
@@ -41,29 +37,15 @@
 		$filters = "";
 	}
 ?>
-
 </a>
 @if ($data['mainDirectoryDetails']->company_color)
 <style>
-.btn-custom {
-    color: #fff;
-    border-radius: 5px;
-    font-weight: bold;
-    background-color: {{ $data['mainDirectoryDetails']->company_color??'rgb(249 95 9)' }};
-}
-.header {
-    background: {{ $data['mainDirectoryDetails']->company_color??'rgb(249 95 9)' }};
-}
+.btn-custom { color: #fff; border-radius: 5px; font-weight: bold; background-color: {{ $data['mainDirectoryDetails']->company_color??'rgb(249 95 9)' }}; }
+.header { background: {{ $data['mainDirectoryDetails']->company_color??'rgb(249 95 9)' }};}
 </style>
 @else
 <style>
-    .btn-custom {
-        background-color: #007bff;
-        color: #fff;
-        border-radius: 5px;
-        font-weight: bold;
-    }
-
+    .btn-custom {  background-color: #007bff; color: #fff; border-radius: 5px; font-weight: bold;}
 </style>
 @endif
 
@@ -83,7 +65,6 @@
 			</div>
 
 			<div class="col-lg-9 col-md-9 col-12">
-
 				<!-- <a href="#0" class="search_mob btn_search_mobile"></a>  -->
 				<form action="{{ route('directory.product',request()->id) }}" method="GET">
 					<div class="row no-gutters custom-search-input-2 inner">
@@ -139,8 +120,6 @@
 		</div>
 
     <div class="row container-fluid">
-
-
 
         {{-- <x-ClientfilterPro :productData="$pDirctoryData" /> --}}
         <x-ClientfilterShop :productData="$pDirctoryData" />

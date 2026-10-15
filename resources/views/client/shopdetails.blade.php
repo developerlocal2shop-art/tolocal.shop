@@ -2199,7 +2199,6 @@ $wislistProductId=array();
     span.locally_text {
         width: 140px !important;
         top: 6px;
-        right: 222px !important;
         line-height: 20px !important;
     }
     .company_details_logo_img {

@@ -63,7 +63,7 @@ if (!empty($params['price'])) {
 
                 <div class="filter_type acc_shop_filter">
                     @php
- 
+
                     $pcat_vald = [];
                     $psubcat_vald = [];
                     $pcat_vald_tags = [];
@@ -95,11 +95,11 @@ if (!empty($params['price'])) {
                             <div class="white-box">
 
                                 <div id="accordion" class="tree-stuc accordion">
-                                    <?php 
-                                                
-                                    $i=1; 
-                                    foreach($data2['product_parent_category'] as $parentCategory){ 
-                                        $get_child_category = Helper::getProductchildCategory($parentCategory->id); 
+                                    <?php
+
+                                    $i=1;
+                                    foreach($data2['product_parent_category'] as $parentCategory){
+                                        $get_child_category = Helper::getProductchildCategory($parentCategory->id);
                                     ?>
                                     <div class="card">
                                         @if (in_array($parentCategory->id, $pcat_vald))
@@ -126,13 +126,13 @@ if (!empty($params['price'])) {
                                         </div>
                                         @endif
 
-                                        <?php 
+                                        <?php
                                             $subcatids = array();
                                             foreach($get_child_category as $childCategory){
                                                 $subcatids[] = $childCategory->id;
                                             }
                                             $tagsid = array();
-                                            $get_listing_tags = Helper::getAllProductTagsListingArray($subcatids); 
+                                            $get_listing_tags = Helper::getAllProductTagsListingArray($subcatids);
                                             foreach($get_listing_tags as $tagsids){
                                                 $tagsid[] = $tagsids->id;
                                             }
@@ -142,10 +142,10 @@ if (!empty($params['price'])) {
                                             data-parent="#accordion" aria-labelledby="heading-1">
 
                                             <div class="card-body">
-                                                <?php 
-                                                            $j='a'; 
+                                                <?php
+                                                            $j='a';
                                                             foreach($get_child_category as $childCategory){
-                                                            $get_listing_tags = Helper::getAllProductTagsListing($childCategory->id); 
+                                                            $get_listing_tags = Helper::getAllProductTagsListing($childCategory->id);
                                                             //echo "<pre>"; print_r(count($get_listing_tags));
                                                             ?>
                                                 <div id="accordion-{{ $childCategory->id }}">
@@ -154,12 +154,12 @@ if (!empty($params['price'])) {
                                                         <div class="card-header equipamento" id="heading-1-1">
 
 
-                                                            
+
 
                                                             @if (in_array($childCategory->id, $psubcat_vald))
                                                             <span class="mb-0">
                                                                 <label class="container_check">
-                                                                   
+
                                                                     <small></small>
                                                                     <!-- Here will be the number of the total listing -->
                                                                     <input type="checkbox" name="category[]" class="subcategories sk_fade_only"
@@ -186,8 +186,8 @@ if (!empty($params['price'])) {
                                                             @endif
 
                                                         </div>
-                                                        <?php if(count($get_listing_tags)>0){ 
-                                                                        
+                                                        <?php if(count($get_listing_tags)>0){
+
                                                                 $subcattagsid = array();
                                                                 foreach($get_listing_tags as $tagsidsub){
                                                                     $subcattagsid[] = $tagsidsub->id;
@@ -206,9 +206,9 @@ if (!empty($params['price'])) {
                                                                                 <span>
                                                                                     <?php
                                                                                     foreach($get_listing_tags as $tagsname){
-                                                                                        
+
                                                                                         if (in_array($tagsname->id, $pcat_tag_pro)){
-                                                                                        
+
                                                                                         if($tagsname->child_cat_id == $childCategory->id){
                                                                                         ?>
                                                                                     <label class="container_check"> {{
@@ -252,11 +252,7 @@ if (!empty($params['price'])) {
                             </div>
                         </div>
                     </div>
-
                     <?php //} ?>
-
-
-
                 </div>
                 <?php //} ?>
                 <?php //if(in_array("category-product", $currenturl) || in_array("listings-product", $currenturl) || in_array("tags-product", $currenturl)){ ?>
@@ -264,42 +260,19 @@ if (!empty($params['price'])) {
                 <input type="hidden" id="urlvalue-list-product" value="listings-product" />
                 <input type="hidden" id="urlvalue-tags-product" value="tags-product" />
                 <?php //} ?>
-                <?php //if(in_array("category-product", $currenturl) || in_array("shop", $currenturl) || in_array("tags-product", $currenturl)){ ?>
-                <!-- Price range filter -->
-               
-                {{-- <div class="filter_type">
-                    <h6>{{__("message.price_limit_filter")}}</h6>
-
-                    <div class="distance"> {{__("message.price_within_filter")}} <span></span> {{ $currencycode }}</div>
-                    <input type="range" class="price-range" min="0" max="{{ $maxPrice }}" step="10"
-                        value="{{ trim(isset($configData['maxPrice'])?$configData['maxPrice']:0) }}"
-                        data-orientation="horizontal" onchange="filter(this)">
-                </div> --}}
-
-                {{-- <div class="filter_type widget widget_price_filter">
-                    <h6>{{__("message.price_limit_filter")}}</h6>
-                    <div class="price_slider_wrapper">
-                        <div class="price_label"><span class="from2">{{ $currencycode }} {{ $data['minprice']->regular_price??0 }}</span> — <span class="to3">{{ $currencycode }} {{ $data['maxprice']->regular_price??0 }}</span></div>
-                        <section class="range-slider">
-                            <span class="rangeValues"></span>
-                            <input onchange="filter(this)" class="price-range-min"  value="{{ trim(isset($configData['minPrice'])?$configData['minPrice']:1) }}" min="{{ $data['minprice']->regular_price??0 }}" max="{{ $data['maxprice']->regular_price }}" step="10" type="range" >
-                            <input onchange="filter(this)" class="price-range" value="{{ trim(isset($configData['maxPrice'])?$configData['maxPrice']:$data['maxprice']->regular_price) }}"  max="{{ $data['maxprice']->regular_price??0 }}"  type="range">
-                        </section>
-                    </div>
-                </div> --}}
 
                 <div class="filter_type widget widget_price_filter">
                     <h6>{{__("message.price_limit_filter")}}</h6>
                     <div class="price_slider_wrapper">
                         <div class="price_label">
-                           <b style="font-size: 12px;"> <span class="from2">{{ $currencycode }} {{ $data['minprice']??0 }}</span> — 
+                           <b style="font-size: 12px;"> <span class="from2">{{ $currencycode }} {{ $data['minprice']??0 }}</span> —
                             <span class="to3">{{ $currencycode }} {{ $data['maxprice']??0 }}</span></b>
                         </div>
                         <section class="range-slider">
-                            <span class="rangeValues"> 
-                               
+                            <span class="rangeValues">
+
                                 {{ trim(isset($configData['minPrice'])?$configData['minPrice']:$data['minprice']) }}
-                                — 
+                                —
                                 {{ trim(isset($configData['maxPrice'])?$configData['maxPrice']:$data['maxprice']) }}</span>
                             <input onchange="filter(this)" class="price-range-min" value="{{ trim(isset($configData['minPrice'])?$configData['minPrice']:1) }}" min="{{ $data['minprice']??0 }}" max="{{ $data['maxprice'] }}" step="10" type="range" >
                             <input onchange="filter(this)" class="price-range" value="{{ trim(isset($configData['maxPrice'])?$configData['maxPrice']:$data['maxprice']) }}"  max="{{ $data['maxprice']??0 }}" type="range">
@@ -324,12 +297,12 @@ if (!empty($params['price'])) {
                             </li>
                         @endforeach
                     </ul>
-                    @if (isset($_GET['review']) || isset($_GET['price']) || isset($_GET['cat']) ) 
+                    @if (isset($_GET['review']) || isset($_GET['price']) || isset($_GET['cat']) )
                     <a class="active rounded-5" href="{{ url('shop') }}" id="home-tab2">See all products</a>
                     @endif
-                    
+
                 </div>
-                
+
 
                 <?php //} ?>
             </div>
@@ -395,7 +368,7 @@ if (!empty($params['price'])) {
         $('.categories,.subcategories,.protags,.amenities').click(function() {
             $('.review_filter').prop('checked', false);
         });
-        
+
         $(document).on('change', '.price-range-min, .price-range', function() {
             $('.review_filter').prop('checked', false);
         });
@@ -408,8 +381,8 @@ if (!empty($params['price'])) {
 
         console.log('selectedReview - ',selectedReview);
 
-        // 
-       
+        //
+
     setTimeout(function() {
         if ($('.review_filter').is(':checked')) {
                 urlSuffix = "review=" + selectedReview;
@@ -434,39 +407,39 @@ if (!empty($params['price'])) {
                     urlSuffix = "cat=" + slectedCategories+"&subcat=" + slectedsubCategories + "&tags=" + slectedProductTags;
                     window.location.replace(urlPrefix + urlSuffix);
                 }else if (slectedCategories != "" && slectedProductTags != "" && selectedPriceRange==0) {
-                    
+
                     urlSuffix = "cat=" + slectedCategories + "&tags=" + slectedProductTags;
                     window.location.replace(urlPrefix + urlSuffix);
                 }else if (slectedsubCategories != "" && slectedProductTags != "" && selectedPriceRange==0) {
-                    
+
                     urlSuffix = "subcat=" + slectedsubCategories + "&tags=" + slectedProductTags;
                     window.location.replace(urlPrefix + urlSuffix);
                 }else if((slectedCategories!="" && slectedsubCategories=="" && slectedProductTags==""  && (selectedPriceRange!=0 && selectedPriceRange!==undefined)) && selectedAmenities==""){
-                    
+
                     urlSuffix = "cat="+slectedCategories+"&price="+selectedPriceMinRange+"-"+selectedPriceRange;
                     window.location.replace(urlPrefix+urlSuffix);
                 }else if((slectedsubCategories!="" && slectedCategories=="" && slectedProductTags=="" && (selectedPriceRange!=0 && selectedPriceRange!==undefined)) && selectedAmenities==""){
-                    
+
                     urlSuffix = "subcat="+slectedsubCategories+"&price="+selectedPriceMinRange+"-"+selectedPriceRange;
                     window.location.replace(urlPrefix+urlSuffix);
                 }else if((slectedCategories!="" && slectedsubCategories!="" && slectedProductTags=="" && (selectedPriceRange!=0 && selectedPriceRange!==undefined)) && selectedAmenities==""){
-                
+
                     urlSuffix = "cat="+slectedCategories+"&subcat="+slectedsubCategories+"&price="+selectedPriceMinRange+"-"+selectedPriceRange;
                     window.location.replace(urlPrefix+urlSuffix);
                 }else if((slectedProductTags!=""  && slectedCategories=="" && slectedsubCategories=="" && (selectedPriceRange!=0 && selectedPriceRange!==undefined)) && selectedAmenities==""){
-                    
+
                     urlSuffix = "tags="+slectedProductTags+"&price="+selectedPriceMinRange+"-"+selectedPriceRange;
                     window.location.replace(urlPrefix+urlSuffix);
                 }else if((slectedCategories!="" && slectedsubCategories!="" && slectedProductTags!=""  && (selectedPriceRange!=0 && selectedPriceRange!==undefined)) && selectedAmenities==""){
-                    
+
                     urlSuffix = "cat="+slectedCategories+"&subcat="+slectedsubCategories+"&tags="+slectedProductTags+"&price="+selectedPriceMinRange+"-"+selectedPriceRange;
                     window.location.replace(urlPrefix+urlSuffix);
                 }else if((slectedCategories!="" && slectedProductTags!=""  && (selectedPriceRange!=0 && selectedPriceRange!==undefined)) && selectedAmenities==""){
-                
+
                     urlSuffix = "cat="+slectedCategories+"&tags="+slectedProductTags+"&price="+selectedPriceMinRange+"-"+selectedPriceRange;
                     window.location.replace(urlPrefix+urlSuffix);
                 }else if((slectedsubCategories!="" && slectedProductTags!=""  && (selectedPriceRange!=0 && selectedPriceRange!==undefined)) && selectedAmenities==""){
-                
+
                     urlSuffix = "subcat="+slectedsubCategories+"&tags="+slectedProductTags+"&price="+selectedPriceMinRange+"-"+selectedPriceRange;
                     window.location.replace(urlPrefix+urlSuffix);
                 }

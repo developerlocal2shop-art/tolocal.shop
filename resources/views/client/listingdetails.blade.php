@@ -8,49 +8,25 @@
 @else
     @section('title', $data['mainDirectoryDetails']->title)
 @endif
-
 @section('content')
-
 
 @if ($data['mainDirectoryDetails']->company_color)
 <style>
-    .btn-custom {
-        color: #fff;
-        border-radius: 5px;
-        font-weight: bold;
-        background-color: {{ $data['mainDirectoryDetails']->company_color }};
-    }
-    .mm-slideout {
-        padding: 1px !important;
-        background: {{ $data['mainDirectoryDetails']->company_color??'#e0a800' }};
-
-    }
-    header.header_in .main-menu > ul > li span > a, header.sticky .main-menu > ul > li span > a{
-        color: #fff !important;
-    }
-    span.locally_text {
-        color: #fff !important;
-    }
-    .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span, b#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value:hover {
-        color: #000;
-    }
+    .btn-custom { color: #fff; border-radius: 5px; font-weight: bold; background-color: {{ $data['mainDirectoryDetails']->company_color }};}
+    .mm-slideout { padding: 1px !important; background: {{ $data['mainDirectoryDetails']->company_color??'#e0a800' }}; }
+    header.header_in .main-menu > ul > li span > a, header.sticky .main-menu > ul > li span > a{ color: #fff !important; }
+    span.locally_text { color: #fff !important; }
+    .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span, b#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value:hover {  color: #000; }
 </style>
 @else
 <style>
-    .btn-custom {
-        background-color: #004dda;
-        color: #fff;
-        border-radius: 5px;
-        font-weight: bold;
-    }
-
+    .btn-custom { background-color: #004dda; color: #fff; border-radius: 5px; font-weight: bold;}
 </style>
 @endif
 
-<div class="loader" id="loader"></div>
+<div class="loader" id="loader" role="status" aria-label="Loading"></div>
 <div class="AJloader" id="AJloader"></div>
 <?php
-
     $useragent=$_SERVER['HTTP_USER_AGENT'];
     $ismobiledevice = 0;
     if(preg_match('/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i',$useragent)||preg_match('/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i',substr($useragent,0,4)))
@@ -64,12 +40,9 @@
         $timezone = 'Asia/Kolkata';
     } elseif ($geo && isset($geo["timezone"])) {
         $timezone = $geo["timezone"];
-    } else {
-        // fallback if API fails or timezone not found
-        //$timezone = 'UTC';
+    } else { // fallback if API fails or timezone not found //$timezone = 'UTC';
         $timezone = 'Europe/Stockholm';
     }
-
     if($user_ip=='127.0.0.1' || $user_ip=='::1' || $user_ip=='localhost' ){
         $countryCode    = 'IN';
         $state          = 'National Capital Territory of Delhi';
@@ -81,13 +54,11 @@
         $state_array    = explode(" ",$state);
         $city           = $geo["city"]??'';
     }
-
     if(in_array("Capital", $state_array)){
         $state = $city;
     }else{
         $state = $state;
     }
-
     date_default_timezone_set($timezone);
     $info = getdate();
 
@@ -564,8 +535,8 @@
     </div>
     <?php } ?>
 
-    <div class="container-fluid  row">
-        <div class="col-md-5">
+    <div class="container-fluid row listing-info-row">
+        <div class="col-md-5 schedule-info-column">
             <?php
             $totalpublicschedule = count($data['publicScheduleData']);
             $totalexceptionschedule = count($data['exceptionScheduleData']);
@@ -582,8 +553,6 @@
                             </p>
                             </a>
                         </li> --}}
-
-                        {{-- <li><a href="#reviews">Reviews</a></li> --}}
                         <?php
                         $openCloseTags = 0;
                         if($totalexceptionschedule>0){
@@ -602,19 +571,64 @@
 
                             foreach($totaleceholiday as $exeholi){ ?>
                             <li>
-                                <button id="down-to-schedule" class="btn btn-warning btn-sm btn-block">
-                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i> <?php echo $exeholi->open_time ; ?> - <?php echo $exeholi->close_time; ?></button>
+                                <button type="button" id="down-to-schedule" class="listing-info-card schedule-info-card">
+                                    <span class="listing-info-card__icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                            <circle cx="12" cy="12" r="9"></circle>
+                                            <path d="M12 7v5l3 2"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="listing-info-card__content">
+                                        <span class="listing-info-card__title">Today's hours</span>
+                                        <span class="listing-info-card__meta"><?php echo $exeholi->open_time ; ?> - <?php echo $exeholi->close_time; ?></span>
+                                    </span>
+                                    <span class="listing-info-card__arrow" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                            <path d="M5 12h14m-6-6 6 6-6 6"></path>
+                                        </svg>
+                                    </span>
+                                </button>
                                 <input type="hidden" class="get_endtime" name="get_endtime" value="<?php echo $exeholi->close_time; ?>">
                             </li>
                         <?php } ?>
 
                         <?php if($openCloseTags>0){ ?>
                             <li>
-                                <button id="down-to-schedule_c" class="btn btn-success btn-sm btn-block">Open</button>
+                                <button type="button" id="down-to-schedule_c" class="listing-info-card schedule-info-card schedule-info-card--open">
+                                    <span class="listing-info-card__icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                            <path d="m5 12 4 4L19 6"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="listing-info-card__content">
+                                        <span class="listing-info-card__title">Open now</span>
+                                        <span class="listing-info-card__meta">Tap to view all hours</span>
+                                    </span>
+                                    <span class="listing-info-card__arrow" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                            <path d="M5 12h14m-6-6 6 6-6 6"></path>
+                                        </svg>
+                                    </span>
+                                </button>
                             </li>
                         <?php }else{ ?>
                             <li>
-                                <button id="down-to-schedule_c" class="btn btn-warning btn-sm btn-block"><?php echo __('message.closed_text'); ?></button>
+                                <button type="button" id="down-to-schedule_c" class="listing-info-card schedule-info-card schedule-info-card--closed">
+                                    <span class="listing-info-card__icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                            <path d="m7 7 10 10M17 7 7 17"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="listing-info-card__content">
+                                        <span class="listing-info-card__title"><?php echo __('message.closed_text'); ?></span>
+                                        <span class="listing-info-card__meta">Tap to view all hours</span>
+                                    </span>
+                                    <span class="listing-info-card__arrow" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                            <path d="M5 12h14m-6-6 6 6-6 6"></path>
+                                        </svg>
+                                    </span>
+                                </button>
                             </li>
                         <?php } ?>
 
@@ -630,23 +644,71 @@
                                 }else{
                                     $openCloseTags=0;
                                 }
-
                             }
                             foreach($totalholiday as $pubhd){ ?>
                                 <li>
-                                    <button id="down-to-schedule" class="btn btn-warning btn-sm btn-block"><i class="fas fa-external-link-alt" aria-hidden="true"></i> <?php echo $pubhd->open_time ; ?> - <?php echo $pubhd->close_time; ?></button>
+                                    <button type="button" id="down-to-schedule" class="listing-info-card schedule-info-card">
+                                        <span class="listing-info-card__icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" focusable="false">
+                                                <circle cx="12" cy="12" r="9"></circle>
+                                                <path d="M12 7v5l3 2"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="listing-info-card__content">
+                                            <span class="listing-info-card__title">Today's hours</span>
+                                            <span class="listing-info-card__meta"><?php echo $pubhd->open_time ; ?> - <?php echo $pubhd->close_time; ?></span>
+                                        </span>
+                                        <span class="listing-info-card__arrow" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" focusable="false">
+                                                <path d="M5 12h14m-6-6 6 6-6 6"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
                                     <input type="hidden" class="get_endtime" name="get_endtime" value="<?php echo $pubhd->close_time; ?>">
                                 </li>
                             <?php } ?>
 
                             <?php if($openCloseTags>0){ ?>
-                                <li> <button id="down-to-schedule_c" class="btn btn-success btn-sm btn-block"> Open</button> </li>
+                                <li>
+                                    <button type="button" id="down-to-schedule_c" class="listing-info-card schedule-info-card schedule-info-card--open">
+                                        <span class="listing-info-card__icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" focusable="false">
+                                                <path d="m5 12 4 4L19 6"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="listing-info-card__content">
+                                            <span class="listing-info-card__title">Open now</span>
+                                            <span class="listing-info-card__meta">Tap to view all hours</span>
+                                        </span>
+                                        <span class="listing-info-card__arrow" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" focusable="false">
+                                                <path d="M5 12h14m-6-6 6 6-6 6"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </li>
                             <?php }else{ ?>
-                                <li>  <button id="down-to-schedule_c" class="btn btn-warning btn-sm btn-block"><?php echo __('message.closed_text'); ?></button> </li>
+                                <li>
+                                    <button type="button" id="down-to-schedule_c" class="listing-info-card schedule-info-card schedule-info-card--closed">
+                                        <span class="listing-info-card__icon" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" focusable="false">
+                                                <path d="m7 7 10 10M17 7 7 17"></path>
+                                            </svg>
+                                        </span>
+                                        <span class="listing-info-card__content">
+                                            <span class="listing-info-card__title"><?php echo __('message.closed_text'); ?></span>
+                                            <span class="listing-info-card__meta">Tap to view all hours</span>
+                                        </span>
+                                        <span class="listing-info-card__arrow" aria-hidden="true">
+                                            <svg viewBox="0 0 24 24" focusable="false">
+                                                <path d="M5 12h14m-6-6 6 6-6 6"></path>
+                                            </svg>
+                                        </span>
+                                    </button>
+                                </li>
                             <?php } ?>
 
                         <?php }else{
-
 
                             foreach($templateandScheduleDaysData as $days => $val){
                                 $days_abb = substr($days, 0, 3);
@@ -657,37 +719,80 @@
                                         $normalopentime = explode(":",$norholi['open_time']);
                                         $normalclosetime = explode(":",$norholi['close_time']);
 
-                                        //if($normalopentime[0]<=$hour && $normalclosetime[0]>=$hour){
                                         if($norholi['open_time']<=$current_date_time && $norholi['close_time']>=$current_date_time){
                                             $openCloseTags=1;
                                             break;
                                         }else{
                                             $openCloseTags=0;
                                         }
-
                                     }
 
-                                    foreach($val as $schd){?>
+                                    foreach($val as $schd){ ?>
                                         <li>
-                                            <button id="down-to-schedule" class="btn btn-warning btn-sm btn-block">
-                                                <i class="fas fa-external-link-alt" aria-hidden="true"></i> <?php echo $schd['open_time'] ; ?> - <?php echo $schd['close_time']; ?></button>
+                                            <button type="button" id="down-to-schedule" class="listing-info-card schedule-info-card">
+                                                <span class="listing-info-card__icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" focusable="false">
+                                                        <circle cx="12" cy="12" r="9"></circle>
+                                                        <path d="M12 7v5l3 2"></path>
+                                                    </svg>
+                                                </span>
+                                                <span class="listing-info-card__content">
+                                                    <span class="listing-info-card__title">Today's hours</span>
+                                                    <span class="listing-info-card__meta"><?php echo $schd['open_time'] ; ?> - <?php echo $schd['close_time']; ?></span>
+                                                </span>
+                                                <span class="listing-info-card__arrow" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" focusable="false">
+                                                        <path d="M5 12h14m-6-6 6 6-6 6"></path>
+                                                    </svg>
+                                                </span>
+                                            </button>
                                             <input type="hidden" class="get_endtime" name="get_endtime" value="<?php echo $schd['close_time']; ?>">
                                         </li>
                                     <?php } ?>
 
                                     <?php if($openCloseTags>0){ ?>
                                         <li>
-                                            <button id="down-to-schedule_c" class="btn btn-success btn-sm btn-block">Open</button>
+                                            <button type="button" id="down-to-schedule_c" class="listing-info-card schedule-info-card schedule-info-card--open">
+                                                <span class="listing-info-card__icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" focusable="false">
+                                                        <path d="m5 12 4 4L19 6"></path>
+                                                    </svg>
+                                                </span>
+                                                <span class="listing-info-card__content">
+                                                    <span class="listing-info-card__title">Open now</span>
+                                                    <span class="listing-info-card__meta">Tap to view all hours</span>
+                                                </span>
+                                                <span class="listing-info-card__arrow" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" focusable="false">
+                                                        <path d="M5 12h14m-6-6 6 6-6 6"></path>
+                                                    </svg>
+                                                </span>
+                                            </button>
                                         </li>
                                     <?php }else{ ?>
                                         <li>
-                                            <button id="down-to-schedule_c" class="btn btn-warning btn-sm btn-block"><?php echo __('message.closed_text'); ?></button>
+                                            <button type="button" id="down-to-schedule_c" class="listing-info-card schedule-info-card schedule-info-card--closed">
+                                                <span class="listing-info-card__icon" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" focusable="false">
+                                                        <path d="m7 7 10 10M17 7 7 17"></path>
+                                                    </svg>
+                                                </span>
+                                                <span class="listing-info-card__content">
+                                                    <span class="listing-info-card__title"><?php echo __('message.closed_text'); ?></span>
+                                                    <span class="listing-info-card__meta">Tap to view all hours</span>
+                                                </span>
+                                                <span class="listing-info-card__arrow" aria-hidden="true">
+                                                    <svg viewBox="0 0 24 24" focusable="false">
+                                                        <path d="M5 12h14m-6-6 6 6-6 6"></path>
+                                                    </svg>
+                                                </span>
+                                            </button>
                                         </li>
                                     <?php } ?>
                             <?php } } ?>
                         <?php } ?>
                         <?php if($ismobiledevice==1){ ?>
-                            <li>
+                            <li class="listing-contact-item">
                                 <span class="headercontact"><button id="down-to-contact" class="btn btn-success btn-sm btn-block">Contact Us</button></span>
                             </li>
                         <?php } ?>
@@ -696,26 +801,59 @@
 
                 </div>
                 <?php if($ismobiledevice==1){ ?>
-                <button class="direction_a btn-block" id="direction_anch" >
-                    <img  class="direction" src="{{ url('/') }}/assets/client/images/direction2.png" width="10%" alt="">
+                <button type="button" class="listing-direction-button" id="direction_anch">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="m3 11 18-8-8 18-2-8-8-2Z"></path>
+                        <path d="m11 13 5-5"></path>
+                    </svg>
                 </button>
                 <?php } ?>
             </nav>
         </div>
-        <div class="col-md-2">
+
+        <div class="col-md-2 listing-shop-column">
         <?php if(!empty($data['directoryProductData'])){ ?>
-            <a class="visit_the_shop btn-block" target="_blank" href="<?php echo url('listings-product', ['id' => $data['mainDirectoryDetails']->slug]); ?>">
-                <i class="fas fa-external-link-alt" aria-hidden="true"></i> Visit the Shop ({{ count($data['directoryProductData']) }})
+            <a class="listing-info-card shop-visit-cta" target="_blank" rel="noopener noreferrer" href="{{ url('listings-product', ['id' => $data['mainDirectoryDetails']->slug]) }}">
+                <span class="shop-visit-cta__icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M3 10v10h18V10M3 10l2-6h14l2 6M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M9 20v-6h6v6"/>
+                    </svg>
+                </span>
+                <span class="shop-visit-cta__content">
+                    <span class="shop-visit-cta__title">Visit the shop</span>
+                    <span class="shop-visit-cta__meta">{{ count($data['directoryProductData']) }} products</span>
+                </span>
+                <span class="shop-visit-cta__arrow" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" focusable="false">
+                        <path d="M5 12h14m-6-6 6 6-6 6"/>
+                    </svg>
+                </span>
             </a>
         <?php } ?>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 listing-address-column">
             @if($data['address'][0]->address)
-                <a class="address relatedprovisitbtn visit_the_shop btn-block" id="down-to-map" href="javascript:void(0);">{{ $data['address'][0]->address }}</a>
+                <a class="listing-info-card listing-address-card" id="down-to-map" href="javascript:void(0);">
+                    <span class="listing-info-card__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                            <circle cx="12" cy="10" r="2.5"/>
+                        </svg>
+                    </span>
+                    <span class="listing-info-card__content">
+                        <span class="listing-info-card__title">Visit us</span>
+                        <span class="listing-info-card__meta">{{ $data['address'][0]->address }}</span>
+                    </span>
+                    <span class="listing-info-card__arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M5 12h14m-6-6 6 6-6 6"/>
+                        </svg>
+                    </span>
+                </a>
             @endif
         </div>
 
-        <div class="col-md-1 functions_reload_div" style="padding: 10px;">
+        <div class="col-md-1 functions_reload_div listing-reload-column" style="padding: 10px;">
             @if( last(request()->segments()) == 'rydholms-dammodehus' )
             <span id="functions_reload">
                 <a target="_blank" href="{{ url('/listings/details/rydholms-dammodehus') }}" style="#201919 !important;" class="btn-sm functions_reload">
@@ -726,21 +864,21 @@
         </div>
     </div>
 
-    <div class="container">
-
-        <!-- START Tags DATA -->
-        <div class="add_bottom_15">
-            @if(count($data['related_tags']) > 0)
-
-                <div class="row">
-                    <h2 style="padding-left: 13px;">Menu:</h2>
+    <div class="container listing-menu-container">
+        @if(count($data['related_tags']) > 0)
+        <section class="listing-menu-section" aria-labelledby="listing-menu-title">
+            <div class="add_bottom_15 listing-menu-categories">
+                <div class="listing-menu-heading">
+                    <div>
+                        <h2 id="listing-menu-title">Menu <span>Browse categories or search products</span></h2>
+                    </div>
                 </div>
 
                 <div id="company_imp_tags_div">
                     @if(count($data['imp_ptags']) > 0)
                         @foreach ($data['imp_ptags'] as $key => $tagval)
-                            <span class="loc_open mr-2 notranslate" style="background-color: #b5b9b7; color: #000 !important; border: 1px solid #b5b9b7; padding: 3px 6px; border-radius: 4px; display: inline-flex; align-items: center;">
-                                <a href="{{ url('listings-product/'.$data['mainDirectoryDetails']->slug.'?tags='.$key??'') }}" target="_blank" class="company_imp_tags2"  style="color: #000; text-decoration: none; margin-right: 5px;">
+                            <span class="listing-menu-tag notranslate">
+                                <a href="{{ url('listings-product/'.$data['mainDirectoryDetails']->slug.'?tags='.$key??'') }}" target="_blank" rel="noopener noreferrer" class="company_imp_tags2">
                                     {{ $tagval }}
                                 </a>
                                 @if(auth()->check())
@@ -755,123 +893,124 @@
                 @if(count($data['imp_ptags']) > 0)
                     @if(auth()->check())
                         @if(auth()->user()->directory_id == $data['mainDirectoryDetails']->id)
-                            <button id="btn_defaulttags" style="border: 1px solid #ccc; float: right;">See More <i class="fas fa-chevron-down"></i></button>
+                            <button type="button" id="btn_defaulttags" class="listing-menu-toggle">
+                                <span>See More</span><i class="fas fa-chevron-down" aria-hidden="true"></i>
+                            </button>
                         @endif
                     @endif
                 @endif
-                <hr>
-                <div class="defaulttags" style="display: @if(count($data['imp_ptags']) > 0)none;@endif">
+                <div class="defaulttags listing-menu-tags" style="{{ count($data['imp_ptags']) > 0 ? 'display: none;' : '' }}">
                     <?php
                     foreach($data['related_tags'] as $tagkey => $tagstitle){
                     ?>
-                    <span class="loc_open mr-2 notranslate" style="background-color: #b5b9b7;color: #000!important;border: 1px solid #b5b9b7;">
-                        <a target="_blank" class="company_imp_tags" data-companyid="{{ $data['mainDirectoryDetails']->id }}" data-id="{{ $tagkey??'' }}" data-title="{{ $tagstitle??'' }}" style="color: #000;">
+                    <span class="listing-menu-tag notranslate">
+                        <a target="_blank" rel="noopener noreferrer" class="company_imp_tags" data-companyid="{{ $data['mainDirectoryDetails']->id }}" data-id="{{ $tagkey??'' }}" data-title="{{ $tagstitle??'' }}">
                             {{ $tagstitle??'' }}
                         </a>
                     </span>
                     <?php } ?>
                 </div>
-            @endif
-        </div>
-        <!-- END TAGS DATA -->
+            </div>
 
-        @if(count($data['related_tags']) > 0)
             <form action="{{ route('directory.product',request()->id) }}" method="GET">
-                <div class="row no-gutters custom-search-input-2 inner">
-                    <div class="col-lg-11 col-md-11">
-                        <div class="form-group">
+                <div class="custom-search-input-2 inner listing-menu-search">
+                    <label class="listing-menu-search__field">
+                        <span class="sr-only">{{ __('message.header_search_text') }}</span>
+                        <span class="listing-menu-search__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <circle cx="11" cy="11" r="7"></circle>
+                                <path d="m16 16 5 5"></path>
+                            </svg>
+                        </span>
+                        <span class="form-group">
                             <input class="form-control" name="search_string" id="search_string" type="text" value="" placeholder="{{__("message.header_search_text")}}(Products, ENA)">
                             <i class="fa fa-microphone" style="color: #fe0536;" aria-hidden="true" id="start-recording"></i>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-1 col-md-1">
-                        <input type="submit" class="btn_search_mobile_submit" value="{{__("message.header_search_text_search_btn")}}" >
-                    </div>
+                        </span>
+                    </label>
+                    <button type="submit" class="listing-menu-search__submit" aria-label="{{ __('message.header_search_text_search_btn') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="m16 16 5 5"></path>
+                        </svg>
+                    </button>
                 </div>
             </form>
+        </section>
         @endif
-
-
     </div>
 
     <div class="container-fluid row">
-
-
-
         <div class="col-md-12">
+            <?php
+                if (isset($data['contactData'])) {
+                    $contactData = $data['contactData'];
+            ?>
+                @if(!empty($contactData[0]->facebook) || (!empty($contactData[0]->twitter)) || (!empty($contactData[0]->linkedin)) || (!empty($contactData[0]->pinterest)) || (!empty($contactData[0]->whatsapp)) || (!empty($contactData[0]->instagram)) || (!empty($contactData[0]->tiktok)) || (!empty($contactData[0]->youtube)) || (!empty($contactData[0]->snapchat)))
 
-                    <?php
-                        if (isset($data['contactData'])) {
-                            $contactData = $data['contactData'];
-                    ?>
-                                @if(!empty($contactData[0]->facebook) || (!empty($contactData[0]->twitter)) || (!empty($contactData[0]->linkedin)) || (!empty($contactData[0]->pinterest)) || (!empty($contactData[0]->whatsapp)) || (!empty($contactData[0]->instagram)) || (!empty($contactData[0]->tiktok)) || (!empty($contactData[0]->youtube)) || (!empty($contactData[0]->snapchat)))
-
-                                <div class="link-css-mobile">
-                                    <div class="col-md-12">
-                                        @if($contactData[0]->facebook)
-                                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->facebook??'' )}}" target="_blank" class="btn btn-info btn-sm">
-                                            <i class="fa fa-facebook" aria-hidden="true"></i>
-                                            </a>
-                                        @endif
-                                        @if($contactData[0]->twitter)
-                                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->twitter??'' )}}" target="_blank" class="btn btn-info btn-sm">
-                                            Twitter
-                                            </a>
-                                        @endif
-                                        @if($contactData[0]->linkedin)
-                                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->linkedin??'' )}}" target="_blank" class="btn btn-info btn-sm">
-                                            <i class="fa fa-linkedin" aria-hidden="true"></i>
-                                            </a>
-                                        @endif
-                                        @if($contactData[0]->pinterest)
-                                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->pinterest??'' )}}" target="_blank" class="btn btn-info btn-sm">
-                                            <i class="fa fa-pinterest" aria-hidden="true"></i>
-                                            </a>
-                                        @endif
-                                        @if($contactData[0]->whatsapp)
-                                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->whatsapp??'' )}}" target="_blank" class="btn btn-info btn-sm">
-                                            Whatsapp
-                                            </a>
-                                        @endif
-                                        @if($contactData[0]->instagram)
-                                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->instagram??'' )}}" target="_blank" class="btn btn-info btn-sm">
-                                            <i class="fa fa-instagram" aria-hidden="true"></i>
-                                            </a>
-                                        @endif
-                                        @if($contactData[0]->tiktok)
-                                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->tiktok??'' )}}" target="_blank" class="btn btn-info btn-sm">
-                                            X
-                                            </a>
-                                        @endif
-                                        @if($contactData[0]->youtube)
-                                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->youtube??'' )}}" target="_blank" class="btn btn-info btn-sm">
-                                             <i class="fa fa-youtube" aria-hidden="true"></i>
-                                            </a>
-                                        @endif
-                                        @if($contactData[0]->snapchat)
-                                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->snapchat??'' )}}" target="_blank" class="btn btn-info btn-sm">
-                                            Snapchat
-                                            </a>
-                                        @endif
+                <div class="link-css-mobile">
+                    <div class="col-md-12">
+                        @if($contactData[0]->facebook)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->facebook??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                            <i class="fa fa-facebook" aria-hidden="true"></i>
+                            </a>
+                        @endif
+                        @if($contactData[0]->twitter)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->twitter??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                            Twitter
+                            </a>
+                        @endif
+                        @if($contactData[0]->linkedin)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->linkedin??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                            <i class="fa fa-linkedin" aria-hidden="true"></i>
+                            </a>
+                        @endif
+                        @if($contactData[0]->pinterest)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->pinterest??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                            <i class="fa fa-pinterest" aria-hidden="true"></i>
+                            </a>
+                        @endif
+                        @if($contactData[0]->whatsapp)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->whatsapp??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                            Whatsapp
+                            </a>
+                        @endif
+                        @if($contactData[0]->instagram)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->instagram??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                            <i class="fa fa-instagram" aria-hidden="true"></i>
+                            </a>
+                        @endif
+                        @if($contactData[0]->tiktok)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->tiktok??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                            X
+                            </a>
+                        @endif
+                        @if($contactData[0]->youtube)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->youtube??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                                <i class="fa fa-youtube" aria-hidden="true"></i>
+                            </a>
+                        @endif
+                        @if($contactData[0]->snapchat)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->snapchat??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                            Snapchat
+                            </a>
+                        @endif
 
 
-                                    </div>
-                                </div>
-                                @endif
-                    <?php } ?>
+                    </div>
+                </div>
+                @endif
+            <?php } ?>
 
-                    <?php if(!empty($data['website_links'])){ ?>
-
-                        <div class="row mb-1 link-css-mobile">
-                            <div class="col-md-12">
-                                <a class="add_bottom_15 link-headings">{{__("message.website_links")}}</a>
-                                @foreach($data['website_links'] as $websitelinks)
-                                <a href="{{ $websitelinks->link }}" target="_blank" class="btn btn-info btn-sm">{{ $websitelinks->name }} </a>
-                                @endforeach
-                            </div>
-                        </div>
-                    <?php } ?>
+            <?php if(!empty($data['website_links'])){ ?>
+                <div class="row mb-1 link-css-mobile">
+                    <div class="col-md-12">
+                        <a class="add_bottom_15 link-headings">{{__("message.website_links")}}</a>
+                        @foreach($data['website_links'] as $websitelinks)
+                        <a href="{{ $websitelinks->link }}" target="_blank" class="btn btn-info btn-sm">{{ $websitelinks->name }} </a>
+                        @endforeach
+                    </div>
+                </div>
+            <?php } ?>
 
 
             <div class="add_bottom_15 likebtn_alignment" style="margin-bottom: 0px;">
@@ -1783,7 +1922,7 @@
                         </div>
                         @if(count($data['directoryTypeData']) > 0)
                             <a id="more_type" class="more_type">
-                                See More <i class="fas fa-chevron-down"></i>
+                                See More d<i class="fas fa-chevron-down"></i>
                             </a>
                         @endif
 
@@ -2254,9 +2393,7 @@
         </div>
         <!-- /row -->
     </div>
-
     <!-- /container -->
-
     <?php
         $arrayCountRelatedProduct = count($data['relatedProductData']);
         if($arrayCountRelatedProduct>0){
@@ -2450,6 +2587,14 @@
     <script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
 
     <script>
+
+        window.addEventListener('load', function () {
+            var pageLoader = document.getElementById('loader');
+            if (pageLoader) {
+                pageLoader.classList.add('is-hidden');
+                pageLoader.setAttribute('aria-hidden', 'true');
+            }
+        });
 
         // Google tag event for vendor page view
         @if(app()->environment('production'))
@@ -3131,8 +3276,6 @@
             $('.modal_header_close_btn').on('click', function() {
                 $('#type_galleryModal').modal('hide');
             });
-
-            $("#loader").fadeOut("slow");
 
             $('#booking_date').datetimepicker({
                 // format:'yy-m-d h:m:s',
@@ -4054,7 +4197,11 @@
 
 
     <style>
-
+        .listing-menu-heading h2 span {
+            font-size: 13px;
+            font-weight: 500;
+            margin: 0px 10px;
+        }
         div#public_holiday_model {
             margin: 20px 0px;
         }
@@ -4571,7 +4718,7 @@
                 margin: 10px 1px;
             }
             .more_type {
-                width: 40%;
+                width: 40% !important;
                 margin: -2px 0px;
             }
             i.fas.fa-chevron-up {
@@ -5235,8 +5382,7 @@
         .headercontact {
             position: fixed;
             right: 0;
-            top: 70px;
-            width: 100%;
+            top: 41px;
             padding: 19px 0px;
             z-index: 99999999;
             border-bottom: 1px solid transparent;
@@ -5507,6 +5653,648 @@
         .company_details_logo_img {
             width: 78px !important;
             margin: 10px 15px !important;
+        }
+    }
+
+    .listing-info-card {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        min-height: 62px;
+        margin: 8px auto;
+        padding: 10px 12px;
+        border: 1px solid #dce8e6;
+        border-radius: 12px;
+        background: #fff;
+        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.07);
+        color: #172b3a !important;
+        text-align: left;
+        text-decoration: none !important;
+        transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+    }
+
+    .listing-info-card:hover {
+        transform: translateY(-2px);
+        border-color: #9acdc3;
+        box-shadow: 0 7px 18px rgba(15, 118, 110, 0.14);
+        color: #172b3a !important;
+    }
+
+    .listing-info-card:focus-visible {
+        outline: 3px solid rgba(15, 118, 110, 0.35);
+        outline-offset: 3px;
+    }
+
+    .shop-visit-cta {
+        max-width: 230px;
+    }
+
+    .schedule-info-card {
+        width: 100%;
+        max-width: 190px;
+        min-height: 62px;
+        margin: 8px 4px;
+        padding: 10px 12px;
+        cursor: pointer;
+        font-family: inherit;
+        white-space: normal;
+    }
+
+    button.schedule-info-card#down-to-schedule,
+    button.schedule-info-card#down-to-schedule_c {
+        width: 100%;
+        max-width: 200px;
+        float: right;
+        margin: 0px 10px 0px 10px;
+        padding: 0px 10px;
+    }
+
+    .schedule-info-card .listing-info-card__title {
+        white-space: nowrap;
+    }
+
+    .schedule-info-card--open .listing-info-card__icon {
+        background: #e8f4f1;
+        color: #0f766e;
+    }
+
+    .schedule-info-card--closed .listing-info-card__icon {
+        background: #fff1f0;
+        color: #c2413b;
+    }
+
+    .schedule-info-card--closed .listing-info-card__arrow {
+        color: #c2413b;
+    }
+
+    .listing-address-card {
+        min-height: 62px;
+    }
+
+    .shop-visit-cta__icon,
+    .listing-info-card__icon {
+        display: inline-flex;
+        flex: 0 0 38px;
+        align-items: center;
+        justify-content: center;
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #e8f4f1;
+        color: #0f766e;
+        font-size: 16px;
+    }
+
+    .shop-visit-cta__icon svg,
+    .listing-info-card__icon svg {
+        display: block;
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+    }
+
+    .shop-visit-cta__content {
+        display: flex;
+        flex: 1 1 auto;
+        min-width: 0;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .listing-info-card__content {
+        display: flex;
+        flex: 1 1 auto;
+        min-width: 0;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+    .shop-visit-cta__title {
+        color: #172b3a;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+
+    .listing-info-card__title {
+        color: #172b3a;
+        font-size: 13px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    .shop-visit-cta__meta {
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 1.2;
+    }
+
+    .listing-info-card__meta {
+        overflow: hidden;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 500;
+        line-height: 1.35;
+        text-overflow: ellipsis;
+    }
+
+    .shop-visit-cta__arrow,
+    .listing-info-card__arrow {
+        flex: 0 0 auto;
+        color: #0f766e;
+        font-size: 12px;
+        transition: transform 180ms ease;
+    }
+
+    .shop-visit-cta__arrow svg,
+    .listing-info-card__arrow svg {
+        display: block;
+        width: 16px;
+        height: 16px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+    }
+
+    .listing-info-card:hover .shop-visit-cta__arrow,
+    .listing-info-card:hover .listing-info-card__arrow {
+        transform: translateX(3px);
+    }
+
+    .listing-menu-container {
+        margin-top: 24px;
+        margin-bottom: 28px;
+    }
+
+    .listing-menu-section {
+        padding: 24px;
+        border: 1px solid #e5eceb;
+        border-radius: 16px;
+        background: #fff;
+        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    }
+
+    .listing-menu-categories {
+        margin-bottom: 20px;
+    }
+
+    .listing-menu-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 18px;
+    }
+
+    .listing-menu-heading h2 {
+        margin: 0;
+        color: #172b3a;
+        font-size: 24px;
+        font-weight: 700;
+        line-height: 1.25;
+    }
+
+    .listing-menu-heading p {
+        margin: 5px 0 0;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.45;
+    }
+
+    #company_imp_tags_div,
+    .listing-menu-tags {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 8px;
+    }
+    button#btn_defaulttags {
+        margin-bottom: 5px;
+    }
+    .listing-menu-tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 20px;
+        padding: 2px 4px;
+        border: 1px solid #e1e9e8;
+        border-radius: 8px;
+        background: #f7faf9;
+        color: #334155;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.3;
+        transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease;
+    }
+
+    .listing-menu-tag:hover,
+    .listing-menu-tag:focus-within {
+        transform: translateY(-1px);
+        border-color: #9acdc3;
+        background: #e8f4f1;
+        color: #0f766e;
+    }
+
+    .listing-menu-tag a,
+    .listing-menu-tag a:hover,
+    .listing-menu-tag a:focus {
+        color: inherit !important;
+        text-decoration: none;
+    }
+
+    .listing-menu-tag .tag_delete {
+        color: #be4450;
+    }
+
+    .listing-menu-toggle {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-top: 12px;
+        padding: 7px 11px;
+        border: 1px solid #dce8e6;
+        border-radius: 8px;
+        background: #fff;
+        color: #0f766e;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.3;
+        cursor: pointer;
+        transition: background-color 160ms ease, border-color 160ms ease;
+    }
+
+    .listing-menu-toggle:hover {
+        border-color: #9acdc3;
+        background: #e8f4f1;
+    }
+
+    .listing-menu-search.custom-search-input-2.inner {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) 58px;
+        align-items: stretch;
+        gap: 8px;
+        width: 100%;
+        height: auto;
+        margin: 0;
+        padding: 0;
+        border: 0;
+        border-radius: 12px;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    .listing-menu-search__field {
+        position: relative;
+        display: flex;
+        align-items: center;
+        min-width: 0;
+        min-height: 52px;
+        margin: 0;
+        padding: 0 48px 0 43px;
+        border: 1px solid #e1e8ed;
+        border-radius: 10px;
+        background: #f8fafc;
+        cursor: text;
+        transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    }
+
+    .listing-menu-search__field:focus-within {
+        border-color: #78b9ae;
+        background: #fff;
+        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
+    }
+
+    .listing-menu-search__icon {
+        position: absolute;
+        left: 14px;
+        display: inline-flex;
+        color: #64748b;
+        pointer-events: none;
+    }
+
+    .listing-menu-search__icon svg,
+    .listing-menu-search__submit svg {
+        display: block;
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: currentColor;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: 1.8;
+    }
+
+    .listing-menu-search__field .form-group {
+        position: relative;
+        flex: 1 1 auto;
+        min-width: 0;
+        margin: 0;
+    }
+
+    .listing-menu-search__field input.form-control {
+        display: block;
+        width: 100%;
+        height: 48px;
+        padding: 0;
+        border: 0 !important;
+        outline: 0;
+        background: transparent;
+        box-shadow: none !important;
+        color: #172b3a;
+        font-size: 14px;
+    }
+
+    .listing-menu-search__field input.form-control::placeholder {
+        color: #8492a6;
+        opacity: 1;
+    }
+
+    .listing-menu-search__field #start-recording {
+        top: 50%;
+        right: -34px;
+        width: 24px;
+        height: 28px;
+        padding: 0;
+        background: transparent;
+        color: #64748b !important;
+        font-size: 16px;
+        line-height: 28px;
+        transform: translateY(-50%);
+        cursor: pointer;
+    }
+
+    .listing-menu-search__submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 52px;
+        padding: 0;
+        border: 0;
+        border-radius: 10px;
+        background: #0f766e;
+        color: #fff;
+        cursor: pointer;
+        transition: background-color 160ms ease, transform 160ms ease;
+    }
+
+    .listing-menu-search__submit:hover {
+        transform: translateY(-1px);
+        background: #0b625c;
+    }
+
+    .listing-menu-search__submit:focus-visible,
+    .listing-menu-toggle:focus-visible {
+        outline: 3px solid rgba(15, 118, 110, 0.28);
+        outline-offset: 2px;
+    }
+
+    @media (max-width: 991px) {
+        .listing-info-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            grid-auto-flow: row dense;
+            row-gap: 8px;
+            margin-right: 0;
+            margin-left: 0;
+        }
+
+        .listing-info-row > .schedule-info-column,
+        .listing-info-row > .listing-shop-column,
+        .listing-info-row > .listing-address-column,
+        .listing-info-row > .listing-reload-column {
+            width: auto;
+            max-width: none;
+            padding-right: 12px;
+            padding-left: 12px;
+        }
+
+        .listing-info-row > .schedule-info-column {
+            grid-column: 1 / -1;
+        }
+
+        .listing-info-row > .listing-info-spacer {
+            display: none;
+        }
+
+        .listing-info-row .schedule-info-column nav.secondary_nav,
+        .listing-info-row .schedule-info-column nav.secondary_nav.is_stuck {
+            position: static !important;
+            left: auto !important;
+            width: auto !important;
+            padding: 0;
+            background: transparent !important;
+            box-shadow: none;
+        }
+
+        .listing-info-row .schedule-info-column nav.secondary_nav > .container-fluid {
+            padding-right: 0;
+            padding-left: 0;
+        }
+
+        .listing-info-row .schedule-info-column nav.secondary_nav ul {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 8px;
+            margin: 0;
+            padding: 0;
+        }
+
+        .listing-info-row .schedule-info-column nav.secondary_nav ul > li,
+        .listing-info-row .schedule-info-column nav.secondary_nav ul > li:last-child {
+            display: block;
+            width: 100%;
+            min-width: 0;
+            margin: 0;
+        }
+
+        .listing-info-row .schedule-info-column .schedule-info-card,
+        .listing-info-row .schedule-info-column button.schedule-info-card#down-to-schedule,
+        .listing-info-row .schedule-info-column button.schedule-info-card#down-to-schedule_c {
+            width: 100%;
+            max-width: none;
+            min-width: 0;
+            min-height: 62px;
+            float: none;
+            margin: 0;
+            padding: 10px 12px;
+        }
+
+        .listing-info-row .schedule-info-column nav.secondary_nav ul > li > button.schedule-info-card {
+            display: flex !important;
+            box-sizing: border-box;
+            width: 100% !important;
+        }
+
+        .listing-info-row .schedule-info-column .listing-contact-item {
+            grid-column: 1 / -1;
+        }
+
+        .listing-info-row .schedule-info-column #down-to-contact {
+            width: 100%;
+            margin: 0;
+        }
+
+        .listing-direction-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            min-height: 38px;
+            margin: 8px 0 0 auto;
+            padding: 7px 12px;
+            border: 1px solid #dce8e6;
+            border-radius: 9px;
+            background: #fff;
+            color: #0f766e;
+            font: inherit;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.2;
+            cursor: pointer;
+        }
+
+        .listing-direction-button svg {
+            display: block;
+            width: 17px;
+            height: 17px;
+            fill: none;
+            stroke: currentColor;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            stroke-width: 1.8;
+        }
+
+        .listing-info-row .shop-visit-cta,
+        .listing-info-row .listing-address-card {
+            max-width: none;
+            margin: 0;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .listing-info-row > .listing-reload-column {
+            grid-column: 1 / -1;
+            text-align: right;
+        }
+
+        .listing-info-row #functions_reload {
+            display: inline-block;
+            margin: 0;
+        }
+
+        .listing-info-row .listing-address-card {
+            min-height: 62px;
+        }
+    }
+
+    @media (max-width: 767px) {
+        .listing-menu-container {
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+
+        .listing-menu-section {
+            padding: 18px;
+            border-radius: 13px;
+        }
+
+        .listing-menu-heading {
+            margin-bottom: 14px;
+        }
+    }
+
+    @media (max-width: 575px) {
+        .listing-menu-container {
+            padding-right: 5px;
+            padding-left: 10px;
+        }
+
+        .listing-menu-section {
+            padding: 16px 14px;
+        }
+
+        .listing-menu-heading h2 {
+            font-size: 21px;
+        }
+
+        .listing-menu-heading p {
+            font-size: 12px;
+        }
+
+        .listing-menu-tag {
+            min-height: 32px;
+            padding-right: 10px;
+            padding-left: 10px;
+            font-size: 12px;
+        }
+
+        .listing-menu-search.custom-search-input-2.inner {
+            grid-template-columns: minmax(0, 1fr) 50px;
+            gap: 6px;
+        }
+
+        .listing-menu-search__field {
+            min-height: 48px;
+            padding-right: 43px;
+            padding-left: 38px;
+        }
+
+        .listing-menu-search__icon {
+            left: 11px;
+        }
+
+        .listing-menu-search__icon svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .listing-menu-search__field input.form-control {
+            height: 44px;
+            font-size: 13px;
+        }
+
+        .listing-menu-search__field #start-recording {
+            right: -31px;
+        }
+
+        .listing-menu-search__submit {
+            min-height: 48px;
+        }
+
+        .listing-info-row {
+            grid-template-columns: minmax(0, 1fr);
+            row-gap: 10px;
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+        .listing-info-row > .schedule-info-column,
+        .listing-info-row > .listing-shop-column,
+        .listing-info-row > .listing-address-column,
+        .listing-info-row > .listing-reload-column {
+            grid-column: 1;
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+        .listing-info-row .schedule-info-column nav.secondary_nav ul {
+            grid-template-columns: minmax(0, 1fr);
+        }
+
+        .listing-info-row .shop-visit-cta,
+        .listing-info-row .listing-address-card {
+            width: 100%;
+            max-width: 420px;
+            margin-right: auto;
+            margin-left: auto;
         }
     }
 

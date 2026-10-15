@@ -1134,150 +1134,134 @@ class Listing extends Controller
                 } else {
                     $ip = $_SERVER['REMOTE_ADDR'];
                 }
-                $uniquevisitor = ViewedListingsCounter::where('directory_id', $id)->where('visiters', $ip)->first();
-                if (!$uniquevisitor) {
-                    $counter = new ViewedListingsCounter;
-                    $counter->directory_id = $id;
-                    $counter->visiters = $ip;
-                    $counter->save();
-                }
+        $uniquevisitor = ViewedListingsCounter::where('directory_id', $id)->where('visiters', $ip)->first();
+        if (!$uniquevisitor) {
+            $counter = new ViewedListingsCounter;
+            $counter->directory_id = $id;
+            $counter->visiters = $ip;
+            $counter->save();
+        }
 
-                $metadata = DB::table('directory_seo')->where('module_id', $id)->where('page_type', 'directory')->first();
+        $metadata = DB::table('directory_seo')->where('module_id', $id)->where('page_type', 'directory')->first();
 
-                $data['mainDirectoryDetails'] = Diectory::with('user')
-                    ->with(['directoryLanguage' => function ($q) use ($language_id) {
-                        $q->where('language_id', '=', $language_id);
-                    }])->select('*')->where('id', $id)->first();
+        $data['mainDirectoryDetails'] = Diectory::with('user')
+            ->with(['directoryLanguage' => function ($q) use ($language_id) {
+                $q->where('language_id', '=', $language_id);
+            }])->select('*')->where('id', $id)->first();
 
-                $data['address']                    = DB::table('directory_location')->select('*')->where('directory_id', $id)->get()->toArray();
-                $data['bannerImage']                = DB::table('directory_media_listing_image')->select('*')->where('directory_id', $id)->get()->toArray();
-                $data['galleryImage']               = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->limit(20)->get()->toArray();
-                $data['allgalleryImage']            = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->get()->toArray();
+        $data['address']                    = DB::table('directory_location')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['bannerImage']                = DB::table('directory_media_listing_image')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['galleryImage']               = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->limit(20)->get()->toArray();
+        $data['allgalleryImage']            = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->get()->toArray();
 
-                $data['galleryImageChunk']          = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->limit(20)->get()->chunk(10);
-                $data['allgalleryImageChunk']       = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->get()->chunk(10);
+        $data['galleryImageChunk']          = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->limit(20)->get()->chunk(10);
+        $data['allgalleryImageChunk']       = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->get()->chunk(10);
 
-                $data['directory_media_cover']      = DB::table('directory_media_cover')->select('*')->where('directory_id', $id)->get()->toArray();
-                $data['amenity']                    = Helper::getAmenity();                 /* get amenity */
-                $data['amenityData']                = DB::table('directory_amenities')->select('*')->where('directory_id', $id)->get()->toArray();
-                $data['directoryTypeimage']         = DB::table('directory_type')->select('*')->where('directory_id',  $id)->groupBy('block_num')->get()->toArray();
-                $data['directoryTypeData']          = DB::table('directory_type')->select('*')->where('directory_id',  $id)->get()->toArray();
-                $data['directoryTypeDataPosition']  = DB::table('directory_type')->select('*')->where('directory_id',  $id)->where('column_name', "position")->orderby(DB::raw('CAST(column_value AS SIGNED)'), 'ASC')->get()->toArray(); // Added by Madhulika for manage the position
-                $data['mediaData']                  = DB::table('directory_media')->select('*')->where('directory_id', $id)->get()->toArray();
-                $data['contactData']                = DB::table('directory_contact')->select('*')->where('directory_id', $id)->get()->toArray();
-                $data['trademarkData']              = DB::table('directory_media_trademarks_image')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['directory_media_cover']      = DB::table('directory_media_cover')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['amenity']                    = Helper::getAmenity();                 /* get amenity */
+        $data['amenityData']                = DB::table('directory_amenities')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['directoryTypeimage']         = DB::table('directory_type')->select('*')->where('directory_id',  $id)->groupBy('block_num')->get()->toArray();
+        $data['directoryTypeData']          = DB::table('directory_type')->select('*')->where('directory_id',  $id)->get()->toArray();
+        $data['directoryTypeDataPosition']  = DB::table('directory_type')->select('*')->where('directory_id',  $id)->where('column_name', "position")->orderby(DB::raw('CAST(column_value AS SIGNED)'), 'ASC')->get()->toArray(); // Added by Madhulika for manage the position
+        $data['mediaData']                  = DB::table('directory_media')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['contactData']                = DB::table('directory_contact')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['trademarkData']              = DB::table('directory_media_trademarks_image')->select('*')->where('directory_id', $id)->get()->toArray();
 
-                $productDirctoryData                = DB::table('product')->select('product.*',
-                                        DB::raw("6371 * acos(cos(radians(" . $latitude . "))
+        $productDirctoryData                = DB::table('product')->select('product.*',
+                                DB::raw("6371 * acos(cos(radians(" . $latitude . "))
+                                * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
+                                + sin(radians(" . $latitude . ")) * sin(radians(latitude))) AS distance"),
+                                'pro_trans.id AS product_lang_id', 'pro_trans.name AS product_lang_name', 'pro_trans.short_content')
+                                ->leftjoin('product_translation as pro_trans', 'product.id', '=', 'pro_trans.product_id');
+
+
+        $data['relatedProductData']   = $productDirctoryData
+                            ->Where('pro_trans.language_id', $language_id)
+                            ->where('product.directory_id', $id)
+                            ->where('product.deleted', '0')->where('product.is_free_product', 0)
+                            ->where('product.status', 'Active')->groupBy('product.id')
+                            // ->orderBy('product.id', 'desc')
+                            ->orderby('distance', 'desc')
+                            //->having('distance', '<', 2000)
+                            ->get()->take(7);
+
+        $data['directoryProductData']         = $productDirctoryData
+                            ->Where('pro_trans.language_id', $language_id)
+                            ->where('product.directory_id', $id)
+                            ->where('product.deleted', '0')->where('product.is_free_product', 0)
+                            ->where('product.status', 'Active')->groupBy('product.id')
+                            // ->orderBy('product.id', 'desc')
+                            ->orderby('distance', 'asc')
+                            //->having('distance', '<', 2000)
+                            ->get()->toArray();
+        $data['offerData']                  = DB::table('offer')->select('*',  DB::raw("6371 * acos(cos(radians(" . $latitude . "))
+                                            * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
+                                            + sin(radians(" .$latitude. ")) * sin(radians(latitude))) AS distance"))
+                                            ->where('offer_directory_link', $id)->where('deleted', '0')
+                                            ->where('offer_expire_date', ">=", date('y-m-d'))
+                                            ->orderby('distance', 'asc')
+                                            //->having('distance', '<', 2000)
+                                            ->get()->toArray();
+
+        $data['eventdata'] = Events::where('directory_id', $id)
+                                            ->where('end_date', '>=', date('Y-m-d')) // Correct format for year is 'Y'
+                                            ->where(function ($query) {
+                                                $query->where('display_status', 'display_on_vendor_page_only')
+                                                        ->orWhere('display_status', 'display_both');
+                                            })
+                                            ->orderBy('id', 'desc')
+                                            ->get();
+
+        $data['shoppingcardData']   = DB::table('shopping_card')->select('*', DB::raw("6371 * acos(cos(radians(" . $latitude . "))
                                         * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
-                                        + sin(radians(" . $latitude . ")) * sin(radians(latitude))) AS distance"),
-                                        'pro_trans.id AS product_lang_id', 'pro_trans.name AS product_lang_name', 'pro_trans.short_content')
-                                        ->leftjoin('product_translation as pro_trans', 'product.id', '=', 'pro_trans.product_id');
+                                        + sin(radians(" .$latitude. ")) * sin(radians(latitude))) AS distance"))
+                                        ->where('directory_link', $id)
+                                        ->where('deleted', '0')
+                                        ->where('expire_date', ">=", date('y-m-d'))
+                                        ->orderby('distance', 'asc')
+                                        //->having('distance', '<', 2000)
+                                        ->get()->toArray();
 
 
-                $data['relatedProductData']   = $productDirctoryData
-                                    ->Where('pro_trans.language_id', $language_id)
-                                    ->where('product.directory_id', $id)
-                                    ->where('product.deleted', '0')->where('product.is_free_product', 0)
-                                    ->where('product.status', 'Active')->groupBy('product.id')
-                                    // ->orderBy('product.id', 'desc')
-                                    ->orderby('distance', 'desc')
-                                    //->having('distance', '<', 2000)
-                                    ->get()->take(7);
 
-                $data['directoryProductData']         = $productDirctoryData
-                                    ->Where('pro_trans.language_id', $language_id)
-                                    ->where('product.directory_id', $id)
-                                    ->where('product.deleted', '0')->where('product.is_free_product', 0)
-                                    ->where('product.status', 'Active')->groupBy('product.id')
-                                    // ->orderBy('product.id', 'desc')
-                                    ->orderby('distance', 'asc')
-                                    //->having('distance', '<', 2000)
-                                    ->get()->toArray();
-                $data['offerData']                  = DB::table('offer')->select('*',  DB::raw("6371 * acos(cos(radians(" . $latitude . "))
-                                                    * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
-                                                    + sin(radians(" .$latitude. ")) * sin(radians(latitude))) AS distance"))
-                                                    ->where('offer_directory_link', $id)->where('deleted', '0')
-                                                    ->where('offer_expire_date', ">=", date('y-m-d'))
-                                                    ->orderby('distance', 'asc')
-                                                    //->having('distance', '<', 2000)
-                                                    ->get()->toArray();
+        $data['adevertiseData'] = Advertisement::query()
+            ->select([
+                'advertisement.*',
+                'vendor_competition_status.status',
+            ])
+            ->leftJoin('vendor_competition_status', function ($join) use ($id) {
+                $join->on('advertisement.id','=','vendor_competition_status.competition_id')
+                ->where('vendor_competition_status.company_id', $id);
+            })
+            ->whereDate('advertisement.end_date', '>=', now())
+            ->whereRaw(
+                'FIND_IN_SET(?, lc_advertisement.adminassignvendor)',
+                [$id]
+            )
+            ->where('advertisement.deleted', '0')
+            ->whereHas('questions')
+            ->where(function ($query) {
+                $query->where('vendor_competition_status.status', 'Active')
+                    ->orWhereNull('vendor_competition_status.id');
+            })
+            ->orderByDesc('advertisement.id')
+            ->limit(15)
+            ->get();
 
-                $data['eventdata'] = Events::where('directory_id', $id)
-                                                    ->where('end_date', '>=', date('Y-m-d')) // Correct format for year is 'Y'
-                                                    ->where(function ($query) {
-                                                        $query->where('display_status', 'display_on_vendor_page_only')
-                                                              ->orWhere('display_status', 'display_both');
-                                                    })
-                                                    ->orderBy('id', 'desc')
-                                                    ->get();
-
-                $data['shoppingcardData']            = DB::table('shopping_card')->select('*', DB::raw("6371 * acos(cos(radians(" . $latitude . "))
-                                                    * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
-                                                    + sin(radians(" .$latitude. ")) * sin(radians(latitude))) AS distance"))
-                                                    ->where('directory_link', $id)
-                                                    ->where('deleted', '0')
-                                                    ->where('expire_date', ">=", date('y-m-d'))
-                                                    ->orderby('distance', 'asc')
-                                                    //->having('distance', '<', 2000)
-                                                    ->get()->toArray();
-
-                $today = date('Y-m-d H:i:s');
-
-                // $data['adevertiseData'] = Advertisement::from('advertisement')
-                //     ->select([
-                //         'advertisement.*',
-                //         'vc_status.status',
-                //     ])
-                //     ->leftJoin('vendor_competition_status as vc_status',
-                //         'advertisement.id', '=','vc_status.competition_id' )
-                //     ->whereDate('advertisement.end_date', '>=', $today)
-                //     ->whereRaw('FIND_IN_SET(?, lc_advertisement.adminassignvendor)', [$id])
-                //     ->where('advertisement.deleted', 0)
-                //     ->where('vc_status.status', 'Active')
-                //     ->whereHas('questions')
-                //     ->orderByDesc('advertisement.id')
-                //     ->limit(15)
-                //     ->get();
-
-    $data['adevertiseData'] = Advertisement::query()
-        ->select([
-            'advertisement.*',
-            'vendor_competition_status.status',
-        ])
-        ->leftJoin('vendor_competition_status', function ($join) use ($id) {
-            $join->on('advertisement.id','=','vendor_competition_status.competition_id')
-            ->where('vendor_competition_status.company_id', $id);
-        })
-        ->whereDate('advertisement.end_date', '>=', now())
-        ->whereRaw(
-            'FIND_IN_SET(?, lc_advertisement.adminassignvendor)',
-            [$id]
-        )
-        ->where('advertisement.deleted', '0')
-        ->whereHas('questions')
-        ->where(function ($query) {
-            $query->where('vendor_competition_status.status', 'Active')
-                ->orWhereNull('vendor_competition_status.id');
-        })
-        ->orderByDesc('advertisement.id')
-        ->limit(15)
-        ->get();
-
-                $data['blogData'] = DB::table('blog as b')
-                        ->select(
-                            'b.*',
-                            DB::raw("6371 * acos(cos(radians(" . $latitude . "))
-                            * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
-                            + sin(radians(" . $latitude . ")) * sin(radians(latitude))) AS distance"),
-                            //'plan_subsc.slug as plan_slug'
-                        )
-                        ->where('b.deleted', '0')
-                        ->where('b.directory_id', $id)  // Make sure the blog is not deleted
-                        ->where('b.status', 'Active')
-                        ->orderBy('b.id', 'desc')
-                        ->limit(5)
-                        ->get()->toArray();
+            $data['blogData'] = DB::table('blog as b')
+                    ->select(
+                        'b.*',
+                        DB::raw("6371 * acos(cos(radians(" . $latitude . "))
+                        * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
+                        + sin(radians(" . $latitude . ")) * sin(radians(latitude))) AS distance"),
+                        //'plan_subsc.slug as plan_slug'
+                    )
+                    ->where('b.deleted', '0')
+                    ->where('b.directory_id', $id)  // Make sure the blog is not deleted
+                    ->where('b.status', 'Active')
+                    ->orderBy('b.id', 'desc')
+                    ->limit(5)
+                    ->get()->toArray();
 
                 $data['categoriesData']             = DB::table('category')->whereIn('id', function ($query) use ($id) {
                     $query->select('category_id')->from('directory_category')->Where('directory_id', $id);

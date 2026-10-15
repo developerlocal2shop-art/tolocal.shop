@@ -1,5 +1,5 @@
 @extends('layouts.client.blog')
-@section('title','Posts | our blog ')
+@section('title','Posts | Our blog ')
 @section('content')
 </a>
 <div class="loader" id="loader"></div>

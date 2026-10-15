@@ -108,21 +108,21 @@ $getDirectoryData = Helper::getDirectoryIdSlug($mainProductD->directory_id);
                 </span>
             </li>
 
-            <li style="display:none;" class="company_detail_menu nav-item dropdown">
-                <span>
-                    <a class="nav-link dropdown-toggle desktop" id="navbarDropdown" href="{{ route('shop') }}">
+            {{-- <li style="display:none;" class="company_detail_menu nav-item dropdown">
+                <span> --}}
+                    {{-- <a class="nav-link dropdown-toggle desktop" id="navbarDropdown" href="{{ route('shop') }}">
                         <span>
-                            {{-- {{ ucfirst(__("message.menu_text_shop")) }} --}}
+
                             Products
                         </span>
-                    </a>
-                    <a class="nav-link mobile" href="{{ route('shop') }}">
-                        {{-- Products --}}
-                    </a>
-                    <span class="nav-link dropdown-toggle mobile" id="navbarDropdown" aria-haspopup="true" href="{{ route('shop') }}">
+                    </a> --}}
+                    {{-- <a class="nav-link mobile" href="{{ route('shop') }}">
+                        Products
+                    </a> --}}
+                    {{-- <span class="nav-link dropdown-toggle mobile" id="navbarDropdown" aria-haspopup="true" href="{{ route('shop') }}">
                     Products
-                    </span>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    </span> --}}
+                    {{-- <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <div class="container2">
                             <div class="row">
                                 <div class="col-md-12">
@@ -130,7 +130,7 @@ $getDirectoryData = Helper::getDirectoryIdSlug($mainProductD->directory_id);
                                         Products
                                         <hr>
                                     </a>
-                                    <?php foreach($data['procategories'] as $parentcat){ ?>
+                                    <?php //foreach($data['procategories'] as $parentcat){ ?>
                                     @php
                                         $count_pro_cat = Helper::getExistingCatByProduct($parentcat->id);
                                     @endphp
@@ -143,10 +143,11 @@ $getDirectoryData = Helper::getDirectoryIdSlug($mainProductD->directory_id);
                                         </a>
 
                                         <ul>
-                                        <?php foreach($data['prosubcategories'] as $subcat){
-                                        $count_pro_sub_cat = Helper::getExistingSubCatByProduct($subcat->id);
-                                        if($count_pro_sub_cat > 0){
-                                        if($subcat->parent_id == $parentcat->id){
+                                        <?php
+                                        //foreach($data['prosubcategories'] as $subcat){
+                                        //$count_pro_sub_cat = Helper::getExistingSubCatByProduct($subcat->id);
+                                        //if($count_pro_sub_cat > 0){
+                                        //if($subcat->parent_id == $parentcat->id){
                                         ?>
                                             <li>
                                                 <a href="{{ url('shop?subcat='.$subcat->id.'') }}" class="notranslate">
@@ -160,17 +161,17 @@ $getDirectoryData = Helper::getDirectoryIdSlug($mainProductD->directory_id);
                                                     {{ ($subcat->name!='')?$subcat->name:$subcat->name }}
                                                 </a>
                                             </li>
-                                            <?php } }  } ?>
+                                            <?php //} }  } ?>
                                         </ul>
                                     </div>
                                     @endif
-                                    <?php } ?>
+                                    <?php // } ?>
                                 </div>
                             </div>
                         </div>
-                        <!--  /.container  -->
-                    </div>
-                </span>  </li>
+                    </div> --}}
+                {{-- </span>
+            </li> --}}
             <li style="display:none;" class="company_detail_menu"><span><a class="notranslate" href="{{ route('blog') }}">{{ ucfirst(__("message.menu_text_blog"))}}</a></span></li>
             <li style="display:none;" class="company_detail_menu"><span><a class="notranslate" href="{{ route('event') }}">{{ ucfirst(__("message.menu_text_event")) }}</a></span></li>
             <li style="display:none;" class="company_detail_menu"><span><a class="notranslate" href="{{ route('contact') }}">{{ ucfirst(__("message.menu_text_contact"))}}</a></span></li>
@@ -599,7 +600,7 @@ $getDirectoryData = Helper::getDirectoryIdSlug($mainProductD->directory_id);
         width: 160px;
         color: #fff;
         position: absolute;
-        right: 222px;
+        right: 248px;
         font-size: 15px;
         font-family: -webkit-body;
         line-height: 25px;
