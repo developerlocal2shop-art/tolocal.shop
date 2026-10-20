@@ -297,6 +297,8 @@ Route::group(['middleware' => ['isuserlogin']], function () {
 
         Route::get('/company-information', [CompanyController::class, 'editcompanyinformation'])->name('editcompanyinformation')->middleware('ModuleAuth');
         Route::post('/company-information', [CompanyController::class, 'updatecompanyinformation'])->name('updatecompanyinformation');
+        Route::post('/company-information/cover-image', [CompanyController::class, 'uploadCompanyCoverImage'])->name('company.cover-image.upload');
+        Route::post('/company-information/gallery-image-with-text', [CompanyController::class, 'uploadCompanyGalleryImageWithText'])->name('company.gallery-image-with-text.upload');
         Route::get('/company/products', [CompanyController::class, 'companyproducts'])->name('company.products')->middleware('ModuleAuth');
         Route::post('/company/products', [CompanyController::class, 'companyproducts'])->name('company.products.save');
         Route::post('/company/get-trademarks-by-categoriesid', [CompanyController::class, 'getTrademarksByCatid']);
@@ -678,4 +680,3 @@ Route::group(['middleware' => 'Language'], function () {
 Route::get('/change-currency/{code}', [Pages::class, 'changeCurrency']);
 Route::get('checkout', [CheckoutController::class, 'index'])->name('checkout');
 Route::post('order-place', [CheckoutController::class, 'placeOrder'])->name('order.place');
-

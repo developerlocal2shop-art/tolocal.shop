@@ -1,11 +1,16 @@
-
+<style>
+ header.header.sticky, header.header_in {
+    background-color: #fff;
+    border-bottom: 1px solid #ededed;
+}
+</style>
 <div id="page">
+
     <header class="header menu_fixed">
         <div class="google_translate_mobile">
             <b id="google_translate_element_mobile"></b>
         </div>
         <div id="logo" class="logo_wrapper">
-
             <a href="{{ url('/') }}" title="ToLocal.shop Directory Listing CMS" class="logo_head_a">
                 <span class="company_details_logo_head">
                     <img src="{{ asset('assets/images/adobe_icon.png') }}" height="auto" alt="" class="company_details_logo_img">
@@ -18,6 +23,8 @@
         </div>
         <x-Clientmenu/>
     </header>
+
+
     <main>
         <div class="row-hero">
             <?php if($data['headerData']->bannertype=="video"){ ?>

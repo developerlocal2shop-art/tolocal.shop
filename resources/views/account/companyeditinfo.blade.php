@@ -278,10 +278,12 @@ $instruction = $data['instruction'];
                                 <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                                     <ul class="nav nav-tabs dir-tabs cust-nav-tab notranslate" id="directory_tabs" role="tablist">
                                         <?php
-                                            function active($currect_page) {
-                                                $url = request()->get('target');
-                                                if($currect_page == $url){
-                                                    echo 'active';
+                                            if (!function_exists('active')) {
+                                                function active($currect_page) {
+                                                    $url = request()->get('target');
+                                                    if($currect_page == $url){
+                                                        echo 'active';
+                                                    }
                                                 }
                                             }
                                         ?>
@@ -830,7 +832,7 @@ $instruction = $data['instruction'];
                                             <div class="row">
                                                 <div class="col-md-6 mobile-alignment-infoicon" id="multi-imagelistingthumbnail">
                                                     <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0" style="display: flex;">Cover Image Listing Thumbnail (<span style="color:red">800 X 800</span>)px
+                                                        <label class="col-md-12 p-0" style="display: flex;">Company Thumbnail (<span style="color:red">800 X 800</span>)px
                                                             <div id="tooltip">
                                                                 <span id="tooltipText">Best result with (800 X 800)px - other dimensions are acceptable but visualization can be poor.</span>
                                                                 <span><i class="fas fa-info-circle" ></i></span>
@@ -856,12 +858,19 @@ $instruction = $data['instruction'];
                                                 </div>
                                                 <div class="col-md-6 infoicon-listingcover-align" id="multi-listingCover">
                                                     <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0" style="display: flex;">Selected Listing Cover Images (<span style="color:red">960 X 450</span>)px
-                                                            <div id="tooltip">
-                                                                <span id="tooltipText">Best result with (960 X 450)px - other dimensions are acceptable but visualization can be poor.</span>
-                                                                <span><i class="fas fa-info-circle" ></i></span>
-                                                            </div>
-                                                        </label>
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <label class="p-0 mb-0" style="display: flex;">Selected Company Cover Images (<span style="color:red">960 X 450</span>)px
+                                                                <div id="tooltip">
+                                                                    <span id="tooltipText">Best result with (960 X 450)px - other dimensions are acceptable but visualization can be poor.</span>
+                                                                    <span><i class="fas fa-info-circle" ></i></span>
+                                                                </div>
+                                                            </label>
+                                                            @if ($user->hasPermission('update') == true)
+                                                            <button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#addCompanyCoverImageModal" style="white-space: nowrap;">
+                                                                Add Image with text
+                                                            </button>
+                                                            @endif
+                                                        </div>
                                                         <p>Note : <i class="fas fa-eye" aria-hidden="true"></i>
                                                             Image upload at a time - 1 and Max limit - {{ $getFeatureUsesValue??'' }} Pending on my package. </p>
                                                         <div class="col-md-12 imageuploadify">
@@ -924,6 +933,12 @@ $instruction = $data['instruction'];
 
                                                             <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-coverimages="{{ $imagenamerow->name_thumbnail }}">
                                                                 <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="cover">
+                                                                @if($imagenamerow->title || $imagenamerow->description)
+                                                                <div class="image-metadata-overlay">
+                                                                    @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
+                                                                    @if($imagenamerow->description)<span>{{ $imagenamerow->description }}</span>@endif
+                                                                </div>
+                                                                @endif
                                                                 <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
 
                                                             </div>
@@ -980,12 +995,17 @@ $instruction = $data['instruction'];
 
                                                     @endphp
                                                     <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0" style="display: flex;">Company gallery images (<span style="color:red">1000 X 1000 </span>)px
-                                                            <div id="tooltip">
-                                                                <span id="tooltipText">Best result with (1000 X 1000)px - other dimensions are acceptable but visualization can be poor.</span>
-                                                                <span><i class="fas fa-info-circle" ></i></span>
-                                                            </div>
-                                                        </label>
+                                                        <div class="d-flex align-items-center justify-content-between">
+                                                            <label class="p-0 mb-0" style="display: flex;">Company gallery images (<span style="color:red">1000 X 1000 </span>)px
+                                                                <div id="tooltip">
+                                                                    <span id="tooltipText">Best result with (1000 X 1000 )px - other dimensions are acceptable but visualization can be poor.</span>
+                                                                    <span><i class="fas fa-info-circle" ></i></span>
+                                                                </div>
+                                                            </label>
+                                                            @if ($user->hasPermission('update') == true)
+                                                            <button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#addCompanyGalleryImageTextModal" style="white-space: nowrap;">Add Image with text</button>
+                                                            @endif
+                                                        </div>
                                                          <p>Note : <i class="fas fa-eye" aria-hidden="true"></i> Image upload at a time - <b>20</b> and Max limit - <b>{{ $getFeatureGalleryValue??'' }}</b> for my package. Now <b>{{ $count_imagenamegallery }}</b> images uploaded</p>
 
                                                         <div class="col-md-12 imageuploadify">
@@ -1032,6 +1052,12 @@ $instruction = $data['instruction'];
                                                             @if($imagenamerow->name_thumbnail)
                                                                 <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
                                                                     <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
+                                                                    @if($imagenamerow->title || $imagenamerow->description)
+                                                                    <div class="image-metadata-overlay">
+                                                                        @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
+                                                                        @if($imagenamerow->description)<span>{{ $imagenamerow->description }}</span>@endif
+                                                                    </div>
+                                                                    @endif
                                                                     <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
                                                                     <input type="checkbox" name="gal_ids" class="cb-element" value="{{ $imagenamerow->id }}">
                                                                 </div>
@@ -2751,6 +2777,236 @@ $instruction = $data['instruction'];
     </div>
     </div>
 </main>
+
+<div class="modal fade" id="addCompanyCoverImageModal" tabindex="-1" role="dialog" aria-labelledby="addCompanyCoverImageModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCompanyCoverImageModalLabel">Add Company Cover Image</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="companyCoverImageUploadForm" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div id="companyCoverImageUploadErrors" class="alert alert-danger" style="display: none;" role="alert"></div>
+                    <div id="companyCoverImageUploadSuccess" class="alert alert-success" style="display: none;" role="status"></div>
+                    <div class="form-group">
+                        <label for="company-cover-image-file">Image File</label>
+                        <input type="file" class="form-control" id="company-cover-image-file" name="image" accept="image/jpeg,image/png,image/gif,image/bmp,image/webp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-cover-image-title">Title</label>
+                        <input type="text" class="form-control" id="company-cover-image-title" name="title" maxlength="255" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-cover-image-description">Description</label>
+                        <textarea class="form-control" id="company-cover-image-description" name="description" rows="4" maxlength="5000" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="companyCoverImageUploadButton">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="addCompanyGalleryImageTextModal" tabindex="-1" role="dialog" aria-labelledby="addCompanyGalleryImageTextModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCompanyGalleryImageTextModalLabel">Add Company Gallery Image with Text</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form id="companyGalleryImageTextUploadForm" enctype="multipart/form-data">
+                @csrf
+                <div class="modal-body">
+                    <div id="companyGalleryImageTextUploadErrors" class="alert alert-danger" style="display: none;" role="alert"></div>
+                    <div id="companyGalleryImageTextUploadSuccess" class="alert alert-success" style="display: none;" role="status"></div>
+                    <div class="form-group">
+                        <label for="company-gallery-image-file">Image File</label>
+                        <input type="file" class="form-control" id="company-gallery-image-file" name="image" accept="image/jpeg,image/png,image/gif,image/bmp,image/webp" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-gallery-image-title">Title</label>
+                        <input type="text" class="form-control" id="company-gallery-image-title" name="title" maxlength="255" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-gallery-image-description">Description</label>
+                        <textarea class="form-control" id="company-gallery-image-description" name="description" rows="4" maxlength="5000" required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" id="companyGalleryImageTextUploadButton">Upload</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('#imgPreview').on('mouseenter focusin', '.thumbnail:has(.image-metadata-overlay)', function () {
+            $('#imgPreview').addClass('metadata-popup-active');
+        }).on('mouseleave focusout', '.thumbnail:has(.image-metadata-overlay)', function () {
+            $('#imgPreview').removeClass('metadata-popup-active');
+        });
+
+        $('#listgallerypreview').on('mouseenter focusin', '.thumbnail:has(.image-metadata-overlay)', function () {
+            $('#listgallerypreview').addClass('metadata-popup-active');
+        }).on('mouseleave focusout', '.thumbnail:has(.image-metadata-overlay)', function () {
+            $('#listgallerypreview').removeClass('metadata-popup-active');
+        });
+
+        var $form = $('#companyCoverImageUploadForm');
+        var $errors = $('#companyCoverImageUploadErrors');
+        var $success = $('#companyCoverImageUploadSuccess');
+        var $uploadButton = $('#companyCoverImageUploadButton');
+
+        $('#addCompanyCoverImageModal').on('show.bs.modal', function () {
+            $errors.hide().text('');
+            $success.hide().text('');
+        });
+
+        $form.on('submit', function (event) {
+            event.preventDefault();
+
+            if (!this.checkValidity()) {
+                this.reportValidity();
+                return;
+            }
+
+            $errors.hide().text('');
+            $success.hide().text('');
+            $uploadButton.prop('disabled', true).text('Uploading...');
+            var uploadSucceeded = false;
+
+            $.ajax({
+                url: @json(route('company.cover-image.upload')),
+                method: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    uploadSucceeded = true;
+                    $success.text(
+                        response.message + ' Title: ' + response.image.title +
+                        ' Description: ' + response.image.description
+                    ).show();
+                    window.setTimeout(function () {
+                        window.location.reload();
+                    }, 1500);
+                },
+                error: function (xhr) {
+                    var message = 'The image could not be uploaded. Please try again.';
+                    var response = xhr.responseJSON;
+
+                    if (response && response.errors) {
+                        var validationMessages = [];
+                        $.each(response.errors, function (field, messages) {
+                            $.each(messages, function (index, validationMessage) {
+                                validationMessages.push(validationMessage);
+                            });
+                        });
+                        message = validationMessages.join(' ');
+                    } else if (response && response.message) {
+                        message = response.message;
+                    }
+
+                    $errors.text(message).show();
+                },
+                complete: function () {
+                    if (!uploadSucceeded) {
+                        $uploadButton.prop('disabled', false).text('Upload');
+                    } else {
+                        $uploadButton.text('Uploaded');
+                    }
+                }
+            });
+        });
+
+        var $galleryForm = $('#companyGalleryImageTextUploadForm');
+        var $galleryErrors = $('#companyGalleryImageTextUploadErrors');
+        var $gallerySuccess = $('#companyGalleryImageTextUploadSuccess');
+        var $galleryUploadButton = $('#companyGalleryImageTextUploadButton');
+
+        $('#addCompanyGalleryImageTextModal').on('show.bs.modal', function () {
+            $galleryErrors.hide().text('');
+            $gallerySuccess.hide().text('');
+        });
+
+        $galleryForm.on('submit', function (event) {
+            event.preventDefault();
+
+            if (!this.checkValidity()) {
+                this.reportValidity();
+                return;
+            }
+
+            $galleryErrors.hide().text('');
+            $gallerySuccess.hide().text('');
+            $galleryUploadButton.prop('disabled', true).text('Uploading...');
+            var uploadSucceeded = false;
+
+            $.ajax({
+                url: @json(route('company.gallery-image-with-text.upload')),
+                method: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                headers: {
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function (response) {
+                    uploadSucceeded = true;
+                    $gallerySuccess.text(
+                        response.message + ' Title: ' + response.image.title +
+                        ' Description: ' + response.image.description
+                    ).show();
+                    window.setTimeout(function () {
+                        window.location.reload();
+                    }, 1500);
+                },
+                error: function (xhr) {
+                    var message = 'The gallery image could not be uploaded. Please try again.';
+                    var response = xhr.responseJSON;
+
+                    if (response && response.errors) {
+                        var validationMessages = [];
+                        $.each(response.errors, function (field, messages) {
+                            $.each(messages, function (index, validationMessage) {
+                                validationMessages.push(validationMessage);
+                            });
+                        });
+                        message = validationMessages.join(' ');
+                    } else if (response && response.message) {
+                        message = response.message;
+                    }
+
+                    $galleryErrors.text(message).show();
+                },
+                complete: function () {
+                    if (!uploadSucceeded) {
+                        $galleryUploadButton.prop('disabled', false).text('Upload');
+                    } else {
+                        $galleryUploadButton.text('Uploaded');
+                    }
+                }
+            });
+        });
+    });
+</script>
 
 <script type="text/javascript">
 
@@ -5283,6 +5539,9 @@ $instruction = $data['instruction'];
         background-color: rgb(255 157 7);
         border-color: rgb(255 157 7);
     }
+    .image-metadata-overlay {
+        padding: 6px !important;
+    }
     .schedule_active_tab{
         background-color: rgb(255 157 7);
         color: #ffffff;
@@ -5362,6 +5621,54 @@ $instruction = $data['instruction'];
         width: 85px;
         height: 80px;
         border: 2px solid #CCC;
+    }
+
+    .image-metadata-overlay {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 50%;
+        z-index: 1;
+        width: 240px;
+        max-height: 160px;
+        padding: 10px 12px;
+        overflow-y: auto;
+        color: #333;
+        background: #fff;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        font-size: 13px;
+        line-height: 1.45;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateX(-50%);
+        transition: opacity 0.15s ease;
+        overflow-wrap: anywhere;
+    }
+
+    .image-metadata-overlay strong,
+    .image-metadata-overlay span {
+        display: block;
+    }
+
+    .thumbnail:hover {
+        z-index: 2;
+    }
+
+    .thumbnail:hover .image-metadata-overlay,
+    .thumbnail:focus-within .image-metadata-overlay {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    #listgallerypreview.metadata-popup-active {
+        overflow: visible;
+    }
+
+    #imgPreview.metadata-popup-active {
+        overflow: visible;
+        position: relative;
+        z-index: 2;
     }
 
     .closebtn {

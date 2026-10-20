@@ -31,7 +31,7 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        View::composer(['components.client.footer','components.client.footervendor'], function ($view) {
+        View::composer(['components.client.footer','components.client.footervendor','components.client.footercompanydetailshop'], function ($view) {
 
             $data['footerData']                 = Systemsetting::first();
             $data['socialfooterData']           = Frontendsetting::first();
@@ -57,7 +57,9 @@ class AppServiceProvider extends ServiceProvider
                 $expired_plan = 0;
             }
             $view->with(['expired_plan' => $expired_plan]);
-            $view->with(['data' => $data]);
+            if ($view->name() !== 'components.client.footercompanydetailshop') {
+                $view->with(['data' => $data]);
+            }
         });
 
         View::composer(['components.client.filter_side_shop'], function ($view) {

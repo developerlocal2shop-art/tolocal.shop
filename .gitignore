@@ -68,6 +68,13 @@ storage/framework/views
 !/public/
 /public/*
 !/public/.htaccess
+!/public/assets/
+/public/assets/*
+!/public/assets/client/
+/public/assets/client/*
+!/public/assets/client/css/
+/public/assets/client/css/*
+!/public/assets/client/css/companydetails.css
 !/public/js/
 /public/js/*
 !/public/js/cookie-consent.js

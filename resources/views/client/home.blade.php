@@ -1,6 +1,7 @@
 @extends('layouts.client.master')
 @section('title', $metatitle)
 @section('content')
+
 <?php
 $useragent = $_SERVER['HTTP_USER_AGENT'];
 $ismobiledevice = 0;

@@ -11,21 +11,123 @@
 @section('content')
 
 @if ($data['mainDirectoryDetails']->company_color)
-<style>
-    .btn-custom { color: #fff; border-radius: 5px; font-weight: bold; background-color: {{ $data['mainDirectoryDetails']->company_color }};}
-    .mm-slideout { padding: 1px !important; background: {{ $data['mainDirectoryDetails']->company_color??'#e0a800' }}; }
-    header.header_in .main-menu > ul > li span > a, header.sticky .main-menu > ul > li span > a{ color: #fff !important; }
-    span.locally_text { color: #fff !important; }
-    .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span, b#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value:hover {  color: #000; }
-</style>
+    <style>
+        .btn-custom { color: #fff; border-radius: 5px; font-weight: bold; background-color: {{ $data['mainDirectoryDetails']->company_color }};}
+        .mm-slideout { padding: 1px !important; background: {{ $data['mainDirectoryDetails']->company_color??'#e0a800' }} !important; }
+        header.header_in .main-menu > ul > li span > a, header.sticky .main-menu > ul > li span > a{ color: #fff !important; }
+        span.locally_text { color: #fff !important; }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span, b#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value:hover {  color: #000; }
+    </style>
 @else
-<style>
-    .btn-custom { background-color: #004dda; color: #fff; border-radius: 5px; font-weight: bold;}
-</style>
+    <style>
+        .btn-custom { background-color: #2f4a7c; color: #fff; border-radius: 5px; font-weight: bold;}
+        .see_all { background-color: #2f4a7c; color: #fff; border: 1px solid #2f4a7c; }
+    </style>
 @endif
+<style>
+    #product.listing_related_product .strip figure > a.img {
+        display: block !important;
+        width: 100%;
+        height: 100% !important;
+        min-height: 200px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 
-<div class="loader" id="loader" role="status" aria-label="Loading"></div>
-<div class="AJloader" id="AJloader"></div>
+    .box_detail.listing-contact-card {
+        padding-top: 22px;
+    }
+
+    .listing-contact-intro {
+        --listing-contact-accent: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin: 0 0 22px;
+        padding: 0 0 18px;
+        border-bottom: 1px solid #e8edf3;
+    }
+
+    .listing-contact-intro__icon {
+        display: inline-flex;
+        flex: 0 0 48px;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        border-radius: 14px;
+        background: color-mix(in srgb, var(--listing-contact-accent) 12%, white);
+        color: var(--listing-contact-accent);
+        font-size: 20px;
+    }
+
+    .listing-contact-intro__copy h2 {
+        margin: 0 0 4px;
+        color: #263247;
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    .listing-contact-intro__copy p {
+        margin: 0;
+        color: #697586;
+        font-size: 13px;
+        line-height: 1.45;
+    }
+
+    #listing_banner .listing-banner-slide {
+        position: relative;
+    }
+
+    #listing_banner .listing-banner-caption {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 2;
+        padding: 100px clamp(20px, 7vw, 110px) 36px;
+        color: #fff;
+        background: linear-gradient(transparent, rgba(8, 16, 29, 0.84));
+        pointer-events: none;
+    }
+
+    #listing_banner .listing-banner-caption__content {
+        width: min(100%, 1100px);
+        margin: 0 auto;
+    }
+
+    #listing_banner .listing-banner-caption h2 {
+        margin: 0 0 8px;
+        color: #fff;
+        font-size: clamp(24px, 3vw, 40px);
+        font-weight: 700;
+        line-height: 1.15;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    #listing_banner .listing-banner-caption p {
+        max-width: 760px;
+        margin: 0;
+        color: rgba(255, 255, 255, 0.94);
+        font-size: clamp(14px, 1.35vw, 18px);
+        line-height: 1.55;
+        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.55);
+    }
+
+    @media (max-width: 767px) {
+        #listing_banner .listing-banner-caption {
+            padding: 70px 20px 24px;
+        }
+    }
+
+    @supports not (background: color-mix(in srgb, #000 10%, white)) {
+        .listing-contact-intro__icon {
+            background: #eef2f8;
+        }
+    }
+</style>
 <?php
     $useragent=$_SERVER['HTTP_USER_AGENT'];
     $ismobiledevice = 0;
@@ -96,6 +198,8 @@
     $serverDay = strtolower(date("D"));
 ?>
 
+<div class="loader" id="loader" role="status" aria-label="Loading"></div>
+<div class="AJloader" id="AJloader"></div>
 <form id="latlongform" action="{{route('pages')}}" enctype="multipart/form-data" method="get">
     @csrf
     <input type="hidden" id="lati" name="lati" > <input type="hidden" id="long" name="long" >
@@ -227,7 +331,7 @@
 </div>
 
 <!-- we offer and About us MODAL -->
-<div class="modal fade"  id="we_offer_details_model" tabindex="-1" role="dialog" style="height: 80%!important; top:50px;" aria-labelledby="exampleModalLabel" aria-hidden="true">
+{{-- <div class="modal fade"  id="we_offer_details_model" tabindex="-1" role="dialog" style="height: 80%!important; top:50px;" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
     <div class="modal-dialog">
         <div class="modal-content">
@@ -297,7 +401,7 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 
 <div class="modal fade listing_detail_gallery" id="type_galleryModal" tabindex="-1" role="dialog" style="top:50px;" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl"> <!-- Using only modal-xl class -->
@@ -506,26 +610,31 @@
     <?php if(!empty($data['directory_media_cover'])){ ?>
         <div id="listing_banner" class="owl-carousel owl-theme">
             <?php foreach($data['directory_media_cover'] as $rowgallery){ ?>
-            @if( count($data['directory_media_cover']) == 1)
                 <div class="item">
-                    <div class="hero_in shop_detail">
-                     <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}">
+                    <div class="hero_in shop_detail listing-banner-slide">
+                        <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" alt="{{ $rowgallery->title ?: $data['mainDirectoryDetails']->title }}">
+                        @if($rowgallery->title || $rowgallery->description)
+                        <div class="listing-banner-caption">
+                            <div class="listing-banner-caption__content">
+                                @if($rowgallery->title)
+                                <h2>{{ $rowgallery->title }}</h2>
+                                @endif
+                                @if($rowgallery->description)
+                                <p>{{ $rowgallery->description }}</p>
+                                @endif
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
-                <div class="item">
-                    <div class="hero_in shop_detail" >
-                    <img src="{{env('IMAGE_PATH').'files/default_images/'.$data['default_image_listing_banner']->image_name }}">
-                    </div>
-                </div>
-            @else
-               <div class="item">
-                    <div class="hero_in shop_detail" >
-                    <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}">
-                    </div>
-                </div>
-
-            @endif
             <?php } ?>
+            @if(count($data['directory_media_cover']) == 1)
+                <div class="item">
+                    <div class="hero_in shop_detail" >
+                        <img src="{{env('IMAGE_PATH').'files/default_images/'.$data['default_image_listing_banner']->image_name }}" alt="">
+                    </div>
+                </div>
+            @endif
         </div>
     <?php }else{ ?>
     <div id="" class="common_banner">
@@ -601,8 +710,8 @@
                                         </svg>
                                     </span>
                                     <span class="listing-info-card__content">
-                                        <span class="listing-info-card__title">Open now</span>
-                                        <span class="listing-info-card__meta">Tap to view all hours</span>
+                                        <span class="listing-info-card__title">Open</span>
+                                        <span class="listing-info-card__meta">Click to see more opening hours</span>
                                     </span>
                                     <span class="listing-info-card__arrow" aria-hidden="true">
                                         <svg viewBox="0 0 24 24" focusable="false">
@@ -677,8 +786,8 @@
                                             </svg>
                                         </span>
                                         <span class="listing-info-card__content">
-                                            <span class="listing-info-card__title">Open now</span>
-                                            <span class="listing-info-card__meta">Tap to view all hours</span>
+                                            <span class="listing-info-card__title">Open</span>
+                                            <span class="listing-info-card__meta">Click to see more opening hours</span>
                                         </span>
                                         <span class="listing-info-card__arrow" aria-hidden="true">
                                             <svg viewBox="0 0 24 24" focusable="false">
@@ -759,8 +868,8 @@
                                                     </svg>
                                                 </span>
                                                 <span class="listing-info-card__content">
-                                                    <span class="listing-info-card__title">Open now</span>
-                                                    <span class="listing-info-card__meta">Tap to view all hours</span>
+                                                    <span class="listing-info-card__title">Open</span>
+                                                    <span class="listing-info-card__meta">Click to see more opening hours</span>
                                                 </span>
                                                 <span class="listing-info-card__arrow" aria-hidden="true">
                                                     <svg viewBox="0 0 24 24" focusable="false">
@@ -791,11 +900,6 @@
                                     <?php } ?>
                             <?php } } ?>
                         <?php } ?>
-                        <?php if($ismobiledevice==1){ ?>
-                            <li class="listing-contact-item">
-                                <span class="headercontact"><button id="down-to-contact" class="btn btn-success btn-sm btn-block">Contact Us</button></span>
-                            </li>
-                        <?php } ?>
 
                     </ul>
 
@@ -810,7 +914,8 @@
                 <?php } ?>
             </nav>
         </div>
-
+        <div class="col-md-1">
+        </div>
         <div class="col-md-2 listing-shop-column">
         <?php if(!empty($data['directoryProductData'])){ ?>
             <a class="listing-info-card shop-visit-cta" target="_blank" rel="noopener noreferrer" href="{{ url('listings-product', ['id' => $data['mainDirectoryDetails']->slug]) }}">
@@ -853,7 +958,7 @@
             @endif
         </div>
 
-        <div class="col-md-1 functions_reload_div listing-reload-column" style="padding: 10px;">
+        {{-- <div class="col-md-1 functions_reload_div listing-reload-column" style="padding: 10px;">
             @if( last(request()->segments()) == 'rydholms-dammodehus' )
             <span id="functions_reload">
                 <a target="_blank" href="{{ url('/listings/details/rydholms-dammodehus') }}" style="#201919 !important;" class="btn-sm functions_reload">
@@ -861,7 +966,12 @@
                 </a>
             </span>
             @endif
-        </div>
+        </div> --}}
+
+        <span class="listing-contact-item">
+            <span class="headercontact"><button id="down-to-contact" class="btn btn-success btn-sm btn-block">Contact Us</button></span>
+        </span>
+
     </div>
 
     <div class="container listing-menu-container">
@@ -870,7 +980,7 @@
             <div class="add_bottom_15 listing-menu-categories">
                 <div class="listing-menu-heading">
                     <div>
-                        <h2 id="listing-menu-title">Menu <span>Browse categories or search products</span></h2>
+                        <h2 id="listing-menu-title"> <span>Browse categories or search products</span></h2>
                     </div>
                 </div>
 
@@ -1012,7 +1122,6 @@
                 </div>
             <?php } ?>
 
-
             <div class="add_bottom_15 likebtn_alignment" style="margin-bottom: 0px;">
                 <span class="loc_open mr-2">
                     <a href="{{ route('listing') }}" style="color: #32a067;">
@@ -1050,34 +1159,33 @@
                     </div>
                 </span>
             </div>
+
         </div>
-
-
 
         <?php if(!empty($data['galleryImageChunk'])){ ?>
-        <div class="container-fluid">
-            <div id="sploffer" class="owl-carousel owl-theme listing_gllary_img gallimageslength">
-                <?php foreach($data['galleryImageChunk'] as $rowgalleryres){
-                    foreach($rowgalleryres as $rowgallery){
-                    ?>
-                <div class="item">
-                    <div class="strip grid">
-                        <figure>
-                        @if(!empty($rowgallery->name_thumbnail))
-                            <a href="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" data-lightbox="topGalleryList">
-                                <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" class="" alt="" width="400" height="266">
-                            </a>
-                        @else
-                            <a href="{{ asset('assets/plugins/images/placeholder.png') }}" data-lightbox="topGalleryList">
-                                <img src="{{ asset('assets/plugins/images/placeholder.png') }}" class="" alt="" width="400" height="266">
-                            </a>
-                        @endif
-                        </figure>
+            <div class="container-fluid">
+                <div id="sploffer" class="owl-carousel owl-theme listing_gllary_img gallimageslength">
+                    <?php foreach($data['galleryImageChunk'] as $rowgalleryres){
+                        foreach($rowgalleryres as $rowgallery){
+                        ?>
+                    <div class="item">
+                        <div class="strip grid">
+                            <figure>
+                            @if(!empty($rowgallery->name_thumbnail))
+                                <a href="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" data-lightbox="topGalleryList">
+                                    <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" class="" alt="" width="400" height="266">
+                                </a>
+                            @else
+                                <a href="{{ asset('assets/plugins/images/placeholder.png') }}" data-lightbox="topGalleryList">
+                                    <img src="{{ asset('assets/plugins/images/placeholder.png') }}" class="" alt="" width="400" height="266">
+                                </a>
+                            @endif
+                            </figure>
+                        </div>
                     </div>
+                    <?php } } ?>
                 </div>
-                <?php } } ?>
             </div>
-        </div>
         <?php } ?>
         <div class="col-md-12">
             <div class="listing_see_all">
@@ -1088,32 +1196,45 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container" id="listing-detail-main-content">
         <div class="row">
-            <div class="col-lg-8">
-                <section id="description">
 
-                    <!-- Trademark Gallery -->
-                    <?php if(!empty($data['trademarkData'][0]->trademark_id)){ ?>
-                    <h5 class="add_bottom_15">{{__("message.trademark_title")}} ({{ count($data['trademarkData']) }})</h5>
-                    <div id="trademark" class="owl-carousel owl-theme">
-                        <?php foreach($data['trademarkData'] as $rowtrademark){
-                            $imagename = Helper::getTrademarkImage($rowtrademark->trademark_id); ?>
-                        <div class="item">
-                            <div class="strip grid">
-                                <figure style="height: 100px;">
-                                    <?php if(!empty($imagename)){ ?>
-                                        <a href="{{ route('listingbytrademark',$rowtrademark->trademark_id??'') }}"><img src="{{env('IMAGE_PATH').'files/trademark/'.$imagename[0]->name_thumbnail }}" class="" alt="Trademark image" width="100" height="100"></a>
-                                    <?php }else{ ?>
-                                        <a href="{{ route('listingbytrademark',$rowtrademark->trademark_id??'') }}"><img src="{{ asset('assets/plugins/images/placeholder.png') }}" class="" alt="Trademark image" width="100" height="100"></a>
-                                    <?php } ?>
+            <div class="col-md-12">
+                <div class="weoffer_comman listing-print-banner">
+                    <div class="listing-print-banner__copy">
+                        Framkalla bilder, beställ studentkyltar, almanackor, fotoböcker, canvas mm direkt från din dator eller mobil. Det går även att få bilderna under dagen, mot en extra kostnad.
+                    </div>
+                    <div class="listing-print-banner__cta">
+                        <a href="{{ route('listing') }}" class="listing-print-banner__btn">Beställ här!</a>
+                        {{-- <div class="listing-print-banner__text">Special text only - with Link Button to change text in Possible to set colour.</div> --}}
+                    </div>
+                </div>
 
-                                </figure>
-                            </div>
+                <!-- Trademark Gallery -->
+                <?php if(!empty($data['trademarkData'][0]->trademark_id)){ ?>
+                <h5 class="add_bottom_15">{{__("message.trademark_title")}} ({{ count($data['trademarkData']) }})</h5>
+                <div id="trademark" class="owl-carousel owl-theme">
+                    <?php foreach($data['trademarkData'] as $rowtrademark){
+                        $imagename = Helper::getTrademarkImage($rowtrademark->trademark_id); ?>
+                    <div class="item">
+                        <div class="strip grid">
+                            <figure style="height: 100px;">
+                                <?php if(!empty($imagename)){ ?>
+                                    <a href="{{ route('listingbytrademark',$rowtrademark->trademark_id??'') }}"><img src="{{env('IMAGE_PATH').'files/trademark/'.$imagename[0]->name_thumbnail }}" class="" alt="Trademark image" width="100" height="100"></a>
+                                <?php }else{ ?>
+                                    <a href="{{ route('listingbytrademark',$rowtrademark->trademark_id??'') }}"><img src="{{ asset('assets/plugins/images/placeholder.png') }}" class="" alt="Trademark image" width="100" height="100"></a>
+                                <?php } ?>
+
+                            </figure>
                         </div>
-                        <?php } ?>
                     </div>
                     <?php } ?>
+                </div>
+                <?php } ?>
+            </div>
+
+            <div class="col-lg-8">
+                <section id="description">
 
                     <?php if(!empty($data['offerData'])){ ?>
                         <h5 class="add_bottom_15">{{__("message.offer_title")}}({{ count($data['offerData']) }})</h5>
@@ -1196,65 +1317,314 @@
                         @endif
                     <?php } ?>
 
+                    <hr>
                     <!--------------Shopping card section---------->
                     <?php if(!empty($data['shoppingcardData'])){ ?>
-                        <div class="main_title_2" style="text-align: left;">
-                        <h5 class="add_bottom_15">Shopping Card ({{ count($data['shoppingcardData']) }})</h5>
-                        </div>
-                        <div id="shopcarddata" class="owl-carousel owl-theme">
-                            <?php foreach($data['shoppingcardData'] as $row){ ?>
-                                <?php
-                                $siteUrlFacebook = url('share/shoping-card/'.$row->id);
-                                $discritionShoppingCard = ($row->title!='')?$row->title:$row->title;
-                                $siteUrlTwitter = url('shopping-card/detail/'.$row->slug);
-                                ?>
-                            <div class="item">
+                        <style>
+                            .listing-shopping-cards {
+                                --shopping-card-accent: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
+                                margin: 32px 0;
+                                padding: clamp(18px, 3vw, 32px);
+                                border: 1px solid #e7ebf0;
+                                border-radius: 20px;
+                                background: linear-gradient(145deg, #f8fafc 0%, #fff 65%);
+                            }
 
-                            <div class="co-sm-4 share-tooltip-desktop share-tooltip" >
-                                <span><img class="image-responsive share-icon-gap" src="{{ asset('assets/plugins/images/social-share/share-icon.png') }}"></span>
-                                <span class = "share-tooltiptext">
-                                    <a class = "fb-share share-icon-gap" href="javascript:void(0);" onclick="fb_share('{{ $siteUrlFacebook }}', '{{ $discritionShoppingCard }}')">
-                                        <img class="image-responsive" title="facebook" src="{{ asset('assets/plugins/images/social-share/facebook-icon.png') }}">
-                                    </a>
-                                    <a class="fb-share share-icon-gap" href="http://twitter.com/share?text={{ $row->title }}&url={{ $siteUrlTwitter }}" target="_blank">
-                                        <img class="image-responsive" title="twitter" src="{{ asset('assets/plugins/images/social-share/rwitter-icon.png') }}">
-                                    </a>
-                                    <?php if($ismobiledevice==1){ ?>
-                                        <a class="fb-share hidden-md hidden-lg" href="whatsapp://send?text={{ $siteUrlTwitter }}" data-action="share/whatsapp/share">
-                                            <img class="image-responsive" title="whatsaap" src="{{ asset('assets/plugins/images/social-share/whatsapp-icon.png') }}" width="29px" height="29px">
-                                        </a>
-                                    <?php } ?>
-                                </span>
-                            </div>
+                            .listing-shopping-cards__heading {
+                                display: flex;
+                                align-items: flex-end;
+                                justify-content: space-between;
+                                gap: 16px;
+                                margin-bottom: 22px;
+                            }
 
-                                <div class="strip grid">
-                                    <figure style="height: 360px;">
-                                        <?php $imagename = Helper::getShoppingcardimage($row->id); ?>
-                                        <?php if(!empty($imagename)){ ?>
-                                        <a href="<?php echo url('shopping-card/detail', ['id' => $row->slug]); ?>"><img src="{{ env('IMAGE_PATH').'images/shoppingcard/'.$imagename[0]->name_thumbnail.'.webp' }}"  alt="" width="400" height="266"></a>
-                                        <?php }else{ ?>
-                                        <a href="<?php echo url('shopping-card/detail', ['id' => $row->slug]); ?>"><img src="{{ asset('assets/plugins/images/placeholder.png') }}"  alt="" width="400" height="266"></a>
-                                        <!-- <img src="{{ asset('assets/plugins/images/placeholder.png') }}" alt="" > -->
-                                        <?php } ?>
-                                        <small>
-                                            {{ $row->title }}
-                                            @if($row->discount_selectedvalue == 'pricediscount')
-                                                <i class="p-discount"> -{{ $row->discount_firstvalue }} </i>
-                                            @elseif($row->discount_selectedvalue == 'percentagediscount')
-                                                <i class="p-discount"> -{{ $row->discount_firstvalue }}% </i>
-                                            @elseif($row->discount_selectedvalue == 'new')
-                                                <i class="p-discount"> New </i>
-                                            @endif
-                                        </small>
-                                    </figure>
-                                    <div class="wrapper">
-                                        <h3>{{ $row->title }}</h3><br>
-                                        <p class="mt-1">{{ substr(strip_tags($row->description),0,48) }}...</p>
-                                    </div>
+                            .listing-shopping-cards__eyebrow {
+                                display: block;
+                                margin-bottom: 6px;
+                                color: var(--shopping-card-accent);
+                                font-size: 12px;
+                                font-weight: 700;
+                                letter-spacing: .12em;
+                                text-transform: uppercase;
+                            }
+
+                            .listing-shopping-cards__title {
+                                margin: 0;
+                                color: #172033;
+                                font-size: clamp(22px, 2.5vw, 30px);
+                                font-weight: 750;
+                                line-height: 1.2;
+                            }
+
+                            .listing-shopping-cards__subtitle {
+                                margin: 7px 0 0;
+                                color: #667085;
+                                font-size: 14px;
+                            }
+
+                            .listing-shopping-cards__count {
+                                display: inline-flex;
+                                flex: 0 0 auto;
+                                align-items: center;
+                                justify-content: center;
+                                min-width: 40px;
+                                height: 40px;
+                                padding: 0 12px;
+                                border: 1px solid #e2e8f0;
+                                border-radius: 999px;
+                                background: #fff;
+                                color: #344054;
+                                font-size: 14px;
+                                font-weight: 700;
+                            }
+
+                            #shopcarddata .owl-stage {
+                                display: flex;
+                            }
+
+                            #shopcarddata .owl-item {
+                                display: flex;
+                                flex: 0 0 auto;
+                                height: auto;
+                                padding: 4px 8px 14px;
+                                box-sizing: border-box;
+                            }
+
+                            #shopcarddata .item {
+                                position: relative;
+                                display: flex;
+                                width: 100%;
+                                min-width: 0;
+                            }
+
+                            #shopcarddata .listing-shopping-card {
+                                display: flex;
+                                flex: 1;
+                                flex-direction: column;
+                                overflow: hidden;
+                                border: 1px solid #e7ebf0;
+                                border-radius: 16px;
+                                background: #fff;
+                                box-shadow: 0 8px 24px rgba(16, 24, 40, .07);
+                                transition: transform .2s ease, box-shadow .2s ease;
+                            }
+
+                            #shopcarddata .listing-shopping-card:hover {
+                                transform: translateY(-4px);
+                                box-shadow: 0 16px 32px rgba(16, 24, 40, .13);
+                            }
+
+                            #shopcarddata .listing-shopping-card__image {
+                                position: relative;
+                                display: block;
+                                overflow: hidden;
+                                aspect-ratio: 16 / 10;
+                                background: #f2f4f7;
+                            }
+
+                            #shopcarddata .listing-shopping-card__image img {
+                                display: block;
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                                transition: transform .35s ease;
+                            }
+
+                            #shopcarddata .listing-shopping-card:hover .listing-shopping-card__image img {
+                                transform: scale(1.04);
+                            }
+
+                            #shopcarddata .listing-shopping-card__badge {
+                                position: absolute;
+                                top: 12px;
+                                left: 12px;
+                                padding: 7px 11px;
+                                border-radius: 999px;
+                                background: var(--shopping-card-accent);
+                                color: #fff;
+                                font-size: 12px;
+                                font-style: normal;
+                                font-weight: 700;
+                                line-height: 1;
+                                box-shadow: 0 3px 10px rgba(16, 24, 40, .18);
+                            }
+
+                            #shopcarddata .listing-shopping-card__share {
+                                top: 10px;
+                                right: 10px;
+                                left: auto;
+                                z-index: 2;
+                            }
+
+                            #shopcarddata .listing-shopping-card__share .share-icon-gap {
+                                width: 36px !important;
+                                height: 36px;
+                                padding: 8px;
+                                border-radius: 50%;
+                                background: rgba(255, 255, 255, .95);
+                                box-shadow: 0 2px 8px rgba(16, 24, 40, .16);
+                            }
+
+                            #shopcarddata .listing-shopping-card__share .share-tooltiptext {
+                                padding: 8px;
+                                border-radius: 10px;
+                                background: #fff;
+                                box-shadow: 0 8px 24px rgba(16, 24, 40, .16);
+                            }
+
+                            #shopcarddata .listing-shopping-card__share span a img {
+                                width: 28px !important;
+                                height: 28px;
+                                object-fit: contain;
+                            }
+
+                            #shopcarddata .listing-shopping-card__body {
+                                display: flex;
+                                flex: 1;
+                                flex-direction: column;
+                                align-items: flex-start;
+                                padding: 18px;
+                            }
+
+                            #shopcarddata .listing-shopping-card__title {
+                                display: -webkit-box;
+                                overflow: hidden;
+                                margin: 0 0 8px;
+                                color: #172033;
+                                font-size: 17px;
+                                font-weight: 700;
+                                line-height: 1.4;
+                                -webkit-box-orient: vertical;
+                                -webkit-line-clamp: 2;
+                            }
+
+                            #shopcarddata .listing-shopping-card__title a {
+                                color: inherit;
+                                text-decoration: none;
+                            }
+
+                            #shopcarddata .listing-shopping-card__title a:hover {
+                                color: var(--shopping-card-accent);
+                            }
+
+                            #shopcarddata .listing-shopping-card__description {
+                                display: -webkit-box;
+                                overflow: hidden;
+                                margin: 0 0 18px;
+                                color: #667085;
+                                font-size: 14px;
+                                line-height: 1.55;
+                                -webkit-box-orient: vertical;
+                                -webkit-line-clamp: 3;
+                            }
+
+                            #shopcarddata .listing-shopping-card__link {
+                                display: inline-flex;
+                                align-items: center;
+                                gap: 8px;
+                                margin-top: auto;
+                                padding: 10px 14px;
+                                border-radius: 8px;
+                                background: var(--shopping-card-accent);
+                                color: #fff;
+                                font-size: 13px;
+                                font-weight: 700;
+                                text-decoration: none;
+                                transition: filter .2s ease, transform .2s ease;
+                            }
+
+                            #shopcarddata .listing-shopping-card__link:hover {
+                                color: #fff;
+                                filter: brightness(.92);
+                                text-decoration: none;
+                                transform: translateX(2px);
+                            }
+
+                            @media (max-width: 575px) {
+                                .listing-shopping-cards {
+                                    margin: 24px -8px;
+                                    padding: 18px 10px 12px;
+                                    border-radius: 14px;
+                                }
+
+                                .listing-shopping-cards__heading {
+                                    margin: 0 8px 14px;
+                                }
+
+                                .listing-shopping-cards__subtitle {
+                                    max-width: 230px;
+                                    font-size: 13px;
+                                }
+
+                                #shopcarddata .owl-item {
+                                    padding-right: 8px;
+                                    padding-left: 8px;
+                                }
+
+                                #shopcarddata .listing-shopping-card__body {
+                                    padding: 15px;
+                                }
+                            }
+                        </style>
+                        <section class="listing-shopping-cards" aria-labelledby="listing-shopping-cards-title">
+                            <div class="listing-shopping-cards__heading">
+                                <div>
+                                    <span class="listing-shopping-cards__eyebrow">Local offers</span>
+                                    <h2 class="listing-shopping-cards__title" id="listing-shopping-cards-title">Shopping cards</h2>
+                                    <p class="listing-shopping-cards__subtitle">Discover special deals from this business.</p>
                                 </div>
+                                <span class="listing-shopping-cards__count" aria-label="{{ count($data['shoppingcardData']) }} shopping cards">{{ count($data['shoppingcardData']) }}</span>
                             </div>
-                            <?php } ?>
-                        </div>
+                            <div id="shopcarddata" class="owl-carousel owl-theme">
+                                <?php foreach($data['shoppingcardData'] as $row){ ?>
+                                    <?php
+                                    $siteUrlFacebook = url('share/shoping-card/'.$row->id);
+                                    $discritionShoppingCard = $row->title;
+                                    $siteUrlTwitter = url('shopping-card/detail/'.$row->slug);
+                                    $shoppingCardUrl = url('shopping-card/detail', ['id' => $row->slug]);
+                                    $imagename = Helper::getShoppingcardimage($row->id);
+                                    ?>
+                                    <div class="item">
+                                        <article class="listing-shopping-card">
+                                            <a class="listing-shopping-card__image" href="{{ $shoppingCardUrl }}" aria-label="View {{ $row->title }}">
+                                                <?php if(!empty($imagename)){ ?>
+                                                    <img src="{{ env('IMAGE_PATH').'images/shoppingcard/'.$imagename[0]->name_thumbnail.'.webp' }}" alt="{{ $row->title }}" width="400" height="250" loading="lazy">
+                                                <?php }else{ ?>
+                                                    <img src="{{ asset('assets/plugins/images/placeholder.png') }}" alt="{{ $row->title }}" width="400" height="250" loading="lazy">
+                                                <?php } ?>
+                                                @if($row->discount_selectedvalue == 'pricediscount')
+                                                    <span class="listing-shopping-card__badge">Save {{ $row->discount_firstvalue }}</span>
+                                                @elseif($row->discount_selectedvalue == 'percentagediscount')
+                                                    <span class="listing-shopping-card__badge">Save {{ $row->discount_firstvalue }}%</span>
+                                                @elseif($row->discount_selectedvalue == 'new')
+                                                    <span class="listing-shopping-card__badge">New</span>
+                                                @endif
+                                            </a>
+                                            <div class="co-sm-4 share-tooltip-desktop share-tooltip listing-shopping-card__share">
+                                                <span><img class="image-responsive share-icon-gap" src="{{ asset('assets/plugins/images/social-share/share-icon.png') }}" alt="Share"></span>
+                                                <span class="share-tooltiptext">
+                                                    <a class="fb-share share-icon-gap" href="javascript:void(0);" onclick="fb_share('{{ $siteUrlFacebook }}', '{{ $discritionShoppingCard }}')" aria-label="Share on Facebook">
+                                                        <img class="image-responsive" title="Facebook" src="{{ asset('assets/plugins/images/social-share/facebook-icon.png') }}" alt="">
+                                                    </a>
+                                                    <a class="fb-share share-icon-gap" href="http://twitter.com/share?text={{ $row->title }}&url={{ $siteUrlTwitter }}" target="_blank" rel="noopener noreferrer" aria-label="Share on Twitter">
+                                                        <img class="image-responsive" title="Twitter" src="{{ asset('assets/plugins/images/social-share/rwitter-icon.png') }}" alt="">
+                                                    </a>
+                                                    <?php if($ismobiledevice==1){ ?>
+                                                        <a class="fb-share hidden-md hidden-lg" href="whatsapp://send?text={{ $siteUrlTwitter }}" data-action="share/whatsapp/share" aria-label="Share on WhatsApp">
+                                                            <img class="image-responsive" title="WhatsApp" src="{{ asset('assets/plugins/images/social-share/whatsapp-icon.png') }}" width="29" height="29" alt="">
+                                                        </a>
+                                                    <?php } ?>
+                                                </span>
+                                            </div>
+                                            <div class="listing-shopping-card__body">
+                                                <h3 class="listing-shopping-card__title"><a href="{{ $shoppingCardUrl }}">{{ $row->title }}</a></h3>
+                                                <p class="listing-shopping-card__description">{{ \Illuminate\Support\Str::limit(strip_tags($row->description), 120) }}</p>
+                                                <a class="listing-shopping-card__link" href="{{ $shoppingCardUrl }}">View shopping card <span aria-hidden="true">&rarr;</span></a>
+                                            </div>
+                                        </article>
+                                    </div>
+                                <?php } ?>
+                            </div>
                         @if(count($data['shoppingcardData']) > 2)
                             <a class="offer-see-all-btn" href="{{ route('directory.shoppingcards', $data['mainDirectoryDetails']->id??0 ) }}">
                                 <div class="see_all">
@@ -1262,6 +1632,7 @@
                                 </div>
                             </a>
                         @endif
+                        </section>
                     <?php } ?>
 
 
@@ -1312,214 +1683,264 @@
 
 
                     <?php if(!empty($data['adevertiseData'])){ ?>
-                    <div class="container-fluid sec-bg  margin_80_55 adevertiseDatad competition_div">
-                        @if(count($data['adevertiseData']) > 0)
-                            <div class="main_title_2">
-                                <div class="viewallcatbtn-align" style="text-align: left;">
-                                    <h5 class="add_bottom_15">
-                                           {{__("Competition")}} ( {{ count($data['adevertiseData']) }} )
-                                    </h5>
-                                </div>
-                            </div>
-
-                            <div id="banner-foot" class="owl-carousel owl-theme hot_add_home">
-                                <?php
-                                foreach($data['adevertiseData'] as $row){
-                                ?>
-
-                                    <div class="item" data-aos="zoom-out-up" data-aos-duration="1000">
-                                        <div class="strip grid">
-                                            <figure class="imageads">
-                                                <?php if(!empty($row->image_name)){ ?>
-                                                <a href="{{ route('competition.detail',$row->id) }}"><img src="{{ env('IMAGE_PATH').'files/advertisement/'.$row->image_name }}" class="img-fluid" alt="" width="400" height="266"></a>
-                                                <?php }else{ ?>
-                                                <a href="{{ route('competition.detail',$row->id) }}"><img src="{{ asset('assets/plugins/images/placeholder.png') }}" class="img-fluid" alt="" width="400" height="266"></a>
-                                                <?php } ?>
-                                                    <small> {{ $row->heading }}</small>
-
-
-                                                    @php
-                                                        //$price = str_replace(',', '', $row->price);
-                                                    @endphp
-
-
-                                                        <small class="adsprice">
-                                                            <i class="p-discount">
-                                                                @if(!is_null($row->price) && $row->price > 0)
-                                                                    <span class="discount-price">
-                                                                         {{ $currencySymbol }}{{ number_format($row->price, 2) }}
-                                                                    </span>
-                                                                @else
-                                                                    {{ $row->discount_text??'' }}
-                                                                @endif
-
-                                                                {{-- {{ $currencySymbol }} {{ number_format((float)$price, 2, '.', '') }} --}}
-                                                            </i>
-                                                        </small>
-
-
-                                                    {{-- @if($row->price != '')
-                                                        <small class="adsprice">
-                                                            <i class="p-discount">
-                                                                {{ $currencySymbol }} {{ number_format($row->price, 2, '.', '') }}
-                                                            </i>
-                                                        </small>
-                                                    @endif --}}
-                                                    @if($row->mid_text != '')
-                                                    <a href="{{ route('competition.detail',$row->id) }}" target="_blank">
-                                                    <small class="adsmidtext">
-                                                        {{ $row->mid_text }}
-                                                    </small>
-                                                    </a>
-                                                    @endif
-                                            </figure>
-                                            <h6 style="text-transform: uppercase;font-weight: 600; font-size: 13px; margin: 5px;padding: 5px;">
-                                                {{ $row->bottom_text??'' }}
-                                            </h6>
-                                            <p style=" margin: -5px 5px 5px 15px">
-                                                {{ $row->description??'' }}
-                                            </p>
-                                        </div>
+                        <hr>
+                        <div class="container-fluid sec-bg adevertiseDatad competition_div">
+                            @if(count($data['adevertiseData']) > 0)
+                                <div class="main_title_2">
+                                    <div class="viewallcatbtn-align" style="text-align: left;">
+                                        <h5 class="add_bottom_15">
+                                            {{__("Competition")}} ( {{ count($data['adevertiseData']) }} )
+                                        </h5>
                                     </div>
+                                </div>
 
-                                <?php } ?>
-                            </div>
+                                <div id="banner-foot" class="owl-carousel owl-theme hot_add_home">
+                                    <?php
+                                    foreach($data['adevertiseData'] as $row){
+                                    ?>
+                                        <div class="item" data-aos="zoom-out-up" data-aos-duration="1000">
+                                            <div class="strip grid">
+                                                <figure class="imageads">
+                                                    <?php if(!empty($row->image_name)){ ?>
+                                                    <a href="{{ route('competition.detail',$row->id) }}"><img src="{{ env('IMAGE_PATH').'files/advertisement/'.$row->image_name }}" class="img-fluid" alt="" width="400" height="266"></a>
+                                                    <?php }else{ ?>
+                                                    <a href="{{ route('competition.detail',$row->id) }}"><img src="{{ asset('assets/plugins/images/placeholder.png') }}" class="img-fluid" alt="" width="400" height="266"></a>
+                                                    <?php } ?>
+                                                        <small> {{ $row->heading }}</small>
+                                                            <small class="adsprice">
+                                                                <i class="p-discount">
+                                                                    @if(!is_null($row->price) && $row->price > 0)
+                                                                        <span class="discount-price">
+                                                                            {{ $currencySymbol }}{{ number_format($row->price, 2) }}
+                                                                        </span>
+                                                                    @else
+                                                                        {{ $row->discount_text??'' }}
+                                                                    @endif
+                                                                </i>
+                                                            </small>
 
-                        @endif
-                    </div>
+                                                        @if($row->mid_text != '')
+                                                        <a href="{{ route('competition.detail',$row->id) }}" target="_blank">
+                                                        <small class="adsmidtext">
+                                                            {{ $row->mid_text }}
+                                                        </small>
+                                                        </a>
+                                                        @endif
+                                                </figure>
+                                                <h6 style="text-transform: uppercase;font-weight: 600; font-size: 13px; margin: 5px;padding: 5px;">
+                                                    {{ $row->bottom_text??'' }}
+                                                </h6>
+                                                <p style=" margin: -5px 5px 5px 15px">
+                                                    {{ $row->description??'' }}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    <?php } ?>
+                                </div>
+                            @endif
+                        </div>
                     <?php } ?>
 
                    @if(count($data['blogData']) > 0)
-                    <div class="container-fluid sec-bg adevertiseDatad">
 
-                        <div class="main_title_2">
-                            <div class="viewallcatbtn-align" style="text-align: left;">
-                                <h5 class="add_bottom_15">
-                                    {{ __("Blogs") }} ( {{ count($data['blogData']) }} )
-                                </h5>
+                    <section class="container-fluid sec-bg adevertiseDatad listing-blogs-section" aria-labelledby="listing-blogs-title">
+                        <div class="listing-blogs-heading">
+                            <div>
+                                {{-- <span class="listing-blogs-eyebrow">Ideas &amp; updates</span> --}}
+                                <h2 id="listing-blogs-title">{{ __("Blogs") }}</h2>
+                                <p>Explore the latest stories and updates.</p>
                             </div>
+                            <span class="listing-blogs-count">{{ count($data['blogData']) }} articles</span>
                         </div>
-
                         <div id="blogData" class="owl-carousel owl-theme hot_add_home">
-
                             @foreach($data['blogData'] as $row)
-                            <div class="item" data-aos="zoom-out-up" data-aos-duration="1000">
-                                <div class="strip grid">
-
+                            <div class="item">
+                                <article class="strip grid">
                                     <figure class="imageads">
-                                        <a href="{{ url('blog/details/'.$row->slug) }}" target="_blank">
+                                        <a href="{{ url('blog/details/'.$row->slug) }}" target="_blank" rel="noopener noreferrer" aria-label="Read {{ $row->title }}">
                                             @if(!empty($row->blog_image))
-                                                <img src="{{ env('IMAGE_PATH').'images/blog/'.$row->blog_image.'.webp' }}"
-                                                    class="img-fluid"
-                                                    alt="{{ $row->title }}"
-                                                    width="400" height="266">
+                                                <img src="{{ env('IMAGE_PATH').'images/blog/'.$row->blog_image.'.webp' }}" class="img-fluid" alt="{{ $row->title }}" width="400" height="266">
                                             @else
-                                                <img src="{{ asset('assets/plugins/images/placeholder.png') }}"
-                                                    class="img-fluid"
-                                                    alt="No image"
-                                                    width="400" height="266">
+                                                <img src="{{ asset('assets/plugins/images/placeholder.png') }}" class="img-fluid" alt="No image available" width="400" height="266">
                                             @endif
                                         </a>
-
-                                        <small>{{ Str::limit(strip_tags($row->title), 20) }}</small>
-
-                                        <small class="adsmidtext">
-                                            {{ date('j F, Y', strtotime($row->created_at)) }}
-                                        </small>
+                                        <span class="blog-card-date"><i class="fa fa-calendar" aria-hidden="true"></i> {{ date('j F, Y', strtotime($row->created_at)) }}</span>
                                     </figure>
-
-                                    <p style="text-transform: uppercase;font-weight: 600; font-size: 13px; margin: 5px;padding: 5px;">
-                                        {{ Str::limit(strip_tags($row->content), 42) }}
-                                    </p>
-
-                                </div>
+                                    <div class="blog-card-content">
+                                        <h3 class="blog-card-title">
+                                            <a href="{{ url('blog/details/'.$row->slug) }}" target="_blank" rel="noopener noreferrer">
+                                                {{ Str::limit(strip_tags($row->title), 70) }}
+                                            </a>
+                                        </h3>
+                                        <p class="blog-card-excerpt">{{ Str::limit(strip_tags($row->content), 100) }}</p>
+                                    </div>
+                                </article>
                             </div>
                             @endforeach
-
                         </div>
-                    </div>
+                    </section>
                     @endif
 
 
-                    <?php if(!empty($data['assortment_links'])){ ?>
-                        <hr>
-                        <h5 class="add_bottom_15 link-headings">{{__("message.assortment_links")}}</h5>
-                        <div class="row mb-1 link-css-mobile">
-                            <div class="col-md-12">
-                                @foreach($data['assortment_links'] as $assortmentlinks)
-                                <a href="{{ $assortmentlinks->link }}" target="_blank" class="btn btn-info btn-sm">{{ $assortmentlinks->name }}</a>
-                                @endforeach
-                            </div>
-                        </div>
-                    <?php } ?>
+                    @if((!empty($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer)) && (!empty($data['mainDirectoryDetails']->directoryLanguage[0]->about_us)))
 
+                    <div class="weoffer_comman modal-body desktop-offerabout">
+                        <div class=" tabs-left" id="modal-tabs">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item" style="margin: 0px 20px 10px 0px; font-size: 18px;">
+                                    <a class="active"  href="#weoffer" data-toggle="tab">We Offer</a>
 
-                    <hr>
-                    <?php if(!empty($data['amenityData'])){ ?>
-                            <!-- <h5 class="add_bottom_15">{{__("message.filters_amenities_subtitle")}}</h5> -->
-                            <?php
-                            if (isset($data['amenityData'])) {
-                                $amenitydataidNew		= (isset($data['amenityData'][0]->amenities_id) ? $data['amenityData'][0]->amenities_id : "");
-                                $amenitydataidExisting 	= (isset($data['amenityData'][1]->amenities_id) ? $data['amenityData'][1]->amenities_id : "");
-                                $amenityDataNew 		= explode(',', $amenitydataidNew);
-                                $amenityDataExisting 	= explode(',', $amenitydataidExisting);
-                                $amenityData            = array_merge($amenityDataExisting,$amenityDataNew);
-                            }
-                            ?>
-
-                        <div class="row add_bottom_30">
-
-                        @if($ismobiledevice != 1)
-                            <style>
-
-                            </style>
-                        @endif
-
-
-                        <?php //if($ismobiledevice == 1){ ?>
-
-                            <ul style="padding: 3px 0px 0px 30px; width:100%" class="row">
-                                    <?php $anemitycounter = 1;
-                                    foreach($data['amenity'] as $amenityrow){
-                                        if(in_array($amenityrow->id, $amenityData)){
-                                            if($anemitycounter > 3){
-                                                $hiddencls = "hidden-amenities hidden";
-                                            }else{
-                                                $hiddencls = "";
-                                            }
-                                    ?>
-                                    <div class="col-md-4">
-                                        <div class="{{ $hiddencls }} amenities_div">
-                                            <?php if($amenityrow->icon_class!=""){ ?>
-                                                <li style="padding-top: 5px;" class="amenities_li"><i class="{{ $amenityrow->icon_class }}" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
-                                            <?php }else{ ?>
-                                                <li style="padding-top: 5px;" class="amenities_li"><i class="fas fa-check" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
-                                            <?php } ?>
-                                        </div>
-                                    </div>
-                                    <?php $anemitycounter++; }  } ?>
-                                    <span style="float: left; width: 100%;"><a href="javascript::" id="amenity-toggle-btn" style="color: #004dda !important;" onclick="showToggle(this, 'hidden-amenities')">{{__("message.show_more")}}</a></span>
+                                    <span class="notranslate">||</span>
+                                </li>
+                                <li class="nav-item" style="margin: 0px 0px 0px -15px; font-size: 18px;">
+                                    <a href="#aboutuslisting"  data-toggle="tab">About Us</a>
+                                    <span class="notranslate">||</span>
+                                </li>
+                                <li class="nav-item" style="margin: 0px 0px 0px 5px; font-size: 18px;">
+                                    <a href="#aboutuslisting_us"  data-toggle="tab">Us</a>
+                                </li>
                             </ul>
 
-                        <?php //}else{ ?>
-
-                            {{-- @foreach($data['amenity'] as $amenityrow)
-                            <?php //if(in_array($amenityrow->id, $amenityData)){ ?>
-                                <div class="col-md-4">
-                                    <ul class="">
-                                        <?php //if($amenityrow->icon_class!=""){ ?>
-                                            <li><i class="{{ $amenityrow->icon_class }}" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
-                                        <?php //}else{ ?>
-                                            <li><i class="fas fa-check" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
-                                        <?php //} ?>
-                                    </ul>
+                        </div>
+                        <div class="tab-content" id="tab-content">
+                            <div class="tab-pane active" id="weoffer">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer))
+                                        <div class="post-content textpopup show-more-heightpopup">{{ $data['mainDirectoryDetails']->directoryLanguage[0]->we_offer }}</div>
+                                            <!-- @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer) > 200)
+                                            <div class="show-morebtn" style="cursor:pointer;">Read More</div>
+                                            @endif -->
+                                        @else
+                                        <div class="text-center">No Data Found</div>
+                                        @endif
+                                    </div>
                                 </div>
-                            <?php //} ?>
-                            @endforeach --}}
-                        <?php //} ?>
-
+                            </div>
+                            <div class="tab-pane" id="aboutuslisting">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->about_us))
+                                            <div class="post-content textpopup-aboutus show-more-heightpopup-aboutus">{{ $data['mainDirectoryDetails']->directoryLanguage[0]->about_us }}</div>
+                                            <!-- @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->about_us) > 200)
+                                            <div class="read-morebtn" style="cursor:pointer;">Read More</div>
+                                            @endif -->
+                                        @else
+                                        <div class="text-center">No Data Found</div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="aboutuslisting_us">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <p class="text show-more-height">
+                                            {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <?php } ?>
+
+                    <div class="row">
+                        <span class="weoffer_comman we-offer-details mobile-offerabout" id="weoffer-mobile">
+                            <div class="col-md-12">
+                                <div class="tabs-left" id="modal-tabs textaddtabs">
+                                    <ul class="nav nav-tabs " id="tablistaddbtn" role="tablist" style="float: left;">
+                                        <li class="nav-item" style="margin: 0px 20px 10px 0px; font-size: 18px;">
+                                            <a class="active textshow"  href="#weoffermobile" data-toggle="tab">We Offer</a>
+                                            And
+                                        </li>
+                                        <li class="nav-item" style="margin: 0px 0px 0px -15px; font-size: 18px;">
+                                            <a class="textshow" href="#aboutuslistingmobile"  data-toggle="tab" >About Us</a>
+                                            And
+                                        </li>
+                                        <li class="nav-item" style="margin: 0px 0px 0px 5px; font-size: 18px;">
+                                            <a class="textshow" href="#us_mobile"  data-toggle="tab" >Us</a>
+                                        </li>
+                                    </ul>
+
+                                </div>
+
+                                <div class="tab-content" id="tab-content" style="display: inline-block;width: 100%;padding-top: 10px;">
+
+                                    <div class="tab-pane active" id="weoffermobile">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer))
+                                                    <div class="post-content textweoffer limit_we_offer" style="display:block">
+                                                        {{ \Illuminate\Support\Str::words($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer, 17, '...') }}
+                                                    </div>
+                                                    <div class="post-content textweoffer1" style="display:none">
+                                                        {{ $data['mainDirectoryDetails']->directoryLanguage[0]->we_offer }}
+                                                    </div>
+                                                    @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer) > 21)
+                                                        {{-- <div class="show-more-weoffer" data-toggle="modal" data-target="#we_offer_details_model" style="cursor:pointer;">Read More</div> --}}
+                                                        <div class="show-more-weoffer limit_we_offer_read_more" style="cursor:pointer;">Read More</div>
+                                                    @endif
+                                                @else
+                                                    <div class="text-center">No Data Found</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="aboutuslistingmobile">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->about_us))
+
+                                                    <div class="post-content textweoffer limit_about" style="display:block">
+                                                        {{ \Illuminate\Support\Str::words($data['mainDirectoryDetails']->directoryLanguage[0]->about_us, 17, '...') }}
+                                                    </div>
+                                                    <div class="post-content textweoffer2" style="display:none">
+                                                        {{ $data['mainDirectoryDetails']->directoryLanguage[0]->about_us }}
+                                                    </div>
+                                                    @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->about_us) > 18)
+                                                        <div class="show-more-weoffer limit_about_read_more" style="cursor:pointer;">Read More</div>
+                                                    @endif
+                                                @else
+                                                <div class="text-center">No Data Found</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane" id="us_mobile">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->description))
+
+                                                    <div class="post-content textweoffer limit_us" style="display:block">
+                                                        {{ \Illuminate\Support\Str::words($data['mainDirectoryDetails']->directoryLanguage[0]->description, 17, '...') }}
+                                                    </div>
+                                                    <div class="post-content textweoffer3" style="display:none">
+                                                        {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
+                                                    </div>
+                                                    @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->description) > 18)
+                                                        <div class="show-more-weoffer limit_us_read_more" style="cursor:pointer;">Read More</div>
+                                                    @endif
+                                                @else
+                                                <div class="text-center">No Data Found</div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </span>
+                    </div>
+                    @endif
+
+                    {{-- <span class="desktop-offerabout we-offer-details" data-toggle="modal" data-target="#we_offer_details_model">
+                        <button class="btn btn-sm" style="background: rgb(249 95 9); color:#fff;" title="We offer Details">
+                            We Offer || About Us
+                        </button>
+                    </span> --}}
+
+
 
                     <div class="opening" id="schedule_sec">
                         <?php if($openCloseTags!=1){ ?>
@@ -1699,117 +2120,109 @@
                         <?php /* --------------------- END EXTRA TIME AND COMMENT UPCOMING HOLIDAY DETAILS -------------------------*/ ?>
                     </div>
 
-                    <br>
-                    @if((!empty($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer)) && (!empty($data['mainDirectoryDetails']->directoryLanguage[0]->about_us)))
 
-                    <div class="row">
-                        <span class="we-offer-details mobile-offerabout" id="weoffer-mobile">
-                            <div class="col-md-12">
-                                <div class="tabs-left" id="modal-tabs textaddtabs">
-                                    <ul class="nav nav-tabs " id="tablistaddbtn" role="tablist" style="float: left;">
-                                        <li class="nav-item" style="margin: 0px 20px 10px 0px; font-size: 18px;">
-                                            <a class="active textshow"  href="#weoffermobile" data-toggle="tab">We Offer</a>
-                                            And
-                                        </li>
-                                        <li class="nav-item" style="margin: 0px 0px 0px -15px; font-size: 18px;">
-                                            <a class="textshow" href="#aboutuslistingmobile"  data-toggle="tab" >About Us</a>
-                                            And
-                                        </li>
-                                        <li class="nav-item" style="margin: 0px 0px 0px 5px; font-size: 18px;">
-                                            <a class="textshow" href="#us_mobile"  data-toggle="tab" >Us</a>
-                                        </li>
-                                    </ul>
-
-                                </div>
-
-                                <div class="tab-content" id="tab-content" style="display: inline-block;width: 100%;padding-top: 10px;">
-
-                                    <div class="tab-pane active" id="weoffermobile">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer))
-                                                    <div class="post-content textweoffer limit_we_offer" style="display:block">
-                                                        {{ \Illuminate\Support\Str::words($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer, 17, '...') }}
-                                                    </div>
-                                                    <div class="post-content textweoffer1" style="display:none">
-                                                        {{ $data['mainDirectoryDetails']->directoryLanguage[0]->we_offer }}
-                                                    </div>
-                                                    @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer) > 21)
-                                                        {{-- <div class="show-more-weoffer" data-toggle="modal" data-target="#we_offer_details_model" style="cursor:pointer;">Read More</div> --}}
-                                                        <div class="show-more-weoffer limit_we_offer_read_more" style="cursor:pointer;">Read More</div>
-                                                    @endif
-                                                @else
-                                                    <div class="text-center">No Data Found</div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane" id="aboutuslistingmobile">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->about_us))
-
-                                                    <div class="post-content textweoffer limit_about" style="display:block">
-                                                        {{ \Illuminate\Support\Str::words($data['mainDirectoryDetails']->directoryLanguage[0]->about_us, 17, '...') }}
-                                                    </div>
-                                                    <div class="post-content textweoffer2" style="display:none">
-                                                        {{ $data['mainDirectoryDetails']->directoryLanguage[0]->about_us }}
-                                                    </div>
-                                                    @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->about_us) > 18)
-                                                        <div class="show-more-weoffer limit_about_read_more" style="cursor:pointer;">Read More</div>
-                                                    @endif
-                                                @else
-                                                <div class="text-center">No Data Found</div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="tab-pane" id="us_mobile">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->description))
-
-                                                    <div class="post-content textweoffer limit_us" style="display:block">
-                                                        {{ \Illuminate\Support\Str::words($data['mainDirectoryDetails']->directoryLanguage[0]->description, 17, '...') }}
-                                                    </div>
-                                                    <div class="post-content textweoffer3" style="display:none">
-                                                        {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
-                                                    </div>
-                                                    @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->description) > 18)
-                                                        <div class="show-more-weoffer limit_us_read_more" style="cursor:pointer;">Read More</div>
-                                                    @endif
-                                                @else
-                                                <div class="text-center">No Data Found</div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </span>
+                    <hr id="locationmap">
+                    <!-- <h3>{{__("message.location")}}</h3> -->
+                    <div id="map" class="map-full map-layout single-listing-map" style="z-index: 50;">
+                        <a class="mobile_direction_a btn-block "  target="_blank" href="https://www.google.com/maps/dir//<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>/@<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>,16z" style="margin: -35px 10px; display:none;">
+                            <img  class="direction" src="{{ url('/') }}/assets/client/images/direction.jpg" width="10%" alt="">
+                        </a>
+                        <iframe data-consent-category="functional" data-consent-src="https://maps.google.com/maps?q=<?php echo e($data['address'][0]->latitude); ?>,<?php echo e($data['address'][0]->longitude); ?>&amp;hl=es;z=14&amp;output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
-                    @endif
-
-                    <span class="desktop-offerabout we-offer-details" data-toggle="modal" data-target="#we_offer_details_model">
-                    <button class="btn btn-sm" style="background: rgb(249 95 9); color:#fff;" title="We offer Details">
-                        We Offer || About Us
-                    </button>
-                    </span>
+                    <!-- End Map -->
 
 
-                <div id="accordion" class="tree-stuc">
+
+                    <hr>
+                    <?php if(!empty($data['assortment_links'])){ ?>
+                        <hr>
+                        <h5 class="add_bottom_15 link-headings">{{__("message.assortment_links")}}</h5>
+                        <div class="row mb-1 link-css-mobile">
+                            <div class="col-md-12">
+                                @foreach($data['assortment_links'] as $assortmentlinks)
+                                <a href="{{ $assortmentlinks->link }}" target="_blank" class="btn btn-info btn-sm">{{ $assortmentlinks->name }}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                    <?php } ?>
+
+
+                    <?php if(!empty($data['amenityData'])){ ?>
+                            <!-- <h5 class="add_bottom_15">{{__("message.filters_amenities_subtitle")}}</h5> -->
+                            <?php
+                            if (isset($data['amenityData'])) {
+                                $amenitydataidNew		= (isset($data['amenityData'][0]->amenities_id) ? $data['amenityData'][0]->amenities_id : "");
+                                $amenitydataidExisting 	= (isset($data['amenityData'][1]->amenities_id) ? $data['amenityData'][1]->amenities_id : "");
+                                $amenityDataNew 		= explode(',', $amenitydataidNew);
+                                $amenityDataExisting 	= explode(',', $amenitydataidExisting);
+                                $amenityData            = array_merge($amenityDataExisting,$amenityDataNew);
+                            }
+                            ?>
+
+                        <div class="row add_bottom_30">
+
+                        @if($ismobiledevice != 1)
+                            <style>
+
+                            </style>
+                        @endif
+
+
+                        <?php //if($ismobiledevice == 1){ ?>
+
+                            <ul style="padding: 3px 0px 0px 30px; width:100%" class="row">
+                                    <?php $anemitycounter = 1;
+                                    foreach($data['amenity'] as $amenityrow){
+                                        if(in_array($amenityrow->id, $amenityData)){
+                                            if($anemitycounter > 3){
+                                                $hiddencls = "hidden-amenities hidden";
+                                            }else{
+                                                $hiddencls = "";
+                                            }
+                                    ?>
+                                    <div class="col-md-4">
+                                        <div class="{{ $hiddencls }} amenities_div">
+                                            <?php if($amenityrow->icon_class!=""){ ?>
+                                                <li style="padding-top: 5px;" class="amenities_li"><i class="{{ $amenityrow->icon_class }}" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
+                                            <?php }else{ ?>
+                                                <li style="padding-top: 5px;" class="amenities_li"><i class="fas fa-check" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
+                                            <?php } ?>
+                                        </div>
+                                    </div>
+                                    <?php $anemitycounter++; }  } ?>
+                                    <span style="float: left; width: 100%;"><a href="javascript::" id="amenity-toggle-btn" style="color: #004dda !important;" onclick="showToggle(this, 'hidden-amenities')">{{__("message.show_more")}}</a></span>
+                            </ul>
+
+                        <?php //}else{ ?>
+
+                            {{-- @foreach($data['amenity'] as $amenityrow)
+                            <?php //if(in_array($amenityrow->id, $amenityData)){ ?>
+                                <div class="col-md-4">
+                                    <ul class="">
+                                        <?php //if($amenityrow->icon_class!=""){ ?>
+                                            <li><i class="{{ $amenityrow->icon_class }}" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
+                                        <?php //}else{ ?>
+                                            <li><i class="fas fa-check" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
+                                        <?php //} ?>
+                                    </ul>
+                                </div>
+                            <?php //} ?>
+                            @endforeach --}}
+                        <?php //} ?>
+
+                    </div>
+                    <hr>
+                    <?php } ?>
+
+
+                   <div id="accordion" class="tree-stuc">
                     <!-- Listing Type Wise Inner Page -->
                     <?php
                     $category_id = isset($data['directoryTypeData'][0]->category_id)?$data['directoryTypeData'][0]->category_id:"";
                     if(!empty($category_id)){
                     ?>
                     <h5>
-                    <?php
-                        $typeName = Helper::getTypeCategory($category_id);
-                    ?>
+                       <?php $typeName = Helper::getTypeCategory($category_id); ?>
                     </h5>
                     <?php
                         $reverseData = array_reverse($data['directoryTypeData']);
@@ -1922,12 +2335,11 @@
                         </div>
                         @if(count($data['directoryTypeData']) > 0)
                             <a id="more_type" class="more_type">
-                                See More d<i class="fas fa-chevron-down"></i>
+                                See More<i class="fas fa-chevron-down"></i>
                             </a>
                         @endif
 
 
-                        <br>
                         <?php /* if($numberofblock!=0 ){
                             for($i=0;$i<$numberofblock;$i++){
                                 if($data['directoryTypeData'][$i]->column_value!=""){ ?>
@@ -1957,10 +2369,6 @@
                             <h4>No Data</h4>
                         <?php }  } */ //die; ?>
 
-
-
-
-
                     <!-- Video File Base On Package-->
 
                     <?php $vediolink = isset($data['mediaData'][0]->video_url)?$data['mediaData'][0]->video_url:"";
@@ -1983,136 +2391,9 @@
                     </div>
                     <?php } ?>
 
-                    <hr id="locationmap">
-                    <!-- <h3>{{__("message.location")}}</h3> -->
-                    <div id="map" class="map-full map-layout single-listing-map" style="z-index: 50;">
-                        <a class="mobile_direction_a btn-block "  target="_blank" href="https://www.google.com/maps/dir//<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>/@<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>,16z" style="margin: -35px 10px; display:none;">
-                            <img  class="direction" src="{{ url('/') }}/assets/client/images/direction.jpg" width="10%" alt="">
-                        </a>
-                        <iframe data-consent-category="functional" data-consent-src="https://maps.google.com/maps?q=<?php echo e($data['address'][0]->latitude); ?>,<?php echo e($data['address'][0]->longitude); ?>&amp;hl=es;z=14&amp;output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                    <!-- End Map -->
+
                 </section>
                 <!-- /section -->
-                <!-- Section Of Review Starts -->
-                <section id="reviews" style="display:none">
-                    <h2>Reviews</h2>
-                    <!-- Ratings starts -->
-                    <div class="reviews-container add_bottom_30">
-                        <div class="row">
-                            <div class="col-lg-3">
-                                <div id="review_summary">
-                                    <strong>5.0</strong>
-                                    <em>
-                                        Awesome </em>
-                                    <small>Based on 2 Reviews</small>
-                                </div>
-                            </div>
-                            <div class="col-lg-9">
-                                <!-- Rating Progeress Bar -->
-                                <div class="row">
-                                    <div class="col-lg-10 col-9">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-3"><small><strong>1 Stars</strong></small></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-10 col-9">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-3"><small><strong>2 Stars</strong></small></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-10 col-9">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-3"><small><strong>3 Stars</strong></small></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-10 col-9">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-3"><small><strong>4 Stars</strong></small></div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-10 col-9">
-                                        <div class="progress">
-                                            <div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-2 col-3"><small><strong>5 Stars</strong></small></div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- /row -->
-                    </div>
-                    <!-- Ratings ends -->
-                    <div class="reviews-container">
-                        <!-- Single Review Starts -->
-                        <div class="review-box clearfix">
-
-                            <figure class="rev-thumb"><img src="{{ asset('assets/client/images/user.png') }}" alt=""></figure>
-                            <div class="rev-content">
-                                <div class="rating">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </div>
-                                <div class="rev-info">
-                                    Jane Roie – Wed, 15-May-2019:
-                                </div>
-                                <div class="rev-text">
-                                    <p>
-                                        Beautiful room, comfortable bed, excellent location, great breakfast, the owner is the perfect host, parking provided for the car, soft towels, good quality sheets, complimentary water, charming hotel.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="review-box clearfix">
-                            <figure class="rev-thumb"><img src="{{ asset('assets/client/images/user.png') }}" alt=""></figure>
-                            <div class="rev-content">
-                                <div class="rating">
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                    <i class="fa fa-star" aria-hidden="true"></i>
-                                </div>
-                                <div class="rev-info">
-                                    Jane Roie – Wed, 15-May-2019:
-                                </div>
-                                <div class="rev-text">
-                                    <p>
-                                        Beautiful, elegant rooms. Fabulous wooden beams. Very comfortable, clean and spacious. High ceilings. Great bathroom. Gated off-street parking. Perfectly positioned to wander into the old town centre on foot. Everything you want to see within easy walking distance. Expensive but worth the price.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Single Review Endss -->
-                    </div>
-                    <!-- /review-container -->
-                </section>
-
-                <div class="row" style="display:none">
-                    <div class="col-12">
-                        <a href="login.html" class="btn btn-warning float-right">Login to review</a>
-                    </div>
-                    <div class="col-12 mt-1">
-                        <a href="login.html" class="btn btn-sm btn-warning float-right">Claim this listing</a>
-                    </div>
-                </div>
-                <br />
-                <!-- Leave a review ends -->
             </div>
 
             <!-- Contact Form Base On Package-->
@@ -2125,7 +2406,6 @@
                         $disbl = "";
                         $notActivateForm = 1;
                     }
-                    //dd($notActivateForm);
                 ?>
             <aside class="col-lg-4 " id="sidebar">
 
@@ -2134,7 +2414,7 @@
                     <div class="overlay-content">Not Activated</div>
                 <?php } ?>
 
-                    <div class="box_detail booking ">
+                    <div class="box_detail booking listing-contact-card">
                         @if(session()->get('status'))
                         <div class="alert alert-success">
                             {{ session()->get('status') }}
@@ -2148,6 +2428,14 @@
                             @endphp
                         @endforeach
 
+                        <div class="listing-contact-intro">
+                            <span class="listing-contact-intro__icon" aria-hidden="true"><i class="fas fa-comments"></i></span>
+                            <div class="listing-contact-intro__copy">
+                                <h2>We're here to help</h2>
+                                <p>Send your question or booking request and the team will get back to you.</p>
+                            </div>
+                        </div>
+
                         <form id="bookingform" class="contact-us-form" action="{{ route('appointment.booking') }}" method="post"  >
                             {{ csrf_field() }}
 
@@ -2158,12 +2446,12 @@
                             <input type="hidden" name="slug" value="clarance-hotel">
                             <input type="hidden" name="type" value="booking">
                             <input type="hidden" name="bookingComment" value="">
-                            <div class="price">
-                                <span class="contact">{{__("message.contact_us_title")}}</span>
-                                <span class="respondata"></span>
-
+                            {{-- <div class="price">
+                                 <span class="contact">
+                                    {{__("message.contact_us_title")}}
+                                </span>
                                 <div class="score"><span>Awesome<em>2 Reviews</em></span><strong>5.0</strong></div>
-                            </div>
+                            </div> --}}
 
                             <div class="form-group" id="input-dates">
                                 <input type="hidden" name="directory_id" id="directory_ids" value="{{ $data['mainDirectoryDetails']->id }}">
@@ -2204,10 +2492,13 @@
 
                             <div class="form-group">
                                 <label class="col-md-12 p-0">{{__("message.message_label_text")}}</label>
-                                <textarea rows="5" class="form-control" name="message"></textarea>
+                                <textarea rows="3" class="form-control" name="message"></textarea>
                             </div>
 
                             <button type="submit" class="add_top_30 btn_1 full-width purchase submitbtn" {{ $disbl }}>{{__("message.submit_button")}}</button>
+
+                            <span class="respondata"></span>
+
                         </form>
 
                         <a style="display:none;" href="javascript:" onclick="addToWishList('6')" class="btn_1 full-width outline wishlist" id="btn-wishlist"><i class="fa fa-heart" aria-hidden="true"></i> Add to wishlist</a>
@@ -2522,31 +2813,26 @@
     <?php } ?>
 
      <?php if(count($most_viewed_listings) > 0){ ?>
-    <div class="container-fluid  margin_80_55">
 
-        <div class="main_title_2">
-            <span><em></em></span>
-            <a class="btn_1 rounded btn-sm" id="click_viewed_listings" style="color: #fff;font-weight: 500; padding: 5px 10px; margin: 10px 0px;">
-                Click for Most Viewed Listings
-            </a>
+    <section class="container-fluid margin_80_55 most-viewed-section" aria-labelledby="most-viewed-listings-title">
+        <div class="most-viewed-heading">
+            <div>
+                <h2 id="most-viewed-listings-title">Most Viewed Companies</h2>
+                <p>Discover the businesses visitors are viewing most. <span class="most-viewed-kicker"><i class="fa fa-eye" aria-hidden="true"></i> Popular right now</span></p>
+            </div>
         </div>
-        <div class="most_viewed_listings_div" style="display: none;">
-        <div class="main_title_2">
-
-            <h2>Most Viewed Listings</h2>
-        </div>
-        <div id="sploffer" class="owl-carousel owl-theme listing_gllary_img most_viewed_listings">
+        <div id="most-viewed-listings-carousel" class="owl-carousel owl-theme listing_gllary_img most_viewed_listings">
             <?php foreach($most_viewed_listings as $row){ ?>
 			<?php $imagename = Helper::getDirectoryimage($row->id);
 			$getDirectorySlug = Helper::getDirectorySeoSlug($row->id);
 
 			?>
             <div class="item">
-                <div class="strip grid">
+                <article class="strip grid">
                     <figure>
                     <input class="product-wishlist" type="hidden" value="{{ $row->id }}" name="product_id" id="product_id">
                     <input type="hidden" name="user_id" id="user_id" value="{{isset(Auth()->user()->id)?Auth()->user()->id:0}}">
-                        <a href="javascript:void(0);" productid="{{ $row->id }}" class="wishlist-icon" onclick="addDirToWishList(this, <?php echo $row->id ?>)">
+                        <a href="javascript:void(0);" productid="{{ $row->id }}" class="wishlist-icon" aria-label="Add {{ $row->title }} to wishlist" onclick="addDirToWishList(this, <?php echo $row->id ?>)">
                             <?php
                             if(!in_array($row->id, $wislistdirectoryId)){ ?>
                                 <i class="fa fa-heart-o" aria-hidden="true"></i>
@@ -2563,62 +2849,96 @@
                     </span>
 					<?php if(!empty($imagename)){ ?>
                         <a href="<?php echo url('listings/details', ['id' => $getDirectorySlug->slug??'']); ?>">
-                            <img src="{{ env('IMAGE_PATH').'images/directory/'.$imagename->name_thumbnail.'.webp' }}" class="img-fluid" alt="" width="400" height="266">
+                            <img src="{{ env('IMAGE_PATH').'images/directory/'.$imagename->name_thumbnail.'.webp' }}" class="img-fluid" alt="{{ $row->title }}" width="400" height="266">
                         </a>
 					<?php }else{ ?>
 						<a href="<?php echo url('listings/details', ['id' => $getDirectorySlug->slug??'']); ?>">
-                            <img src="{{ asset('assets/client/images/98008ded21258aa9c869d4f64a6ba7b6.jpg') }}" class="img-fluid" alt="" width="400" height="266">
+                            <img src="{{ asset('assets/client/images/98008ded21258aa9c869d4f64a6ba7b6.jpg') }}" class="img-fluid" alt="{{ $row->title }}" width="400" height="266">
                         </a>
 					<?php } ?>
-
                     </figure>
-                    <p class="featured-footer mb-0" style="text-align: center;">
-							<a>{{ $row->title}}</a>
-					</p>
-                </div>
+                    <h3 class="most-viewed-card-title">
+                        <a href="<?php echo url('listings/details', ['id' => $getDirectorySlug->slug??'']); ?>">{{ $row->title }}</a>
+                    </h3>
+                </article>
             </div>
             <?php } ?>
         </div>
-        </div>
-
-    </div>
+    </section>
     <?php } ?>
 
-    <script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
+<script src="https://mozilla.github.io/pdf.js/build/pdf.mjs" type="module"></script>
+<script>
 
-    <script>
+    window.addEventListener('load', function () {
+        var pageLoader = document.getElementById('loader');
+        if (pageLoader) {
+            pageLoader.classList.add('is-hidden');
+            pageLoader.setAttribute('aria-hidden', 'true');
+        }
 
-        window.addEventListener('load', function () {
-            var pageLoader = document.getElementById('loader');
-            if (pageLoader) {
-                pageLoader.classList.add('is-hidden');
-                pageLoader.setAttribute('aria-hidden', 'true');
-            }
-        });
-
-        // Google tag event for vendor page view
-        @if(app()->environment('production'))
-            gtag('event', 'vendor_page_view', {
-                vendor_id: '{{ $data["mainDirectoryDetails"]->id }}',
-                entry_source: '{{ url()->previous() }}'
+        var $mostViewedListings = $('#most-viewed-listings-carousel');
+        if ($mostViewedListings.length && typeof $.fn.owlCarousel === 'function') {
+            $mostViewedListings.owlCarousel({
+                items: 3,
+                itemsDesktop: [1199, 3],
+                itemsDesktopSmall: [979, 2],
+                itemsTablet: [768, 2],
+                itemsMobile: [479, 1],
+                navigation: true,
+                navigationText: [
+                    '<i class="fa fa-chevron-left" aria-hidden="true"></i>',
+                    '<i class="fa fa-chevron-right" aria-hidden="true"></i>'
+                ],
+                pagination: false,
+                autoPlay: false,
+                stopOnHover: true
             });
-        @endif
+        }
 
-        $('.limit_we_offer_read_more').on("click", function() {
-            $('.limit_we_offer').attr('style', 'display:none !important;');
-            $('.limit_we_offer_read_more').hide();
-            $('.textweoffer1').show();
+        var $listingBlogs = $('#blogData');
+        if ($listingBlogs.length && typeof $.fn.owlCarousel === 'function') {
+            $listingBlogs.owlCarousel({
+                items: 3,
+                itemsDesktop: [1199, 3],
+                itemsDesktopSmall: [979, 2],
+                itemsTablet: [768, 2],
+                itemsMobile: [479, 1],
+                navigation: {{ count($data['blogData']) > 1 ? 'true' : 'false' }},
+                navigationText: [
+                    '<i class="fa fa-chevron-left" aria-hidden="true"></i>',
+                    '<i class="fa fa-chevron-right" aria-hidden="true"></i>'
+                ],
+                pagination: false,
+                autoPlay: false,
+                stopOnHover: true
+            });
+        }
+    });
+
+    // Google tag event for vendor page view
+    @if(app()->environment('production'))
+        gtag('event', 'vendor_page_view', {
+            vendor_id: '{{ $data["mainDirectoryDetails"]->id }}',
+            entry_source: '{{ url()->previous() }}'
         });
-        $('.limit_about_read_more').on("click", function() {
-            $('.limit_about').attr('style', 'display:none !important;');
-            $('.limit_about_read_more').hide();
-            $('.textweoffer2').show();
-        });
-        $('.limit_us_read_more').on("click", function() {
-            $('.limit_us').attr('style', 'display:none !important;');
-            $('.limit_us_read_more').hide();
-            $('.textweoffer3').show();
-        });
+    @endif
+
+    $('.limit_we_offer_read_more').on("click", function() {
+        $('.limit_we_offer').attr('style', 'display:none !important;');
+        $('.limit_we_offer_read_more').hide();
+        $('.textweoffer1').show();
+    });
+    $('.limit_about_read_more').on("click", function() {
+        $('.limit_about').attr('style', 'display:none !important;');
+        $('.limit_about_read_more').hide();
+        $('.textweoffer2').show();
+    });
+    $('.limit_us_read_more').on("click", function() {
+        $('.limit_us').attr('style', 'display:none !important;');
+        $('.limit_us_read_more').hide();
+        $('.textweoffer3').show();
+    });
 
     $('#btn_defaulttags').on('click', function() {
         const $tags = $('.defaulttags');
@@ -2643,8 +2963,6 @@
         }
     });
 
-
-
     $('.tag_delete').on('click', function() {
         var imp_tag_id = $(this).data('impid');
         var company_id = $('#directory_ids').val();
@@ -2661,28 +2979,7 @@
                 console.log('Result:', result);
 
                 if (result.status === true) {
-
                     alert(result.message || 'Something went wrong');
-                    // const container = $("#company_imp_tags_div");
-                    // container.empty();
-                    // const baseListingUrl = `{{ url('listings-product/' . $data['mainDirectoryDetails']->slug) }}`;
-                    // $.each(result.data, function(_, value) {
-                    //     container.append(`
-                    //         <span class="loc_open mr-2 notranslate"
-                    //             style="background-color: #b5b9b7; color: #000 !important; border: 1px solid #b5b9b7; padding: 3px 6px; border-radius: 4px; display: inline-flex; align-items: center;">
-                    //             <a href="${baseListingUrl}?tags=${value.ptag_id}"  target="_blank"
-                    //             class="company_imp_tags2"
-                    //             data-companyid="${value.company_id}"
-                    //             data-id="${value.ptag_id}"
-                    //             data-title="${value.ptag_name}" style="color: #000; text-decoration: none; margin-right: 5px;">
-                    //                 ${value.ptag_name}
-                    //             </a>
-                    //             <i class="fa fa-times tag_delete"
-                    //             data-impid="${value.ptag_id}"
-                    //             style="cursor:pointer;"></i>
-                    //         </span>
-                    //     `);
-                    // });
                     setTimeout(function(){
                         window.location.reload(); // you can pass true to reload function to ignore the client cache and reload from the server
                     },1000);
@@ -2782,1348 +3079,780 @@
     });
 
     $('#state').on('change', function() {
-            var state_id = this.value;
-            $("#city").html('');
+        var state_id = this.value;
+        $("#city").html('');
+        $.ajax({
+            url: baseUrl + '/get-cities-by-state'
+            , type: "POST"
+            , data: {
+                state_id: state_id
+                , _token: '{{ csrf_token() }}'
+            }
+            , dataType: 'json'
+            , success: function(result) {
+                if(result.cities.length== 0){
+                    document.getElementById('city_name').style.display = "block";
+                    document.getElementById('city_dropdown').style.display = "none";
+                }else{
+                    document.getElementById('city_name').style.display = "none";
+                    document.getElementById('city_dropdown').style.display = "block";
+
+                    $('#city').html('<option value="">Select City</option>');
+                    $.each(result.cities, function(key, value) {
+                        $("#city").append('<option value="' + value.id + '">' + value.name + '</option>');
+                    });
+                }
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const toggleButtons = document.querySelectorAll('.description_toggle');
+
+        toggleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.previousElementSibling; // Target the content
+                const isExpanded = content.classList.contains('expanded');
+
+                if (isExpanded) {
+                    content.classList.remove('expanded');
+                    button.textContent = 'Read More';
+                } else {
+                    content.classList.add('expanded');
+                    button.textContent = 'Read Less';
+                }
+            });
+        });
+    });
+
+    function view_type_gallery_button(cat_id,directory_id,block_num) {
+        $('.AJloader').show();
             $.ajax({
-                url: baseUrl + '/get-cities-by-state'
-                , type: "POST"
-                , data: {
-                    state_id: state_id
-                    , _token: '{{ csrf_token() }}'
+                url: baseUrl + '/get-directory-type-galleries',
+                type: "POST",
+                data: {
+                    cat_id: cat_id,
+                    directory_id: directory_id,
+                    block_num: block_num,
+                    _token: '{{csrf_token()}}'
                 }
                 , dataType: 'json'
                 , success: function(result) {
-                    if(result.cities.length== 0){
-                        document.getElementById('city_name').style.display = "block";
-                        document.getElementById('city_dropdown').style.display = "none";
-                    }else{
-                        document.getElementById('city_name').style.display = "none";
-                        document.getElementById('city_dropdown').style.display = "block";
+                    $('.AJloader').hide();
 
-                        $('#city').html('<option value="">Select City</option>');
-                        $.each(result.cities, function(key, value) {
-                            $("#city").append('<option value="' + value.id + '">' + value.name + '</option>');
+                    $("#type_gallery_list").html('');
+                    $('#type_galleryModal').modal('show');
+
+                    $.each(result.DirectoryTypeGallery, function(key, value) {
+                        $("#type_gallery_list").append(`
+
+                        <div class="image-thumbnail existing-img col-md-2 col-2" id="gtype_key_${value.id}">
+                            <a href="{{ env('IMAGE_PATH') }}files/directorytypeimage/${value.image_name}" data-lightbox="allGalleryImages">
+                                <img data-id="${value.id}" src="{{ env('IMAGE_PATH') }}files/directorytypeimage/${value.image_name}" class="previewBlocks gtype_img" style="width: 150px; height: auto; border: 1px solid #ccc; padding:5px; margin: 5px 5px;">
+                            </a>
+                        </div>
+
+                        `);
+                    });
+                }
+            });
+    };
+
+    function view_type_pdf_button(cat_id,directory_id,block_num) {
+        $('.AJloader').show();
+            $.ajax({
+                url: baseUrl + '/get-directory-type-pdf',
+                type: "POST",
+                data: {
+                    cat_id: cat_id,
+                    directory_id: directory_id,
+                    block_num: block_num,
+                    _token: '{{csrf_token()}}'
+                }
+                , dataType: 'json'
+                , success: function(result) {
+                    $('.AJloader').hide();
+
+                    $("#type_pdf_list").html('');
+                    $('#type_pdf_Modal').modal('show');
+
+                    $.each(result.DirectoryTypePdf, function(key, value) {
+
+                    let url = `{{ env('IMAGE_PATH') }}files/directorytypeimage/${value.pdf_name}?embedded=true`;
+
+                    console.log('url', url);
+
+                    var { pdfjsLib } = globalThis;
+                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.mjs';
+
+                    var pdfDoc = null,
+                        pageNum = 1,
+                        pageRendering = false,
+                        pageNumPending = null,
+                        scale = 3.2;
+
+                    // Function to render a PDF page
+                    function renderPage(num, canvas, ctx) {
+                        pageRendering = true;
+
+                        pdfDoc.getPage(num).then(function(page) {
+                            var viewport = page.getViewport({ scale: scale });
+                            canvas.height = viewport.height;
+                            canvas.width = viewport.width;
+
+                            var renderContext = {
+                                canvasContext: ctx,
+                                viewport: viewport
+                            };
+                            var renderTask = page.render(renderContext);
+
+                            // Wait for rendering to finish
+                            renderTask.promise.then(function() {
+                                pageRendering = false;
+                                if (pageNumPending !== null) {
+                                    renderPage(pageNumPending, canvas, ctx);
+                                    pageNumPending = null;
+                                }
+                            });
                         });
+
+                        // Update page counters
+                        document.getElementById(`page_num_${key}`).textContent = num;
+                    }
+
+                    // Queue render for a new page if rendering is already in progress
+                    function queueRenderPage(num, canvas, ctx) {
+                        if (pageRendering) {
+                            pageNumPending = num;
+                        } else {
+                            renderPage(num, canvas, ctx);
+                        }
+                    }
+
+                    // Previous page button logic
+                    function onPrevPage(canvas, ctx) {
+                        if (pageNum <= 1) {
+                            return;
+                        }
+                        pageNum--;
+                        queueRenderPage(pageNum, canvas, ctx);
+                    }
+
+                    // Next page button logic
+                    function onNextPage(canvas, ctx) {
+                        if (pageNum >= pdfDoc.numPages) {
+                            return;
+                        }
+                        pageNum++;
+                        queueRenderPage(pageNum, canvas, ctx);
+                    }
+
+                    // Fetch the PDF document and render it once the document is loaded
+                    pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
+                        pdfDoc = pdfDoc_;
+
+                        // Append the HTML content and ensure the canvas is in the DOM
+                        $("#type_pdf_list").append(`
+                            <div class="col-md-12 gallerytype_pdf" data-id="${value.id}" data-position="${value.position}" id="pdf_type_key_${key}">
+                                <div>
+                                    <button class="previous_pdf" id="prev_${key}">Previous</button>
+                                    <button class="next_pdf" id="next_${key}">Next</button>
+                                    &nbsp; &nbsp;
+                                    <span>Page: <span id="page_num_${key}"></span> / <span> Total: ${pdfDoc.numPages}</span></span>
+                                </div>
+
+                                <canvas class="canvas_pdf"  id="the-canvas-${key}"></canvas>
+                            </div>
+                        `);
+
+                        // Access the newly appended canvas
+                        var canvas = document.getElementById(`the-canvas-${key}`);
+                        var ctx = canvas.getContext('2d');
+
+                        // Initial page rendering
+                        renderPage(pageNum, canvas, ctx);
+
+                        // Add event listeners for the dynamically created buttons
+                        document.getElementById(`prev_${key}`).addEventListener('click', function() {
+                            onPrevPage(canvas, ctx);
+                        });
+                        document.getElementById(`next_${key}`).addEventListener('click', function() {
+                            onNextPage(canvas, ctx);
+                        });
+                    }).catch(function(error) {
+                        console.error("Error loading PDF:", error);
+                    });
+                });
+
+
+
+
+
+                }
+            });
+    };
+
+    function showToggle(elem, selector) {
+        $('.'+selector).slideToggle();
+        console.log($(elem).text());
+        if($(elem).text() === "Show more")
+        {
+            $(elem).text('Show less');
+        }
+        else
+        {
+            $(elem).text('Show more');
+        }
+    }
+
+    function updateClock() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        var seconds = now.getSeconds();
+        // Add leading zero if needed
+        hours = (hours < 10) ? '0' + hours : hours;
+        minutes = (minutes < 10) ? '0' + minutes : minutes;
+        seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+            var timeString = hours + ':' + minutes;
+            var get_endtime = $('.get_endtime').val();
+
+            if ((timeString > get_endtime) && (!localStorage.getItem('key_endtime'))) {
+
+                const key = 'key_endtime';
+                const value = 'endtime';
+                const expirationTimeInMinutes = 1;
+
+                const currentTime = new Date().getTime();
+                const expirationTime = currentTime + expirationTimeInMinutes * 60 * 1000;
+
+                const item = {
+                    value: value,
+                    expirationTime: expirationTime,
+                };
+                localStorage.setItem(key, JSON.stringify(item));
+
+                //location.reload();
+            }
+    }
+    // Update the clock every second (1000 milliseconds)
+    setInterval(updateClock, 1000);
+    // Initial update to display the time immediately
+    updateClock();
+
+    // Wait for 2 minutes
+    var key2 = 'key_endtime';
+    // Retrieve data from localStorage
+    const storedItem = localStorage.getItem(key2);
+    if (storedItem) {
+        const parsedItem = JSON.parse(storedItem);
+
+        if (new Date().getTime() < parsedItem.expirationTime) {
+        // Data is still valid, retrieve the value
+        const retrievedValue = parsedItem.value;
+        console.log(retrievedValue);
+        } else {
+        // Data has expired, remove it from localStorage
+        localStorage.removeItem(key2);
+        console.log('Data has expired');
+        }
+    } else {
+        console.log('No data found');
+    }
+
+    function addToWishList(elem, id) {
+        var user_login = $('#user_id').val();
+
+        if (user_login > 0) {
+            $.ajax({
+                type: 'POST'
+                , url: baseUrl + '/add-to-wishlist/' + id
+                , data: {
+                    "_token": "{{ csrf_token() }}"
+                    , user_login: user_login
+                    , id: id
+                }
+                , success: function(response) {
+                    if (response.msg == 'Added to wishlist') {
+                        $(elem).html('<i class="fas fa-heart"></i>');
+                        toastr.success('{{__("message.added_to_wishlist_text")}}');
+                    } else if (response.msg == 'This item is already in wishlist') {
+                        $(elem).html('<i class="far fa-heart"></i>');
+                        toastr.success('{{__("message.this_item_is_already_in_wishlist_text")}}');
+                    } else {
+                        $(elem).html('<i class="far fa-heart"></i>');
+                        toastr.success('{{__("message.removed_from_the_wishlist_text")}}');
                     }
                 }
             });
+        } else if (user_login == 0) {
+            toastr.error('{{__("message.please_login_first_text")}}');
+
+        }
+    }
+
+    function addToLikeCounter(elem, id) {
+        var user_login = $('#user_id').val();
+        var type = $('#type_items').val();
+        var countrycode = $('#country_code').val();
+        var state = $('#state').val();
+        var city = $('#city').val();
+        /*if (user_login > 0) {*/
+            $.ajax({
+                type: 'POST'
+                , url: baseUrl + '/add-to-like/' + id
+                , data: {
+                    "_token": "{{ csrf_token() }}"
+                    , user_login: user_login
+                    , id: id, type_item:type
+                    ,countrycode: countrycode
+                    ,state : state, city :city
+                }
+                , success: function(response) {
+                    if (response.msg == 'liked') {
+                        $('#listinglikedtotal span').text(response.totallike);
+                        //$(elem).html('<i class="fas fa-heart"></i>');
+                        toastr.success('You Liked!');
+                    }
+                    else {
+                        toastr.success('Already Liked!');
+                        // $(elem).html('<i class="far fa-heart"></i>');
+                        // toastr.success('You Unlike!');
+                    }
+                }
+            });
+        /* } else if (user_login == 0) {
+            toastr.error('{{__("message.please_login_first_text")}}');
+
+        } */
+    }
+
+    function addDirToWishList(elem,id) {
+        var user_login   = $('#user_id').val();
+        $('.AJloader').show();
+        if (user_login >0) {
+            $.ajax({
+                type : 'POST',
+                url: baseUrl+'/add-to-wishlist-directory/'+id,
+                data: {"_token": "{{ csrf_token() }}",user_login : user_login, id:id },
+                success : function(response) {
+                    if (response.msg == 'Added to wishlist') {
+                        $(elem).html('<i class="fas fa-heart"></i>');
+                        toastr.success('{{__("message.added_to_wishlist_text")}}');
+                    }else{
+                        $(elem).html('<i class="far fa-heart"></i>');
+                        toastr.success('{{__("message.removed_from_the_wishlist_text")}}');
+                    }
+                    $('.AJloader').hide();
+                }
+            });
+        }else if(user_login ==0){
+            toastr.error('{{__("message.please_login_first_text")}}');
+            window.setTimeout(function() {
+                $('.AJloader').hide();
+                window.location.href = "{{ url('login') }}";
+            }, 3000);
+
+        }
+    }
+
+    $(document).ready(function() {
+
+        $("#direction_anch").click(function() {
+            var url = "https://www.google.com/maps/dir//<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>/@<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>,16z";
+            window.open(url, '_blank');
+        });
+
+        @if (request()->get('ref') === 'cc')
+            $('#customer_club').modal('show');
+        @endif
+
     });
 
+</script>
 
+<script type="text/javascript">
+    'use strict';
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggleButtons = document.querySelectorAll('.description_toggle');
+    function createListingsMap(options) {
+        var defaults = {
+            markerPath: 'assets/client/images/marker.png'
+            , markerPathHighlight: 'assets/client/images/marker-hover.png'
+            , markerShadow: 'assets/client/images/location-pin.svg'
+            , imgBasePath: 'assets/client/images/listing_thumbnails/'
+            , mapPopupType: 'venue'
+            , useTextIcon: false
+        }
 
-            toggleButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const content = button.previousElementSibling; // Target the content
-                    const isExpanded = content.classList.contains('expanded');
+        /*
+        ====================================================
+            Bind popup and highlighting features
+            to each marker
+        ====================================================
+        */
 
-                    if (isExpanded) {
-                        content.classList.remove('expanded');
-                        button.textContent = 'Read More';
-                    } else {
-                        content.classList.add('expanded');
-                        button.textContent = 'Read Less';
-                    }
-                });
-            });
+        var markersGroup = []
+        var defaultIcon = L.icon({
+            iconUrl: settings.markerPath,
+            // shadowUrl: settings.markerShadow,
+            iconSize: [25, 37.5], // default size was 25, 37.5
+            popupAnchor: [0, -18]
+            , tooltipAnchor: [0, 19],
+            // shadowSize: [25, 37.5],
+            // shadowAnchor: [-3, 30]
         });
 
-        function view_type_gallery_button(cat_id,directory_id,block_num) {
-            $('.AJloader').show();
-                $.ajax({
-                    url: baseUrl + '/get-directory-type-galleries',
-                    type: "POST",
-                    data: {
-                        cat_id: cat_id,
-                        directory_id: directory_id,
-                        block_num: block_num,
-                        _token: '{{csrf_token()}}'
-                    }
-                    , dataType: 'json'
-                    , success: function(result) {
-                        $('.AJloader').hide();
+        var highlightIcon = L.icon({
+            iconUrl: settings.markerPathHighlight
+            , iconSize: [25, 37.5]
+            , popupAnchor: [0, -18]
+            , tooltipAnchor: [0, 19]
+        });
 
-                        $("#type_gallery_list").html('');
-                        $('#type_galleryModal').modal('show');
 
-                        $.each(result.DirectoryTypeGallery, function(key, value) {
-                            $("#type_gallery_list").append(`
+        function onEachFeature(feature, layer) {
 
-                            <div class="image-thumbnail existing-img col-md-2 col-2" id="gtype_key_${value.id}">
-                                <a href="{{ env('IMAGE_PATH') }}files/directorytypeimage/${value.image_name}" data-lightbox="allGalleryImages">
-                                    <img data-id="${value.id}" src="{{ env('IMAGE_PATH') }}files/directorytypeimage/${value.image_name}" class="previewBlocks gtype_img" style="width: 150px; height: auto; border: 1px solid #ccc; padding:5px; margin: 5px 5px;">
-                                </a>
-                            </div>
+            layer.on({
+                mouseover: highlightMarker
+                , mouseout: resetMarker
+                , click: scrollToListing
+            });
 
-                            `);
-                        });
-                    }
+            if (feature.properties && feature.properties.about) {
+                //This is the code for represent the popover
+
+                layer.bindPopup(getPopupContent(feature.properties), {
+                    minwidth: 200
+                    , maxWidth: 600
+                    , className: 'map-custom-popup'
                 });
-        };
 
-        function view_type_pdf_button(cat_id,directory_id,block_num) {
-            $('.AJloader').show();
-                $.ajax({
-                    url: baseUrl + '/get-directory-type-pdf',
-                    type: "POST",
-                    data: {
-                        cat_id: cat_id,
-                        directory_id: directory_id,
-                        block_num: block_num,
-                        _token: '{{csrf_token()}}'
-                    }
-                    , dataType: 'json'
-                    , success: function(result) {
-                        $('.AJloader').hide();
-
-                        $("#type_pdf_list").html('');
-                        $('#type_pdf_Modal').modal('show');
-
-                        // $.each(result.DirectoryTypePdf, function(key, value) {
-
-                        //     let url = `{{ env('IMAGE_PATH') }}files/directorytypeimage/${value.pdf_name}?embedded=true`;
-                        //         // If absolute URL from the remote server is provided, configure the CORS
-                        //         // header on that server.
-
-                        //         // Loaded via <script> tag, create shortcut to access PDF.js exports.
-                        //         var { pdfjsLib } = globalThis;
-                        //         // The workerSrc property shall be specified.
-                        //         pdfjsLib.GlobalWorkerOptions.workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.mjs';
-                        //         var pdfDoc = null,
-                        //             pageNum = 1,
-                        //             pageRendering = false,
-                        //             pageNumPending = null,
-                        //             scale = 0.8,
-                        //             canvas = document.getElementById('the-canvas'),
-                        //             ctx = canvas.getContext('2d');
-
-                        //         function renderPage(num) {
-                        //             pageRendering = true;
-                        //             // Using promise to fetch the page
-                        //             pdfDoc.getPage(num).then(function(page) {
-                        //             var viewport = page.getViewport({scale: scale});
-                        //             canvas.height = viewport.height;
-                        //             canvas.width = viewport.width;
-
-                        //             // Render PDF page into canvas context
-                        //             var renderContext = {
-                        //                 canvasContext: ctx,
-                        //                 viewport: viewport
-                        //             };
-                        //             var renderTask = page.render(renderContext);
-                        //             // Wait for rendering to finish
-                        //             renderTask.promise.then(function() {
-                        //                 pageRendering = false;
-                        //                 if (pageNumPending !== null) {
-                        //                 // New page rendering is pending
-                        //                 renderPage(pageNumPending);
-                        //                 pageNumPending = null;
-                        //                 }
-                        //             });
-                        //             });
-
-                        //         }
-
-                        //         //const url = `${env('IMAGE_PATH')}files/directorytypeimage/${value.pdf_name}?embedded=true`;
-                        //         pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
-                        //             pdfDoc = pdfDoc_;
-                        //             document.getElementById('page_count').textContent;
-                        //             // Initial/first page rendering
-                        //             renderPage(pageNum);
-                        //         });
-
-                        //     $("#type_pdf_list").append(`
-
-                        //     <div class="col-md-12 gallerytype_pdf" data-id="${value.id}" data-position="${value.position}" data-gallerytypeimages="${value.pdf_name}" id="pdf_type_key_${key}">
-
-                        //             <div>
-                        //             <span id="page_count"></span>
-                        //             </div>
-                        //             <canvas id="the-canvas"></canvas>
-
-                        //     </div>
-
-                        //     `);
-
-                        // });
-
-                        $.each(result.DirectoryTypePdf, function(key, value) {
-
-                        let url = `{{ env('IMAGE_PATH') }}files/directorytypeimage/${value.pdf_name}?embedded=true`;
-
-                        console.log('url', url);
-
-                        var { pdfjsLib } = globalThis;
-                        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://mozilla.github.io/pdf.js/build/pdf.worker.mjs';
-
-                        var pdfDoc = null,
-                            pageNum = 1,
-                            pageRendering = false,
-                            pageNumPending = null,
-                            scale = 3.2;
-
-                        // Function to render a PDF page
-                        function renderPage(num, canvas, ctx) {
-                            pageRendering = true;
-
-                            pdfDoc.getPage(num).then(function(page) {
-                                var viewport = page.getViewport({ scale: scale });
-                                canvas.height = viewport.height;
-                                canvas.width = viewport.width;
-
-                                var renderContext = {
-                                    canvasContext: ctx,
-                                    viewport: viewport
-                                };
-                                var renderTask = page.render(renderContext);
-
-                                // Wait for rendering to finish
-                                renderTask.promise.then(function() {
-                                    pageRendering = false;
-                                    if (pageNumPending !== null) {
-                                        renderPage(pageNumPending, canvas, ctx);
-                                        pageNumPending = null;
-                                    }
-                                });
-                            });
-
-                            // Update page counters
-                            document.getElementById(`page_num_${key}`).textContent = num;
-                        }
-
-                        // Queue render for a new page if rendering is already in progress
-                        function queueRenderPage(num, canvas, ctx) {
-                            if (pageRendering) {
-                                pageNumPending = num;
-                            } else {
-                                renderPage(num, canvas, ctx);
-                            }
-                        }
-
-                        // Previous page button logic
-                        function onPrevPage(canvas, ctx) {
-                            if (pageNum <= 1) {
-                                return;
-                            }
-                            pageNum--;
-                            queueRenderPage(pageNum, canvas, ctx);
-                        }
-
-                        // Next page button logic
-                        function onNextPage(canvas, ctx) {
-                            if (pageNum >= pdfDoc.numPages) {
-                                return;
-                            }
-                            pageNum++;
-                            queueRenderPage(pageNum, canvas, ctx);
-                        }
-
-                        // Fetch the PDF document and render it once the document is loaded
-                        pdfjsLib.getDocument(url).promise.then(function(pdfDoc_) {
-                            pdfDoc = pdfDoc_;
-
-                            // Append the HTML content and ensure the canvas is in the DOM
-                            $("#type_pdf_list").append(`
-                                <div class="col-md-12 gallerytype_pdf" data-id="${value.id}" data-position="${value.position}" id="pdf_type_key_${key}">
-                                    <div>
-                                        <button class="previous_pdf" id="prev_${key}">Previous</button>
-                                        <button class="next_pdf" id="next_${key}">Next</button>
-                                        &nbsp; &nbsp;
-                                        <span>Page: <span id="page_num_${key}"></span> / <span> Total: ${pdfDoc.numPages}</span></span>
-                                    </div>
-
-                                    <canvas class="canvas_pdf"  id="the-canvas-${key}"></canvas>
-                                </div>
-                            `);
-
-                            // Access the newly appended canvas
-                            var canvas = document.getElementById(`the-canvas-${key}`);
-                            var ctx = canvas.getContext('2d');
-
-                            // Initial page rendering
-                            renderPage(pageNum, canvas, ctx);
-
-                            // Add event listeners for the dynamically created buttons
-                            document.getElementById(`prev_${key}`).addEventListener('click', function() {
-                                onPrevPage(canvas, ctx);
-                            });
-                            document.getElementById(`next_${key}`).addEventListener('click', function() {
-                                onNextPage(canvas, ctx);
-                            });
-                        }).catch(function(error) {
-                            console.error("Error loading PDF:", error);
-                        });
+                if (settings.useTextIcon) {
+                    layer.bindTooltip('<div id="customTooltip-' + feature.properties.id + '">$' + feature.properties.price + '</div>', {
+                        direction: 'top'
+                        , permanent: true
+                        , opacity: 1
+                        , interactive: true
+                        , className: 'map-custom-tooltip'
                     });
-
-
-
-
-
-                    }
-                });
-        };
-
-        function showToggle(elem, selector) {
-            $('.'+selector).slideToggle();
-            console.log($(elem).text());
-            if($(elem).text() === "Show more")
-            {
-                $(elem).text('Show less');
-            }
-            else
-            {
-                $(elem).text('Show more');
-            }
-        }
-
-        function updateClock() {
-            var now = new Date();
-            var hours = now.getHours();
-            var minutes = now.getMinutes();
-            var seconds = now.getSeconds();
-            // Add leading zero if needed
-            hours = (hours < 10) ? '0' + hours : hours;
-            minutes = (minutes < 10) ? '0' + minutes : minutes;
-            seconds = (seconds < 10) ? '0' + seconds : seconds;
-
-                var timeString = hours + ':' + minutes;
-                var get_endtime = $('.get_endtime').val();
-
-                if ((timeString > get_endtime) && (!localStorage.getItem('key_endtime'))) {
-
-                    const key = 'key_endtime';
-                    const value = 'endtime';
-                    const expirationTimeInMinutes = 1;
-
-                    const currentTime = new Date().getTime();
-                    const expirationTime = currentTime + expirationTimeInMinutes * 60 * 1000;
-
-                    const item = {
-                        value: value,
-                        expirationTime: expirationTime,
-                    };
-                    localStorage.setItem(key, JSON.stringify(item));
-
-                    //location.reload();
                 }
+            }
+            markersGroup.push(layer);
         }
-        // Update the clock every second (1000 milliseconds)
-        setInterval(updateClock, 1000);
-        // Initial update to display the time immediately
-        updateClock();
 
-        // Wait for 2 minutes
-        var key2 = 'key_endtime';
-        // Retrieve data from localStorage
-        const storedItem = localStorage.getItem(key2);
-        if (storedItem) {
-            const parsedItem = JSON.parse(storedItem);
-
-            if (new Date().getTime() < parsedItem.expirationTime) {
-            // Data is still valid, retrieve the value
-            const retrievedValue = parsedItem.value;
-            console.log(retrievedValue);
+        function pointToLayer(feature, latlng) {
+            if (settings.useTextIcon) {
+                var markerOpacity = 0
             } else {
-            // Data has expired, remove it from localStorage
-            localStorage.removeItem(key2);
-            console.log('Data has expired');
+                var markerOpacity = 1
             }
-        } else {
-            console.log('No data found');
+
+            return L.marker(latlng, {
+                icon: defaultIcon
+                , id: feature.properties.id
+                , opacity: markerOpacity
+            });
         }
 
-        function addToWishList(elem, id) {
-            var user_login = $('#user_id').val();
+        function highlightMarker(e) {
+            highlight(e.target);
+        };
 
-            if (user_login > 0) {
-                $.ajax({
-                    type: 'POST'
-                    , url: baseUrl + '/add-to-wishlist/' + id
-                    , data: {
-                        "_token": "{{ csrf_token() }}"
-                        , user_login: user_login
-                        , id: id
-                    }
-                    , success: function(response) {
-                        if (response.msg == 'Added to wishlist') {
-                            $(elem).html('<i class="fas fa-heart"></i>');
-                            toastr.success('{{__("message.added_to_wishlist_text")}}');
-                        } else if (response.msg == 'This item is already in wishlist') {
-                            $(elem).html('<i class="far fa-heart"></i>');
-                            toastr.success('{{__("message.this_item_is_already_in_wishlist_text")}}');
-                        } else {
-                            $(elem).html('<i class="far fa-heart"></i>');
-                            toastr.success('{{__("message.removed_from_the_wishlist_text")}}');
-                        }
-                    }
+        function resetMarker(e) {
+            reset(e.target);
+        };
+
+        // this function triggers after clicking on a marker
+        function scrollToListing(e) {
+            var listing_code = e.target.defaultOptions.id;
+            var toFocusId = '#listing-banner-image-for-' + listing_code; // this is the id of the link where hovering gives an animation
+
+            if ($("#" + listing_code).length > 0) { // this if condition checks if "#"+listing_code this id exists in the view. We've done this to avoid a console error in single listing page
+                // to focust the listing
+                $('html, body').animate({
+                    scrollTop: $('#' + listing_code).offset().top - 110
+                }, 'slow', function() {
+                    // adding a class where listing banner will be scaled up a little bit
+                    $(toFocusId).addClass('focus-a-listing');
+                    // Removing the class after seconds
+                    setTimeout(function() {
+                        $(toFocusId).removeClass('focus-a-listing');
+                    }, 300);
                 });
-            } else if (user_login == 0) {
-                toastr.error('{{__("message.please_login_first_text")}}');
-
-            }
-        }
-
-        function addToLikeCounter(elem, id) {
-            var user_login = $('#user_id').val();
-            var type = $('#type_items').val();
-            var countrycode = $('#country_code').val();
-            var state = $('#state').val();
-            var city = $('#city').val();
-            /*if (user_login > 0) {*/
-                $.ajax({
-                    type: 'POST'
-                    , url: baseUrl + '/add-to-like/' + id
-                    , data: {
-                        "_token": "{{ csrf_token() }}"
-                        , user_login: user_login
-                        , id: id, type_item:type
-                        ,countrycode: countrycode
-                        ,state : state, city :city
-                    }
-                    , success: function(response) {
-                        if (response.msg == 'liked') {
-                            $('#listinglikedtotal span').text(response.totallike);
-                            //$(elem).html('<i class="fas fa-heart"></i>');
-                            toastr.success('You Liked!');
-                        }
-                        else {
-                            toastr.success('Already Liked!');
-                            // $(elem).html('<i class="far fa-heart"></i>');
-                            // toastr.success('You Unlike!');
-                        }
-                    }
-                });
-            /* } else if (user_login == 0) {
-                toastr.error('{{__("message.please_login_first_text")}}');
-
-            } */
-        }
-
-        function addDirToWishList(elem,id) {
-            var user_login   = $('#user_id').val();
-            $('.AJloader').show();
-            if (user_login >0) {
-                $.ajax({
-                    type : 'POST',
-                    url: baseUrl+'/add-to-wishlist-directory/'+id,
-                    data: {"_token": "{{ csrf_token() }}",user_login : user_login, id:id },
-                    success : function(response) {
-                        if (response.msg == 'Added to wishlist') {
-                            $(elem).html('<i class="fas fa-heart"></i>');
-                            toastr.success('{{__("message.added_to_wishlist_text")}}');
-                        }else{
-                            $(elem).html('<i class="far fa-heart"></i>');
-                            toastr.success('{{__("message.removed_from_the_wishlist_text")}}');
-                        }
-                        $('.AJloader').hide();
-                    }
-                });
-            }else if(user_login ==0){
-                toastr.error('{{__("message.please_login_first_text")}}');
-                window.setTimeout(function() {
-                    $('.AJloader').hide();
-                    window.location.href = "{{ url('login') }}";
-                }, 3000);
-
             }
         }
 
-        $(document).ready(function() {
-
-            @if (request()->get('ref') === 'cc')
-                $('#customer_club').modal('show');
-            @endif
-
-
-
-            $('.modal_header_close_btn').on('click', function() {
-                $('#type_pdf_Modal').modal('hide');
-            });
-
-            $('#click_viewed_listings').on('click', function() {
-                $('.most_viewed_listings_div').toggle();
-            });
-            $('.company_details_logo_img').on('click', function() {
-                $('.company_detail_menu').toggle();
-            });
-            $('.btn_mobile').on('click', function() {
-                $('.company_detail_menu').show();
-            });
-
-            $("#down-to-map").click(function() {
-                $('html, body').animate({
-                    scrollTop: $("#locationmap").offset().top
-                }, 2000);
-            });
-            $("#down-to-schedule").click(function() {
-                $('html, body').animate({
-                    scrollTop: $("#schedule_sec").offset().top
-                }, 2000);
-            });
-            $("#down-to-schedule_c").click(function() {
-                $('html, body').animate({
-                    scrollTop: $("#schedule_sec").offset().top
-                }, 2000);
-            });
-            $("#down-to-contact").click(function() {
-                $('html, body').animate({
-                    scrollTop: $("#sidebar").offset().top
-                }, 2000);
-            });
-
-            $('.modal_header_close_btn').on('click', function() {
-                $('#type_galleryModal').modal('hide');
-            });
-
-            $('#booking_date').datetimepicker({
-                // format:'yy-m-d h:m:s',
-                minDate: 0,
-                format: 'Y-m-d H:m:s',
-            });
-
-            $(document).on('click', '.submitbtn', function(e) {
-                e.preventDefault();
-
-                $(document).find('.required').removeClass('is-invalid');
-                $(document).find('.invalid-feedback').remove();
-
-                var obj = $(this);
-                let requestTxt = $(this).attr('process-text');
-                requestTxt = (typeof(requestTxt) != "undefined") ? requestTxt : 'Please wait';
-                var oldhtml = $(this).html();
-
-                var form = $(this).closest("form");
-                var url = form.attr('action');
-                var method = form.attr('method');
-                var loader = `<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span><span class="">${requestTxt}...</span>`;
-
-                var allformdata = new FormData(form[0]);
-                $.ajax({
-                    type: method
-                    , url: url
-                    , headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                    , data: allformdata
-                    , mimeType: "multipart/form-data"
-                    , contentType: false
-                    , cache: false
-                    , processData: false
-                    , dataType: "json"
-                    , beforeSend: function() {
-                        obj.attr("disabled", true);
-                        obj.html(loader);
-                    },
-
-                    success: function(response) {
-                        console.log(response);
-
-                        if (response.status == false) {
-                            $.each(response.errors, function(index, value) {
-                                form.find('.required').each(function() {
-                                    var fieldName = $(this).attr('name');
-                                    if (fieldName == index && value != "") {
-                                        $(this).addClass("is-invalid");
-                                        $(this).after(`<span class="red invalid-feedback" role="alert">${value}</span>`);
-                                        $(this).focus();
-                                    }
-                                });
-                            });
-
-                            if (typeof(response.message) != "undefined") {
-                                $('.respondata').html('<p style="margin: 13px 0px 0px;color: red;font-weight: 500;">' + response.message + '</p>');
-
-                                window.setTimeout(function() {
-                                    $('.respondata').hide();
-                                }, 5000);
-                            }
-
-                        } else {
-                            if (typeof(response.message) != "undefined") {
-                                console.log(response.message);
-                                $("#bookingform")[0].reset();
-                                $('.respondata').html('<p style="margin: 13px 0px 0px;color: green;font-weight: 500;">' + response.message + '</p>');
-                                window.setTimeout(function() {
-                                    $('.respondata').hide();
-                                }, 5000);
-
-
-                            }
-
-                        }
-                        obj.attr("disabled", false);
-                        obj.html(oldhtml);
-                    }
-                    , error: function(err) {}
-                });
-
-            });
-
-            $(document).on('click', '.cc_submitbtn', function(e) {
-                e.preventDefault();
-
-                var cc_user_id = $('#cc_user_id').val();
-
-                if (!cc_user_id) {
-                    alert('Please login to your account before joining the customer club.');
-                    setTimeout(() => {
-                        window.location.href = "{{ url('login') }}";
-                    }, 2000);
-                    return false;
-                }
-
-
-                $(document).find('.required').removeClass('is-invalid');
-                $(document).find('.invalid-feedback').remove();
-
-                var obj = $(this);
-                let requestTxt = $(this).attr('process-text');
-                requestTxt = (typeof(requestTxt) != "undefined") ? requestTxt : 'Please wait';
-                var oldhtml = $(this).html();
-
-                var form = $(this).closest("form");
-                var url = form.attr('action');
-                var method = form.attr('method');
-                var loader = `<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span><span class="">${requestTxt}...</span>`;
-
-                var allformdata = new FormData(form[0]);
-                $.ajax({
-                    type: method
-                    , url: url
-                    , headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
-                    , data: allformdata
-                    , mimeType: "multipart/form-data"
-                    , contentType: false
-                    , cache: false
-                    , processData: false
-                    , dataType: "json"
-                    , beforeSend: function() {
-                        obj.attr("disabled", true);
-                        obj.html(loader);
-                    },
-
-                    success: function(response) {
-                        //console.log(response);
-                        if (response.status == 'exists') {
-                            alert('You have already joined this Customer Club.');
-
-                        }else if (response.status == false) {
-                            $.each(response.errors, function(index, value) {
-                                form.find('.required').each(function() {
-                                    var fieldName = $(this).attr('name');
-                                    if (fieldName == index && value != "") {
-                                        $(this).addClass("is-invalid");
-                                        $(this).after(`<span class="red invalid-feedback" role="alert">${value}</span>`);
-                                        $(this).focus();
-                                    }
-                                });
-                            });
-
-                            if (typeof(response.message) != "undefined") {
-                                $('.cc_respondata').html('<p style="margin: 13px 0px 0px;color: red;font-weight: 500;">' + response.message + '</p>');
-
-                                window.setTimeout(function() {
-                                    $('.cc_respondata').hide();
-                                }, 5000);
-                            }
-
-                        } else {
-                            if (typeof(response.message) != "undefined") {
-                                console.log(response.message);
-                                $("#customer_club_form")[0].reset();
-                                $('.cc_respondata').html('<p style="margin: 13px 0px 0px;color: green;font-weight: 500;">' + response.message + '</p>');
-
-                                window.setTimeout(function() {
-                                    $('.cc_respondata').hide();
-                                }, 7000);
-
-
-                            }
-
-                        }
-                        obj.attr("disabled", false);
-                        obj.html(oldhtml);
-                    }
-                    , error: function(err) {}
-                });
-
-            });
-
-            $("#direction_anch").click(function() {
-                var url = "https://www.google.com/maps/dir//<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>/@<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>,16z";
-                window.open(url, '_blank');
-            });
-
-            $('#sploffer, #mostviewed').owlCarousel({
-                loop: true
-                , autoPlay: true
-                , lazyLoad: true
-                , singleItem: false
-                , slideSpeed: 300
-                , paginationSpeed: 400
-                , pagination: false
-                , navigation : true
-                , navigationText : ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>']
-
-                /* itemsDesktop : false,
-                 itemsDesktopSmall : false,
-                 itemsTablet: false,
-                 itemsMobile : false, */
-                ,dots: true
-                , responsiveClass: true
-                , nav: true
-                , responsive: {
-                   0: {
-                    items: 1
-                    },
-
-                    600: {
-                    items: 1
-                    },
-
-                    1024: {
-                    items: 2
-                    },
-
-                    1366: {
-                    items: 2
-                    }
-                }
-            });
-
-            $('#trademark').owlCarousel({
-                loop: true
-                , autoPlay: true
-                , dots: false
-                , pagination: false
-                , nav: true
-                , lazyLoad: true
-                , singleItem: false
-                , slideSpeed: 300
-                , paginationSpeed: 400
-                , navigation : true
-                , navigationText : ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>']
-
-                , responsiveClass: true
-                , responsive: {
-                    0: {
-                        items: 2
-                    }
-                    , 600: {
-                        items: 3
-                    }
-                    , 1024: {
-                        items: 4
-                    }
-                    , 1366: {
-                        items: 5
-                    }
-                }
-            });
-
-
-            $('#blogData').owlCarousel({
-                loop: true
-                , autoPlay: true
-                , lazyLoad: true
-                , singleItem: false
-                , slideSpeed: 300
-                , paginationSpeed: 400
-                , items: 2,
-                dots: true
-                , responsiveClass: true
-                , nav: true
-                , responsive: {
-                    0: {
-                        items: 1
-                    },
-                    600: {
-                        items: 3
-                    },
-                    1024: {
-                        items: 4
-                    },
-                    1366: {
-                        items: 5
-                    }
-                }
-            });
-
-             $('#banner-foot').owlCarousel({
-                loop: true
-                , autoPlay: true
-                , lazyLoad: true
-                , singleItem: false
-                , slideSpeed: 300
-                , paginationSpeed: 400
-                , items: 2,
-                dots: true
-                , responsiveClass: true
-                , nav: true
-                , responsive: {
-                    0: {
-                        items: 1
-                    },
-                    600: {
-                        items: 3
-                    },
-                    1024: {
-                        items: 4
-                    },
-                    1366: {
-                        items: 5
-                    }
-                }
-            });
-
-            $('#eventdata').owlCarousel({
-                loop: true
-                , autoPlay: true
-                , items: 2
-                , dots: false
-                , pagination: false
-                , nav: true
-                , lazyLoad: true
-                , singleItem: false
-                , slideSpeed: 300
-                , paginationSpeed: 400
-                , navigation : true
-                , navigationText : ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>']
-                , responsiveClass: true
-                , responsive: {
-                    0: {
-                        items: 1
-                    }
-                    , 600: {
-                        items: 3
-                    }
-                    , 1024: {
-                        items: 4
-                    }
-                    , 1366: {
-                        items: 5
-                    }
-                }
-            });
-
-
-            $('#offerdata').owlCarousel({
-                loop: true
-                , autoPlay: true
-                , items: 2
-                , dots: false
-                , pagination: false
-                , nav: true
-                , lazyLoad: true
-                , singleItem: false
-                , slideSpeed: 300
-                , paginationSpeed: 400
-                , navigation : true
-                , navigationText : ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>']
-                , responsiveClass: true
-                , responsive: {
-                    0: {
-                        items: 1
-                    }
-                    , 600: {
-                        items: 3
-                    }
-                    , 1024: {
-                        items: 4
-                    }
-                    , 1366: {
-                        items: 5
-                    }
-                }
-            });
-
-            $('#shopcarddata').owlCarousel({
-                loop: true
-                , autoPlay: true
-                , items: 2
-                , dots: false
-                , pagination: false
-                , nav: true
-                , lazyLoad: true
-                , singleItem: false
-                , slideSpeed: 300
-                , paginationSpeed: 400
-                , navigation : true
-                , navigationText : ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>']
-                , responsiveClass: true
-                , responsive: {
-                    0: {
-                        items: 1
-                    }
-                    , 600: {
-                        items: 3
-                    }
-                    , 1024: {
-                        items: 4
-                    }
-                    , 1366: {
-                        items: 5
-                    }
-                }
-            });
-
-            $('#product,#categorydata').owlCarousel({
-                loop: true
-                , autoPlay: true
-                , dots: false
-                , pagination: false
-                , nav: true
-                , lazyLoad: true
-                , singleItem: false
-                , slideSpeed: 300
-                , paginationSpeed: 400
-                , navigation : true
-                , navigationText : ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>']
-
-                , responsiveClass: true
-                , responsive: {
-                    0: {
-                        items: 1
-                    }
-                    , 600: {
-                        items: 3
-                    }
-                    , 1024: {
-                        items: 4
-                    }
-                    , 1366: {
-                        items: 5
-                    }
-                }
-
-            });
-
-            $('#listing_banner').owlCarousel({
-                loop: true
-                , autoPlay: true
-                , lazyLoad: true
-                , singleItem: false
-                , slideSpeed: 300
-                , paginationSpeed: 400
-                , pagination: false
-                , navigation : true
-                , items: 2
-                ,navigationText : ['<i class="fa fa-angle-left" aria-hidden="true"></i>','<i class="fa fa-angle-right" aria-hidden="true"></i>']
-
-                ,dots: true
-                , responsiveClass: true
-                , nav: true
-                , responsive: {
-                0: {
-                    items: 1
-                    },
-
-                    600: {
-                    items: 1
-                    },
-
-                    1024: {
-                    items: 2
-                    },
-
-                    1366: {
-                    items: 2
-                    }
-                }
-            });
-
-        });
-
-    </script>
-
-    <script type="text/javascript">
-        'use strict';
-
-        function createListingsMap(options) {
-            var defaults = {
-                markerPath: 'assets/client/images/marker.png'
-                , markerPathHighlight: 'assets/client/images/marker-hover.png'
-                , markerShadow: 'assets/client/images/location-pin.svg'
-                , imgBasePath: 'assets/client/images/listing_thumbnails/'
-                , mapPopupType: 'venue'
-                , useTextIcon: false
+        function highlight(marker) {
+            marker.setIcon(highlightIcon);
+            if (settings.useTextIcon) {
+                findTooltip(marker).addClass('active');
+            }
+        }
+
+        function reset(marker) {
+            marker.setIcon(defaultIcon);
+            if (settings.useTextIcon) {
+                findTooltip(marker).removeClass('active');
+            }
+        }
+
+        function findTooltip(marker) {
+            var tooltip = marker.getTooltip()
+            var id = $(tooltip._content).filter("div").attr("id")
+            return $('#' + id).parents('.leaflet-tooltip')
+        }
+
+        function getPopupContent(properties) {
+
+            if (properties.name) {
+                var title = '<h6><a href="' + properties.link + '">' + properties.name + '</a></h6>'
+            } else {
+                title = ''
             }
 
-
-
-            /*
-            ====================================================
-              Bind popup and highlighting features
-              to each marker
-            ====================================================
-            */
-
-            var markersGroup = []
-
-            var defaultIcon = L.icon({
-                iconUrl: settings.markerPath,
-                // shadowUrl: settings.markerShadow,
-                iconSize: [25, 37.5], // default size was 25, 37.5
-                popupAnchor: [0, -18]
-                , tooltipAnchor: [0, 19],
-                // shadowSize: [25, 37.5],
-                // shadowAnchor: [-3, 30]
-            });
-
-            var highlightIcon = L.icon({
-                iconUrl: settings.markerPathHighlight
-                , iconSize: [25, 37.5]
-                , popupAnchor: [0, -18]
-                , tooltipAnchor: [0, 19]
-            });
-
-
-            function onEachFeature(feature, layer) {
-
-                layer.on({
-                    mouseover: highlightMarker
-                    , mouseout: resetMarker
-                    , click: scrollToListing
-                });
-
-                if (feature.properties && feature.properties.about) {
-                    //This is the code for represent the popover
-
-                    layer.bindPopup(getPopupContent(feature.properties), {
-                        minwidth: 200
-                        , maxWidth: 600
-                        , className: 'map-custom-popup'
-                    });
-
-                    if (settings.useTextIcon) {
-                        layer.bindTooltip('<div id="customTooltip-' + feature.properties.id + '">$' + feature.properties.price + '</div>', {
-                            direction: 'top'
-                            , permanent: true
-                            , opacity: 1
-                            , interactive: true
-                            , className: 'map-custom-tooltip'
-                        });
-                    }
-                }
-                markersGroup.push(layer);
+            if (properties.about) {
+                var about = '<p class="">' + properties.about + '</p>'
+            } else {
+                about = ''
             }
 
-            function pointToLayer(feature, latlng) {
-                if (settings.useTextIcon) {
-                    var markerOpacity = 0
-                } else {
-                    var markerOpacity = 1
-                }
+            if (properties.image) {
 
-                return L.marker(latlng, {
-                    icon: defaultIcon
-                    , id: feature.properties.id
-                    , opacity: markerOpacity
-                });
-            }
-
-            function highlightMarker(e) {
-                highlight(e.target);
-            };
-
-            function resetMarker(e) {
-                reset(e.target);
-            };
-
-            // this function triggers after clicking on a marker
-            function scrollToListing(e) {
-                var listing_code = e.target.defaultOptions.id;
-                var toFocusId = '#listing-banner-image-for-' + listing_code; // this is the id of the link where hovering gives an animation
-
-                if ($("#" + listing_code).length > 0) { // this if condition checks if "#"+listing_code this id exists in the view. We've done this to avoid a console error in single listing page
-                    // to focust the listing
-                    $('html, body').animate({
-                        scrollTop: $('#' + listing_code).offset().top - 110
-                    }, 'slow', function() {
-                        // adding a class where listing banner will be scaled up a little bit
-                        $(toFocusId).addClass('focus-a-listing');
-                        // Removing the class after seconds
-                        setTimeout(function() {
-                            $(toFocusId).removeClass('focus-a-listing');
-                        }, 300);
-                    });
-                }
-            }
-
-            function highlight(marker) {
-                marker.setIcon(highlightIcon);
-                if (settings.useTextIcon) {
-                    findTooltip(marker).addClass('active');
-                }
-            }
-
-            function reset(marker) {
-                marker.setIcon(defaultIcon);
-                if (settings.useTextIcon) {
-                    findTooltip(marker).removeClass('active');
-                }
-            }
-
-            function findTooltip(marker) {
-                var tooltip = marker.getTooltip()
-                var id = $(tooltip._content).filter("div").attr("id")
-                return $('#' + id).parents('.leaflet-tooltip')
-            }
-
-            function getPopupContent(properties) {
-
-                if (properties.name) {
-                    var title = '<h6><a href="' + properties.link + '">' + properties.name + '</a></h6>'
-                } else {
-                    title = ''
-                }
-
-                if (properties.about) {
-                    var about = '<p class="">' + properties.about + '</p>'
-                } else {
-                    about = ''
-                }
-
-                if (properties.image) {
-
-                    var imageClass = 'image';
-                    if (settings.mapPopupType == 'venue') {
-                        imageClass += ' d-none d-md-block'
-                    }
-
-                    var image = '<div class="' + imageClass + '"style="height: 150px; background-image: url(\'' + settings.imgBasePath + properties.image + '\'); background-size: cover; background-position: center;"></div>';
-                } else {
-                    image = '<div class="image"></div>'
-                }
-
-                if (properties.address) {
-                    var address = '<p class="text-muted"><i class="fas fa-map-marker-alt fa-fw text-dark mr-2"></i>' + properties.address + '</p>'
-                } else {
-                    address = ''
-                }
-                if (properties.email) {
-                    var email = '<p class="text-muted"><i class="fas fa-envelope-open fa-fw text-dark mr-2"></i><a href="mailto:' + properties.email + '" class="text-muted">' + properties.email + '</a></p>'
-                } else {
-                    email = ''
-                }
-                if (properties.phone) {
-                    var phone = '<p class="text-muted"><i class="fa fa-phone fa-fw text-dark mr-2"></i>' + properties.phone + '</p>'
-                } else {
-                    phone = ''
-                }
-
-                if (properties.stars) {
-                    var stars = '<div class="text-xs">'
-                    for (var step = 1; step <= 5; step++) {
-                        if (step <= properties.stars) {
-                            stars += "<i class='fas fa-star text-warning'></i>"
-                        } else {
-                            stars += "<i class='fas fa-star' style = 'color: #BDBDBD'></i>"
-                        }
-                    }
-                    stars += "</div>"
-                } else {
-                    stars = ''
-                }
-
-                if (properties.url) {
-                    var url = '<a href="' + properties.url + '">' + properties.url + '</a><br>'
-
-                } else {
-                    url = ''
-                }
-
-                var popupContent = '';
-
+                var imageClass = 'image';
                 if (settings.mapPopupType == 'venue') {
-                    popupContent =
-
-                        '<div class="popup-venue card">' +
-                        '<div style = "overflow: hidden; height: 150px; background-image: url(\'' + settings.imgBasePath + properties.image + '\'); background-size: cover; background-position: center;" class="map-direction-image">' + '</div>' +
-                        '<div class="card-body">' +
-                        '<div class="">' + title + ' </div>' +
-                        '<div>' + address + '</div>' +
-                        '<div>' + phone + '</div>' +
-                        '</div>' +
-                        '</div>';
-                } else if (settings.mapPopupType == 'rental') {
-                    popupContent =
-                        '<div class="popup-rental">' +
-                        image +
-                        '<div class="text">' +
-                        title +
-                        stars +
-                        '</div>' +
-                        '</div>';
+                    imageClass += ' d-none d-md-block'
                 }
 
-
-                return popupContent;
+                var image = '<div class="' + imageClass + '"style="height: 150px; background-image: url(\'' + settings.imgBasePath + properties.image + '\'); background-size: cover; background-position: center;"></div>';
+            } else {
+                image = '<div class="image"></div>'
             }
 
-            L.Map.include({
-                getMarkerById: function(id) {
-                    var marker = null;
-                    this.eachLayer(function(layer) {
-                        if (layer instanceof L.Marker) {
-                            if (layer.options.id === id) {
-                                marker = layer;
-                            }
-                        }
-                    });
-                    return marker;
-                }
-            });
+            if (properties.address) {
+                var address = '<p class="text-muted"><i class="fas fa-map-marker-alt fa-fw text-dark mr-2"></i>' + properties.address + '</p>'
+            } else {
+                address = ''
+            }
+            if (properties.email) {
+                var email = '<p class="text-muted"><i class="fas fa-envelope-open fa-fw text-dark mr-2"></i><a href="mailto:' + properties.email + '" class="text-muted">' + properties.email + '</a></p>'
+            } else {
+                email = ''
+            }
+            if (properties.phone) {
+                var phone = '<p class="text-muted"><i class="fa fa-phone fa-fw text-dark mr-2"></i>' + properties.phone + '</p>'
+            } else {
+                phone = ''
+            }
 
-            var previousHighLightedMarkerId;
-            $('[button-direction-id!=""][button-direction-id]').on('click', function() {
-                var markerId = $(this).attr('button-direction-id');
-                var marker = map.getMarkerById(markerId);
-                if (marker) {
-                    marker.openPopup(); // this line of code opens up the pop on map
-                    highlight(marker);
-                    if (previousHighLightedMarkerId != markerId) {
-                        var marker = map.getMarkerById(previousHighLightedMarkerId);
-                        if (marker) {
-                            reset(marker);
+            if (properties.stars) {
+                var stars = '<div class="text-xs">'
+                for (var step = 1; step <= 5; step++) {
+                    if (step <= properties.stars) {
+                        stars += "<i class='fas fa-star text-warning'></i>"
+                    } else {
+                        stars += "<i class='fas fa-star' style = 'color: #BDBDBD'></i>"
+                    }
+                }
+                stars += "</div>"
+            } else {
+                stars = ''
+            }
+
+            if (properties.url) {
+                var url = '<a href="' + properties.url + '">' + properties.url + '</a><br>'
+
+            } else {
+                url = ''
+            }
+
+            var popupContent = '';
+
+            if (settings.mapPopupType == 'venue') {
+                popupContent =
+
+                    '<div class="popup-venue card">' +
+                    '<div style = "overflow: hidden; height: 150px; background-image: url(\'' + settings.imgBasePath + properties.image + '\'); background-size: cover; background-position: center;" class="map-direction-image">' + '</div>' +
+                    '<div class="card-body">' +
+                    '<div class="">' + title + ' </div>' +
+                    '<div>' + address + '</div>' +
+                    '<div>' + phone + '</div>' +
+                    '</div>' +
+                    '</div>';
+            } else if (settings.mapPopupType == 'rental') {
+                popupContent =
+                    '<div class="popup-rental">' +
+                    image +
+                    '<div class="text">' +
+                    title +
+                    stars +
+                    '</div>' +
+                    '</div>';
+            }
+
+
+            return popupContent;
+        }
+
+        L.Map.include({
+            getMarkerById: function(id) {
+                var marker = null;
+                this.eachLayer(function(layer) {
+                    if (layer instanceof L.Marker) {
+                        if (layer.options.id === id) {
+                            marker = layer;
                         }
                     }
-                    previousHighLightedMarkerId = markerId;
-                }
-            });
-        }
-        createListingsMap({
-            mapId: 'map'
-            , jsonFile: 'https://demo.creativeitem.com/atlas/assets/frontend/single-listing-geojson/listing-id-6.json'
+                });
+                return marker;
+            }
         });
 
-        /* Description Read More*/
+        var previousHighLightedMarkerId;
+        $('[button-direction-id!=""][button-direction-id]').on('click', function() {
+            var markerId = $(this).attr('button-direction-id');
+            var marker = map.getMarkerById(markerId);
+            if (marker) {
+                marker.openPopup(); // this line of code opens up the pop on map
+                highlight(marker);
+                if (previousHighLightedMarkerId != markerId) {
+                    var marker = map.getMarkerById(previousHighLightedMarkerId);
+                    if (marker) {
+                        reset(marker);
+                    }
+                }
+                previousHighLightedMarkerId = markerId;
+            }
+        });
+    }
+    createListingsMap({
+        mapId: 'map'
+        , jsonFile: 'https://demo.creativeitem.com/atlas/assets/frontend/single-listing-geojson/listing-id-6.json'
+    });
 
-        $(document).ready(function() {
+    /* Description Read More*/
 
+    $(document).ready(function() {
+
+        $('.show-more-weoffer').hide();
+        $('.textshow').on('click', function() {
+            $('.textweoffer2').show();
+            var textclspre = $('.btnhidetexttoggle').length;
+            //alert("Text Class : "+textclspre);
+            if(textclspre==0){
+                $('#tablistaddbtn').after('<button class="btn btn-sm btnhidetexttoggle" id="texthideoffer" title="Hide Details" style="border-radius: 1.2rem !important; margin-left: 10px !important;"><i class="fas fa-minus-circle" aria-hidden="true"></i></button>');
+                $('.show-more-weoffer').show();
+            }
+        });
+
+
+        $(document).on("click", "#texthideoffer", function() {
+            $('.textweoffer2').hide();
             $('.show-more-weoffer').hide();
-            $('.textshow').on('click', function() {
-                $('.textweoffer2').show();
-                var textclspre = $('.btnhidetexttoggle').length;
-                //alert("Text Class : "+textclspre);
-                if(textclspre==0){
-                   $('#tablistaddbtn').after('<button class="btn btn-sm btnhidetexttoggle" id="texthideoffer" title="Hide Details" style="border-radius: 1.2rem !important; margin-left: 10px !important;"><i class="fas fa-minus-circle" aria-hidden="true"></i></button>');
-                   $('.show-more-weoffer').show();
-                }
-            });
+        });
 
 
-            $(document).on("click", "#texthideoffer", function() {
-                $('.textweoffer2').hide();
-                $('.show-more-weoffer').hide();
-            });
-
-
-            function readMore() {
-                if($(window).width() < 514){
-                    var maxLength = 90;
-                }else{
-                    var maxLength = 460;
-                }
-
-                $(".text").each(function() {
-                    var myStr = $(this).text();
-                    if ($.trim(myStr).length > maxLength) {
-                        var newStr = myStr.substring(0, maxLength);
-                        var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
-                        $(this).empty().html(newStr);
-                        $(this).append('<div class="dotdotdot" style="display: inline-flex;">...</div>');
-                        $(this).append('<div class="show-more" style="cursor:pointer;">Read More</div>');
-                        $(this).append('<span class="more-text">' + removedStr + ' <div class="read-less" style="cursor:pointer;">Read Less</div>' + '</span>');
-                    }
-                });
-
+        function readMore() {
+            if($(window).width() < 514){
+                var maxLength = 90;
+            }else{
+                var maxLength = 460;
             }
-            readMore();
-            $(document).on("click", ".show-more", function() {
-                $(this).siblings(".more-text").contents().unwrap();
-                $(this).remove();
-                $('.dotdotdot').remove();
-            });
 
-            $(document).on("click", ".read-less", function() {
-                $(this).remove();
-                readMore();
-            });
-
-
-        /* Popup Model We Offer Read More*/
-
-            function readMoreWeOffer() {
-                if($(window).width() < 514){
-                    var maxLength = 100;
-                }else{
-                    var maxLength = 435;
-                }
-                //var maxLength = 400;
-                $(".textpopup").each(function() {
+            $(".text").each(function() {
                 var myStr = $(this).text();
                 if ($.trim(myStr).length > maxLength) {
                     var newStr = myStr.substring(0, maxLength);
                     var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
                     $(this).empty().html(newStr);
                     $(this).append('<div class="dotdotdot" style="display: inline-flex;">...</div>');
-                    $(this).append('<div class="show-morebtn" style="cursor:pointer;">Read More</div>');
-                    $(this).append('<span class="more-textweoffer">' + removedStr + ' <div class="read-lessbtn" style="cursor:pointer;">Read Less</div>' + '</span>');
+                    $(this).append('<div class="show-more" style="cursor:pointer;">Read More</div>');
+                    $(this).append('<span class="more-text">' + removedStr + ' <div class="read-less" style="cursor:pointer;">Read Less</div>' + '</span>');
                 }
-                });
-
-            }
-            readMoreWeOffer();
-            $(document).on("click", ".show-morebtn", function() {
-                $(this).siblings(".more-textweoffer").contents().unwrap();
-                $('.dotdotdot').remove();
-                $(this).remove();
             });
-
-            $(document).on("click", ".read-lessbtn", function() {
-                $(this).remove();
-                readMoreWeOffer();
-            });
-
-        /* Popup Model About Us Read More*/
-
-        function readMoreAboutUs() {
-                if($(window).width() < 514){
-                    var maxLength = 100;
-                }else{
-                    var maxLength = 435;
-                }
-                //var maxLength = 435;
-                $(".textpopup-aboutus").each(function() {
-                var myStr = $(this).text();
-                if ($.trim(myStr).length > maxLength) {
-                    var newStr = myStr.substring(0, maxLength);
-                    var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
-                    $(this).empty().html(newStr);
-                    $(this).append('<div class="dotdotdot" style="display: inline-flex;">...</div>');
-                    $(this).append('<div class="read-morebtn" style="cursor:pointer;">Read More</div>');
-                    $(this).append('<span class="more-textaboutus">' + removedStr + ' <div class="read-lessbtn-popup" style="cursor:pointer;">Read Less</div>' + '</span>');
-                }
-                });
 
         }
-        readMoreAboutUs();
-            $(document).on("click", ".read-morebtn", function() {
-                    $(this).siblings(".more-textaboutus").contents().unwrap();
-                    $(this).remove();
-                    $('.dotdotdot').remove();
+        readMore();
+        $(document).on("click", ".show-more", function() {
+            $(this).siblings(".more-text").contents().unwrap();
+            $(this).remove();
+            $('.dotdotdot').remove();
+        });
+
+        $(document).on("click", ".read-less", function() {
+            $(this).remove();
+            readMore();
+        });
+
+
+    /* Popup Model We Offer Read More*/
+
+        function readMoreWeOffer() {
+            if($(window).width() < 514){
+                var maxLength = 100;
+            }else{
+                var maxLength = 435;
+            }
+            //var maxLength = 400;
+            $(".textpopup").each(function() {
+            var myStr = $(this).text();
+            if ($.trim(myStr).length > maxLength) {
+                var newStr = myStr.substring(0, maxLength);
+                var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                $(this).empty().html(newStr);
+                $(this).append('<div class="dotdotdot" style="display: inline-flex;">...</div>');
+                $(this).append('<div class="show-morebtn" style="cursor:pointer;">Read More</div>');
+                $(this).append('<span class="more-textweoffer">' + removedStr + ' <div class="read-lessbtn" style="cursor:pointer;">Read Less</div>' + '</span>');
+            }
             });
 
-            $(document).on("click", ".read-lessbtn-popup", function() {
-                $(this).remove();
-                readMoreAboutUs();
-            });
+        }
+        readMoreWeOffer();
+        $(document).on("click", ".show-morebtn", function() {
+            $(this).siblings(".more-textweoffer").contents().unwrap();
+            $('.dotdotdot').remove();
+            $(this).remove();
         });
+
+        $(document).on("click", ".read-lessbtn", function() {
+            $(this).remove();
+            readMoreWeOffer();
+        });
+
+    /* Popup Model About Us Read More*/
+
+    function readMoreAboutUs() {
+            if($(window).width() < 514){
+                var maxLength = 100;
+            }else{
+                var maxLength = 435;
+            }
+            //var maxLength = 435;
+            $(".textpopup-aboutus").each(function() {
+            var myStr = $(this).text();
+            if ($.trim(myStr).length > maxLength) {
+                var newStr = myStr.substring(0, maxLength);
+                var removedStr = myStr.substring(maxLength, $.trim(myStr).length);
+                $(this).empty().html(newStr);
+                $(this).append('<div class="dotdotdot" style="display: inline-flex;">...</div>');
+                $(this).append('<div class="read-morebtn" style="cursor:pointer;">Read More</div>');
+                $(this).append('<span class="more-textaboutus">' + removedStr + ' <div class="read-lessbtn-popup" style="cursor:pointer;">Read Less</div>' + '</span>');
+            }
+            });
+
+    }
+    readMoreAboutUs();
+        $(document).on("click", ".read-morebtn", function() {
+                $(this).siblings(".more-textaboutus").contents().unwrap();
+                $(this).remove();
+                $('.dotdotdot').remove();
+        });
+
+        $(document).on("click", ".read-lessbtn-popup", function() {
+            $(this).remove();
+            readMoreAboutUs();
+        });
+    });
 
 
     function showPosition() {
@@ -4193,2114 +3922,13 @@
     }
     window.onload = showPosition;
 
-    </script>
-
-
-    <style>
-        .listing-menu-heading h2 span {
-            font-size: 13px;
-            font-weight: 500;
-            margin: 0px 10px;
-        }
-        div#public_holiday_model {
-            margin: 20px 0px;
-        }
-        a#amenity-toggle-btn {
-            font-size: 15px;
-            font-weight: 400;
-            margin: 0px 17px;
-        }
-        .table-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch; /* smooth scroll on mobile */
-            border: 1px solid #ddd;
-            border-radius: 6px;
-        }
-
-        .table-wrapper table {
-            width: 100%;
-            min-width: 700px; /* table scrolls when screen smaller */
-            border-collapse: collapse;
-            font-family: Arial, sans-serif;
-            font-size: 14px;
-        }
-
-        .table-wrapper th, td {
-            padding: 1px;
-            border-bottom: 1px solid #e0e0e0;
-            text-align: left;
-            /* white-space: nowrap; */
-        }
-
-        .table-wrapper th {
-            background-color: #f9f9f9;
-            font-weight: 600;
-        }
-
-        .table-wrapper tr:nth-child(even) {
-            background-color: #fafafa;
-        }
-
-        .direction_a {
-            border: none;
-            margin: 0;
-            padding: 0;
-        }
-        a.relatedprovisitbtn {
-            background: #efede7;
-            margin: 8px 10px;
-        }
-        .text .more-text{
-            display: none;
-        }
-        .textpopup .more-textweoffer{
-            display: none;
-        }
-        .textpopup-aboutus .more-textaboutus{
-            display: none;
-        }
-        #we_offer_details_model .nav-item a {
-            padding: 0 10px;
-            height: 30px;
-            display: inline-block;
-            line-height: 30px;
-            border-radius: 5px 5px 0 0;
-            border: 1px solid #ddd;
-            border-bottom: none;
-        }
-        #we_offer_details_model .nav-item a.active {
-            background: #1f3863;
-            color: #fff;
-            border: 1px solid #1f3863;
-        }
-
-        .red { background: unset !important; }
-
-        div#product .strip .wrapper {
-            padding: 0px 10px 5px 10px;
-        }
-        #sploffer .item {
-            margin: 0 5px;
-        }
-        #trademark .item {
-            margin: 0 5px;
-        }
-        #offerdata .owl-item {
-            margin-right: 20px;
-            height: 100%;
-        }
-        #shopcarddata .owl-item {
-            margin-right: 20px;
-            height: 100%;
-        }
-        #product .owl-item {
-            margin: 0 15px;
-        }
-        .score {
-            display: none;
-        }
-        .old-price {
-            text-decoration: line-through;
-            color: dimgray;
-            font-size: 12px;
-            font-weight: 160;
-        }
-        #categorydata .item {
-            margin: 0 15px;
-        }
-        a.view_company {
-            background: #203864;
-            padding: 2px 10px;
-            border-radius: 4px;
-            color: #fff;
-            margin-right: 6px;
-        }
-        .opening table {
-            width: 100%;
-        }
-        .extra-time {
-            background: #becadf;
-            margin-top: 10px;
-            border: 1px dashed #1f3865;
-            font-weight: 600;
-            color: #1f3763;
-        }
-        .extra-time td span {
-            display: block;
-            text-align: center;
-        }
-        div#tree_structure_listings {
-            margin: 14px -8px;
-        }
-        #sploffer .owl-item {
-            margin: 1px 1px;
-        }
-        .btn_home_align {
-            margin-top: 20px;
-        }
-        a#tree_structure2 {
-            font-size: 12px;
-            padding: 5px 6px;
-        }
-        .holiday-public{
-            float: right;
-            margin-top: -10px;
-        }
-        .clock-css {
-            position: absolute !important;
-            left: 25px !important;
-            top: 25px !important;
-            font-size: 36px !important;
-            font-size: 2.25rem !important;
-            color: #555 !important;
-        }
-        .pub-holiday-css{
-            left: unset !important;
-            right: 88px;
-            top: unset !important;
-            font-size: 34px !important;
-            color: #555;
-            cursor: pointer;
-        }
-        .modal-backdrop {
-            position: absolute;
-            top: unset;
-        }
-        div#public_holiday_model .modal-header {
-            background: #1f3863;
-        }
-        div#public_holiday_model .modal-header h5.modal-title {
-            color: #fff;
-        }
-        div#public_holiday_model .modal-header button.close {
-            color: #fff;
-        }
-        div#we_offer_details_model .modal-header {
-            background: #1f3863;
-        }
-        div#we_offer_details_model .modal-header h5.modal-title {
-            color: #fff;
-        }
-        div#we_offer_details_model .modal-header button.close {
-            color: #fff;
-        }
-        div#public_holiday_model table {
-            width: 100%;
-        }
-        div#public_holiday_model table td {
-            padding: 6px 20px;
-            text-align: left;
-        }
-        div#public_holiday_model table th {
-            padding: 6px 20px;
-        }
-        div#public_holiday_model .modal-body .col-md-12 > table > tbody > tr:nth-child(odd) {
-            background: #d1def5;
-        }
-        .owl-prev {
-            position: absolute;
-            height: 40px;
-            width: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #fff;
-            border-radius: 50%;
-            opacity: 1;
-            margin-top: auto;
-            margin-bottom: auto;
-            box-shadow: -2px 1px 10px #bdbdbd;
-            top: calc(50% - 40px);
-            cursor: pointer;
-            left: 0;
-            padding: 0;
-            line-height: 44px;
-            margin: 0 0 0 10px;
-        }
-        .owl-next{
-            position: absolute;
-            height: 40px;
-            width: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #fff;
-            border-radius: 50%;
-            opacity: 1;
-            margin-top: auto;
-            margin-bottom: auto;
-            box-shadow: -2px 1px 10px #bdbdbd;
-            top: calc(50% - 40px);
-            cursor: pointer;
-            right: 0;
-            padding: 0;
-            line-height: 44px;
-            margin: 0 10 0 0px!important;
-        }
-        .owl-prev i , .owl-next i {
-            font-size: 25px;
-        }
-        .owl-theme .owl-controls .owl-buttons div {
-            background: #0a071e;
-        }
-        .owl-controls.clickable {
-            margin: 0;
-        }
-        div#sploffer.owl-carousel .owl-item img {
-            /* height: 100%; */
-            object-fit: unset;
-        }
-        div#allgalleryimages_model .modal-header {
-            background: #1f3863;
-        }
-        div#allgalleryimages_model .modal-header h5.modal-title {
-            color: #fff;
-        }
-        div#allgalleryimages_model .modal-header button.close {
-            color: #fff;
-        }
-        .booking select {
-            display: block;
-        }
-        .modal-dialog {
-            max-width: 975px;
-            margin: 0px auto;
-        }
-        .formtextarea_cc {
-            height: 50px !important;
-            padding: 6px 10px !important;
-        }
-        .customer_clubModal {
-            width: 100% !important;
-            margin: 0px auto;
-        }
-
-        .modal_dialogcc{
-            max-width: 670px !important;
-            margin: 50px auto;
-        }
-        .lb-outerContainer {
-            max-width: 600px!important;
-            max-height: 600px!important;
-            width: 100%!important;
-            /* height: 100%!important; */
-        }
-        .lb-dataContainer {
-            max-width: 100% !important;
-        }
-        .lightbox .lb-image{
-            object-fit: contain;
-        }
-
-        div#product.owl-carousel .owl-item img.offericon {
-            height: auto;
-            object-fit: inherit;
-        }
-        .newicon{
-            position: absolute;
-            max-width: 60px;
-            left: 10px;
-            top: -6px;
-            z-index: 1;
-        }
-
-        @media(max-width:991px)
-        {
-
-            #trademark .item {
-                margin: 0 5px;
-                height: 130px;
-                display: flex;
-                align-items: center;
-                width: 100%;
-                padding: 0 10px;
-                justify-content: center;
-            }
-
-            div#trademark .strip.grid {
-                height: 100%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                margin: 0;
-            }
-
-            div#trademark .strip figure {
-                height: auto!important;
-                max-height: fit-content;
-                padding: 0 15px;
-            }
-
-        }
-        @media(max-width:375px)
-        {
-            .link-css-mobile {
-                padding-bottom: 15px;
-            }
-            .link-headings{text-align:center;}
-            .link-css-mobile{text-align:center;}
-
-
-            .link-css-mobile .btn-info {
-                color: #fff;
-                background-color: #17a2b8;
-                border-color: #17a2b8;
-                max-width: 200px;
-                width: 100%;
-                margin-bottom: 10px;
-            }
-        }
-
-        .share-tooltip .image-responsive {
-            position: relative;
-        }
-        /*.share-icon-gap {
-            margin-right: 3px !important;
-        }*/
-        .share-tooltip:hover:after {
-            top: 16px;
-            content: "";
-            position: absolute;
-            bottom: 100%;
-            left: 16px;
-            margin-left: -5px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent transparent #203864 transparent;
-            display:none;
-        }
-        .share-tooltiptext::before {
-            content: "";
-            position: absolute;
-            left: 50%;
-            top: 100%;
-            transform: translateX(-50%);
-            border-color: black;
-        }
-        .share-tooltip:hover .share-tooltiptext {
-            visibility: visible;
-            opacity: 1;
-            top: 76%;
-            z-index: 99;
-        }
-        .share-tooltip-desktop {
-            position: absolute;
-            z-index: 9999 !important;
-            cursor: pointer;
-            top: 8px;
-            right: 20px;
-        }
-        .share-tooltip-desktop span:nth-child(1) {
-            margin-bottom: 4px;
-            display: block;
-        }
-        .share-tooltip-desktop span img {
-            width: 30px !important;
-        }
-        .share-tooltip-desktop span a {
-            line-height: 10px !important;
-        }
-        .share-tooltip-desktop .share-tooltiptext {
-            display: none;
-        }
-        div.share-tooltip:hover .share-tooltiptext {
-            display: block;
-        }
-        .share-tooltip-desktop span a {
-            display: block;
-            margin-bottom: 5px;
-        }
-        /*
-        @media (max-width: 380px){
-        .share-tooltip-desktop {left: 10px;}
-        }*/
-
-        .see_more_gallery_type {
-            top: 65px;
-            width: 46%;
-            background: #fff;
-            border: 1px solid;
-            line-height: 20px;
-            padding: 1px;
-            height: 25px;
-            left: 28%;
-            cursor: pointer;
-        }
-        .tab-content>.active {
-            display: block;
-        }
-        .textweoffer{
-            display: block !important;
-        }
-        .room_type {
-            border: 1px solid #f1ecec;
-            padding: 15px 15px 10px;
-        }
-        span.locally_text {
-            margin: -85px 0px 0px 0px;
-            float: right;
-            width: 170px;
-            color: #222121;
-            position: absolute;
-            right: 170px;
-            font-size: 14px;
-        }
-
-        @media (max-width: 768px) {
-            .modal-header .close {
-                padding: 3px;
-                margin: 0rem 1rem 0rem auto;
-            }
-            div#public_holiday_model .modal-header h5.modal-title {
-                color: #fff;
-                font-size: 17px;
-            }
-            header.header_in .hamburger-inner, header.header_in .hamburger-inner::after, header.header_in .hamburger-inner::before, header.sticky .hamburger-inner, header.sticky .hamburger-inner::after, header.sticky .hamburger-inner::before {
-                background-color: #fff;
-            }
-            .visit_the_shop {
-                text-align: center;
-            }
-            .link-css-mobile {
-                padding-bottom: 15px;
-            }
-            span.company_details_logo img {
-                margin: -5px 0px 0px 35px !important;
-                text-align: center;
-                width: 50%;
-                padding: 3px 0px;
-            }
-            span.locally_text {
-                width: 100%;
-                position: sticky;
-                text-align: center;
-                padding: 0px 0px 0px 0px;
-                margin: -3px 0px -3px 0px;
-                font-size: 15px;
-            }
-            span.company_details_logo {
-                margin: 0px !important;
-                position: relative;
-            }
-            img.company_details_logo_img {
-                display: none;
-            }
-            button#down-to-schedule_c {
-                margin: -32px 40px -25px 140px;
-                padding: 0;
-            }
-            button#down-to-schedule {
-                margin: 1px 5px;
-                padding: 0;
-            }
-            button#down-to-contact {
-                margin: 0px 0px;
-                position: relative;
-                width: auto;
-                z-index: 20000;
-                padding: 0px 5px;
-            }
-            .custom-search-input-2.inner input[type=submit] {
-                height: 28px;
-            }
-            i.fas.fa-chevron-down {
-                margin: 0px 5px;
-            }
-            div#company_imp_tags_div span a {
-                font-size: 11px;
-            }
-            .add_bottom_15.likebtn_alignment {
-                margin: 0px;
-            }
-            .add_bottom_15 h2 {
-                font-size: 20px;
-                margin: 10px 1px;
-            }
-            .more_type {
-                width: 40% !important;
-                margin: -2px 0px;
-            }
-            i.fas.fa-chevron-up {
-                margin: 1px 4px;
-            }
-            a#tree_structure2 {
-                width: 100% !important;
-            }
-            .holiday-public {
-                float: left !important;
-                margin-top: -45px !important;
-                margin-left: 70px !important;
-                position: absolute !important;
-            }
-            .opening i {
-                display: ruby-text !important;
-                margin: -52px -5px;
-            }
-            .canvas_pdf {
-                max-width: 100% !important;
-            }
-            img.direction {
-                float: right;
-                margin: -27px 0px;
-                width: 45px;
-                height: auto;
-            }
-            .margin_80_55 {
-                padding-top: 0px;
-                padding-bottom: 10px;
-            }
-            .add_bottom_15 {
-                display: inline-block;
-            }
-            div#listing_banner .hero_in {
-                max-height: 390px;
-            }
-            .strip .wrapper h3 {
-                min-height: 30px;
-            }
-            .listing_detail_gallery {
-                padding: 15px;
-            }
-            .modal-header {
-                padding: 6px;
-            }
-            div#allgalleryimages_model .modal-header h5.modal-title {
-                color: #fff;
-                font-size: 14px;
-            }
-            div#type_gallery_list img {
-                margin: 5px !important;
-                padding: 3px;
-                border: 1px solid #ccc;
-                width: 53px !important;
-                height: auto !important;
-            }
-            div#allgalleryimages_model.listing_detail_gallery .thumbnail img {
-                max-height: 180px;
-                border: 1px solid #ccc;
-            }
-            div#product .strip .wrapper {
-                padding: 0px 0px 10px 15px;
-            }
-            div#trademark {
-                margin-bottom: 30px;
-            }
-            .owl-theme .owl-controls .owl-buttons div { margin: 5px; padding: 0px 3px; font-size: 0px; }
-            .owl-prev {
-                height: 28px;
-                width: 26px;
-            }
-            .owl-next {
-                height: 28px;
-                width: 26px;
-            }
-            #offerdata .owl-item {
-                margin-right: 0px;
-            }
-            #product .owl-item {
-                margin: 0 0px;
-            }
-            #sploffer .owl-item {
-                margin: 0 0px;
-            }
-            .secondary_nav {
-                padding: 5px 0;
-            }
-            .detail_title_1 h1 {
-                font-size: 15px !important;
-            }
-            a.relatedprovisitbtn {
-                margin: 0px 0px 0px 0px;
-                padding: 3px 5px;
-                font-size: 13px;
-                text-align: left;
-            }
-            a.address {
-                font-size: 10px;
-            }
-            .see_all {
-                width: 57px;
-                font-size: 12px;
-            }
-            #weoffer-mobile .nav-item a {
-                border: 1px solid #ccc;
-            }
-
-
-        }
-
-        .canvas_pdf {
-            max-width: 690px;
-        }
-
-        .next_pdf{
-            color: #4fa94f;
-            border: 1px solid;
-        }
-        .previous_pdf {
-            color: #dc3545;
-            border: 1px solid;
-        }
-
-    </style>
-
-    <style>
-
-   figure.imageads small.adsmidtext {
-        top: 75%!important;
-        left: 50%!important;
-        transform: translate(-50%,-50%);
-        text-align: center;
-        line-height: 31px !important;
-        border: 1px solid #fff;
-        padding: 3px !important;
-    }
-    /* =========================
-    Competition Section
-    ========================= */
-
-    .competition_div .main_title_2 h5 {
-        font-size: 20px;
-        font-weight: 600;
-        color: #1e293b;
-        letter-spacing: 0.5px;
-        position: relative;
-    }
-
-    .main_title_2 h5::after {
-        content: "";
-        width: 70px;
-        height: 4px;
-        border-radius: 20px;
-        background: linear-gradient(90deg, #ff6b00, #ffb347);
-        position: absolute;
-        left: 0;
-        bottom: -12px;
-    }
-
-    /* =========================
-    Carousel Item
-    ========================= */
-    .competition_div .item {
-        padding: 12px;
-    }
-
-    .competition_div .strip.grid {
-        background: #ffffff;
-        border-radius: 22px;
-        overflow: hidden;
-        position: relative;
-        transition: all 0.35s ease;
-        box-shadow: 0 8px 30px rgba(15, 23, 42, 0.08);
-        border: 1px solid rgba(226, 232, 240, 0.8);
-    }
-
-    .competition_div .strip.grid:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 18px 45px rgba(15, 23, 42, 0.15);
-    }
-
-    /* =========================
-    Image Area
-    ========================= */
-    .competition_div .imageads {
-        position: relative;
-        overflow: hidden;
-        margin: 0;
-        background: #f1f5f9;
-    }
-
-    .competition_div .imageads img {
-        width: 100%;
-        height: 250px;
-        object-fit: cover;
-        transition: transform 0.5s ease;
-        display: block;
-    }
-
-    .competition_div .strip.grid:hover .imageads img {
-        transform: scale(1.08);
-    }
-
-    /* Dark overlay */
-    .competition_div .imageads::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        background: linear-gradient(
-            to top,
-            rgba(0, 0, 0, 0.72),
-            rgba(0, 0, 0, 0.15),
-            transparent
-        );
-        z-index: 1;
-    }
-
-    /* =========================
-    Top Heading Badge
-    ========================= */
-    .competition_div .imageads small:first-of-type {
-        position: absolute;
-        top: 18px;
-        left: 18px;
-        z-index: 2;
-        background: rgba(255, 255, 255, 0.95);
-        color: #0f172a;
-        padding: 8px 16px;
-        border-radius: 50px;
-        font-size: 12px;
-        font-weight: 700;
-        letter-spacing: 0.4px;
-        text-transform: uppercase;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.12);
-    }
-
-    /* =========================
-    Discount Badge
-    ========================= */
-    .competition_div .adsprice {
-        top: 60px;
-        z-index: 2;
-        background: linear-gradient(135deg, #ff512f, #dd2476);
-        color: #fff;
-        padding: 2px 0px;
-        border-radius: 14px;
-        font-size: 13px;
-        font-weight: 700;
-        min-width: 70px;
-        text-align: center;
-        box-shadow: 0 10px 20px rgba(221, 36, 118, 0.35);
-    }
-
-    .competition_div .adsprice .p-discount {
-        font-style: normal;
-        font-weight: 800;
-    }
-
-    /* =========================
-    Mid Text Overlay
-    ========================= */
-    .competition_div .adsmidtext {
-        position: absolute;
-        left: 20px;
-        right: 20px;
-        bottom: 20px;
-        z-index: 2;
-        color: #fff;
-        font-size: 16px;
-        font-weight: 600;
-        line-height: 1.5;
-        display: block;
-        text-shadow: 0 2px 8px rgba(0,0,0,0.45);
-    }
-
-    /* =========================
-    Bottom Title
-    ========================= */
-
-    .competition_div .strip.grid h6 {
-        padding: 10px 15px !important;
-        margin: 0 !important;
-        font-size: 14px !important;
-        font-weight: 500 !important;
-        color: #0f172a;
-        background: #fff;
-        line-height: 1.5;
-        border-top: 1px solid #eef2f7;
-        display: flex;
-        align-items: center;
-    }
-
-    /* =========================
-    Owl Carousel Dots
-    ========================= */
-    .competition_div .owl-dots {
-        margin-top: 25px;
-        text-align: center;
-    }
-
-    .competition_div .owl-dot span {
-        width: 12px;
-        height: 12px;
-        margin: 5px;
-        background: #cbd5e1 !important;
-        border-radius: 50%;
-        transition: all 0.3s ease;
-    }
-
-    .competition_div .owl-dot.active span {
-        width: 32px;
-        border-radius: 30px;
-        background: linear-gradient(90deg, #ff6b00, #ffb347) !important;
-    }
-
-    /* =========================
-    Owl Navigation
-    ========================= */
-    .competition_div .owl-nav {
-        margin-top: 15px;
-    }
-
-    .competition_div .owl-nav button {
-        width: 46px;
-        height: 46px;
-        border-radius: 50% !important;
-        background: #fff !important;
-        color: #0f172a !important;
-        font-size: 22px !important;
-        box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-        transition: all 0.3s ease;
-        border: 1px solid #e2e8f0 !important;
-    }
-
-    .competition_div .owl-nav button:hover {
-        background: linear-gradient(135deg, #ff6b00, #ff8f00) !important;
-        color: #fff !important;
-        transform: translateY(-2px);
-    }
-
-    /* =========================
-    Responsive
-    ========================= */
-    @media (max-width: 991px) {
-
-        .competition_div {
-            padding: 50px 0;
-        }
-
-        .competition_div .main_title_2 h5 {
-            font-size: 24px;
-        }
-
-        .competition_div .imageads img {
-            height: 220px;
-        }
-    }
-
-    @media (max-width: 767px) {
-
-        .competition_div .main_title_2 h5 {
-            font-size: 20px;
-        }
-
-        .competition_div .imageads img {
-            height: 200px;
-        }
-
-        .competition_div .adsmidtext {
-            font-size: 14px;
-        }
-
-        .competition_div .strip.grid h6 {
-            font-size: 14px !important;
-            min-height: auto;
-        }
-
-        .competition_div .adsprice {
-            padding: 8px 12px;
-            min-width: 55px;
-        }
-
-        .competition_div .adsprice .p-discount {
-            font-size: 16px;
-        }
-    }
-
-
-    .strip ul {
-        bottom: -40px !important;
-        padding: 0px 0px 40px 10px !important;
-    }
-    .modal-header {
-        padding: 1rem !important;
-    }
-    div#staticBackdrop {
-        height: 70px !important;
-    }
-    p#staticBackdropLabel {
-        color: #040303;
-        font-weight: 400;
-        font-size: 16px !important;
-    }
-    .link-css-mobile i {
-        font-size: 23px;
-        margin: 1px;
-    }
-    .main-menu {
-        padding-top: 6px;
-    }
-    div#eventdata .item {
-        padding: 5px;
-    }
-    .modal-open .modal {
-        margin: 23px 0px 0px 0px;
-    }
-    .btn_1.full-width.purchase, a.btn_1.full-width.purchase {
-        background-color: #2f4a7c;
-    }
-    .visit_the_shop {
-        color: #333 !important;
-        font-size: 13px;
-        margin: 13px;
-    }
-    i.fas.fa-chevron-down {
-        margin: 0px 6px;
-    }
-    .add_bottom_15.likebtn_alignment {
-        margin: 0px 35px;
-    }
-    header.header.sticky, header.header_in {
-        background-color: {{ $data['mainDirectoryDetails']->company_color }};
-    }
-
-    .listing-social-btn .social-button {
-        height: 30px;
-        line-height: 26px!important;
-        width: 25%!important;
-        border: 1px solid #ccc !important;
-        font-size: 12px;
-        font-weight: 600;
-    }
-    .more_type {
-        width: 21%;
-        float: right;
-        margin: -10px 18px;
-        text-align: right;
-        cursor: pointer;
-        border-color: #3b5998;
-        background: #fff;
-        border: 1px solid #666;
-        border-radius: 50px;
-        font-size: 14px;
-        padding: 5px 25px;
-        transition: .3s;
-        display: inline-block;
-        line-height: 17px;
-        font-weight: 500;
-    }
-    .row.no-gutters.custom-search-input-2.inner {
-        margin: 5px 0px 15px 0px;
-    }
-    span.company_details_logo {
-        margin: 0px 17px;
-        position: absolute;
-    }
-    button#down-to-schedule_c {
-        width: 80px;
-        margin: -40px 40px -25px 140px;
-    }
-    button#down-to-schedule {
-        width: 130px;
-        float: left;
-        margin: 1px 5px;
-    }
-    a.company_imp_tags {
-        cursor: pointer;
-    }
-    a.company_imp_tags2 {
-        cursor: pointer;
-    }
-    i.fa.fa-times.tag_delete {
-        color: #993939;
-        margin: 0px 5px;
-    }
-    div#allgalleryimages_model.listing_detail_gallery .thumbnail img {
-        max-height: 100%;
-        border: 3px solid #1f3863;
-        padding: 0px;
-    }
-    img.logo_normal_center {
-        width: 350px;
-        margin: -3px 0px 0px 0px;
-    }
-    div#logo {
-        margin: 2px 0px 0px 10px;
-    }
-    #logo img {
-        max-width: 245px;
-        min-width: 200px;
-    }
-
-
-    .main-menu ul, .main-menu ul li, .main-menu ul ul {
-        margin: 5px 0px 0px 0px;
-    }
-    div#listing_banner {
-    margin-top: 85px;
-   }
-
-    .main-menu {
-        text-align: center;
-        float:none !important;
-    }
-    header {
-    padding: 10px 0px 5px 10px !important;
-    }
-
-    .company_d_title {
-        margin: -8px 200px 3px 100px;
-        font-size: 38px;
-        background: #fff;
-        width: auto;
-        font-family: fantasy;
-        border-radius: 25px;
-        padding: 1px 15px;
-    }
-
-   .company_d_title_mobile{
-    display:none;
-   }
-
-    .secondary_nav ul li:nth-child(2) {
-        display: unset;
-    }
-
-    .secondary_nav {
-        padding: 8px 0;
-    }
-    .visit_the_shop{
-        color: #333 !important;
-        font-size: 13px;
-    }
-    div#lightbox {
-        right: 0%;
-    }
-    .gallerytype_pdf {
-        margin: 0px 5px 30px 15px;
-        border: 4px solid #1f3863;
-        padding: 1px;
-    }
-    button#listsubmit-dirtype {
-        margin-top: 24px;
-    }
-
-    #functions_reload a {
-        color: #333 !important;
-        margin: -20px -22px;
-        padding: 5px;
-    }
-    span#functions_reload i {
-        margin: 0px 5px !important;
-    }
-    .lb-dataContainer {
-        max-width: 26% !important;
-        padding: 2px;
-        text-align: center;
-    }
-    #listing_banner .owl-item img {
-        min-height: 417px;
-    }
-    img.direction {
-        float: right;
-        margin: -40px 10px;
-        width: 60px;
-        height: auto;
-        border-radius: 5px;
-    }
-    .room_type.first img {
-        min-height: 147px;
-        max-height: 137px;
-        object-fit: cover;
-        margin: 15px 20px;
-    }
-    .room_type.first .col-md-4 {
-        text-align: center;
-    }
-    ul.hotel_facilities {
-        margin: 5px 15px 5px -24px; padding: 8px;
-    }
-    .toggle-btn {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        text-decoration: none;
-    }
-
-    .dropdown-icon {
-        margin-left: -30px;
-        transition: transform 0.3s ease;
-        padding: 0px 10px;
-    }
-
-    .toggle-btn.collapsed .dropdown-icon i {
-        transform: rotate(0deg);
-    }
-
-    .toggle-btn:not(.collapsed) .dropdown-icon i {
-        transform: rotate(180deg);
-    }
-
-    .show-more-height {
-        overflow: hidden;
-        display: block;
-        max-height: 87px; /* Collapsed height */
-        transition: max-height 0.3s ease;
-    }
-
-    .show-more-height.expanded {
-        max-height: 500px; /* Expanded height (adjust based on your content) */
-    }
-    .description_toggle {
-        color: #3e3838;
-        border: none;
-        padding: 1px 5px;
-        cursor: pointer;
-        margin: -5px 0px 20px 0px;
-        display: block;
-        text-align: center;
-        outline: none;
-    }
-    .description_toggle:focus {
-        outline:none;
-    }
-    .link-css-mobile{
-        float: left;
-        margin: -6px 5px;
-    }
-
-    @media screen and (max-width:767px){
-
-        .link-css-mobile i {
-            font-size: 16px;
-        }
-        header.header {
-            padding: 15px 15px 0px 15px !important;
-        }
-
-        .home_qr_code{
-            display: none;
-        }
-
-        .functions_reload_div{
-            text-align: right;
-        }
-        #functions_reload a {
-            margin: 0px 0px !important;
-            padding: 0px 10px !important;
-        }
-        .headercontact {
-            position: fixed;
-            right: 0;
-            top: 41px;
-            padding: 19px 0px;
-            z-index: 99999999;
-            border-bottom: 1px solid transparent;
-            float: left;
-        }
-        img.logo_normal_center {
-            width: 220px;
-            margin: -10px 0px -20px 0px;
-        }
-        .listing_see_all {
-            display: inline-block !important;
-        }
-        div#logo {
-            margin: 0px 30px;
-        }
-        #logo img {
-            height: 28px;
-            margin: 4px 0 0;
-            min-width: 200px;
-        }
-        span#functions_reload {
-            margin: 0px 0px auto;
-            text-align: center;
-            border: none;
-            position: relative;
-        }
-        .direction_a {
-            border: none;
-            margin: 10px 10px;
-            padding: 0;
-        }
-        div#listing_banner {
-         margin-top: 87px;
-        }
-        .owl-carousel {
-           margin: 25px 0px 0px 0px;
-        }
-
-        .main-menu ul li select {
-            max-width: 100%;
-            width: 70%;
-        }
-        .mm-listview>li>a, .mm-listview>li>span {
-            text-align: left;
-        }
-        .company_d_title {
-           margin: 15px;
-           font-size: 20px;
-           background: #fff;
-           padding: 0px 0px;
-        }
-        li.company_details_logo img {
-            margin: -20px 0px 0px 0px !important;
-            position: relative !important;
-        }
-        .company_d_title_mobile {
-            display: block;
-            margin: 1px 130px -26px -230px;
-            font-size: 17px;
-            background: #fff;
-            width: auto;
-            font-family: fantasy;
-            border-radius: 25px;
-            padding: 3px 10px;
-        }
-        .single-listing-map {
-            height: 212px;
-            margin: 85px 0px 0px 0px;
-        }
-        .room_type {
-            padding: 0 !important;
-        }
-        .dropdown-icon {
-            margin-left: 0px;
-            position: absolute;
-            right: 5px;
-            top: 30px;
-        }
-        .room_type {  border: none !important; padding: 3px 0px; }
-        ul.hotel_facilities {
-            margin: 5px 0px 0px 5px;
-            padding: 10px;
-        }
-        #functions_reload a {
-            font-size: 13px !important;
-        }
-        .google_translate_mobile {
-            float: right;
-            margin: 0px 35px;
-        }
-        .owl-prev {
-            margin: 30px 10px !important;
-        }
-        .owl-next {
-            margin: 30px 10px !important;
-        }
-        iframe{
-            height: 193px !important;
-        }
-        #logo {
-            width: 60%;
-        }
-
-        .goog-te-gadget-simple span {
-            display: inherit !important;
-        }
-        .goog-te-gadget-simple {
-            width: 96px;
-        }
-        #listing_banner .owl-item img {
-            min-height: auto;
-        }
-
-        div#trademark.owl-carousel .owl-item img {
-            display: block;
-            width: 180px;
-            height: 120px !important;
-        }
-        .mobile_direction_a{
-            display: block !important;
-        }
-    }
-    .notactivate:before {
-        content: '';
-        width:  100%;
-        height: 100%;
-        position: absolute;
-        background-color: rgba(0,0,0,0.6) !important;
-        z-index: 999;
-
-    }
-    .notactivate {
-        position: relative;
-
-    }
-    .overlay-content {
-        width: 80%;
-        height: 80%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        border: #fff solid 4px;
-        color: #fff;
-        font-size: 30px;
-        z-index: 999;
-        position: absolute;
-        top: 0;
-        left: 0;
-        margin: 10%;
-    }
-
-    #customer_club h4 {
-        width: 100%;
-    }
-    #customer_club p {
-        text-align: center;
-    }
-    #customer_club p {
-        text-align: center;
-        width: 100%;
-    }
-
-    .customer-club-form-container {
-        max-width: 600px;
-        margin: 10px auto;
-        background: #fff;
-        padding: 15px;
-        border-radius: 10px;
-        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-        width: 100%;
-    }
-
-    .btn-custom:hover {
-        background-color: #0056b3;
-    }
-    .formlabel_state label {
-        display: block;
-    }
-    span.cc_respondata {
-        font-size: 18px;
-    }
-    .add_bottom_15 span a:hover {
-        color: hsl(224.83deg 46.29% 30.68%) !important;
-        font-size: 11px;
-    }
-
-    @media (min-width: 1700px) and (max-width: 2600px) {
-        .container{
-            max-width: 1600px;
-        }
-        figure.imageads small.adsmidtext {
-            top: 80%!important;
-        }
-        div#product .strip figure a, div#sploffer a {
-            display: ruby-text;
-        }
-        div#product .strip figure a, div#sploffer a {
-            height: auto !important;
-        }
-    }
-
-    @media only screen and (min-width: 768px) and (max-width: 992px) {
-        .locally {
-            margin: -62px 85px !important;
-        }
-        .link-css-mobile {
-            padding-bottom: 15px;
-        }
-        span.locally_text {
-            width: 280px !important;
-            right: 150px !important;
-            font-size: 18px !important;
-            top: 5px;
-            margin: 0px !important;
-        }
-        .headercontact {
-            position: fixed;
-            right: 0;
-            top: 86px;
-            width: 100%;
-            padding: 4px 0px;
-            z-index: 99999999;
-            border-bottom: 1px solid transparent;
-            float: left;
-        }
-        button#down-to-contact {
-            margin: -20px 0px;
-            position: relative;
-            width: auto;
-            z-index: 20000;
-            padding: 0px 5px;
-        }
-        span.company_details_logo {
-            margin: -23px 24px;
-        }
-        .mm-listview>li>a, .mm-listview>li>span {
-            text-align: left;
-        }
-        .main-menu ul, .main-menu ul li, .main-menu ul ul {
-            margin: 5px 0px 0px 0px;
-            text-align: left;
-        }
-    }
-
-    @media (min-width: 992px) and (max-width: 1199px) {
-        span.company_details_logo {
-            margin: -23px 24px;
-        }
-        span.locally_text {
-            width: 160px !important;
-            right: 154px !important;
-            font-size: 18px !important;
-            top: 5px;
-            margin: 0px !important;
-        }
-    }
-
-    @media screen and (min-width: 1600px) and (max-width: 2500px) {
-        span.locally_text {
-            margin: -74px 5px 0px 0px !important;
-            float: right !important;
-            width: 183px !important;
-            color: #222121 !important;
-            position: absolute !important;
-            right: 261px !important;
-            font-size: 14px !important;
-        }
-        .company_details_logo_img {
-            width: 78px !important;
-            margin: 10px 15px !important;
-        }
-    }
-
-    .listing-info-card {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        width: 100%;
-        min-height: 62px;
-        margin: 8px auto;
-        padding: 10px 12px;
-        border: 1px solid #dce8e6;
-        border-radius: 12px;
-        background: #fff;
-        box-shadow: 0 3px 12px rgba(15, 23, 42, 0.07);
-        color: #172b3a !important;
-        text-align: left;
-        text-decoration: none !important;
-        transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
-    }
-
-    .listing-info-card:hover {
-        transform: translateY(-2px);
-        border-color: #9acdc3;
-        box-shadow: 0 7px 18px rgba(15, 118, 110, 0.14);
-        color: #172b3a !important;
-    }
-
-    .listing-info-card:focus-visible {
-        outline: 3px solid rgba(15, 118, 110, 0.35);
-        outline-offset: 3px;
-    }
-
-    .shop-visit-cta {
-        max-width: 230px;
-    }
-
-    .schedule-info-card {
-        width: 100%;
-        max-width: 190px;
-        min-height: 62px;
-        margin: 8px 4px;
-        padding: 10px 12px;
-        cursor: pointer;
-        font-family: inherit;
-        white-space: normal;
-    }
-
-    button.schedule-info-card#down-to-schedule,
-    button.schedule-info-card#down-to-schedule_c {
-        width: 100%;
-        max-width: 200px;
-        float: right;
-        margin: 0px 10px 0px 10px;
-        padding: 0px 10px;
-    }
-
-    .schedule-info-card .listing-info-card__title {
-        white-space: nowrap;
-    }
-
-    .schedule-info-card--open .listing-info-card__icon {
-        background: #e8f4f1;
-        color: #0f766e;
-    }
-
-    .schedule-info-card--closed .listing-info-card__icon {
-        background: #fff1f0;
-        color: #c2413b;
-    }
-
-    .schedule-info-card--closed .listing-info-card__arrow {
-        color: #c2413b;
-    }
-
-    .listing-address-card {
-        min-height: 62px;
-    }
-
-    .shop-visit-cta__icon,
-    .listing-info-card__icon {
-        display: inline-flex;
-        flex: 0 0 38px;
-        align-items: center;
-        justify-content: center;
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-        background: #e8f4f1;
-        color: #0f766e;
-        font-size: 16px;
-    }
-
-    .shop-visit-cta__icon svg,
-    .listing-info-card__icon svg {
-        display: block;
-        width: 20px;
-        height: 20px;
-        fill: none;
-        stroke: currentColor;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-width: 1.8;
-    }
-
-    .shop-visit-cta__content {
-        display: flex;
-        flex: 1 1 auto;
-        min-width: 0;
-        flex-direction: column;
-        gap: 3px;
-    }
-
-    .listing-info-card__content {
-        display: flex;
-        flex: 1 1 auto;
-        min-width: 0;
-        flex-direction: column;
-        gap: 3px;
-    }
-
-    .shop-visit-cta__title {
-        color: #172b3a;
-        font-size: 13px;
-        font-weight: 700;
-        line-height: 1.2;
-        white-space: nowrap;
-    }
-
-    .listing-info-card__title {
-        color: #172b3a;
-        font-size: 13px;
-        font-weight: 700;
-        line-height: 1.2;
-    }
-
-    .shop-visit-cta__meta {
-        color: #64748b;
-        font-size: 11px;
-        font-weight: 500;
-        line-height: 1.2;
-    }
-
-    .listing-info-card__meta {
-        overflow: hidden;
-        color: #64748b;
-        font-size: 11px;
-        font-weight: 500;
-        line-height: 1.35;
-        text-overflow: ellipsis;
-    }
-
-    .shop-visit-cta__arrow,
-    .listing-info-card__arrow {
-        flex: 0 0 auto;
-        color: #0f766e;
-        font-size: 12px;
-        transition: transform 180ms ease;
-    }
-
-    .shop-visit-cta__arrow svg,
-    .listing-info-card__arrow svg {
-        display: block;
-        width: 16px;
-        height: 16px;
-        fill: none;
-        stroke: currentColor;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-width: 1.8;
-    }
-
-    .listing-info-card:hover .shop-visit-cta__arrow,
-    .listing-info-card:hover .listing-info-card__arrow {
-        transform: translateX(3px);
-    }
-
-    .listing-menu-container {
-        margin-top: 24px;
-        margin-bottom: 28px;
-    }
-
-    .listing-menu-section {
-        padding: 24px;
-        border: 1px solid #e5eceb;
-        border-radius: 16px;
-        background: #fff;
-        box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
-    }
-
-    .listing-menu-categories {
-        margin-bottom: 20px;
-    }
-
-    .listing-menu-heading {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 16px;
-        margin-bottom: 18px;
-    }
-
-    .listing-menu-heading h2 {
-        margin: 0;
-        color: #172b3a;
-        font-size: 24px;
-        font-weight: 700;
-        line-height: 1.25;
-    }
-
-    .listing-menu-heading p {
-        margin: 5px 0 0;
-        color: #64748b;
-        font-size: 13px;
-        line-height: 1.45;
-    }
-
-    #company_imp_tags_div,
-    .listing-menu-tags {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 8px;
-    }
-    button#btn_defaulttags {
-        margin-bottom: 5px;
-    }
-    .listing-menu-tag {
-        display: inline-flex;
-        align-items: center;
-        min-height: 20px;
-        padding: 2px 4px;
-        border: 1px solid #e1e9e8;
-        border-radius: 8px;
-        background: #f7faf9;
-        color: #334155;
-        font-size: 13px;
-        font-weight: 600;
-        line-height: 1.3;
-        transition: border-color 160ms ease, background-color 160ms ease, color 160ms ease, transform 160ms ease;
-    }
-
-    .listing-menu-tag:hover,
-    .listing-menu-tag:focus-within {
-        transform: translateY(-1px);
-        border-color: #9acdc3;
-        background: #e8f4f1;
-        color: #0f766e;
-    }
-
-    .listing-menu-tag a,
-    .listing-menu-tag a:hover,
-    .listing-menu-tag a:focus {
-        color: inherit !important;
-        text-decoration: none;
-    }
-
-    .listing-menu-tag .tag_delete {
-        color: #be4450;
-    }
-
-    .listing-menu-toggle {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        margin-top: 12px;
-        padding: 7px 11px;
-        border: 1px solid #dce8e6;
-        border-radius: 8px;
-        background: #fff;
-        color: #0f766e;
-        font-size: 12px;
-        font-weight: 600;
-        line-height: 1.3;
-        cursor: pointer;
-        transition: background-color 160ms ease, border-color 160ms ease;
-    }
-
-    .listing-menu-toggle:hover {
-        border-color: #9acdc3;
-        background: #e8f4f1;
-    }
-
-    .listing-menu-search.custom-search-input-2.inner {
-        display: grid !important;
-        grid-template-columns: minmax(0, 1fr) 58px;
-        align-items: stretch;
-        gap: 8px;
-        width: 100%;
-        height: auto;
-        margin: 0;
-        padding: 0;
-        border: 0;
-        border-radius: 12px;
-        background: transparent;
-        box-shadow: none;
-    }
-
-    .listing-menu-search__field {
-        position: relative;
-        display: flex;
-        align-items: center;
-        min-width: 0;
-        min-height: 52px;
-        margin: 0;
-        padding: 0 48px 0 43px;
-        border: 1px solid #e1e8ed;
-        border-radius: 10px;
-        background: #f8fafc;
-        cursor: text;
-        transition: border-color 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
-    }
-
-    .listing-menu-search__field:focus-within {
-        border-color: #78b9ae;
-        background: #fff;
-        box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.1);
-    }
-
-    .listing-menu-search__icon {
-        position: absolute;
-        left: 14px;
-        display: inline-flex;
-        color: #64748b;
-        pointer-events: none;
-    }
-
-    .listing-menu-search__icon svg,
-    .listing-menu-search__submit svg {
-        display: block;
-        width: 20px;
-        height: 20px;
-        fill: none;
-        stroke: currentColor;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-width: 1.8;
-    }
-
-    .listing-menu-search__field .form-group {
-        position: relative;
-        flex: 1 1 auto;
-        min-width: 0;
-        margin: 0;
-    }
-
-    .listing-menu-search__field input.form-control {
-        display: block;
-        width: 100%;
-        height: 48px;
-        padding: 0;
-        border: 0 !important;
-        outline: 0;
-        background: transparent;
-        box-shadow: none !important;
-        color: #172b3a;
-        font-size: 14px;
-    }
-
-    .listing-menu-search__field input.form-control::placeholder {
-        color: #8492a6;
-        opacity: 1;
-    }
-
-    .listing-menu-search__field #start-recording {
-        top: 50%;
-        right: -34px;
-        width: 24px;
-        height: 28px;
-        padding: 0;
-        background: transparent;
-        color: #64748b !important;
-        font-size: 16px;
-        line-height: 28px;
-        transform: translateY(-50%);
-        cursor: pointer;
-    }
-
-    .listing-menu-search__submit {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 52px;
-        padding: 0;
-        border: 0;
-        border-radius: 10px;
-        background: #0f766e;
-        color: #fff;
-        cursor: pointer;
-        transition: background-color 160ms ease, transform 160ms ease;
-    }
-
-    .listing-menu-search__submit:hover {
-        transform: translateY(-1px);
-        background: #0b625c;
-    }
-
-    .listing-menu-search__submit:focus-visible,
-    .listing-menu-toggle:focus-visible {
-        outline: 3px solid rgba(15, 118, 110, 0.28);
-        outline-offset: 2px;
-    }
-
-    @media (max-width: 991px) {
-        .listing-info-row {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            grid-auto-flow: row dense;
-            row-gap: 8px;
-            margin-right: 0;
-            margin-left: 0;
-        }
-
-        .listing-info-row > .schedule-info-column,
-        .listing-info-row > .listing-shop-column,
-        .listing-info-row > .listing-address-column,
-        .listing-info-row > .listing-reload-column {
-            width: auto;
-            max-width: none;
-            padding-right: 12px;
-            padding-left: 12px;
-        }
-
-        .listing-info-row > .schedule-info-column {
-            grid-column: 1 / -1;
-        }
-
-        .listing-info-row > .listing-info-spacer {
-            display: none;
-        }
-
-        .listing-info-row .schedule-info-column nav.secondary_nav,
-        .listing-info-row .schedule-info-column nav.secondary_nav.is_stuck {
-            position: static !important;
-            left: auto !important;
-            width: auto !important;
-            padding: 0;
-            background: transparent !important;
-            box-shadow: none;
-        }
-
-        .listing-info-row .schedule-info-column nav.secondary_nav > .container-fluid {
-            padding-right: 0;
-            padding-left: 0;
-        }
-
-        .listing-info-row .schedule-info-column nav.secondary_nav ul {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-            gap: 8px;
-            margin: 0;
-            padding: 0;
-        }
-
-        .listing-info-row .schedule-info-column nav.secondary_nav ul > li,
-        .listing-info-row .schedule-info-column nav.secondary_nav ul > li:last-child {
-            display: block;
-            width: 100%;
-            min-width: 0;
-            margin: 0;
-        }
-
-        .listing-info-row .schedule-info-column .schedule-info-card,
-        .listing-info-row .schedule-info-column button.schedule-info-card#down-to-schedule,
-        .listing-info-row .schedule-info-column button.schedule-info-card#down-to-schedule_c {
-            width: 100%;
-            max-width: none;
-            min-width: 0;
-            min-height: 62px;
-            float: none;
-            margin: 0;
-            padding: 10px 12px;
-        }
-
-        .listing-info-row .schedule-info-column nav.secondary_nav ul > li > button.schedule-info-card {
-            display: flex !important;
-            box-sizing: border-box;
-            width: 100% !important;
-        }
-
-        .listing-info-row .schedule-info-column .listing-contact-item {
-            grid-column: 1 / -1;
-        }
-
-        .listing-info-row .schedule-info-column #down-to-contact {
-            width: 100%;
-            margin: 0;
-        }
-
-        .listing-direction-button {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 7px;
-            min-height: 38px;
-            margin: 8px 0 0 auto;
-            padding: 7px 12px;
-            border: 1px solid #dce8e6;
-            border-radius: 9px;
-            background: #fff;
-            color: #0f766e;
-            font: inherit;
-            font-size: 12px;
-            font-weight: 600;
-            line-height: 1.2;
-            cursor: pointer;
-        }
-
-        .listing-direction-button svg {
-            display: block;
-            width: 17px;
-            height: 17px;
-            fill: none;
-            stroke: currentColor;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            stroke-width: 1.8;
-        }
-
-        .listing-info-row .shop-visit-cta,
-        .listing-info-row .listing-address-card {
-            max-width: none;
-            margin: 0;
-        }
-    }
-
-    @media (max-width: 767px) {
-        .listing-info-row > .listing-reload-column {
-            grid-column: 1 / -1;
-            text-align: right;
-        }
-
-        .listing-info-row #functions_reload {
-            display: inline-block;
-            margin: 0;
-        }
-
-        .listing-info-row .listing-address-card {
-            min-height: 62px;
-        }
-    }
-
-    @media (max-width: 767px) {
-        .listing-menu-container {
-            margin-top: 5px;
-            margin-bottom: 10px;
-        }
-
-        .listing-menu-section {
-            padding: 18px;
-            border-radius: 13px;
-        }
-
-        .listing-menu-heading {
-            margin-bottom: 14px;
-        }
-    }
-
-    @media (max-width: 575px) {
-        .listing-menu-container {
-            padding-right: 5px;
-            padding-left: 10px;
-        }
-
-        .listing-menu-section {
-            padding: 16px 14px;
-        }
-
-        .listing-menu-heading h2 {
-            font-size: 21px;
-        }
-
-        .listing-menu-heading p {
-            font-size: 12px;
-        }
-
-        .listing-menu-tag {
-            min-height: 32px;
-            padding-right: 10px;
-            padding-left: 10px;
-            font-size: 12px;
-        }
-
-        .listing-menu-search.custom-search-input-2.inner {
-            grid-template-columns: minmax(0, 1fr) 50px;
-            gap: 6px;
-        }
-
-        .listing-menu-search__field {
-            min-height: 48px;
-            padding-right: 43px;
-            padding-left: 38px;
-        }
-
-        .listing-menu-search__icon {
-            left: 11px;
-        }
-
-        .listing-menu-search__icon svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        .listing-menu-search__field input.form-control {
-            height: 44px;
-            font-size: 13px;
-        }
-
-        .listing-menu-search__field #start-recording {
-            right: -31px;
-        }
-
-        .listing-menu-search__submit {
-            min-height: 48px;
-        }
-
-        .listing-info-row {
-            grid-template-columns: minmax(0, 1fr);
-            row-gap: 10px;
-            padding-right: 8px;
-            padding-left: 8px;
-        }
-
-        .listing-info-row > .schedule-info-column,
-        .listing-info-row > .listing-shop-column,
-        .listing-info-row > .listing-address-column,
-        .listing-info-row > .listing-reload-column {
-            grid-column: 1;
-            padding-right: 8px;
-            padding-left: 8px;
-        }
-
-        .listing-info-row .schedule-info-column nav.secondary_nav ul {
-            grid-template-columns: minmax(0, 1fr);
-        }
-
-        .listing-info-row .shop-visit-cta,
-        .listing-info-row .listing-address-card {
-            width: 100%;
-            max-width: 420px;
-            margin-right: auto;
-            margin-left: auto;
-        }
-    }
-
+</script>
+<style>
+.strip ul {
+    bottom: 0px !important;
+    padding: 4px 0px 4px 10px !important;
+}
 </style>
-
-
 
 </main>
 @endsection

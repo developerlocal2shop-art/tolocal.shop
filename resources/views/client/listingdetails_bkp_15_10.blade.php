@@ -1922,7 +1922,7 @@
                         </div>
                         @if(count($data['directoryTypeData']) > 0)
                             <a id="more_type" class="more_type">
-                                See More d<i class="fas fa-chevron-down"></i>
+                                See More<i class="fas fa-chevron-down"></i>
                             </a>
                         @endif
 

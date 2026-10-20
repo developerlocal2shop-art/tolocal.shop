@@ -42,6 +42,9 @@
         <link href="{{ URL::asset('assets/css/select2.css') }}" rel="stylesheet">
         <!-- YOUR CUSTOM CSS -->
         <link rel="stylesheet" href="{{ asset('assets/client/css/custom.css') }}">
+        @if (request()->routeIs('listing.details') || request()->routeIs('directory.product'))
+        <link rel="stylesheet" href="{{ asset('assets/client/css/company_detail_shop.css') }}">
+        @endif
         <link rel="stylesheet" href="{{ URL::asset('assets/css/fontawesome-iconpicker.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.datetimepicker.css') }}" />
         <link rel='stylesheet' href="{{ asset('assets/client/css/owl.carousel.min.css') }}">

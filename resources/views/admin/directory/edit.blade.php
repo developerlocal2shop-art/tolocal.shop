@@ -674,10 +674,12 @@
                         <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
                             <ul class="nav nav-tabs dir-tabs cust-nav-tab" id="directory_tabs" role="tablist">
                                 <?php
-                                    function active($currect_page) {
-                                        $url = request()->get('target');
-                                        if($currect_page == $url){
-                                            echo 'active';
+                                    if (!function_exists('active')) {
+                                        function active($currect_page) {
+                                            $url = request()->get('target');
+                                            if($currect_page == $url){
+                                                echo 'active';
+                                            }
                                         }
                                     }
                                 ?>

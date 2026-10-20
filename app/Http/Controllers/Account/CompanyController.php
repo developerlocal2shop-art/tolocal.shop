@@ -2559,6 +2559,160 @@ class CompanyController extends Controller
     * Created By: Sanjay Sah
     * Created At: 21-10-24
     */
+    public function uploadCompanyCoverImage(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user->hasPermission('update')) {
+            return response()->json(['message' => 'You do not have permission to upload cover images.'], 403);
+        }
+
+        $validated = $request->validate([
+            'image' => 'required|image|mimes:jpeg,jpg,png,gif,bmp,webp|max:10240',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:5000',
+        ]);
+
+        $directoryId = $user->directory_id;
+        if (!Diectory::where('id', $directoryId)->exists()) {
+            return response()->json(['message' => 'Company not found.'], 404);
+        }
+
+        $imageName = (string) Str::uuid();
+        $storagePath = 'directory/' . $imageName . '.webp';
+        $fileStored = false;
+
+        try {
+            $imageStream = Image::make($request->file('image')->getRealPath())
+                ->resize(960, 450)
+                ->stream('webp', 50);
+            if (!Storage::disk('images')->put($storagePath, $imageStream)) {
+                throw new \RuntimeException('The image could not be saved.');
+            }
+            $fileStored = true;
+
+            $lastPosition = DirectoryMediaCover::where('directory_id', $directoryId)->max('position');
+            $coverImage = new DirectoryMediaCover();
+            $coverImage->directory_id = $directoryId;
+            $coverImage->position = $lastPosition === null ? 0 : $lastPosition + 1;
+            $coverImage->name_thumbnail = $imageName;
+            $coverImage->name_large = $imageName;
+            $coverImage->extension = strtolower($request->file('image')->getClientOriginalExtension());
+            $coverImage->path = 'images/directory/' . $imageName;
+            $coverImage->payable = DirectoryMediaCover::where('directory_id', $directoryId)->value('payable') ?? 0;
+            $coverImage->title = $validated['title'];
+            $coverImage->description = $validated['description'];
+            $coverImage->save();
+
+            return response()->json([
+                'message' => 'Image uploaded successfully.',
+                'image' => [
+                    'title' => $coverImage->title,
+                    'description' => $coverImage->description,
+                ],
+            ], 201);
+        } catch (\Throwable $exception) {
+            if ($fileStored) {
+                try {
+                    if (!Storage::disk('images')->delete($storagePath)) {
+                        Log::warning('Could not remove an uploaded cover image after a failed database save.', [
+                            'directory_id' => $directoryId,
+                            'image' => $imageName,
+                        ]);
+                    }
+                } catch (\Throwable $cleanupException) {
+                    Log::warning('Could not remove an uploaded cover image after a failed database save.', [
+                        'directory_id' => $directoryId,
+                        'image' => $imageName,
+                        'exception' => $cleanupException,
+                    ]);
+                }
+            }
+
+            Log::error('Company cover image upload failed.', [
+                'directory_id' => $directoryId,
+                'exception' => $exception,
+            ]);
+
+            return response()->json(['message' => 'The image could not be uploaded. Please try again.'], 500);
+        }
+    }
+
+    public function uploadCompanyGalleryImageWithText(Request $request)
+    {
+        $user = Auth::user();
+        if (!$user->hasPermission('update')) {
+            return response()->json(['message' => 'You do not have permission to upload gallery images.'], 403);
+        }
+
+        $validated = $request->validate([
+            'image' => 'required|image|mimes:jpeg,jpg,png,gif,bmp,webp|max:10240',
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:5000',
+        ]);
+
+        $directoryId = $user->directory_id;
+        if (!Diectory::where('id', $directoryId)->exists()) {
+            return response()->json(['message' => 'Company not found.'], 404);
+        }
+
+        $imageName = (string) Str::uuid();
+        $storagePath = 'directory/' . $imageName . '.webp';
+        $fileStored = false;
+
+        try {
+            $imageStream = Image::make($request->file('image')->getRealPath())->stream('webp', 50);
+            if (!Storage::disk('images')->put($storagePath, $imageStream)) {
+                throw new \RuntimeException('The image could not be saved.');
+            }
+            $fileStored = true;
+
+            $lastPosition = DirectoryMediagallery::where('directory_id', $directoryId)->max('position');
+            $galleryImage = new DirectoryMediagallery();
+            $galleryImage->directory_id = $directoryId;
+            $galleryImage->position = $lastPosition === null ? 0 : $lastPosition + 1;
+            $galleryImage->name_thumbnail = $imageName;
+            $galleryImage->name_large = $request->file('image')->getClientOriginalName();
+            $galleryImage->extension = strtolower($request->file('image')->getClientOriginalExtension());
+            $galleryImage->path = 'images/directory/' . $imageName;
+            $galleryImage->payable = DirectoryMedia::where('directory_id', $directoryId)->value('payable') ?? 0;
+            $galleryImage->title = $validated['title'];
+            $galleryImage->description = $validated['description'];
+            $galleryImage->save();
+
+            return response()->json([
+                'message' => 'Gallery image uploaded successfully.',
+                'image' => [
+                    'title' => $galleryImage->title,
+                    'description' => $galleryImage->description,
+                ],
+            ], 201);
+        } catch (\Throwable $exception) {
+            if ($fileStored) {
+                try {
+                    if (!Storage::disk('images')->delete($storagePath)) {
+                        Log::warning('Could not remove an uploaded gallery image after a failed database save.', [
+                            'directory_id' => $directoryId,
+                            'image' => $imageName,
+                        ]);
+                    }
+                } catch (\Throwable $cleanupException) {
+                    Log::warning('Could not remove an uploaded gallery image after a failed database save.', [
+                        'directory_id' => $directoryId,
+                        'image' => $imageName,
+                        'exception' => $cleanupException,
+                    ]);
+                }
+            }
+
+            Log::error('Company gallery image upload failed.', [
+                'directory_id' => $directoryId,
+                'exception' => $exception,
+            ]);
+
+            return response()->json(['message' => 'The gallery image could not be uploaded. Please try again.'], 500);
+        }
+    }
+
     public function updatecompanyinformation(Request $request)
     {
 
