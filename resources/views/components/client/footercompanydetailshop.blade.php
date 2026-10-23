@@ -17,6 +17,8 @@ if(in_array("rydholms-dammodehus", $currenturl)){
     $companyPostalCity = trim(($data['mainDirectoryDetails']->post_code ?? '') . ' ' . ($data['mainDirectoryDetails']->city ?? ''));
     $companyLocation = Helper::getDirectoryLocationID($data['mainDirectoryDetails']->id ?? 0);
 
+    $companyContact = Helper::getDirectoryContact($data['mainDirectoryDetails']->id ?? 0);
+
     $companyPhone = $data['mainDirectoryDetails']->phone ?? $data['footerData']->phone ?? '';
     $companyEmail = $data['mainDirectoryDetails']->email ?? $data['footerData']->system_email ?? '';
     $companyWebsite = $data['mainDirectoryDetails']->website ?? '';
@@ -69,15 +71,17 @@ if(in_array("rydholms-dammodehus", $currenturl)){
                     <p>{{ $companyLocation->address??'' }}</p>
                 @endif
 
-                @if(!empty($companyPhone))
+                @if(!empty($companyContact))
                     <p>
-                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $companyPhone) }}">{{ $companyPhone }}</a>
+                        <a href="tel:{{ preg_replace('/[^0-9+]/', '', $companyContact->phone??'') }}">
+                            +{{ $companyContact->phone??'' }}
+                        </a>
                     </p>
                 @endif
 
-                @if(!empty($companyEmail))
+                @if(!empty($companyContact) && !empty($companyContact->email))
                     <p>
-                        <a href="mailto:{{ $companyEmail }}">{{ $companyEmail }}</a>
+                        <a href="mailto:{{ $companyContact->email }}">{{ $companyContact->email }}</a>
                     </p>
                 @endif
 
@@ -488,7 +492,7 @@ $(document).ready(function() {
         , responsiveClass: true
         , responsive: {
             0: {
-                items: 2
+                items: 3
             }
             , 600: {
                 items: 3

@@ -13,121 +13,28 @@
 @if ($data['mainDirectoryDetails']->company_color)
     <style>
         .btn-custom { color: #fff; border-radius: 5px; font-weight: bold; background-color: {{ $data['mainDirectoryDetails']->company_color }};}
-        .mm-slideout { padding: 1px !important; background: {{ $data['mainDirectoryDetails']->company_color??'#e0a800' }} !important; }
+        .mm-slideout {  background: {{ $data['mainDirectoryDetails']->company_color??'#e0a800' }} !important; }
         header.header_in .main-menu > ul > li span > a, header.sticky .main-menu > ul > li span > a{ color: #fff !important; }
         span.locally_text { color: #fff !important; }
         .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span, b#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value:hover {  color: #000; }
+        .listing-contact-intro {
+            --listing-contact-accent: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
+        }
+        .listing-shopping-cards {
+            --shopping-card-accent: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
+        }
+        .weoffer_comman.listing-print-banner {
+            background: {{ $data['mainDirectoryDetails']->company_color ?: '#2ec1de' }};
+        }
     </style>
 @else
     <style>
+        .logo_city_name { margin: 16px 5px 14px 4px !important; color: #9d414a; }
         .btn-custom { background-color: #2f4a7c; color: #fff; border-radius: 5px; font-weight: bold;}
         .see_all { background-color: #2f4a7c; color: #fff; border: 1px solid #2f4a7c; }
     </style>
 @endif
-<style>
-    #product.listing_related_product .strip figure > a.img {
-        display: block !important;
-        width: 100%;
-        height: 100% !important;
-        min-height: 200px;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
 
-    .box_detail.listing-contact-card {
-        padding-top: 22px;
-    }
-
-    .listing-contact-intro {
-        --listing-contact-accent: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        margin: 0 0 22px;
-        padding: 0 0 18px;
-        border-bottom: 1px solid #e8edf3;
-    }
-
-    .listing-contact-intro__icon {
-        display: inline-flex;
-        flex: 0 0 48px;
-        align-items: center;
-        justify-content: center;
-        width: 48px;
-        height: 48px;
-        border-radius: 14px;
-        background: color-mix(in srgb, var(--listing-contact-accent) 12%, white);
-        color: var(--listing-contact-accent);
-        font-size: 20px;
-    }
-
-    .listing-contact-intro__copy h2 {
-        margin: 0 0 4px;
-        color: #263247;
-        font-size: 17px;
-        font-weight: 700;
-        line-height: 1.3;
-    }
-
-    .listing-contact-intro__copy p {
-        margin: 0;
-        color: #697586;
-        font-size: 13px;
-        line-height: 1.45;
-    }
-
-    #listing_banner .listing-banner-slide {
-        position: relative;
-    }
-
-    #listing_banner .listing-banner-caption {
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 2;
-        padding: 100px clamp(20px, 7vw, 110px) 36px;
-        color: #fff;
-        background: linear-gradient(transparent, rgba(8, 16, 29, 0.84));
-        pointer-events: none;
-    }
-
-    #listing_banner .listing-banner-caption__content {
-        width: min(100%, 1100px);
-        margin: 0 auto;
-    }
-
-    #listing_banner .listing-banner-caption h2 {
-        margin: 0 0 8px;
-        color: #fff;
-        font-size: clamp(24px, 3vw, 40px);
-        font-weight: 700;
-        line-height: 1.15;
-        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-    }
-
-    #listing_banner .listing-banner-caption p {
-        max-width: 760px;
-        margin: 0;
-        color: rgba(255, 255, 255, 0.94);
-        font-size: clamp(14px, 1.35vw, 18px);
-        line-height: 1.55;
-        text-shadow: 0 1px 5px rgba(0, 0, 0, 0.55);
-    }
-
-    @media (max-width: 767px) {
-        #listing_banner .listing-banner-caption {
-            padding: 70px 20px 24px;
-        }
-    }
-
-    @supports not (background: color-mix(in srgb, #000 10%, white)) {
-        .listing-contact-intro__icon {
-            background: #eef2f8;
-        }
-    }
-</style>
 <?php
     $useragent=$_SERVER['HTTP_USER_AGENT'];
     $ismobiledevice = 0;
@@ -329,79 +236,6 @@
         </div>
     </div>
 </div>
-
-<!-- we offer and About us MODAL -->
-{{-- <div class="modal fade"  id="we_offer_details_model" tabindex="-1" role="dialog" style="height: 80%!important; top:50px;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">We Offer or About Us</h5>
-                <button type="button" class="close modal_header_close_btn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class=" tabs-left" id="modal-tabs">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item" style="margin: 0px 20px 10px 0px; font-size: 18px;">
-                            <a class="active"  href="#weoffer" data-toggle="tab">We Offer</a>
-
-                            <span class="notranslate">||</span>
-                        </li>
-                        <li class="nav-item" style="margin: 0px 0px 0px -15px; font-size: 18px;">
-                            <a href="#aboutuslisting"  data-toggle="tab">About Us</a>
-                            <span class="notranslate">||</span>
-                        </li>
-                        <li class="nav-item" style="margin: 0px 0px 0px 5px; font-size: 18px;">
-                            <a href="#aboutuslisting_us"  data-toggle="tab">Us</a>
-                        </li>
-                    </ul>
-
-                </div>
-                <div class="tab-content" id="tab-content">
-                    <div class="tab-pane active" id="weoffer">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer))
-                                <div class="post-content textpopup show-more-heightpopup">{{ $data['mainDirectoryDetails']->directoryLanguage[0]->we_offer }}</div>
-                                    <!-- @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->we_offer) > 200)
-                                    <div class="show-morebtn" style="cursor:pointer;">Read More</div>
-                                    @endif -->
-                                @else
-                                <div class="text-center">No Data Found</div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="aboutuslisting">
-                        <div class="row">
-                            <div class="col-md-12">
-                                @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->about_us))
-                                    <div class="post-content textpopup-aboutus show-more-heightpopup-aboutus">{{ $data['mainDirectoryDetails']->directoryLanguage[0]->about_us }}</div>
-                                    <!-- @if(strlen($data['mainDirectoryDetails']->directoryLanguage[0]->about_us) > 200)
-                                    <div class="read-morebtn" style="cursor:pointer;">Read More</div>
-                                    @endif -->
-                                @else
-                                <div class="text-center">No Data Found</div>
-                                @endif
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="aboutuslisting_us">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <p class="text show-more-height">
-                                    {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
 
 <div class="modal fade listing_detail_gallery" id="type_galleryModal" tabindex="-1" role="dialog" style="top:50px;" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl"> <!-- Using only modal-xl class -->
@@ -637,11 +471,11 @@
             @endif
         </div>
     <?php }else{ ?>
-    <div id="" class="common_banner">
-        <div class="hero_in shop_detail">
-                <img src="{{env('IMAGE_PATH').'files/default_images/'.$data['default_image_listing_banner']->image_name }}" alt="">
+        <div id="" class="common_banner">
+            <div class="hero_in shop_detail">
+                    <img src="{{env('IMAGE_PATH').'files/default_images/'.$data['default_image_listing_banner']->image_name }}" alt="">
+            </div>
         </div>
-    </div>
     <?php } ?>
 
     <div class="container-fluid row listing-info-row">
@@ -652,16 +486,8 @@
             ?>
             <nav class="secondary_nav sticky_horizontal_2 sticky-listingdetails-header" style="background: #f8f8f8;">
                 <div class="container-fluid">
-                    <ul class="clearfix">
-                        {{-- <li>
-                            <a href="#description" class="active">
+                    <ul class="">
 
-                            <p style="font-size: 13px; font-weight: 400; color: #333;">
-                                <i class="fas fa-hand-o-right" style="color: #ffc107;" aria-hidden="true"></i>
-                                Note : All automatically translated
-                            </p>
-                            </a>
-                        </li> --}}
                         <?php
                         $openCloseTags = 0;
                         if($totalexceptionschedule>0){
@@ -904,14 +730,7 @@
                     </ul>
 
                 </div>
-                <?php if($ismobiledevice==1){ ?>
-                <button type="button" class="listing-direction-button" id="direction_anch">
-                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                        <path d="m3 11 18-8-8 18-2-8-8-2Z"></path>
-                        <path d="m11 13 5-5"></path>
-                    </svg>
-                </button>
-                <?php } ?>
+
             </nav>
         </div>
         <div class="col-md-1">
@@ -956,6 +775,15 @@
                     </span>
                 </a>
             @endif
+
+            <?php if($ismobiledevice==1){ ?>
+                <button type="button" class="listing-direction-button" id="direction_anch">
+                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                        <path d="m3 11 18-8-8 18-2-8-8-2Z"></path>
+                        <path d="m11 13 5-5"></path>
+                    </svg>
+                </button>
+                <?php } ?>
         </div>
 
         {{-- <div class="col-md-1 functions_reload_div listing-reload-column" style="padding: 10px;">
@@ -972,89 +800,14 @@
             <span class="headercontact"><button id="down-to-contact" class="btn btn-success btn-sm btn-block">Contact Us</button></span>
         </span>
 
-    </div>
+        <div class="col-md-12 listing-social-row">
 
-    <div class="container listing-menu-container">
-        @if(count($data['related_tags']) > 0)
-        <section class="listing-menu-section" aria-labelledby="listing-menu-title">
-            <div class="add_bottom_15 listing-menu-categories">
-                <div class="listing-menu-heading">
-                    <div>
-                        <h2 id="listing-menu-title"> <span>Browse categories or search products</span></h2>
-                    </div>
-                </div>
+            <div class="left_side_breadcrumb new_social_data">
 
-                <div id="company_imp_tags_div">
-                    @if(count($data['imp_ptags']) > 0)
-                        @foreach ($data['imp_ptags'] as $key => $tagval)
-                            <span class="listing-menu-tag notranslate">
-                                <a href="{{ url('listings-product/'.$data['mainDirectoryDetails']->slug.'?tags='.$key??'') }}" target="_blank" rel="noopener noreferrer" class="company_imp_tags2">
-                                    {{ $tagval }}
-                                </a>
-                                @if(auth()->check())
-                                    @if(auth()->user()->directory_id == $data['mainDirectoryDetails']->id)
-                                        <i class="fa fa-times tag_delete" data-impid="{{ $key }}" style="cursor:pointer;"></i>
-                                    @endif
-                                @endif
-                            </span>
-                        @endforeach
-                    @endif
-                </div>
-                @if(count($data['imp_ptags']) > 0)
-                    @if(auth()->check())
-                        @if(auth()->user()->directory_id == $data['mainDirectoryDetails']->id)
-                            <button type="button" id="btn_defaulttags" class="listing-menu-toggle">
-                                <span>See More</span><i class="fas fa-chevron-down" aria-hidden="true"></i>
-                            </button>
-                        @endif
-                    @endif
-                @endif
-                <div class="defaulttags listing-menu-tags" style="{{ count($data['imp_ptags']) > 0 ? 'display: none;' : '' }}">
-                    <?php
-                    foreach($data['related_tags'] as $tagkey => $tagstitle){
-                    ?>
-                    <span class="listing-menu-tag notranslate">
-                        <a target="_blank" rel="noopener noreferrer" class="company_imp_tags" data-companyid="{{ $data['mainDirectoryDetails']->id }}" data-id="{{ $tagkey??'' }}" data-title="{{ $tagstitle??'' }}">
-                            {{ $tagstitle??'' }}
-                        </a>
-                    </span>
-                    <?php } ?>
-                </div>
-            </div>
-
-            <form action="{{ route('directory.product',request()->id) }}" method="GET">
-                <div class="custom-search-input-2 inner listing-menu-search">
-                    <label class="listing-menu-search__field">
-                        <span class="sr-only">{{ __('message.header_search_text') }}</span>
-                        <span class="listing-menu-search__icon" aria-hidden="true">
-                            <svg viewBox="0 0 24 24" focusable="false">
-                                <circle cx="11" cy="11" r="7"></circle>
-                                <path d="m16 16 5 5"></path>
-                            </svg>
-                        </span>
-                        <span class="form-group">
-                            <input class="form-control" name="search_string" id="search_string" type="text" value="" placeholder="{{__("message.header_search_text")}}(Products, ENA)">
-                            <i class="fa fa-microphone" style="color: #fe0536;" aria-hidden="true" id="start-recording"></i>
-                        </span>
-                    </label>
-                    <button type="submit" class="listing-menu-search__submit" aria-label="{{ __('message.header_search_text_search_btn') }}">
-                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-                            <circle cx="11" cy="11" r="7"></circle>
-                            <path d="m16 16 5 5"></path>
-                        </svg>
-                    </button>
-                </div>
-            </form>
-        </section>
-        @endif
-    </div>
-
-    <div class="container-fluid row">
-        <div class="col-md-12">
-            <?php
+                <?php
                 if (isset($data['contactData'])) {
                     $contactData = $data['contactData'];
-            ?>
+                ?>
                 @if(!empty($contactData[0]->facebook) || (!empty($contactData[0]->twitter)) || (!empty($contactData[0]->linkedin)) || (!empty($contactData[0]->pinterest)) || (!empty($contactData[0]->whatsapp)) || (!empty($contactData[0]->instagram)) || (!empty($contactData[0]->tiktok)) || (!empty($contactData[0]->youtube)) || (!empty($contactData[0]->snapchat)))
 
                 <div class="link-css-mobile">
@@ -1109,9 +862,9 @@
                     </div>
                 </div>
                 @endif
-            <?php } ?>
+                <?php } ?>
 
-            <?php if(!empty($data['website_links'])){ ?>
+                <?php if(!empty($data['website_links'])){ ?>
                 <div class="row mb-1 link-css-mobile">
                     <div class="col-md-12">
                         <a class="add_bottom_15 link-headings">{{__("message.website_links")}}</a>
@@ -1120,9 +873,10 @@
                         @endforeach
                     </div>
                 </div>
-            <?php } ?>
+                 <?php } ?>
 
-            <div class="add_bottom_15 likebtn_alignment" style="margin-bottom: 0px;">
+            </div>
+            <div class="right_side_links new_breadcrumb_data">
                 <span class="loc_open mr-2">
                     <a href="{{ route('listing') }}" style="color: #32a067;">
                         {{__("message.menu_text_listing")}}>
@@ -1133,34 +887,152 @@
                         <?php echo end($currentUrl); ?>>
                     </a>
                 </span>
-                <span class="mr-2" >
-                    <div class="postmeta">
-                        <ul>
-                            <li>
-                                <?php //echo "<pre>"; print_r($event); ?>
-                                <input type="hidden" name="type_item" id="type_items" value="directory">
-                                <input type="hidden" name="country_code" id="country_code" value="{{$countryCode}}">
-                                <input type="hidden" name="state" id="state" value="{{$state}}">
-                                <input type="hidden" name="city" id="city" value="{{$city}}">
-                                <a href="javascript:void(0);" id="listinglikedtotal" class="notranslate" title="Like Listing" productid="{{ $data['mainDirectoryDetails']->directoryLanguage[0]->directory_id }}" onclick="addToLikeCounter(this, <?php echo $data['mainDirectoryDetails']->directoryLanguage[0]->directory_id ?>)">
-                                    <i class="fa fa-thumbs-up notranslate" aria-hidden="true"></i>
-                                    (
-                                        <span class="notranslate">
-                                            @if(count(Helper::CountLikeData('directory',$data['mainDirectoryDetails']->directoryLanguage[0]->directory_id)) != 0)
-                                                {{ count(Helper::CountLikeData('directory',$data['mainDirectoryDetails']->directoryLanguage[0]->directory_id)) }}
-                                            @else
-                                                {{ 0 }}
-                                            @endif
-                                        </span>
-                                    ) Like
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </span>
+                <div class="add_bottom_15 likebtn_alignment" style="margin-bottom: 0px;">
+                    <span class="mr-2" >
+                        <div class="postmeta">
+                            <ul>
+                                <li>
+                                    <input type="hidden" name="type_item" id="type_items" value="directory">
+                                    <input type="hidden" name="country_code" id="country_code" value="{{$countryCode}}">
+                                    <input type="hidden" name="state" id="state" value="{{$state}}">
+                                    <input type="hidden" name="city" id="city" value="{{$city}}">
+                                    <a href="javascript:void(0);" id="listinglikedtotal" class="notranslate" title="Like Listing" productid="{{ $data['mainDirectoryDetails']->directoryLanguage[0]->directory_id }}" onclick="addToLikeCounter(this, <?php echo $data['mainDirectoryDetails']->directoryLanguage[0]->directory_id ?>)">
+                                        <i class="fa fa-thumbs-up notranslate" aria-hidden="true"></i>
+                                        (
+                                            <span class="notranslate">
+                                                @if(count(Helper::CountLikeData('directory',$data['mainDirectoryDetails']->directoryLanguage[0]->directory_id)) != 0)
+                                                    {{ count(Helper::CountLikeData('directory',$data['mainDirectoryDetails']->directoryLanguage[0]->directory_id)) }}
+                                                @else
+                                                    {{ 0 }}
+                                                @endif
+                                            </span>
+                                        ) Like
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </span>
+                </div>
             </div>
 
         </div>
+    </div>
+
+    @if($data['mainDirectoryDetails']->directoryLanguage[0]->description)
+        <div class="container-fluid print_mobile" style="display: none;">
+            <div class="weoffer_comman listing-print-banner" >
+                <div class="listing-print-banner__copy listing-print-banner__copy--mobile">
+                    {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
+                </div>
+                @if(\Illuminate\Support\Str::length($data['mainDirectoryDetails']->directoryLanguage[0]->description ?? '') > 180)
+                    <button type="button" class="listing-print-banner__toggle" aria-expanded="false">See more</button>
+                @endif
+
+
+                <div class="listing-print-banner__cta">
+                    @if($data['mainDirectoryDetails']->description_button_link)
+                        <a href="{{ $data['mainDirectoryDetails']->description_button_link??'' }}" id="down-to-contact" class="listing-print-banner__btn">Order here!</a>
+                    @else
+                        <a href="{{ url('contact') }}" id="down-to-contact" class="listing-print-banner__btn">Order here!</a>
+                    @endif
+
+                    {{-- <div class="listing-print-banner__text">Special text only - with Link Button to change text in Possible to set colour.</div> --}}
+                </div>
+            </div>
+        </div>
+    @endif
+
+    <script>
+        document.querySelectorAll('.listing-print-banner__toggle').forEach(function (toggle) {
+            toggle.addEventListener('click', function () {
+                var copy = toggle.previousElementSibling;
+                var isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+
+                copy.classList.toggle('is-expanded', !isExpanded);
+                toggle.setAttribute('aria-expanded', String(!isExpanded));
+                toggle.textContent = isExpanded ? 'See more' : 'See less';
+            });
+        });
+    </script>
+
+    <div class="container listing-menu-container">
+
+        @if(count($data['related_tags']) > 0)
+        <section class="listing-menu-section" aria-labelledby="listing-menu-title">
+            <div class="add_bottom_15 listing-menu-categories">
+                <div class="listing-menu-heading">
+                    <div>
+                        <h2 id="listing-menu-title"> <span>Browse categories or search products</span></h2>
+                    </div>
+                </div>
+
+                <div id="company_imp_tags_div">
+                    @if(count($data['imp_ptags']) > 0)
+                        @foreach ($data['imp_ptags'] as $key => $tagval)
+                            <span class="listing-menu-tag notranslate">
+                                <a href="{{ url('listings-product/'.$data['mainDirectoryDetails']->slug.'?tags='.$key??'') }}" target="_blank" rel="noopener noreferrer" class="company_imp_tags2">
+                                    {{ $tagval }}
+                                </a>
+                                @if(auth()->check())
+                                    @if(auth()->user()->directory_id == $data['mainDirectoryDetails']->id)
+                                        <i class="fa fa-times tag_delete" data-impid="{{ $key }}" style="cursor:pointer;"></i>
+                                    @endif
+                                @endif
+                            </span>
+                        @endforeach
+                    @endif
+                    @if(count($data['imp_ptags']) > 0)
+                        @if(auth()->check())
+                            @if(auth()->user()->directory_id == $data['mainDirectoryDetails']->id)
+                                <button type="button" id="btn_defaulttags" class="listing-menu-toggle">
+                                    <span>See More</span><i class="fas fa-chevron-down" aria-hidden="true"></i>
+                                </button>
+                            @endif
+                        @endif
+                    @endif
+                </div>
+
+                <div class="defaulttags listing-menu-tags" style="{{ count($data['imp_ptags']) > 0 ? 'display: none;' : '' }}">
+                    <?php
+                    foreach($data['related_tags'] as $tagkey => $tagstitle){
+                    ?>
+                    <span class="listing-menu-tag notranslate">
+                        <a target="_blank" rel="noopener noreferrer" class="company_imp_tags" data-companyid="{{ $data['mainDirectoryDetails']->id }}" data-id="{{ $tagkey??'' }}" data-title="{{ $tagstitle??'' }}">
+                            {{ $tagstitle??'' }}
+                        </a>
+                    </span>
+                    <?php } ?>
+                </div>
+            </div>
+
+            <form action="{{ route('directory.product',request()->id) }}" method="GET">
+                <div class="custom-search-input-2 inner listing-menu-search">
+                    <label class="listing-menu-search__field">
+                        <span class="sr-only">{{ __('message.header_search_text') }}</span>
+                        <span class="listing-menu-search__icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" focusable="false">
+                                <circle cx="11" cy="11" r="7"></circle>
+                                <path d="m16 16 5 5"></path>
+                            </svg>
+                        </span>
+                        <span class="form-group">
+                            <input class="form-control" name="search_string" id="search_string" type="text" value="" placeholder="{{__("message.header_search_text")}}(Products, ENA)">
+                            <i class="fa fa-microphone" style="color: #fe0536;" aria-hidden="true" id="start-recording"></i>
+                        </span>
+                    </label>
+                    <button type="submit" class="listing-menu-search__submit" aria-label="{{ __('message.header_search_text_search_btn') }}">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <circle cx="11" cy="11" r="7"></circle>
+                            <path d="m16 16 5 5"></path>
+                        </svg>
+                    </button>
+                </div>
+            </form>
+        </section>
+        @endif
+    </div>
+
+    <div class="container-fluid row">
 
         <?php if(!empty($data['galleryImageChunk'])){ ?>
             <div class="container-fluid">
@@ -1200,16 +1072,22 @@
         <div class="row">
 
             <div class="col-md-12">
-                <div class="weoffer_comman listing-print-banner">
-                    <div class="listing-print-banner__copy">
-                        Framkalla bilder, beställ studentkyltar, almanackor, fotoböcker, canvas mm direkt från din dator eller mobil. Det går även att få bilderna under dagen, mot en extra kostnad.
-                    </div>
-                    <div class="listing-print-banner__cta">
-                        <a href="{{ route('listing') }}" class="listing-print-banner__btn">Beställ här!</a>
-                        {{-- <div class="listing-print-banner__text">Special text only - with Link Button to change text in Possible to set colour.</div> --}}
-                    </div>
-                </div>
 
+                @if($data['mainDirectoryDetails']->directoryLanguage[0]->description)
+                    <div class="weoffer_comman listing-print-banner print_desktop">
+                        <div class="listing-print-banner__copy">
+                            {{ \Illuminate\Support\Str::words($data['mainDirectoryDetails']->directoryLanguage[0]->description, 70, '.') }}
+                        </div>
+                        <div class="listing-print-banner__cta">
+
+                            @if($data['mainDirectoryDetails']->description_button_link)
+                                <a href="{{ $data['mainDirectoryDetails']->description_button_link??'' }}" target="_blank" id="down-to-contact" class="listing-print-banner__btn">Order here!</a>
+                            @else
+                                <a href="{{ url('contact') }}" id="down-to-contact" target="_blank" class="listing-print-banner__btn">Order here!</a>
+                            @endif
+                        </div>
+                    </div>
+                @endif
                 <!-- Trademark Gallery -->
                 <?php if(!empty($data['trademarkData'][0]->trademark_id)){ ?>
                 <h5 class="add_bottom_15">{{__("message.trademark_title")}} ({{ count($data['trademarkData']) }})</h5>
@@ -1317,255 +1195,11 @@
                         @endif
                     <?php } ?>
 
-                    <hr>
+
                     <!--------------Shopping card section---------->
                     <?php if(!empty($data['shoppingcardData'])){ ?>
-                        <style>
-                            .listing-shopping-cards {
-                                --shopping-card-accent: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
-                                margin: 32px 0;
-                                padding: clamp(18px, 3vw, 32px);
-                                border: 1px solid #e7ebf0;
-                                border-radius: 20px;
-                                background: linear-gradient(145deg, #f8fafc 0%, #fff 65%);
-                            }
+                        <hr>
 
-                            .listing-shopping-cards__heading {
-                                display: flex;
-                                align-items: flex-end;
-                                justify-content: space-between;
-                                gap: 16px;
-                                margin-bottom: 22px;
-                            }
-
-                            .listing-shopping-cards__eyebrow {
-                                display: block;
-                                margin-bottom: 6px;
-                                color: var(--shopping-card-accent);
-                                font-size: 12px;
-                                font-weight: 700;
-                                letter-spacing: .12em;
-                                text-transform: uppercase;
-                            }
-
-                            .listing-shopping-cards__title {
-                                margin: 0;
-                                color: #172033;
-                                font-size: clamp(22px, 2.5vw, 30px);
-                                font-weight: 750;
-                                line-height: 1.2;
-                            }
-
-                            .listing-shopping-cards__subtitle {
-                                margin: 7px 0 0;
-                                color: #667085;
-                                font-size: 14px;
-                            }
-
-                            .listing-shopping-cards__count {
-                                display: inline-flex;
-                                flex: 0 0 auto;
-                                align-items: center;
-                                justify-content: center;
-                                min-width: 40px;
-                                height: 40px;
-                                padding: 0 12px;
-                                border: 1px solid #e2e8f0;
-                                border-radius: 999px;
-                                background: #fff;
-                                color: #344054;
-                                font-size: 14px;
-                                font-weight: 700;
-                            }
-
-                            #shopcarddata .owl-stage {
-                                display: flex;
-                            }
-
-                            #shopcarddata .owl-item {
-                                display: flex;
-                                flex: 0 0 auto;
-                                height: auto;
-                                padding: 4px 8px 14px;
-                                box-sizing: border-box;
-                            }
-
-                            #shopcarddata .item {
-                                position: relative;
-                                display: flex;
-                                width: 100%;
-                                min-width: 0;
-                            }
-
-                            #shopcarddata .listing-shopping-card {
-                                display: flex;
-                                flex: 1;
-                                flex-direction: column;
-                                overflow: hidden;
-                                border: 1px solid #e7ebf0;
-                                border-radius: 16px;
-                                background: #fff;
-                                box-shadow: 0 8px 24px rgba(16, 24, 40, .07);
-                                transition: transform .2s ease, box-shadow .2s ease;
-                            }
-
-                            #shopcarddata .listing-shopping-card:hover {
-                                transform: translateY(-4px);
-                                box-shadow: 0 16px 32px rgba(16, 24, 40, .13);
-                            }
-
-                            #shopcarddata .listing-shopping-card__image {
-                                position: relative;
-                                display: block;
-                                overflow: hidden;
-                                aspect-ratio: 16 / 10;
-                                background: #f2f4f7;
-                            }
-
-                            #shopcarddata .listing-shopping-card__image img {
-                                display: block;
-                                width: 100%;
-                                height: 100%;
-                                object-fit: cover;
-                                transition: transform .35s ease;
-                            }
-
-                            #shopcarddata .listing-shopping-card:hover .listing-shopping-card__image img {
-                                transform: scale(1.04);
-                            }
-
-                            #shopcarddata .listing-shopping-card__badge {
-                                position: absolute;
-                                top: 12px;
-                                left: 12px;
-                                padding: 7px 11px;
-                                border-radius: 999px;
-                                background: var(--shopping-card-accent);
-                                color: #fff;
-                                font-size: 12px;
-                                font-style: normal;
-                                font-weight: 700;
-                                line-height: 1;
-                                box-shadow: 0 3px 10px rgba(16, 24, 40, .18);
-                            }
-
-                            #shopcarddata .listing-shopping-card__share {
-                                top: 10px;
-                                right: 10px;
-                                left: auto;
-                                z-index: 2;
-                            }
-
-                            #shopcarddata .listing-shopping-card__share .share-icon-gap {
-                                width: 36px !important;
-                                height: 36px;
-                                padding: 8px;
-                                border-radius: 50%;
-                                background: rgba(255, 255, 255, .95);
-                                box-shadow: 0 2px 8px rgba(16, 24, 40, .16);
-                            }
-
-                            #shopcarddata .listing-shopping-card__share .share-tooltiptext {
-                                padding: 8px;
-                                border-radius: 10px;
-                                background: #fff;
-                                box-shadow: 0 8px 24px rgba(16, 24, 40, .16);
-                            }
-
-                            #shopcarddata .listing-shopping-card__share span a img {
-                                width: 28px !important;
-                                height: 28px;
-                                object-fit: contain;
-                            }
-
-                            #shopcarddata .listing-shopping-card__body {
-                                display: flex;
-                                flex: 1;
-                                flex-direction: column;
-                                align-items: flex-start;
-                                padding: 18px;
-                            }
-
-                            #shopcarddata .listing-shopping-card__title {
-                                display: -webkit-box;
-                                overflow: hidden;
-                                margin: 0 0 8px;
-                                color: #172033;
-                                font-size: 17px;
-                                font-weight: 700;
-                                line-height: 1.4;
-                                -webkit-box-orient: vertical;
-                                -webkit-line-clamp: 2;
-                            }
-
-                            #shopcarddata .listing-shopping-card__title a {
-                                color: inherit;
-                                text-decoration: none;
-                            }
-
-                            #shopcarddata .listing-shopping-card__title a:hover {
-                                color: var(--shopping-card-accent);
-                            }
-
-                            #shopcarddata .listing-shopping-card__description {
-                                display: -webkit-box;
-                                overflow: hidden;
-                                margin: 0 0 18px;
-                                color: #667085;
-                                font-size: 14px;
-                                line-height: 1.55;
-                                -webkit-box-orient: vertical;
-                                -webkit-line-clamp: 3;
-                            }
-
-                            #shopcarddata .listing-shopping-card__link {
-                                display: inline-flex;
-                                align-items: center;
-                                gap: 8px;
-                                margin-top: auto;
-                                padding: 10px 14px;
-                                border-radius: 8px;
-                                background: var(--shopping-card-accent);
-                                color: #fff;
-                                font-size: 13px;
-                                font-weight: 700;
-                                text-decoration: none;
-                                transition: filter .2s ease, transform .2s ease;
-                            }
-
-                            #shopcarddata .listing-shopping-card__link:hover {
-                                color: #fff;
-                                filter: brightness(.92);
-                                text-decoration: none;
-                                transform: translateX(2px);
-                            }
-
-                            @media (max-width: 575px) {
-                                .listing-shopping-cards {
-                                    margin: 24px -8px;
-                                    padding: 18px 10px 12px;
-                                    border-radius: 14px;
-                                }
-
-                                .listing-shopping-cards__heading {
-                                    margin: 0 8px 14px;
-                                }
-
-                                .listing-shopping-cards__subtitle {
-                                    max-width: 230px;
-                                    font-size: 13px;
-                                }
-
-                                #shopcarddata .owl-item {
-                                    padding-right: 8px;
-                                    padding-left: 8px;
-                                }
-
-                                #shopcarddata .listing-shopping-card__body {
-                                    padding: 15px;
-                                }
-                            }
-                        </style>
                         <section class="listing-shopping-cards" aria-labelledby="listing-shopping-cards-title">
                             <div class="listing-shopping-cards__heading">
                                 <div>
@@ -1850,11 +1484,11 @@
                                     <ul class="nav nav-tabs " id="tablistaddbtn" role="tablist" style="float: left;">
                                         <li class="nav-item" style="margin: 0px 20px 10px 0px; font-size: 18px;">
                                             <a class="active textshow"  href="#weoffermobile" data-toggle="tab">We Offer</a>
-                                            And
+                                            |
                                         </li>
                                         <li class="nav-item" style="margin: 0px 0px 0px -15px; font-size: 18px;">
                                             <a class="textshow" href="#aboutuslistingmobile"  data-toggle="tab" >About Us</a>
-                                            And
+                                            |
                                         </li>
                                         <li class="nav-item" style="margin: 0px 0px 0px 5px; font-size: 18px;">
                                             <a class="textshow" href="#us_mobile"  data-toggle="tab" >Us</a>

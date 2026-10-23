@@ -360,579 +360,665 @@ $instruction = $data['instruction'];
                                                 <span>Services</span>
                                             </a>
                                         </li>
-                                        <!-- <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#finish" role="tab">
-                                                <span>Submit</span>
-                                            </a>
-                                        </li> -->
                                     </ul>
-                                    <div class="tab-content cust-tab-cont" id="directory_tabscon">
-                                        <div class="tab-pane <?php if(request()->get('target')!=""){ active('basic'); }else{ echo "active";} ?> notranslate" id="basic" role="tabpanel">
-                                            <ul class="nav nav-tabs" role="tablist">
-                                                @foreach($data['languagesData'] as $languagesrow)
-                                                    <li class="nav-item">
-                                                        <a class="nav-link {{ $languagesrow->id == 1 ? 'active' : '' }}" data-bs-toggle="tab" href="#{{ $languagesrow->name }}" role="tab">
-                                                            <span>{{ $languagesrow->name }}</span>
-                                                        </a>
-                                                    </li>
-                                                @endforeach
-                                            </ul>
-                                            <div class="tab-content cust-tab-cont">
-                                                @foreach($basicAndTraslationData as $basiclanguagesrow)
-                                                <?php $languagecodeBasicData = Helper::getLanguagesDataById($basiclanguagesrow->language_id); ?>
-                                                <div class="tab-pane {{ $basiclanguagesrow->language_id == 1 ? 'active' : '' }}" id="{{ $languagecodeBasicData->name }}" role="tabpanel">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0" style="display: inline-flex;">Name<span class="notranslate" style="color:red;">*</span>
-                                                            <div id="infotooltip">
-                                                                <span id="infotooltipText">Use Google translate and then copy in the translation.</span>
-                                                                <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
-                                                            </div>
-                                                            <a class="btn btn-xs" target="_blank" title="Google Translation" href="<?php echo url("https://translate.google.se/"); ?>"><i class="fa fa-language" aria-hidden="true" style="font-size:22px; color: #203864;"></i></a>
-                                                        </label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <!-- <input type="text" name="name_{{$languagecodeBasicData->code}}" id="cat-{{$languagecodeBasicData->code}}" maxlength="50" onkeyup="charCount(this.value,this.id,50)" data-id="{{$languagecodeBasicData->code}}" value="{{ old('name_'.$languagecodeBasicData->code, $basiclanguagesrow->title ?? '') }}" placeholder="Enter Directory Name in {{ $languagecodeBasicData->name }}" class="directorynametitle seoinputname form-control p-0 border-0" autocomplete=off> -->
-                                                            <input type="text" name="name_{{$languagecodeBasicData->code}}" id="cat-{{$languagecodeBasicData->code}}" maxlength="50" onkeyup="charCount(this.value,this.id,50)" data-id="{{$languagecodeBasicData->code}}" value="{{ old('name_'.$languagecodeBasicData->code, $basiclanguagesrow->title ?? '') }}" placeholder="Enter Directory Name" class="directorynametitle seoinputname form-control p-0 notranslate border-0" autocomplete=off>
-                                                            <input type="hidden" name="langtranlation_{{$languagecodeBasicData->code}}" value="{{ $basiclanguagesrow->id }}" class="form-control p-0 border-0">
+
+                                <div class="tab-content cust-tab-cont" id="directory_tabscon">
+
+                                    <div class="tab-pane <?php if(request()->get('target')!=""){ active('basic'); }else{ echo "active";} ?> notranslate" id="basic" role="tabpanel">
+                                        <ul class="nav nav-tabs" role="tablist">
+                                            @foreach($data['languagesData'] as $languagesrow)
+                                                <li class="nav-item">
+                                                    <a class="nav-link {{ $languagesrow->id == 1 ? 'active' : '' }}" data-bs-toggle="tab" href="#{{ $languagesrow->name }}" role="tab">
+                                                        <span>{{ $languagesrow->name }}</span>
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                        <div class="tab-content cust-tab-cont">
+                                            @foreach($basicAndTraslationData as $basiclanguagesrow)
+                                            <?php $languagecodeBasicData = Helper::getLanguagesDataById($basiclanguagesrow->language_id); ?>
+                                            <div class="tab-pane {{ $basiclanguagesrow->language_id == 1 ? 'active' : '' }}" id="{{ $languagecodeBasicData->name }}" role="tabpanel">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0" style="display: inline-flex;">Name<span class="notranslate" style="color:red;">*</span>
+                                                        <div id="infotooltip">
+                                                            <span id="infotooltipText">Use Google translate and then copy in the translation.</span>
+                                                            <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
                                                         </div>
-                                                        <span class="text-danger">@error('name_en'){{$message}} @enderror</span>
+                                                        <a class="btn btn-xs" target="_blank" title="Google Translation" href="<?php echo url("https://translate.google.se/"); ?>"><i class="fa fa-language" aria-hidden="true" style="font-size:22px; color: #203864;"></i></a>
+                                                    </label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <!-- <input type="text" name="name_{{$languagecodeBasicData->code}}" id="cat-{{$languagecodeBasicData->code}}" maxlength="50" onkeyup="charCount(this.value,this.id,50)" data-id="{{$languagecodeBasicData->code}}" value="{{ old('name_'.$languagecodeBasicData->code, $basiclanguagesrow->title ?? '') }}" placeholder="Enter Directory Name in {{ $languagecodeBasicData->name }}" class="directorynametitle seoinputname form-control p-0 border-0" autocomplete=off> -->
+                                                        <input type="text" name="name_{{$languagecodeBasicData->code}}" id="cat-{{$languagecodeBasicData->code}}" maxlength="50" onkeyup="charCount(this.value,this.id,50)" data-id="{{$languagecodeBasicData->code}}" value="{{ old('name_'.$languagecodeBasicData->code, $basiclanguagesrow->title ?? '') }}" placeholder="Enter Directory Name" class="directorynametitle seoinputname form-control p-0 notranslate border-0" autocomplete=off>
+                                                        <input type="hidden" name="langtranlation_{{$languagecodeBasicData->code}}" value="{{ $basiclanguagesrow->id }}" class="form-control p-0 border-0">
                                                     </div>
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0 notranslate">SEO</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <!-- <input type="text" id="seo-{{$languagecodeBasicData->code}}" name="seo_{{$languagecodeBasicData->code}}" value="{{ $basiclanguagesrow->seo_url }}" placeholder="Directory SEO in {{ $languagecodeBasicData->name }}" class="form-control p-0 border-0" readonly> -->
-                                                            <input type="text" id="seo-{{$languagecodeBasicData->code}}" name="seo_{{$languagecodeBasicData->code}}" value="{{ $basicData->slug??'' }}" placeholder="Directory SEO in {{ $languagecodeBasicData->name }}" class="form-control p-0 border-0" readonly>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0" style="display: inline-flex;">Description<span style="color:red;">*</span>
-                                                            <div id="infotooltip">
-                                                                <span id="infotooltipText">All text inserted in English enabling best translation.</span>
-                                                                <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
-                                                            </div>
-                                                        </label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <textarea rows="5" name="description_{{$languagecodeBasicData->code}}" id="description-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="directorydesc form-control p-0 border-0">{{ old('description_'.$languagecodeBasicData->code, $basiclanguagesrow->description ?? '') }}</textarea>
-                                                        </div>
-                                                        <span class="text-danger">@error('description_en'){{$message}} @enderror</span>
-                                                    </div>
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0" style="display: inline-flex;">We Offer
-                                                            <div id="infotooltip">
-                                                                <span id="infotooltipText">All text inserted in English enabling best translation.</span>
-                                                                <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
-                                                            </div>
-                                                        </label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <!-- <textarea rows="5" name="weoffer_{{$languagecodeBasicData->code}}" id="weoffer-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="form-control p-0 border-0" placeholder="Enter We Offer in {{ $languagecodeBasicData->name }}">{{ old('weoffer_'.$languagecodeBasicData->code, $basiclanguagesrow->we_offer ?? '') }}</textarea> -->
-                                                            <textarea rows="5" name="weoffer_{{$languagecodeBasicData->code}}" id="weoffer-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="form-control p-0 border-0" placeholder="Enter We Offer">{{ old('weoffer_'.$languagecodeBasicData->code, $basiclanguagesrow->we_offer ?? '') }}</textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0" style="display: inline-flex;">About Us
-                                                            <div id="infotooltip">
-                                                                <span id="infotooltipText">All text inserted in English enabling best translation.</span>
-                                                                <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
-                                                            </div>
-                                                        </label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <!-- <textarea rows="5" name="aboutus_{{$languagecodeBasicData->code}}" id="aboutus-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="form-control p-0 border-0" placeholder="Enter About Us in {{ $languagecodeBasicData->name }}">{{ old('aboutus_'.$languagecodeBasicData->code, $basiclanguagesrow->about_us ?? '') }}</textarea> -->
-                                                            <textarea rows="5" name="aboutus_{{$languagecodeBasicData->code}}" id="aboutus-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="form-control p-0 border-0" placeholder="Enter About Us">{{ old('aboutus_'.$languagecodeBasicData->code, $basiclanguagesrow->about_us ?? '') }}</textarea>
-                                                        </div>
-                                                    </div>
+                                                    <span class="text-danger">@error('name_en'){{$message}} @enderror</span>
                                                 </div>
-                                                @endforeach
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4 infoicon-featurestype">
-
-                                                        <label class="col-md-12 p-0" style="display: inline-flex;">Featured Type
-                                                            <div id="infotooltip">
-                                                                <span id="infotooltipText">Select <b>Super Featured</b>, If you want this directory to show in "Popular Companies" list on Home page.</span>
-                                                                <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
-                                                            </div>
-                                                        </label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <select class="form-control" name="featuretype" id="featuretype">
-                                                                <?php /* ?><option value="none" {{ "none"==$basicData->feature_type ? 'selected' : '' }}>None</option><?php */ ?>
-                                                                <option value="featured" {{ "featured"==$basicData->feature_type ? 'selected' : '' }}> Featured</option>
-                                                                <option value="superfeatured" {{ "superfeatured"==$basicData->feature_type ? 'selected' : '' }}>Super Featured(Popular)
-                                                                </option>
-                                                            </select>
-                                                        </div>
-                                                        <span class="text-danger">@error('featuretype'){{$message}} @enderror</span>
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0 notranslate">SEO</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <!-- <input type="text" id="seo-{{$languagecodeBasicData->code}}" name="seo_{{$languagecodeBasicData->code}}" value="{{ $basiclanguagesrow->seo_url }}" placeholder="Directory SEO in {{ $languagecodeBasicData->name }}" class="form-control p-0 border-0" readonly> -->
+                                                        <input type="text" id="seo-{{$languagecodeBasicData->code}}" name="seo_{{$languagecodeBasicData->code}}" value="{{ $basicData->slug??'' }}" placeholder="Directory SEO in {{ $languagecodeBasicData->name }}" class="form-control p-0 border-0" readonly>
                                                     </div>
                                                 </div>
 
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Google analytics id</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="google_ana_id" value="{{ old('$google_ana_id', $basicData->google_analytics_id ?? '') }}" placeholder="Enter Google analytics id" class="form-control p-0 border-0" autocomplete=off>
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0" style="display: inline-flex;">We Offer
+                                                        <div id="infotooltip">
+                                                            <span id="infotooltipText">All text inserted in English enabling best translation.</span>
+                                                            <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
                                                         </div>
-                                                        <span class="text-danger">@error('google_ana_id'){{$message}} @enderror</span>
+                                                    </label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <!-- <textarea rows="5" name="weoffer_{{$languagecodeBasicData->code}}" id="weoffer-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="form-control p-0 border-0" placeholder="Enter We Offer in {{ $languagecodeBasicData->name }}">{{ old('weoffer_'.$languagecodeBasicData->code, $basiclanguagesrow->we_offer ?? '') }}</textarea> -->
+                                                        <textarea rows="5" name="weoffer_{{$languagecodeBasicData->code}}" id="weoffer-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="form-control p-0 border-0" placeholder="Enter We Offer">{{ old('weoffer_'.$languagecodeBasicData->code, $basiclanguagesrow->we_offer ?? '') }}</textarea>
                                                     </div>
                                                 </div>
-                                                <input type="hidden" name="createdby" id="createdby" class="form-control" value="{{auth()->user()->id;}}">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0" style="display: inline-flex;">About Us
+                                                        <div id="infotooltip">
+                                                            <span id="infotooltipText">All text inserted in English enabling best translation.</span>
+                                                            <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <!-- <textarea rows="5" name="aboutus_{{$languagecodeBasicData->code}}" id="aboutus-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="form-control p-0 border-0" placeholder="Enter About Us in {{ $languagecodeBasicData->name }}">{{ old('aboutus_'.$languagecodeBasicData->code, $basiclanguagesrow->about_us ?? '') }}</textarea> -->
+                                                        <textarea rows="5" name="aboutus_{{$languagecodeBasicData->code}}" id="aboutus-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="form-control p-0 border-0" placeholder="Enter About Us">{{ old('aboutus_'.$languagecodeBasicData->code, $basiclanguagesrow->about_us ?? '') }}</textarea>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0" style="display: inline-flex;">Description<span style="color:red;">*</span>
+                                                        <div id="infotooltip">
+                                                            <span id="infotooltipText">All text inserted in English enabling best translation.</span>
+                                                            <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <textarea rows="5" name="description_{{$languagecodeBasicData->code}}" id="description-{{$languagecodeBasicData->code}}" maxlength="900" onkeyup="charCount(this.value,this.id,900)" class="directorydesc form-control p-0 border-0">{{ old('description_'.$languagecodeBasicData->code, $basiclanguagesrow->description ?? '') }}</textarea>
+                                                    </div>
+                                                    <span class="text-danger">@error('description_en'){{$message}} @enderror</span>
+                                                </div>
 
                                             </div>
+                                            @endforeach
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Description Button Link</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="description_button_link" value="{{ old('$description_button_link', $basicData->description_button_link ?? '') }}" placeholder="Enter description button link" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('description_button_link'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-4 infoicon-featurestype">
+
+                                                    <label class="col-md-12 p-0" style="display: inline-flex;">Featured Type
+                                                        <div id="infotooltip">
+                                                            <span id="infotooltipText">Select <b>Super Featured</b>, If you want this directory to show in "Popular Companies" list on Home page.</span>
+                                                            <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
+                                                        </div>
+                                                    </label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <select class="form-control" name="featuretype" id="featuretype">
+                                                            <?php /* ?><option value="none" {{ "none"==$basicData->feature_type ? 'selected' : '' }}>None</option><?php */ ?>
+                                                            <option value="featured" {{ "featured"==$basicData->feature_type ? 'selected' : '' }}> Featured</option>
+                                                            <option value="superfeatured" {{ "superfeatured"==$basicData->feature_type ? 'selected' : '' }}>Super Featured(Popular)
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                    <span class="text-danger">@error('featuretype'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Google analytics id</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="google_ana_id" value="{{ old('$google_ana_id', $basicData->google_analytics_id ?? '') }}" placeholder="Enter Google analytics id" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('google_ana_id'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" name="createdby" id="createdby" class="form-control" value="{{auth()->user()->id;}}">
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Company Header's Color</label>
+                                                    <div id="cp5c" class="col-md-12 border-bottom p-0 input-group">
+                                                    <input type="color" class="form-control input-lg" value="{{ $basicData->company_color }}" name="company_color" id="company_color">
+                                                    <span class="input-group-append">
+                                                        <span class="input-group-text colorpicker-input-addon"><i></i></span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <span class="text-danger">@error('company_logo'){{$message}} @enderror</span>
+                                            </div>
+                                            <div class="col-md-1">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Company Logo (size: 350 * 100)</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                    <input type="file" class="form-control" name="company_logo" id="company_logo">
+                                                    </div>
+                                                </div>
+                                                <span class="text-danger">@error('company_logo'){{$message}} @enderror</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                @if (!empty($basicData->company_logo))
+                                                <img src="{{env('IMAGE_PATH').'/'.$basicData->company_logo }}" width="130px">
+                                                @else
+                                                <img src="{{ asset('assets/images/comp.jpg') }}" width="130px" alt="" >
+                                                @endif
+                                            </div>
+                                        </div>
+
                                             <div class="row">
                                                 <div class="col-md-3">
                                                     <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Company Header's Color</label>
-                                                        <div id="cp5c" class="col-md-12 border-bottom p-0 input-group">
-                                                        <input type="color" class="form-control input-lg" value="{{ $basicData->company_color }}" name="company_color" id="company_color">
-                                                        <span class="input-group-append">
-                                                            <span class="input-group-text colorpicker-input-addon"><i></i></span>
-                                                          </span>
-                                                        </div>
-                                                    </div>
-                                                    <span class="text-danger">@error('company_logo'){{$message}} @enderror</span>
-                                                </div>
-                                                <div class="col-md-1">
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Company Logo (size: 350 * 100)</label>
+                                                        <label class="col-md-12 p-0">Email<span class="notranslate" style="color:red;">*</span>(To change OTP verification)</label>
                                                         <div class="col-md-12 border-bottom p-0">
-                                                        <input type="file" class="form-control" name="company_logo" id="company_logo">
+                                                            <input type="email" name="email" id="email" value="{{ old('email', isset($contactData[0]->email)?$contactData[0]->email:'') }}" placeholder="Enter e-mail address" class="form-control p-0 border-0" autocomplete=off>
                                                         </div>
                                                     </div>
-                                                    <span class="text-danger">@error('company_logo'){{$message}} @enderror</span>
+                                                </div>
+                                                <div class="col-md-1" style="display: none;" id="otp_div">
+                                                    <div class="form-group mb-4">
+                                                        <label class="col-md-12 p-0">OTP</label>
+                                                        <div class="col-md-12 border-bottom p-0">
+                                                            <input type="text"  name="otp" id="otp" placeholder="Otp" class="form-control p-0 border-0" style="width:100%;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group mb-4">
+                                                        <label class="col-md-12 p-0">.</label>
+                                                        <div class="col-md-12 p-0">
+                                                            <a id="e_verification" id="verifyOtp alert alert-info" style="margin: 8px 5px 5px 0px !important; cursor: pointer; background: #d1ecf1; position: absolute; padding: 5px 10px; border-radius: 15px;">
+                                                                Send Verification
+                                                            </a>
+                                                            <a id="e_veifyotp" class="e_verifyOtp alert alert-info" style="margin: 8px 5px 5px 0px !important; cursor: pointer; background: #d1ecf1; position: absolute; padding: 5px 10px; border-radius: 15px; display:none;">
+                                                                Verify OTP
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-3">
-                                                    @if (!empty($basicData->company_logo))
-                                                    <img src="{{env('IMAGE_PATH').'/'.$basicData->company_logo }}" width="130px">
-                                                    @else
-                                                    <img src="{{ asset('assets/images/comp.jpg') }}" width="130px" alt="" >
-                                                    @endif
+                                                    <div class="form-group mb-4">
+                                                        <label class="col-md-12 p-0">Name<span class="notranslate" style="color:red;">*</span></label>
+                                                        <div class="col-md-12 border-bottom p-0">
+                                                            <input type="text" name="name" value="{{ old('name', isset($contactData[0]->name)?$contactData[0]->name:'') }}" placeholder="Enter Name" class="form-control p-0 border-0" autocomplete=off>
+                                                        </div>
+                                                        <span class="text-danger">@error('name'){{$message}} @enderror</span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group mb-4">
+                                                        <label class="col-md-12 p-0" style="display: inline-flex;">Phone Number<span style="color:red;">*</span>
+                                                            <div id="infotooltip">
+                                                                <span id="infotooltipText">Company phone, displayed for contacts to the company. Enter phone number only don't enter country code.</span>
+                                                                <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
+                                                            </div>
+                                                        </label>
+                                                        <div class="col-md-12 border-bottom p-0">
+                                                            <input type="text" name="phone_number" value="{{ old('phone_number', isset($contactData[0]->phone)?$contactData[0]->phone:'') }}" placeholder="Enter Phone Number" class="form-control p-0 border-0" autocomplete=off>
+                                                        </div>
+                                                        <span class="text-danger">@error('phone_number'){{$message}} @enderror</span>
+                                                    </div>
                                                 </div>
                                             </div>
 
-                                            <?php //echo "<pre>"; print_r($data['categoryData']);?>
-
-                                            {{-- <div class="form-group mb-4">
-                                                <label class="col-md-12 p-0">Trademark</label>
+                                            <hr style="height:2px;color:#8898aa">
+                                            <div class="form-group ">
+                                                <?php $dataselectedcategory = isset($data['trademarkDatacate'][0]['trademarkcat_id'])?$data['trademarkDatacate'][0]['trademarkcat_id']:''; ?>
+                                                <label class="col-md-12 p-0">Trademark Category<span class="notranslate" style="color:red;">*</span></label>
                                                 <div class="col-md-12 ">
+                                                    <select class="form-control notranslate" name="trademarkcategory" id="trademark-category" onChange="getTrademarkOptions(this)" style="width:100%">
+                                                        <option value="">Select Trademark Category</option>
+                                                        @foreach($data['trademarkcategory'] as $categorysrow)
+                                                        <option value="{{ $categorysrow['id'] }}" <?php if($categorysrow['id']==$dataselectedcategory){echo "selected";} ?>> {{ $categorysrow['name'] }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <span class="text-danger">@error('trademarkcategory'){{$message}} @enderror</span>
+                                            </div>
+                                            <div class="form-group mb-4">
 
-                                                    <select multiple class="form-control select2 notranslate" name="trademark[]" id="par-trademark">
+                                                <label class="col-md-12 p-0">Trademark (You may enter own and missing Trademarks from Business Package)</label>
+                                                <div class="col-md-12 ">
+                                                    <select multiple class="form-control select2 notranslate" name="trademark[]" id="par-trademark" style="width:100%">
                                                         <option></option>
-                                                        @foreach($data['trademarks'] as $trademarksrow)
-                                                        <option value="{{ $trademarksrow->id }}" <?php //if(in_array($trademarksrow->id,$data['trademarkData'])){echo "selected";} ?>> {{ $trademarksrow->name }}</option>
+                                                        @foreach($data['trademarkselectedDataAccordingToTrademarkCat'] as $trademarksrow)
+                                                        <option value="{{ $trademarksrow->id }}" <?php if(in_array($trademarksrow->id,$data['trademarkData'])){echo "selected";} ?>> {{ $trademarksrow->name }}</option>
                                                         @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div> --}}
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        <div class="form-group mb-4">
-                                                            <label class="col-md-12 p-0">Email<span class="notranslate" style="color:red;">*</span>(To change OTP verification)</label>
-                                                            <div class="col-md-12 border-bottom p-0">
-                                                                <input type="email" name="email" id="email" value="{{ old('email', isset($contactData[0]->email)?$contactData[0]->email:'') }}" placeholder="Enter e-mail address" class="form-control p-0 border-0" autocomplete=off>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-1" style="display: none;" id="otp_div">
-                                                        <div class="form-group mb-4">
-                                                            <label class="col-md-12 p-0">OTP</label>
-                                                            <div class="col-md-12 border-bottom p-0">
-                                                                <input type="text"  name="otp" id="otp" placeholder="Otp" class="form-control p-0 border-0" style="width:100%;">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-md-2">
-                                                        <div class="form-group mb-4">
-                                                            <label class="col-md-12 p-0">.</label>
-                                                            <div class="col-md-12 p-0">
-                                                                <a id="e_verification" id="verifyOtp alert alert-info" style="margin: 8px 5px 5px 0px !important; cursor: pointer; background: #d1ecf1; position: absolute; padding: 5px 10px; border-radius: 15px;">
-                                                                    Send Verification
-                                                                </a>
-                                                                <a id="e_veifyotp" class="e_verifyOtp alert alert-info" style="margin: 8px 5px 5px 0px !important; cursor: pointer; background: #d1ecf1; position: absolute; padding: 5px 10px; border-radius: 15px; display:none;">
-                                                                    Verify OTP
-                                                                </a>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group mb-4">
-                                                            <label class="col-md-12 p-0">Name<span class="notranslate" style="color:red;">*</span></label>
-                                                            <div class="col-md-12 border-bottom p-0">
-                                                                <input type="text" name="name" value="{{ old('name', isset($contactData[0]->name)?$contactData[0]->name:'') }}" placeholder="Enter Name" class="form-control p-0 border-0" autocomplete=off>
-                                                            </div>
-                                                            <span class="text-danger">@error('name'){{$message}} @enderror</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <div class="form-group mb-4">
-                                                            <label class="col-md-12 p-0" style="display: inline-flex;">Phone Number<span style="color:red;">*</span>
-                                                                <div id="infotooltip">
-                                                                    <span id="infotooltipText">Company phone, displayed for contacts to the company. Enter phone number only don't enter country code.</span>
-                                                                    <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
-                                                                </div>
-                                                            </label>
-                                                            <div class="col-md-12 border-bottom p-0">
-                                                                <input type="text" name="phone_number" value="{{ old('phone_number', isset($contactData[0]->phone)?$contactData[0]->phone:'') }}" placeholder="Enter Phone Number" class="form-control p-0 border-0" autocomplete=off>
-                                                            </div>
-                                                            <span class="text-danger">@error('phone_number'){{$message}} @enderror</span>
-                                                        </div>
-                                                    </div>
+                                                    </select>
                                                 </div>
-
-                                                <hr style="height:2px;color:#8898aa">
-                                                <div class="form-group ">
-                                                    <?php $dataselectedcategory = isset($data['trademarkDatacate'][0]['trademarkcat_id'])?$data['trademarkDatacate'][0]['trademarkcat_id']:''; ?>
-                                                    <label class="col-md-12 p-0">Trademark Category<span class="notranslate" style="color:red;">*</span></label>
-                                                    <div class="col-md-12 ">
-                                                        <select class="form-control notranslate" name="trademarkcategory" id="trademark-category" onChange="getTrademarkOptions(this)" style="width:100%">
-                                                            <option value="">Select Trademark Category</option>
-                                                            @foreach($data['trademarkcategory'] as $categorysrow)
-                                                            <option value="{{ $categorysrow['id'] }}" <?php if($categorysrow['id']==$dataselectedcategory){echo "selected";} ?>> {{ $categorysrow['name'] }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <span class="text-danger">@error('trademarkcategory'){{$message}} @enderror</span>
-                                                </div>
-                                                <div class="form-group mb-4">
-
-                                                    <label class="col-md-12 p-0">Trademark (You may enter own and missing Trademarks from Business Package)</label>
-                                                    <div class="col-md-12 ">
-                                                        <select multiple class="form-control select2 notranslate" name="trademark[]" id="par-trademark" style="width:100%">
-                                                            <option></option>
-                                                            @foreach($data['trademarkselectedDataAccordingToTrademarkCat'] as $trademarksrow)
-                                                            <option value="{{ $trademarksrow->id }}" <?php if(in_array($trademarksrow->id,$data['trademarkData'])){echo "selected";} ?>> {{ $trademarksrow->name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">PayPal email<span class="notranslate" style="color:red;">*</span></label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="paypal_email" value="{{ old('paypal_email', Auth::user()->paypal_email??'') }}" placeholder="Enter PayPal Email" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('paypal_email'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0" style="display: inline-flex;">
-                                                            PayPal merchant ID (optional)
-                                                        </label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="paypal_merchant_id" value="{{ old('paypal_merchant_id', Auth::user()->paypal_merchant_id??'' ) }}" placeholder="Enter PayPal Merchant ID" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                </div>
-                                                <?php /* ?>
-                                                <div class="form-group mb-4">
-                                                    {{-- <label class="col-md-12 p-0">Popular</label> --}}
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="form-check-input" name="popular" id="" value="1" {{ $basicData->popular=='1' ? 'checked' : '' }}>
-                                                        <label class="custom-control-label" for="1" style="display: inline-flex;"> Popular
-                                                            <div id="infotooltip">
-                                                                <span id="infotooltipText">Please check this, If you want this directory to show in the list of popular.</span>
-                                                                <span><i class="fas fa-info-circle" style="color:#3c3c3e; padding-left: 5px;"></i></span>
-                                                            </div>
-                                                        </label>
-                                                    </div>
-                                                    <span class="text-danger">@error('popular'){{$message}} @enderror</span>
-                                                </div>
-                                                <?php */ ?>
-
-                                                @if ($user->hasPermission('update') == true)
-                                                <button type="submit" id="listsubmit-basic" class="btn btn-primary listsubmit">Save Changes</button>
-                                                @endif
-                                        </div>
-
-                                        <div class="tab-pane <?php active('location');?>" id="location" role="tabpanel">
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Address</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input id="pac-input" class="form-control" type="text" autocomplete=off placeholder="address" name="address" value="{{ old('address',$locationData[0]->address??'') }}" />
-                                                            {{-- <textarea rows="5" name="address" class="form-control p-0 border-0">{{ $locationData[0]->address }}</textarea> --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Country</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="country_id" readonly id="country_id" value="{{ old('country_id',$locationData[0]->country_id??'') }}" placeholder="Country" class="form-control p-0 border-0" autocomplete=off>
-
-                                                            {{-- <select class="form-control" name="country_id" id="country-dropdown">
-                                                                <option value=""> Select Country </option>
-                                                                @foreach($data['country'] as $countryrow)
-                                                                <option @if($countryrow->id==old('country_id')) selected @endif value="{{ $countryrow->id }}" {{ $countryrow->id == $locationData[0]->country_id ? 'selected' : '' }}> {{ $countryrow->name }}</option>
-                                                            @endforeach
-                                                            </select> --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">State</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-
-                                                            <input type="text" name="state_id" readonly id="state_id" value="{{ $locationData[0]->state_id??'' }}" placeholder="State" class="form-control p-0 border-0" autocomplete=off>
-
-                                                            {{-- <select class="form-control" name="state_id" id="state-dropdown"></select> --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">city</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="city_id" readonly id="city" value="{{ old('city',$locationData[0]->city_name??'') }}" placeholder="city" class="form-control p-0 border-0" autocomplete=off>
-
-                                                            {{-- <input type="hidden" id="cityid" value="{{ $locationData[0]->city_id }}"> --}}
-                                                            {{-- <select class="form-control" name="city_id" id="city-dropdown"></select> --}}
-                                                        </div>
-                                                    </div>
-                                                </div>
-
                                             </div>
 
                                             <div class="row">
-
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-12">
-                                                        <label class="col-md-12 p-0">Place</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="place" id="place" value="{{ old('place',$locationData[0]->place??'') }}" placeholder="Place" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <!-- <span class="text-danger">@error('latitude'){{$message}} @enderror</span> -->
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">PayPal email<span class="notranslate" style="color:red;">*</span></label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="paypal_email" value="{{ old('paypal_email', Auth::user()->paypal_email??'') }}" placeholder="Enter PayPal Email" class="form-control p-0 border-0" autocomplete=off>
                                                     </div>
+                                                    <span class="text-danger">@error('paypal_email'){{$message}} @enderror</span>
                                                 </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-12">
-                                                        <label class="col-md-12 p-0">Zipcode</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="zipcode" id="zipcode" value="{{ old('zipcode',$locationData[0]->zipcode??'') }}" placeholder="zipcode" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <!-- <span class="text-danger">@error('latitude'){{$message}} @enderror</span> -->
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4" style="display:none;">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Latitude</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="latitude" value="{{ old('latitude', $locationData[0]->latitude??'') }}" placeholder="Provide latitude for getting the exact result" class="form-control p-0 border-0" id="latitude" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4" style="display:none;">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Longitude</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="longitude" value="{{ old('longitude', $locationData[0]->longitude??'') }}" placeholder="Provide longitude for getting the exact result" class="form-control p-0 border-0" id="longitude" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div id="map" class="map-full map-layout single-listing-map" style="height: 300px; z-index: 50;">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0" style="display: inline-flex;">
+                                                        PayPal merchant ID (optional)
+                                                    </label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="paypal_merchant_id" value="{{ old('paypal_merchant_id', Auth::user()->paypal_merchant_id??'' ) }}" placeholder="Enter PayPal Merchant ID" class="form-control p-0 border-0" autocomplete=off>
                                                     </div>
                                                 </div>
                                             </div>
+                                            </div>
+
                                             @if ($user->hasPermission('update') == true)
-                                            <button type="submit" id="listsubmit-location" class="btn btn-primary listsubmit">Save Changes</button>
-                                        @endif
-                                        </div>
+                                            <button type="submit" id="listsubmit-basic" class="btn btn-primary listsubmit">Save Changes</button>
+                                            @endif
+                                    </div>
 
-                                        <div class="tab-pane <?php active('amenities');?>" id="amenities" role="tabpanel">
-
-                                            <div class="row">
-                                                <input type="hidden" name="links_count" value="<?php echo ($getFeatureAmenitiesValue); ?>" id="amenitycatcount" />
-                                                <div class="col-md-12">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Amenity Category (You can select multiple categories!)</label>
-                                                        <div class="col-md-12 ">
-
-                                                            <select multiple class="form-control select2" name="amenitycat_id[]" id="amenitycat-dropdown" onChange="getSelectedAmenityOptions(this)" style="width:100%">
-                                                                <option value="">Select Amenity Category </option>
-
-                                                                @foreach($data['amenityCategoryData'] as $row)
-                                                                <option value="{{ $row['id'] }}" <?php if(in_array($row['id'],$data['dataamenityCatIdData'])){echo "selected";} ?>> {{ $row['name'] }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
+                                    <div class="tab-pane <?php active('location');?>" id="location" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Address</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input id="pac-input" class="form-control" type="text" autocomplete=off placeholder="address" name="address" value="{{ old('address',$locationData[0]->address??'') }}" />
+                                                        {{-- <textarea rows="5" name="address" class="form-control p-0 border-0">{{ $locationData[0]->address }}</textarea> --}}
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="row amenitiesdata">
-                                                <?php //echo "<pre>"; print_r($amenitygetallselectedDataAccordingToAmenityCat); ?>
-                                                @if(!empty($amenitygetallselectedDataAccordingToAmenityCat))
-                                                @foreach($amenitygetallselectedDataAccordingToAmenityCat as $key => $amenityrow)
-                                                <div class="amenitycategories_name"><span><?php echo $key; ?></span></div>
-                                                    @foreach($amenityrow as $ameyrow)
-                                                        <div class="col-md-3 p-10">
-                                                            <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="form-check-input" name="amenities[]" id="{{ $ameyrow->id }}" value="{{ $ameyrow->id }}" <?php if (in_array($ameyrow->id, $data['getselectetedAmenityData'])) { echo 'checked'; } ?>>
-                                                                <label class="custom-control-label" for="1"><i class="{{ $ameyrow->icon_class }}" style="color: #636363 !important;"></i> {{ $ameyrow->title }} </label>
-                                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Country</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="country_id" readonly id="country_id" value="{{ old('country_id',$locationData[0]->country_id??'') }}" placeholder="Country" class="form-control p-0 border-0" autocomplete=off>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">State</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="state_id" readonly id="state_id" value="{{ $locationData[0]->state_id??'' }}" placeholder="State" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">city</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="city_id" readonly id="city" value="{{ old('city',$locationData[0]->city_name??'') }}" placeholder="city" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-12">
+                                                    <label class="col-md-12 p-0">Place</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="place" id="place" value="{{ old('place',$locationData[0]->place??'') }}" placeholder="Place" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <!-- <span class="text-danger">@error('latitude'){{$message}} @enderror</span> -->
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-12">
+                                                    <label class="col-md-12 p-0">Zipcode</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="zipcode" id="zipcode" value="{{ old('zipcode',$locationData[0]->zipcode??'') }}" placeholder="zipcode" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <!-- <span class="text-danger">@error('latitude'){{$message}} @enderror</span> -->
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" style="display:none;">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Latitude</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="latitude" value="{{ old('latitude', $locationData[0]->latitude??'') }}" placeholder="Provide latitude for getting the exact result" class="form-control p-0 border-0" id="latitude" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4" style="display:none;">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Longitude</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="longitude" value="{{ old('longitude', $locationData[0]->longitude??'') }}" placeholder="Provide longitude for getting the exact result" class="form-control p-0 border-0" id="longitude" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div id="map" class="map-full map-layout single-listing-map" style="height: 300px; z-index: 50;">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @if ($user->hasPermission('update') == true)
+                                        <button type="submit" id="listsubmit-location" class="btn btn-primary listsubmit">Save Changes</button>
+                                    @endif
+                                    </div>
+
+                                    <div class="tab-pane <?php active('amenities');?>" id="amenities" role="tabpanel">
+
+                                        <div class="row">
+                                            <input type="hidden" name="links_count" value="<?php echo ($getFeatureAmenitiesValue); ?>" id="amenitycatcount" />
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Amenity Category (You can select multiple categories!)</label>
+                                                    <div class="col-md-12 ">
+
+                                                        <select multiple class="form-control select2" name="amenitycat_id[]" id="amenitycat-dropdown" onChange="getSelectedAmenityOptions(this)" style="width:100%">
+                                                            <option value="">Select Amenity Category </option>
+
+                                                            @foreach($data['amenityCategoryData'] as $row)
+                                                            <option value="{{ $row['id'] }}" <?php if(in_array($row['id'],$data['dataamenityCatIdData'])){echo "selected";} ?>> {{ $row['name'] }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row amenitiesdata">
+                                            <?php //echo "<pre>"; print_r($amenitygetallselectedDataAccordingToAmenityCat); ?>
+                                            @if(!empty($amenitygetallselectedDataAccordingToAmenityCat))
+                                            @foreach($amenitygetallselectedDataAccordingToAmenityCat as $key => $amenityrow)
+                                            <div class="amenitycategories_name"><span><?php echo $key; ?></span></div>
+                                                @foreach($amenityrow as $ameyrow)
+                                                    <div class="col-md-3 p-10">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="form-check-input" name="amenities[]" id="{{ $ameyrow->id }}" value="{{ $ameyrow->id }}" <?php if (in_array($ameyrow->id, $data['getselectetedAmenityData'])) { echo 'checked'; } ?>>
+                                                            <label class="custom-control-label" for="1"><i class="{{ $ameyrow->icon_class }}" style="color: #636363 !important;"></i> {{ $ameyrow->title }} </label>
                                                         </div>
-                                                    @endforeach
+                                                    </div>
                                                 @endforeach
-                                                @endif
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group mb-4">
-                                                        <label class="p-0">Edit Your Own Amenity</label>
-                                                        @php
-                                                        $directory_amenity = [];
-                                                        @endphp
-                                                        @foreach ($data['directory_amenity'] as $val)
-                                                        @php $directory_amenity[] = $val->title @endphp
-                                                        @endforeach
-                                                        <input type="text" name="directory_own_amenity" data-role="tagsinput" id="tags_name" value="{{ old('directory_amenity', implode(',',$directory_amenity) ) }}" placeholder="Add Your Own Amenity" class="form-control p-0 border-0">
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            @if ($user->hasPermission('update') == true)
-                                            <button type="submit" id="listsubmit-amenity" class="btn btn-primary listsubmit">Save Changes</button>
+                                            @endforeach
                                             @endif
                                         </div>
 
-                                        <div class="tab-pane cus-title <?php active('media');?>" id="media" role="tabpanel">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-4">
+                                                    <label class="p-0">Edit Your Own Amenity</label>
+                                                    @php
+                                                    $directory_amenity = [];
+                                                    @endphp
+                                                    @foreach ($data['directory_amenity'] as $val)
+                                                    @php $directory_amenity[] = $val->title @endphp
+                                                    @endforeach
+                                                    <input type="text" name="directory_own_amenity" data-role="tagsinput" id="tags_name" value="{{ old('directory_amenity', implode(',',$directory_amenity) ) }}" placeholder="Add Your Own Amenity" class="form-control p-0 border-0">
 
-                                            <div class="loader" id="loader"></div>
-                                            <div class="AJloader" id="AJloader"></div>
-                                            <?php $valuePayable = isset($mediaData[0]->payable) ? $mediaData[0]->payable : 0; ?>
-                                            <div class="row mb-4">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @if ($user->hasPermission('update') == true)
+                                        <button type="submit" id="listsubmit-amenity" class="btn btn-primary listsubmit">Save Changes</button>
+                                        @endif
+                                    </div>
 
-                                                 <div class="col-md-3">
-                                                    <div class="custom-control custom-radio" style="opacity: 0;">
-                                                        <input type="radio" class="pay" name="payimage" value="payable" id="pay" checked>
+                                    <div class="tab-pane cus-title <?php active('media');?>" id="media" role="tabpanel">
 
-                                                        {{-- <input type="radio" class="pay" name="payimage" value="payable" id="pay" {{ $valuePayable==1 ? 'checked' : '' }}> --}}
-                                                        <label class="custom-control-label" for="1">Payable </label>
+                                        <div class="loader" id="loader"></div>
+                                        <div class="AJloader" id="AJloader"></div>
+                                        <?php $valuePayable = isset($mediaData[0]->payable) ? $mediaData[0]->payable : 0; ?>
+                                        <div class="row mb-4">
+
+                                                <div class="col-md-3">
+                                                <div class="custom-control custom-radio" style="opacity: 0;">
+                                                    <input type="radio" class="pay" name="payimage" value="payable" id="pay" checked>
+
+                                                    {{-- <input type="radio" class="pay" name="payimage" value="payable" id="pay" {{ $valuePayable==1 ? 'checked' : '' }}> --}}
+                                                    <label class="custom-control-label" for="1">Payable </label>
+                                                </div>
+                                            </div>
+                                            {{-- <div class="col-md-3">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="pay" name="payimage" value="nonpayable" id="nonpay" {{ $valuePayable==0 ? 'checked' : '' }}>
+                                                    <label class="custom-control-label" for="2">Non Payable </label>
+                                                </div>
+                                            </div> --}}
+                                        </div>
+                                        @php
+                                            $getFeatureUsesValue = Helper::getFeatureUsesValue('listing-thumbnail-and-listing-cover');
+                                            $getFeatureGalleryValue = Helper::getFeatureUsesValue('media');
+                                        @endphp
+                                        <div class="row">
+                                            <div class="col-md-6 mobile-alignment-infoicon" id="multi-imagelistingthumbnail">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0" style="display: flex;">Company Thumbnail (<span style="color:red">800 X 800</span>)px
+                                                        <div id="tooltip">
+                                                            <span id="tooltipText">Best result with (800 X 800)px - other dimensions are acceptable but visualization can be poor.</span>
+                                                            <span><i class="fas fa-info-circle" ></i></span>
+                                                        </div>
+
+                                                    </label>
+                                                    <p>Note : <i class="fas fa-eye" aria-hidden="true"></i> Image upload at a time - 1</p>
+                                                    <div class="col-md-12 imageuploadify">
+
+                                                        <div class="imageuploadify-overlay" style="display: none;"><i class="fa fa-picture-o"></i></div>
+                                                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                                        <span class="imageuploadify-message">Drag&amp;Drop Your File(s)Here To Upload</span>
+                                                        <button type="button" class="btn btn-default" style="background: white; color: rgb(58, 160, 255); pointer-events: initial;">or select file to upload</button>
+
+
+                                                        <input type="hidden" name="array_thumb_listing[]" class="form-control" id="listing-thumb-array" value="">
+                                                        <input type="hidden" name="array_thumb_listing_new[]" class="form-control" id="listing-thumb-array-new" value="">
+                                                        <input type="hidden" name="thumb_hidden_img" class="form-control" id="thumb_hidden_img" value="">
+
+                                                        <input type="file" class="form-control" name="listing_thumb[]" id="multi-thumbnail-img" >
                                                     </div>
                                                 </div>
-                                                {{-- <div class="col-md-3">
-                                                    <div class="custom-control custom-radio">
-                                                        <input type="radio" class="pay" name="payimage" value="nonpayable" id="nonpay" {{ $valuePayable==0 ? 'checked' : '' }}>
-                                                        <label class="custom-control-label" for="2">Non Payable </label>
-                                                    </div>
-                                                </div> --}}
                                             </div>
-                                            @php
-                                                $getFeatureUsesValue = Helper::getFeatureUsesValue('listing-thumbnail-and-listing-cover');
-                                                $getFeatureGalleryValue = Helper::getFeatureUsesValue('media');
-                                            @endphp
-                                            <div class="row">
-                                                <div class="col-md-6 mobile-alignment-infoicon" id="multi-imagelistingthumbnail">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0" style="display: flex;">Company Thumbnail (<span style="color:red">800 X 800</span>)px
+                                            <div class="col-md-6 infoicon-listingcover-align" id="multi-listingCover">
+                                                <div class="form-group mb-4">
+                                                    <div class="d-flex align-items-center justify-content-between">
+                                                        <label class="p-0 mb-0" style="display: flex;">Selected Company Cover Images (<span style="color:red">960 X 450</span>)px
                                                             <div id="tooltip">
-                                                                <span id="tooltipText">Best result with (800 X 800)px - other dimensions are acceptable but visualization can be poor.</span>
+                                                                <span id="tooltipText">Best result with (960 X 450)px - other dimensions are acceptable but visualization can be poor.</span>
                                                                 <span><i class="fas fa-info-circle" ></i></span>
                                                             </div>
-
                                                         </label>
-                                                        <p>Note : <i class="fas fa-eye" aria-hidden="true"></i> Image upload at a time - 1</p>
-                                                        <div class="col-md-12 imageuploadify">
+                                                        @if ($user->hasPermission('update') == true)
+                                                        <button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#addCompanyCoverImageModal" style="white-space: nowrap;">
+                                                            Add Image with text
+                                                        </button>
+                                                        @endif
+                                                    </div>
+                                                    <p>Note : <i class="fas fa-eye" aria-hidden="true"></i>
+                                                        Image upload at a time - 1 and Max limit - {{ $getFeatureUsesValue??'' }} Pending on my package. </p>
+                                                    <div class="col-md-12 imageuploadify">
+                                                        <div class="imageuploadify-overlay2" style="display: none;"><i class="fa fa-picture-o"></i></div>
+                                                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                                        <span class="imageuploadify-message">Drag&amp;Drop Your File(s)Here To Upload</span>
+                                                        <button type="button" class="btn btn-default" style="background: white; color: rgb(58, 160, 255); pointer-events: initial;">or select file to upload</button>
+                                                        <input type="hidden" name="array_cover_listing[]" class="form-control" id="listing-cover-array" value="">
+                                                        <input type="hidden" name="array_cover_images" class="form-control" id="listing-cover-arrayimage">
 
-                                                            <div class="imageuploadify-overlay" style="display: none;"><i class="fa fa-picture-o"></i></div>
-                                                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                                                            <span class="imageuploadify-message">Drag&amp;Drop Your File(s)Here To Upload</span>
-                                                            <button type="button" class="btn btn-default" style="background: white; color: rgb(58, 160, 255); pointer-events: initial;">or select file to upload</button>
-
-
-                                                            <input type="hidden" name="array_thumb_listing[]" class="form-control" id="listing-thumb-array" value="">
-                                                            <input type="hidden" name="array_thumb_listing_new[]" class="form-control" id="listing-thumb-array-new" value="">
-                                                            <input type="hidden" name="thumb_hidden_img" class="form-control" id="thumb_hidden_img" value="">
-
-                                                            <input type="file" class="form-control" name="listing_thumb[]" id="multi-thumbnail-img" >
-                                                        </div>
+                                                        <input type="file" class="form-control" name="listing_cover[]" multiple id="cover-img">
+                                                        <span class="text-danger">@error('listing_cover'){{$message}} @enderror</span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6 infoicon-listingcover-align" id="multi-listingCover">
-                                                    <div class="form-group mb-4">
-                                                        <div class="d-flex align-items-center justify-content-between">
-                                                            <label class="p-0 mb-0" style="display: flex;">Selected Company Cover Images (<span style="color:red">960 X 450</span>)px
-                                                                <div id="tooltip">
-                                                                    <span id="tooltipText">Best result with (960 X 450)px - other dimensions are acceptable but visualization can be poor.</span>
-                                                                    <span><i class="fas fa-info-circle" ></i></span>
-                                                                </div>
-                                                            </label>
-                                                            @if ($user->hasPermission('update') == true)
-                                                            <button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#addCompanyCoverImageModal" style="white-space: nowrap;">
-                                                                Add Image with text
-                                                            </button>
-                                                            @endif
-                                                        </div>
-                                                        <p>Note : <i class="fas fa-eye" aria-hidden="true"></i>
-                                                            Image upload at a time - 1 and Max limit - {{ $getFeatureUsesValue??'' }} Pending on my package. </p>
-                                                        <div class="col-md-12 imageuploadify">
-                                                            <div class="imageuploadify-overlay2" style="display: none;"><i class="fa fa-picture-o"></i></div>
-                                                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                                                            <span class="imageuploadify-message">Drag&amp;Drop Your File(s)Here To Upload</span>
-                                                            <button type="button" class="btn btn-default" style="background: white; color: rgb(58, 160, 255); pointer-events: initial;">or select file to upload</button>
-                                                            <input type="hidden" name="array_cover_listing[]" class="form-control" id="listing-cover-array" value="">
-                                                            <input type="hidden" name="array_cover_images" class="form-control" id="listing-cover-arrayimage">
-
-                                                            <input type="file" class="form-control" name="listing_cover[]" multiple id="cover-img">
-                                                            <span class="text-danger">@error('listing_cover'){{$message}} @enderror</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
                                             </div>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4 previewBlocks">
+
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-4 previewBlocks">
+                                                    @php
+                                                    $mediadirct_id = isset($mediaData[0]->directory_id)? $mediaData[0]->directory_id : "";
+                                                    $imagename_thumb = App\Http\Controllers\Admin\Directory\DirectoryController::get_thumbImage($mediadirct_id);
+                                                    @endphp
+                                                    <label class="col-md-12 p-0">Preview</label>
+                                                    <div class="col-md-12 thumbnailimgPreview" id="thumbnailimgPreview">
+                                                        <?php $name_thumb = isset($mediaData[0]->name_thumbnail)? $mediaData[0]->name_thumbnail :"";
+                                                        if (!empty($imagename_thumb)) { $last_position = end($imagename_thumb); ?>
+                                                        @foreach($imagename_thumb as $imagenamerow)
+                                                        <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-thumbimages="{{ $imagenamerow->name_thumbnail }}">
+                                                            <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="thumb">
+                                                            <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
+
+                                                        </div>
+                                                        @endforeach
+
+                                                        <?php } else{ ?>
+                                                        {{-- <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="" class="previewBlocksNew" alt="media-img" width="70px" height="70px"/> --}}
+                                                        <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-thumbnail-img" class="previewBlocks" alt="media-img" width="70px" height="70px" />
+                                                        <?php } ?>
+                                                        <input type="hidden" id="lastpositionthumbValue" data-payble="<?php echo $valuePayable ?>" value="<?php echo !empty($last_position->position)?$last_position->position:'-1'  ?>" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-4 previewBlocks">
+                                                    <label class="col-md-12 p-0">Preview</label>
+                                                    <div class="col-md-12 imgPreview" id="imgPreview">
                                                         @php
                                                         $mediadirct_id = isset($mediaData[0]->directory_id)? $mediaData[0]->directory_id : "";
-                                                        $imagename_thumb = App\Http\Controllers\Admin\Directory\DirectoryController::get_thumbImage($mediadirct_id);
+                                                        $imagenamecover = App\Http\Controllers\Admin\Directory\DirectoryController::getCoverImage($mediadirct_id);
                                                         @endphp
-                                                        <label class="col-md-12 p-0">Preview</label>
-                                                        <div class="col-md-12 thumbnailimgPreview" id="thumbnailimgPreview">
-                                                            <?php $name_thumb = isset($mediaData[0]->name_thumbnail)? $mediaData[0]->name_thumbnail :"";
-                                                            if (!empty($imagename_thumb)) { $last_position = end($imagename_thumb); ?>
-                                                            @foreach($imagename_thumb as $imagenamerow)
-                                                            <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-thumbimages="{{ $imagenamerow->name_thumbnail }}">
-                                                                <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="thumb">
-                                                                <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
 
+                                                        <?php
+                                                        if (!empty($imagenamecover)){
+                                                            $last_position = end($imagenamecover);
+                                                        ?>
+                                                        @foreach($imagenamecover as $imagenamerow)
+
+                                                        <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-coverimages="{{ $imagenamerow->name_thumbnail }}">
+                                                            <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="cover">
+                                                            @if($imagenamerow->title || $imagenamerow->description)
+                                                            <div class="image-metadata-overlay">
+                                                                @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
+                                                                @if($imagenamerow->description)<span>{{ $imagenamerow->description }}</span>@endif
                                                             </div>
-                                                            @endforeach
+                                                            @endif
+                                                            <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
 
-                                                            <?php } else{ ?>
-                                                            {{-- <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="" class="previewBlocksNew" alt="media-img" width="70px" height="70px"/> --}}
-                                                            <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-thumbnail-img" class="previewBlocks" alt="media-img" width="70px" height="70px" />
-                                                            <?php } ?>
-                                                            <input type="hidden" id="lastpositionthumbValue" data-payble="<?php echo $valuePayable ?>" value="<?php echo !empty($last_position->position)?$last_position->position:'-1'  ?>" />
                                                         </div>
+                                                        @endforeach
+
+                                                        <?php } else{ ?>
+
+                                                        <!-- <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-cover-img" alt="directory-img" width="70px" height="70px" class="previewBlocks" /> -->
+                                                        <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-cover-img" class="previewBlocks" alt="media-img" width="70px" height="70px" />
+                                                        <?php } ?>
+
+                                                        <input type="hidden" id="lastpositioncoverValue" value="<?php echo isset($last_position->position)?$last_position->position:'-1'  ?>" />
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4 previewBlocks">
-                                                        <label class="col-md-12 p-0">Preview</label>
-                                                        <div class="col-md-12 imgPreview" id="imgPreview">
-                                                            @php
-                                                            $mediadirct_id = isset($mediaData[0]->directory_id)? $mediaData[0]->directory_id : "";
-                                                            $imagenamecover = App\Http\Controllers\Admin\Directory\DirectoryController::getCoverImage($mediadirct_id);
-                                                            @endphp
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Video Provider</label>
+                                                    <div class="col-md-12 ">
+                                                        <?php $videoplayer = isset($mediaData[0]->video_provider) ? $mediaData[0]->video_provider : ""; ?>
+                                                        <select class="form-control" name="video_provider" id="video-provider">
+                                                            <option value="youtube" {{ "youtube"==$videoplayer ? 'selected' : '' }}>YouTube</option>
+                                                            <option value="vimeo" {{ "vimeo"==$videoplayer ? 'selected' : '' }}>Vimeo</option>
+                                                            <option value="html" {{ "html"==$videoplayer ? 'selected' : '' }}>HTML5</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Video URL</label>
+                                                    <div class="col-md-12 ">
+                                                        <input type="text" class="form-control" name="videourl" value="{{ old('videourl', isset($mediaData[0]->video_url))? $mediaData[0]->video_url:'' }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="row">
 
-                                                            <?php
-                                                            if (!empty($imagenamecover)){
-                                                                $last_position = end($imagenamecover);
-                                                            ?>
-                                                            @foreach($imagenamecover as $imagenamerow)
+                                            <div class="col-md-12 infoicon-multi-gallery-align" id="multi-gallery">
+                                                @php
+                                                    $imagenamegalleryChunk = App\Http\Controllers\Admin\Directory\DirectoryController::getgalImageChunk($mediadirct_id);
 
-                                                            <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-coverimages="{{ $imagenamerow->name_thumbnail }}">
-                                                                <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="cover">
+                                                    $imagenamegall = App\Http\Controllers\Admin\Directory\DirectoryController::getallgalImage($mediadirct_id);
+                                                    if($imagenamegall){
+                                                        $count_imagenamegallery = count($imagenamegall);
+                                                    }else{
+                                                        $count_imagenamegallery = 0;
+                                                    }
+
+                                                @endphp
+                                                <div class="form-group mb-4">
+                                                    <div class="d-flex align-items-center justify-content-between">
+                                                        <label class="p-0 mb-0" style="display: flex;">Company gallery images (<span style="color:red">1000 X 1000 </span>)px
+                                                            <div id="tooltip">
+                                                                <span id="tooltipText">Best result with (1000 X 1000 )px - other dimensions are acceptable but visualization can be poor.</span>
+                                                                <span><i class="fas fa-info-circle" ></i></span>
+                                                            </div>
+                                                        </label>
+                                                        @if ($user->hasPermission('update') == true)
+                                                        <button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#addCompanyGalleryImageTextModal" style="white-space: nowrap;">Add Image with text</button>
+                                                        @endif
+                                                    </div>
+                                                        <p>Note : <i class="fas fa-eye" aria-hidden="true"></i> Image upload at a time - <b>20</b> and Max limit - <b>{{ $getFeatureGalleryValue??'' }}</b> for my package. Now <b>{{ $count_imagenamegallery }}</b> images uploaded</p>
+
+                                                    <div class="col-md-12 imageuploadify">
+
+                                                        <div class="imageuploadify-overlay3" style="display: none;"><i class="fa fa-picture-o"></i></div>
+                                                        <i class="fa fa-cloud-upload" aria-hidden="true"></i>
+                                                        <span class="imageuploadify-message">Drag&amp;Drop Your File(s)Here To Upload<br>You have to upload multiple images at a time</span>
+                                                        <button type="button" class="btn btn-default" style="background: white; color: rgb(58, 160, 255); pointer-events: initial;">or select file to upload</button>
+
+                                                        <input type="hidden" name="array_gallery_listing[]" class="form-control" id="listing-gallery-array" value="">
+                                                        <input type="hidden" name="array_gallery_images" class="form-control" id="listing-gallery-arrayimage">
+                                                        <input type="file" id="gallist" class="form-control" name="listing_gallery[]" multiple>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-4 previewBlocks">
+                                                    @php
+                                                        $imagenamegal = App\Http\Controllers\Admin\Directory\DirectoryController::getgalImage($mediadirct_id);
+                                                    @endphp
+                                                    <?php if (!empty($imagenamegal)) { ?>
+                                                    <div class="delete_all">
+                                                        <div class="bulk_delete row" style="">
+                                                            <input type="checkbox" id="checkAll_gal" class="checkall_gal" style="margin: 8px 5px 10px 5px;">All
+                                                            <a class="btn btn-danger btn-sm" id="deleteAllSelectedGal" style="margin: 0px 0px 0px 15px;width: auto;">
+                                                                Delete In Bulk
+                                                            </a> <hr>
+                                                        </div>
+                                                    </div>
+                                                    <?php } ?>
+                                                    <label class="col-md-12 p-0">Preview</label>
+
+                                                    <div class="col-md-12 listgallerypreview show-more-height" id="listgallerypreview">
+                                                        <?php
+                                                        if (!empty($imagenamegalleryChunk)) { $last_position = end($imagenamegalleryChunk);
+                                                            foreach($imagenamegalleryChunk as $imageDirectory){
+                                                                foreach($imageDirectory as $imagenamerow){
+                                                        ?>
+                                                        @if($imagenamerow->name_thumbnail)
+                                                            <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
+                                                                <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
                                                                 @if($imagenamerow->title || $imagenamerow->description)
                                                                 <div class="image-metadata-overlay">
                                                                     @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
@@ -940,415 +1026,220 @@ $instruction = $data['instruction'];
                                                                 </div>
                                                                 @endif
                                                                 <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
-
+                                                                <input type="checkbox" name="gal_ids" class="cb-element" value="{{ $imagenamerow->id }}">
                                                             </div>
-                                                            @endforeach
-
-                                                            <?php } else{ ?>
-
-                                                            <!-- <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-cover-img" alt="directory-img" width="70px" height="70px" class="previewBlocks" /> -->
-                                                            <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-cover-img" class="previewBlocks" alt="media-img" width="70px" height="70px" />
-                                                            <?php } ?>
-
-                                                            <input type="hidden" id="lastpositioncoverValue" value="<?php echo isset($last_position->position)?$last_position->position:'-1'  ?>" />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Video Provider</label>
-                                                        <div class="col-md-12 ">
-                                                            <?php $videoplayer = isset($mediaData[0]->video_provider) ? $mediaData[0]->video_provider : ""; ?>
-                                                            <select class="form-control" name="video_provider" id="video-provider">
-                                                                <option value="youtube" {{ "youtube"==$videoplayer ? 'selected' : '' }}>YouTube</option>
-                                                                <option value="vimeo" {{ "vimeo"==$videoplayer ? 'selected' : '' }}>Vimeo</option>
-                                                                <option value="html" {{ "html"==$videoplayer ? 'selected' : '' }}>HTML5</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Video URL</label>
-                                                        <div class="col-md-12 ">
-                                                            <input type="text" class="form-control" name="videourl" value="{{ old('videourl', isset($mediaData[0]->video_url))? $mediaData[0]->video_url:'' }}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr>
-                                            <div class="row">
-
-                                                <div class="col-md-12 infoicon-multi-gallery-align" id="multi-gallery">
-                                                    @php
-                                                        $imagenamegalleryChunk = App\Http\Controllers\Admin\Directory\DirectoryController::getgalImageChunk($mediadirct_id);
-
-                                                        $imagenamegall = App\Http\Controllers\Admin\Directory\DirectoryController::getallgalImage($mediadirct_id);
-                                                        if($imagenamegall){
-                                                            $count_imagenamegallery = count($imagenamegall);
-                                                        }else{
-                                                            $count_imagenamegallery = 0;
-                                                        }
-
-                                                    @endphp
-                                                    <div class="form-group mb-4">
-                                                        <div class="d-flex align-items-center justify-content-between">
-                                                            <label class="p-0 mb-0" style="display: flex;">Company gallery images (<span style="color:red">1000 X 1000 </span>)px
-                                                                <div id="tooltip">
-                                                                    <span id="tooltipText">Best result with (1000 X 1000 )px - other dimensions are acceptable but visualization can be poor.</span>
-                                                                    <span><i class="fas fa-info-circle" ></i></span>
-                                                                </div>
-                                                            </label>
-                                                            @if ($user->hasPermission('update') == true)
-                                                            <button type="button" class="btn btn-primary btn-sm ml-2" data-toggle="modal" data-target="#addCompanyGalleryImageTextModal" style="white-space: nowrap;">Add Image with text</button>
-                                                            @endif
-                                                        </div>
-                                                         <p>Note : <i class="fas fa-eye" aria-hidden="true"></i> Image upload at a time - <b>20</b> and Max limit - <b>{{ $getFeatureGalleryValue??'' }}</b> for my package. Now <b>{{ $count_imagenamegallery }}</b> images uploaded</p>
-
-                                                        <div class="col-md-12 imageuploadify">
-
-                                                            <div class="imageuploadify-overlay3" style="display: none;"><i class="fa fa-picture-o"></i></div>
-                                                            <i class="fa fa-cloud-upload" aria-hidden="true"></i>
-                                                            <span class="imageuploadify-message">Drag&amp;Drop Your File(s)Here To Upload<br>You have to upload multiple images at a time</span>
-                                                            <button type="button" class="btn btn-default" style="background: white; color: rgb(58, 160, 255); pointer-events: initial;">or select file to upload</button>
-
-                                                            <input type="hidden" name="array_gallery_listing[]" class="form-control" id="listing-gallery-array" value="">
-                                                            <input type="hidden" name="array_gallery_images" class="form-control" id="listing-gallery-arrayimage">
-                                                            <input type="file" id="gallist" class="form-control" name="listing_gallery[]" multiple>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                    <div class="form-group mb-4 previewBlocks">
-                                                        @php
-                                                            $imagenamegal = App\Http\Controllers\Admin\Directory\DirectoryController::getgalImage($mediadirct_id);
-                                                        @endphp
-                                                        <?php if (!empty($imagenamegal)) { ?>
-                                                        <div class="delete_all">
-                                                            <div class="bulk_delete row" style="">
-                                                                <input type="checkbox" id="checkAll_gal" class="checkall_gal" style="margin: 8px 5px 10px 5px;">All
-                                                                <a class="btn btn-danger btn-sm" id="deleteAllSelectedGal" style="margin: 0px 0px 0px 15px;width: auto;">
-                                                                    Delete In Bulk
-                                                                </a> <hr>
+                                                        @else
+                                                            <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
+                                                                <img src="{{ asset('assets/plugins/images/placeholder.png') }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
+                                                                <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
+                                                                <input type="checkbox" name="gal_ids" class="cb-element" value="{{ $imagenamerow->id }}">
                                                             </div>
-                                                        </div>
-                                                        <?php } ?>
-                                                        <label class="col-md-12 p-0">Preview</label>
-
-                                                        <div class="col-md-12 listgallerypreview show-more-height" id="listgallerypreview">
-                                                            <?php
-                                                            if (!empty($imagenamegalleryChunk)) { $last_position = end($imagenamegalleryChunk);
-                                                                foreach($imagenamegalleryChunk as $imageDirectory){
-                                                                    foreach($imageDirectory as $imagenamerow){
-                                                            ?>
-                                                            @if($imagenamerow->name_thumbnail)
-                                                                <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
-                                                                    <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
-                                                                    @if($imagenamerow->title || $imagenamerow->description)
-                                                                    <div class="image-metadata-overlay">
-                                                                        @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
-                                                                        @if($imagenamerow->description)<span>{{ $imagenamerow->description }}</span>@endif
-                                                                    </div>
-                                                                    @endif
-                                                                    <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
-                                                                    <input type="checkbox" name="gal_ids" class="cb-element" value="{{ $imagenamerow->id }}">
-                                                                </div>
-                                                            @else
-                                                                <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
-                                                                    <img src="{{ asset('assets/plugins/images/placeholder.png') }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
-                                                                    <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
-                                                                    <input type="checkbox" name="gal_ids" class="cb-element" value="{{ $imagenamerow->id }}">
-                                                                </div>
-                                                            @endif
-
-                                                            <?php } }  } else{ ?>
-
-                                                            <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-gal-img" alt="directory-img" width="70px" height="70px" class="previewBlocks" />
-                                                            <?php } ?>
-                                                            <input type="hidden" id="lastpositiongallValue" value="<?php echo isset($last_position->position)?$last_position->position:'-1'  ?>" />
-
-
-                                                        </div>
-
-
-                                                        <?php /* ?>
-                                                        @php
-                                                        $imagenamegal = App\Http\Controllers\Admin\Directory\DirectoryController::getallgalImage($mediadirct_id);
-                                                        @endphp
-                                                        @if (count($imagenamegal) > 12)
-                                                            {{-- <div class="see_all" data-toggle="modal" data-target="#allgalleryimages_model">See All</div> --}}
-                                                            <div class="see_all show_more" id="gallery_all">More</div>
                                                         @endif
-                                                        <?php */?>
+
+                                                        <?php } }  } else{ ?>
+                                                        <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-gal-img" alt="directory-img" width="70px" height="70px" class="previewBlocks" />
+                                                        <?php } ?>
+                                                        <input type="hidden" id="lastpositiongallValue" value="<?php echo isset($last_position->position)?$last_position->position:'-1'  ?>" />
+
                                                     </div>
                                                 </div>
                                             </div>
-                                            @if ($user->hasPermission('update') == true)
-                                            <div class="row">
-                                                <div class="col-md-12">
-                                                <p><strong>Note : </strong><i class="fas fa-eye" aria-hidden="true"></i> (Save after each upload)</p>
-                                                    <button type="submit" id="listsubmit-media" class="btn btn-primary listsubmit" style="width: 300px;">Save Changes</button>
+                                        </div>
+                                        @if ($user->hasPermission('update') == true)
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                            <p><strong>Note : </strong><i class="fas fa-eye" aria-hidden="true"></i> (Save after each upload)</p>
+                                                <button type="submit" id="listsubmit-media" class="btn btn-primary listsubmit" style="width: 300px;">Save Changes</button>
+                                            </div>
+                                        </div>
+                                        @endif
+                                    </div>
+
+                                    <div class="tab-pane <?php active('seo');?> notranslate" id="seo" role="tabpanel">
+                                        <div class="">
+                                            <?php /* ?><ul class="nav nav-tabs" role="tablist">
+                                                @foreach($data['languagesData'] as $languagesrow)
+                                                <li class="nav-item">
+                                                    <a class="nav-link {{ $languagesrow->id == 1 ? 'active' : '' }}" data-bs-toggle="tab" href="<?php echo "#" . $languagesrow->name . "_" . $languagesrow->id; ?>" role="tab">
+                                                        <span>{{ $languagesrow->name }}</span>
+                                                    </a>
+                                                </li>
+                                                @endforeach
+                                            </ul><?php */ ?>
+                                            <div class="tab-content cust-tab-cont">
+                                                @foreach($seoAndTraslationData as $seoLanguagedatarow)
+                                                <?php $languagecodenameData = Helper::getLanguagesDataById($seoLanguagedatarow->language_id); ?>
+                                                <div class="tab-pane {{ $seoLanguagedatarow->language_id == 1 ? 'active' : '' }}" id="<?php echo $languagecodenameData->name . "_" . $languagecodenameData->id; ?>" role="tabpanel">
+                                                    <div class="form-group mb-4">
+                                                        <label class="col-md-12 p-0">Meta keywords</label>
+                                                        <div class="col-md-12 border-bottom p-0">
+                                                            <input type="text" name="meta_keywords_{{$languagecodenameData->code}}" value="{{ old('meta_keywords_'.$languagecodenameData->code, $seoLanguagedatarow->meta_keyword) }}" placeholder="Enter Meta Keywords Name in {{ $languagecodenameData->name }}" class="metakey form-control p-0 border-0" autocomplete=off>
+                                                            <input type="hidden" name="seolangtranlation_{{$languagecodenameData->code}}" value="{{ $seoLanguagedatarow->id }}" class="form-control p-0 border-0">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group mb-4">
+                                                        <label class="col-md-12 p-0">Meta description</label>
+                                                        <div class="col-md-12 border-bottom p-0">
+                                                            <textarea rows="5" id="metadesc" name="meta_description_{{$languagecodenameData->code}}" onkeyup="limitWords(this.id)" class="metaDescp form-control p-0 border-0">{{ old('meta_description_'.$languagecodenameData->code, $seoLanguagedatarow->meta_description) }}</textarea>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                @endforeach
+                                            </div>
+
+                                            @php
+                                                $getCategoryValue = Helper::getFeatureUsesValue('category');
+                                                $getsubCategoryValue = Helper::getFeatureUsesValue('sub-category');
+                                                $getTagsValue = Helper::getFeatureUsesValue('tags');
+                                            @endphp
+
+                                            <?php
+                                                if (isset($data['categoryData'][0])) {
+                                                    $mainCategorrId = $data['categoryData'][0];
+                                                }else{
+                                                    $mainCategorrId = "";
+                                                }
+                                            ?>
+                                            <div class="form-group mb-4">
+                                                <label class="col-md-12 p-0">Company Category</label>
+                                                <div class="col-md-12 border-bottom p-0">
+                                                    <select class="form-control notranslate" name="category" id="par-category" onChange="getSubCategory(this.value)" style="width:100%">
+                                                        @foreach($data['parent_category'] as $categorysrow)
+                                                            <option value="{{ $categorysrow->id }}" {{ $categorysrow->id == $mainCategorrId ? 'selected' : '' }}>
+                                                                {{ $categorysrow->name }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
-                                            @endif
-                                        </div>
 
-                                        <div class="tab-pane <?php active('seo');?> notranslate" id="seo" role="tabpanel">
-                                            <div class="">
-                                                <?php /* ?><ul class="nav nav-tabs" role="tablist">
-                                                    @foreach($data['languagesData'] as $languagesrow)
-                                                    <li class="nav-item">
-                                                        <a class="nav-link {{ $languagesrow->id == 1 ? 'active' : '' }}" data-bs-toggle="tab" href="<?php echo "#" . $languagesrow->name . "_" . $languagesrow->id; ?>" role="tab">
-                                                            <span>{{ $languagesrow->name }}</span>
-                                                        </a>
-                                                    </li>
-                                                    @endforeach
-                                                </ul><?php */ ?>
-                                                <div class="tab-content cust-tab-cont">
-                                                    @foreach($seoAndTraslationData as $seoLanguagedatarow)
-                                                    <?php $languagecodenameData = Helper::getLanguagesDataById($seoLanguagedatarow->language_id); ?>
-                                                    <div class="tab-pane {{ $seoLanguagedatarow->language_id == 1 ? 'active' : '' }}" id="<?php echo $languagecodenameData->name . "_" . $languagecodenameData->id; ?>" role="tabpanel">
+
+                                            <div class="form-group mb-4">
+                                                <label class="col-md-12 p-0">Sub Category (Package limit - {{ $getsubCategoryValue }})</label>
+                                                <div class="col-md-12 border-bottom p-0">
+                                                    <select multiple class="form-control select2" name="sub_category[]" id="subcategory" onChange="getSelectedOptions(this)" style="width:100%">
+                                                        @foreach($data['child_category'] as $child_categorysrow)
+                                                        <option value="{{ $child_categorysrow['id'] }}" <?php if(in_array($child_categorysrow['id'],$data['subcategoryData'])){echo "selected";} ?>> {{ $child_categorysrow['name'] }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group mb-4">
+                                                <label class=" p-0">Tags(select category first!) (Package limit - {{ $getTagsValue }})</label>
+                                                <div class=" ">
+                                                    <select multiple class="form-control select2 notranslate" name="simpletags[]" id="par-tags" onChange="changeSimpletags(this)" style="width:100%">
+
+                                                        @foreach($data['tags'] as $tagsrow)
+                                                            <option value="{{ $tagsrow['id'] }}" <?php if(in_array($tagsrow['id'],$data['tagsData'])){echo "selected";} ?>>
+                                                                    {{ $tagsrow['tags'] }} - {{ $tagsrow['id'] }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <label class=" p-0">Note: If the tags you thought aren't on the dropdown list <a href="{{ route('company.request.newticket') }}"> click here </a> for admin request!</label>
+                                            </div>
+
+                                            <?php /* ----------- DON'T UNCOMMENT OR DELETE IT TILL FURTHER NOITFY. (BY MADHULIKA) ----------------------------
+                                            <div class="form-group mb-4">
+                                                <label class=" p-0">Own Tags(select category first!)</label>
+                                                <div class=" ">
+                                                    <select multiple class="form-control select2" name="owntags[]" id="par-owntags" style="width:100%">
+                                                        <option></option>
+                                                        @foreach($data['owntags'] as $owntagsrow)
+                                                        <option value="{{ $owntagsrow->id }}" <?php if(in_array($owntagsrow->id,$data['ownTagsData'])){echo "selected";} ?>> {{ $owntagsrow->tags }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-4">
+                                                <label class=" p-0">Select Directory Own Tags</label>
+                                                <div class=" ">
+                                                    <select multiple class="form-control select2" name="direcowntags[]" id="par-dircowntags" style="width:100%">
+                                                        <option></option>
+                                                        @foreach($data['directoryowntags'] as $owntagsrow)
+                                                        <option value="{{ $owntagsrow->id }}" <?php if(in_array($owntagsrow->id,$data['directoryownTagsData'])){echo "selected";} ?>> {{ $owntagsrow->tag_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group mb-4">
+                                                <label class=" p-0">Create New Directory Own Tags</label>
+                                                <div class=" ">
+                                                    <input type="text" name="createnewowntag" value="{{ old('createnewowntag') }}" placeholder="Enter tags with comma seperated eg:tag1,tag2..." class="form-control border-0" autocomplete=off>
+                                                </div>
+                                            </div>
+                                            */?>
+                                        </div>
+                                        @if ($user->hasPermission('update') == true)
+                                        <button type="submit" id="listsubmit-seo" class="btn btn-primary listsubmit">Save Changes</button>
+                                        @endif
+                                    </div>
+
+                                    <div class="tab-pane <?php active('schedule');?>" id="schedule" role="tabpanel">
+
+                                            <a class="btn btn-info mb-4 schedule_active_tab"  id="normaldays" >Normal days</a>
+                                            <a class="btn btn-info mb-4"  id="exceptionalholidays" >Exceptional holidays</a>
+                                            <a class="btn btn-info mb-4" id="publicholidays" >Public holidays</a>
+
+                                            <input type="hidden" name="holiday_status" id="holiday_status" value="{{ $basicData->holiday_status??'' }}">
+
+                                            <div class="normal_days_div" id="normal_days_div" style="display:block;">
+                                                <div class="row mb-4">
+                                                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                        <div class="panel-heading cust-tab-head">
+                                                            <h4 class="box-title">Normal days</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-md-12">
                                                         <div class="form-group mb-4">
-                                                            <label class="col-md-12 p-0">Meta keywords</label>
+                                                            <label class="col-md-12 p-0">Add Comment</label>
                                                             <div class="col-md-12 border-bottom p-0">
-                                                                <input type="text" name="meta_keywords_{{$languagecodenameData->code}}" value="{{ old('meta_keywords_'.$languagecodenameData->code, $seoLanguagedatarow->meta_keyword) }}" placeholder="Enter Meta Keywords Name in {{ $languagecodenameData->name }}" class="metakey form-control p-0 border-0" autocomplete=off>
-                                                                <input type="hidden" name="seolangtranlation_{{$languagecodenameData->code}}" value="{{ $seoLanguagedatarow->id }}" class="form-control p-0 border-0">
+                                                                <textarea rows="5" name="add_normal_comment" id="add-comment" class="form-control border-0 " placeholder="Enter Comment">{{ old('$add_normal_comment', $basicData->schedule_normal_comment ?? '') }}</textarea>
                                                             </div>
                                                         </div>
-
-                                                        <div class="form-group mb-4">
-                                                            <label class="col-md-12 p-0">Meta description</label>
-                                                            <div class="col-md-12 border-bottom p-0">
-                                                                <textarea rows="5" id="metadesc" name="meta_description_{{$languagecodenameData->code}}" onkeyup="limitWords(this.id)" class="metaDescp form-control p-0 border-0">{{ old('meta_description_'.$languagecodenameData->code, $seoLanguagedatarow->meta_description) }}</textarea>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                    @endforeach
-                                                </div>
-
-                                                @php
-                                                    $getCategoryValue = Helper::getFeatureUsesValue('category');
-                                                    $getsubCategoryValue = Helper::getFeatureUsesValue('sub-category');
-                                                    $getTagsValue = Helper::getFeatureUsesValue('tags');
-                                                @endphp
-
-                                                <?php
-                                                    if (isset($data['categoryData'][0])) {
-                                                        $mainCategorrId = $data['categoryData'][0];
-                                                    }else{
-                                                        $mainCategorrId = "";
-                                                    }
-                                                ?>
-                                                <div class="form-group mb-4">
-                                                    <label class="col-md-12 p-0">Company Category</label>
-                                                    <div class="col-md-12 border-bottom p-0">
-                                                        <select class="form-control notranslate" name="category" id="par-category" onChange="getSubCategory(this.value)" style="width:100%">
-                                                            @foreach($data['parent_category'] as $categorysrow)
-                                                                <option value="{{ $categorysrow->id }}" {{ $categorysrow->id == $mainCategorrId ? 'selected' : '' }}>
-                                                                    {{ $categorysrow->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
                                                     </div>
                                                 </div>
 
-
-                                                <div class="form-group mb-4">
-                                                    <label class="col-md-12 p-0">Sub Category (Package limit - {{ $getsubCategoryValue }})</label>
-                                                    <div class="col-md-12 border-bottom p-0">
-                                                        <select multiple class="form-control select2" name="sub_category[]" id="subcategory" onChange="getSelectedOptions(this)" style="width:100%">
-                                                            @foreach($data['child_category'] as $child_categorysrow)
-                                                            <option value="{{ $child_categorysrow['id'] }}" <?php if(in_array($child_categorysrow['id'],$data['subcategoryData'])){echo "selected";} ?>> {{ $child_categorysrow['name'] }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group mb-4">
-                                                    <label class=" p-0">Tags(select category first!) (Package limit - {{ $getTagsValue }})</label>
-                                                    <div class=" ">
-                                                        <select multiple class="form-control select2 notranslate" name="simpletags[]" id="par-tags" onChange="changeSimpletags(this)" style="width:100%">
-
-                                                            @foreach($data['tags'] as $tagsrow)
-                                                                <option value="{{ $tagsrow['id'] }}" <?php if(in_array($tagsrow['id'],$data['tagsData'])){echo "selected";} ?>>
-                                                                     {{ $tagsrow['tags'] }} - {{ $tagsrow['id'] }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <label class=" p-0">Note: If the tags you thought aren't on the dropdown list <a href="{{ route('company.request.newticket') }}"> click here </a> for admin request!</label>
-                                                </div>
-
-                                                <?php /* ----------- DON'T UNCOMMENT OR DELETE IT TILL FURTHER NOITFY. (BY MADHULIKA) ----------------------------
-                                                <div class="form-group mb-4">
-                                                    <label class=" p-0">Own Tags(select category first!)</label>
-                                                    <div class=" ">
-                                                        <select multiple class="form-control select2" name="owntags[]" id="par-owntags" style="width:100%">
-                                                            <option></option>
-                                                            @foreach($data['owntags'] as $owntagsrow)
-                                                            <option value="{{ $owntagsrow->id }}" <?php if(in_array($owntagsrow->id,$data['ownTagsData'])){echo "selected";} ?>> {{ $owntagsrow->tags }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group mb-4">
-                                                    <label class=" p-0">Select Directory Own Tags</label>
-                                                    <div class=" ">
-                                                        <select multiple class="form-control select2" name="direcowntags[]" id="par-dircowntags" style="width:100%">
-                                                            <option></option>
-                                                            @foreach($data['directoryowntags'] as $owntagsrow)
-                                                            <option value="{{ $owntagsrow->id }}" <?php if(in_array($owntagsrow->id,$data['directoryownTagsData'])){echo "selected";} ?>> {{ $owntagsrow->tag_name }}</option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group mb-4">
-                                                    <label class=" p-0">Create New Directory Own Tags</label>
-                                                    <div class=" ">
-                                                        <input type="text" name="createnewowntag" value="{{ old('createnewowntag') }}" placeholder="Enter tags with comma seperated eg:tag1,tag2..." class="form-control border-0" autocomplete=off>
-                                                    </div>
-                                                </div>
-                                                */?>
-                                            </div>
-                                            @if ($user->hasPermission('update') == true)
-                                            <button type="submit" id="listsubmit-seo" class="btn btn-primary listsubmit">Save Changes</button>
-                                            @endif
-                                        </div>
-
-
-                                        <div class="tab-pane <?php active('schedule');?>" id="schedule" role="tabpanel">
-
-                                                <a class="btn btn-info mb-4 schedule_active_tab"  id="normaldays" >Normal days</a>
-                                                <a class="btn btn-info mb-4"  id="exceptionalholidays" >Exceptional holidays</a>
-                                                <a class="btn btn-info mb-4" id="publicholidays" >Public holidays</a>
-
-                                                <input type="hidden" name="holiday_status" id="holiday_status" value="{{ $basicData->holiday_status??'' }}">
-
-                                                <div class="normal_days_div" id="normal_days_div" style="display:block;">
+                                                <div class="">
                                                     <div class="row mb-4">
-                                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                            <div class="panel-heading cust-tab-head">
-                                                                <h4 class="box-title">Normal days</h4>
+                                                    <label class="col-md-12">Schedule Template</label>
+                                                        <div class="col-md-3">
+                                                            <div class="custom-control  custom-radio">
+                                                                <input type="radio" class="pay" name="normaldays" value="no" id="pay" {{ $basicData->is_normaltemplate=='no' ? 'checked' : '' }}>
+                                                                <label class="custom-control-label" for="1">No </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="custom-control custom-radio">
+                                                                <input type="radio" class="pay" name="normaldays" value="yes" id="nonpay" {{ $basicData->is_normaltemplate=='yes' ? 'checked' : '' }}>
+                                                                <label class="custom-control-label" for="1">Yes</label>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
 
-                                                    <div class="row">
-                                                        <div class="col-md-12">
-                                                            <div class="form-group mb-4">
-                                                                <label class="col-md-12 p-0">Add Comment</label>
-                                                                <div class="col-md-12 border-bottom p-0">
-                                                                    <textarea rows="5" name="add_normal_comment" id="add-comment" class="form-control border-0 " placeholder="Enter Comment">{{ old('$add_normal_comment', $basicData->schedule_normal_comment ?? '') }}</textarea>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
+                                                <div class="form-group mb-4" id="normaldays-template" style="display:none;">
+                                                    <label class=" p-0">Normal Days Template</label>
                                                     <div class="">
-                                                        <div class="row mb-4">
-                                                        <label class="col-md-12">Schedule Template</label>
-                                                            <div class="col-md-3">
-                                                                <div class="custom-control  custom-radio">
-                                                                    <input type="radio" class="pay" name="normaldays" value="no" id="pay" {{ $basicData->is_normaltemplate=='no' ? 'checked' : '' }}>
-                                                                    <label class="custom-control-label" for="1">No </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="custom-control custom-radio">
-                                                                    <input type="radio" class="pay" name="normaldays" value="yes" id="nonpay" {{ $basicData->is_normaltemplate=='yes' ? 'checked' : '' }}>
-                                                                    <label class="custom-control-label" for="1">Yes</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+
+                                                        <select class="form-control" id="normaldaytemplateselect" name="normaldaytemplateselect" onchange="getNormalTemplateOption(this.value);" style="width:100%">
+                                                            <option value="none">Select Template</option>
+                                                            @foreach($data['normaldaysdata'] as $normaldaysdatarow)
+                                                            <option value="{{ $normaldaysdatarow->id }}" {{ $normaldaysdatarow->id == $basicData->is_normaltemplate_id ? 'selected' : '' }}> {{ $normaldaysdatarow->name }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
+                                                </div>
 
-                                                    <div class="form-group mb-4" id="normaldays-template" style="display:none;">
-                                                        <label class=" p-0">Normal Days Template</label>
-                                                        <div class="">
-
-                                                            <select class="form-control" id="normaldaytemplateselect" name="normaldaytemplateselect" onchange="getNormalTemplateOption(this.value);" style="width:100%">
-                                                                <option value="none">Select Template</option>
-                                                                @foreach($data['normaldaysdata'] as $normaldaysdatarow)
-                                                                <option value="{{ $normaldaysdatarow->id }}" {{ $normaldaysdatarow->id == $basicData->is_normaltemplate_id ? 'selected' : '' }}> {{ $normaldaysdatarow->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <?php if($basicData->is_normaltemplate=='yes'){ ?>
-                                                        <div class="table-schedule">
-                                                            <table id="nomaldays-template-table" class="table text-nowrap" style="display:none;">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th class="border-top-0">Day</th>
-                                                                        <th class="border-top-0">Closed</th>
-                                                                        <th class="border-top-0">Open</th>
-                                                                        <th class="border-top-0">Closed</th>
-                                                                        <th class="border-top-0">Add Hours</th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                    <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-                                                                    $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
-                                                                    "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
-                                                                    "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
-                                                                    ?>
-                                                                    <?php if(count($scheduleData)!=0){ ?>
-                                                                    <?php foreach($scheduleData as $value=>$dayDetail){ ?>
-                                                                    <?php $j=0; foreach($dayDetail as $dayData){ ?>
-                                                                    <tr class=" <?= $value.'_template';?> <?= $value.'_template_row_'.$j;?>">
-                                                                        <td> <?= $j==0?$value.':':''; ?></td>
-                                                                        <td>
-                                                                            <?php if($j==0){?>
-                                                                            <input class="form-check-input" type="checkbox" name="<?php echo $value; ?>_template_is_closed" value="1" <?php if($dayData['is_closed']){echo "checked";}?>>
-                                                                            <?php  } ?>
-                                                                        </td>
-                                                                        <td>
-                                                                            <select class="form-control" name="<?= $value;?>_template_hours_min[]">
-                                                                                <?php foreach($timeValue as $rowtime){ ?>
-                                                                                <option value="<?php echo $rowtime ?>" <?php if($rowtime==$dayData['open_time']){echo "selected" ;}?>>
-                                                                                    <?php echo $rowtime ?>
-                                                                                </option>
-                                                                                <?php } ?>
-
-                                                                            </select>
-                                                                        </td>
-                                                                        <td>
-                                                                            <select class="form-control" name="<?= $value;?>_template_hours_max[]">
-                                                                                <?php foreach($timeValue as $rowtime){ ?>
-                                                                                <option value="<?php echo $rowtime ?>" <?php if($rowtime==$dayData['close_time']){echo "selected" ;}?>>
-                                                                                    <?php echo $rowtime ?>
-                                                                                </option>
-                                                                                <?php } ?>
-                                                                            </select>
-                                                                        </td>
-                                                                        <td>
-                                                                            <?php if($j==0){?><button type="button" class="btn btn-info" id="" onclick="addTemplateDayBlock('<?= $value.'_template';?>')">+ Hours</button>
-                                                                            <?php }else{?>
-                                                                            <button class="btn btn-danger" type="button" onclick="removeTemplateDayBlock('<?= $value.'_template';?>',<?= $j;?>)">- Hours</button>
-                                                                            <?php } ?>
-                                                                        <td>
-                                                                    </tr>
-                                                                    <?php $j++; } ?>
-                                                                    <?php } ?>
-                                                                    <?php } ?>
-
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    <?php } ?>
-
+                                                <?php if($basicData->is_normaltemplate=='yes'){ ?>
                                                     <div class="table-schedule">
-                                                        <table id="nomaldays-table" class="table text-nowrap" style="display:none;">
+                                                        <table id="nomaldays-template-table" class="table text-nowrap" style="display:none;">
                                                             <thead>
                                                                 <tr>
                                                                     <th class="border-top-0">Day</th>
@@ -1358,27 +1249,24 @@ $instruction = $data['instruction'];
                                                                     <th class="border-top-0">Add Hours</th>
                                                                 </tr>
                                                             </thead>
-
                                                             <tbody>
-                                                                <?php
-                                                                $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+                                                                <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
                                                                 $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
-                                                            "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
-                                                            "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
+                                                                "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
+                                                                "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
                                                                 ?>
-
-                                                                <?php if(count($scheduleData)!=0 && $basicData->is_normaltemplate!='yes'){ ?>
+                                                                <?php if(count($scheduleData)!=0){ ?>
                                                                 <?php foreach($scheduleData as $value=>$dayDetail){ ?>
                                                                 <?php $j=0; foreach($dayDetail as $dayData){ ?>
-                                                                <tr class=" <?= $value;?> <?= $value.'_row_'.$j;?>">
+                                                                <tr class=" <?= $value.'_template';?> <?= $value.'_template_row_'.$j;?>">
                                                                     <td> <?= $j==0?$value.':':''; ?></td>
                                                                     <td>
                                                                         <?php if($j==0){?>
-                                                                        <input class="form-check-input" type="checkbox" name="<?php echo $value; ?>_is_closed" value="1" <?php if($dayData['is_closed']){echo "checked";}?>>
+                                                                        <input class="form-check-input" type="checkbox" name="<?php echo $value; ?>_template_is_closed" value="1" <?php if($dayData['is_closed']){echo "checked";}?>>
                                                                         <?php  } ?>
                                                                     </td>
                                                                     <td>
-                                                                        <select class="form-control" name="<?= $value;?>_hours_min[]">
+                                                                        <select class="form-control" name="<?= $value;?>_template_hours_min[]">
                                                                             <?php foreach($timeValue as $rowtime){ ?>
                                                                             <option value="<?php echo $rowtime ?>" <?php if($rowtime==$dayData['open_time']){echo "selected" ;}?>>
                                                                                 <?php echo $rowtime ?>
@@ -1388,7 +1276,7 @@ $instruction = $data['instruction'];
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <select class="form-control" name="<?= $value;?>_hours_max[]">
+                                                                        <select class="form-control" name="<?= $value;?>_template_hours_max[]">
                                                                             <?php foreach($timeValue as $rowtime){ ?>
                                                                             <option value="<?php echo $rowtime ?>" <?php if($rowtime==$dayData['close_time']){echo "selected" ;}?>>
                                                                                 <?php echo $rowtime ?>
@@ -1397,256 +1285,487 @@ $instruction = $data['instruction'];
                                                                         </select>
                                                                     </td>
                                                                     <td>
-                                                                        <?php if($j==0){?><button type="button" class="btn btn-info" id="" onclick="addDayBlock('<?= $value;?>')">+ Hours</button>
+                                                                        <?php if($j==0){?><button type="button" class="btn btn-info" id="" onclick="addTemplateDayBlock('<?= $value.'_template';?>')">+ Hours</button>
                                                                         <?php }else{?>
-                                                                        <button class="btn btn-danger" type="button" onclick="removeDayBlock('<?= $value;?>',<?= $j;?>)">- Hours</button>
+                                                                        <button class="btn btn-danger" type="button" onclick="removeTemplateDayBlock('<?= $value.'_template';?>',<?= $j;?>)">- Hours</button>
                                                                         <?php } ?>
                                                                     <td>
                                                                 </tr>
                                                                 <?php $j++; } ?>
                                                                 <?php } ?>
-                                                                <?php }else{ ?>
-                                                                <?php foreach($days as $key => $value){ ?>
-                                                                <tr class=" <?= $value;?> <?= $value.'_row_0';?>">
-                                                                    <td> <?php echo $value; ?>:</td>
-                                                                    <td> <input class="form-check-input" type="checkbox" name="<?php echo $value; ?>_is_closed" value="1"></td>
-                                                                    <td>
-                                                                        <select class="form-control" name="<?= $value;?>_hours_min[]">
-                                                                            <?php foreach($timeValue as $rowtime){ ?>
-                                                                            <option value="<?php echo $rowtime ?>">
-                                                                                <?php echo $rowtime ?>
-                                                                            </option>
-                                                                            <?php } ?>
-
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <select class="form-control" name="<?= $value;?>_hours_max[]">
-                                                                            <?php foreach($timeValue as $rowtime){ ?>
-                                                                            <option value="<?php echo $rowtime ?>">
-                                                                                <?php echo $rowtime ?>
-                                                                            </option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td> <button type="button" class="btn btn-info" id="" onclick="addDayBlock('<?= $value;?>')">+ Hours</button>
-                                                                    <td>
-                                                                </tr>
-
                                                                 <?php } ?>
-                                                                <?php } ?>
+
                                                             </tbody>
                                                         </table>
                                                     </div>
+                                                <?php } ?>
 
-                                                    @if(Helper::getFeatureUses('schedule-normal') == false)
-                                                    <?php
-                                                        $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-                                                        $timeValue = array(
-                                                            "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00",
-                                                            "05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30",
-                                                            "11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00",
-                                                            "16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30",
-                                                            "22:00","22:30","23:00","23:30","24:00");
-                                                    ?>
-                                                     @endif
-                                                </div>
-
-
-
-                                                <div class="exceptional_days_div" id="exceptional_days_div" style="display:none;">
-                                                    <?php /* ---------------------- START Exceptional holidays --------------------------------  */ ?>
-                                                    <div class="row mb-4">
-                                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                            <div class="panel-heading cust-tab-head">
-                                                                <h4 class="box-title"> Exceptional holidays</h4>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="">
-                                                        <div class="row mb-4">
-                                                            <label class="col-md-12">Schedule Template</label>
-                                                            <div class="col-md-3">
-                                                            <div class="custom-control custom-radio">
-                                                                    <input type="radio" class="pay" name="exception_days" value="no" id="pay" {{ $basicData->is_exceptionaltemplate=='no' ? 'checked' : '' }}>
-                                                                    <label class="custom-control-label" for="1">No </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="custom-control custom-radio">
-                                                                    <input type="radio" class="pay" name="exception_days" value="yes" id="nonpay" {{ $basicData->is_exceptionaltemplate=='yes' ? 'checked' : '' }}>
-                                                                    <label class="custom-control-label" for="1">Yes</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group mb-4 row" style="margin: 2px;" id="exception_days-template">
-                                                        <label class="col-md-12 p-0">Exceptional Holidays Template</label>
-
-                                                        <div class="col-md-4 cus-title"><br>
-                                                            <div class="form-group mb-4">
-                                                                <label class="col-md-12 p-0">Template Name</label>
-                                                                <div class="col-md-12 border-bottom p-0">
-                                                                    <input type="text" name="exceptional_template_name" id="exceptional_template_name" value="{{ old('exceptional_template_name') }}" placeholder="Enter Exceptional Template Name" class="form-control p-0 border-0" autocomplete=off>
-                                                                </div>
-                                                                <span class="text-danger">@error('exceptional_template_name'){{$message}} @enderror</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <button type="submit" id="exceptional_template_name_btn" style="margin: 55px 0px 2px;" class="btn btn-info">Add</button>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <hr>
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <select class="form-control" name="exception_daystemplateselect_admin" id="exception-daystemplateselect_admin" onchange ="getExceptionTemplateOption(this.value,'admin')" style="width:100%">
-                                                                <option value="none">Admin Template</option>
-                                                                @foreach($data['exeptionaldaysdata_admin'] as $exeptionaldaysdatarow)
-                                                                <option value="{{ $exeptionaldaysdatarow->id }}" {{ $exeptionaldaysdatarow->id == $basicData->is_exceptionaltemplate_id ? 'selected' : '' }}> {{ $exeptionaldaysdatarow->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-1">
-                                                        </div>
-                                                        <div class="col-md-2">
-                                                            <select class="form-control" name="exception_daystemplateselect" id="exception-daystemplateselect" onchange ="getExceptionTemplateOption(this.value,'vendor')" style="width:100%">
-                                                                <option value="none">Vendor Template</option>
-                                                                @foreach($data['exeptionaldaysdata'] as $exeptionaldaysdatarow)
-                                                                <option value="{{ $exeptionaldaysdatarow->id }}" {{ $exeptionaldaysdatarow->id == $basicData->is_exceptionaltemplate_id ? 'selected' : '' }}> {{ $exeptionaldaysdatarow->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <input type="file" style="width: 219px;float: left;" target="_blank" name="exeptional_template_impt_file" id="exeptional_template_impt_file" style="float: left;width: 70%; margin: -2px 5px;" class="form-control">
-                                                            <a class="btn btn-success btn-sm" style="text-align: right;margin: 5px;color: #fff;" id="exeptional_templateimpt_btn">Import Data </a>
-                                                        </div>
-
-                                                        <div class="col-md-3 import-style">
-                                                            <a href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Exc format">
-                                                                <i style="font-size:25px;color: #e31212;" class="fa fa-download" aria-hidden="true"></i> Sample Format
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div id="exeptional_template_upload-status" style="text-align: right; text-align: right;margin: 5px 310px;"></div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <input type="hidden" name="exeActualdataforyesno" value="{{ $basicData->is_exceptionaltemplate }}">
-                                                    <input type="hidden" name="exeActualdataforselectedTemplateId" value="{{ $basicData->is_exceptionaltemplate_id }}">
-
-                                                    <?php if($basicData->is_exceptionaltemplate=='yes'){if($data['scheduleExceptionHolidayDatacount']!=0){ ?>
-                                                    <div class="table-exceptional">
-                                                        <table id="temp-exceptiondaysdetails-table" class="table table-bordered">
+                                                <div class="table-schedule">
+                                                    <table id="nomaldays-table" class="table text-nowrap" style="display:none;">
                                                         <thead>
                                                             <tr>
-                                                                <th class="border-top-0">Date</th>
-                                                                <th class="border-top-0">Holiday</th>
                                                                 <th class="border-top-0">Day</th>
-                                                                <th class="border-top-0">Opening</th>
-                                                                <th class="border-top-0">Closing</th>
                                                                 <th class="border-top-0">Closed</th>
-                                                                <th class="border-top-0 delete_default_exceptional_dv">Action</th>
-
+                                                                <th class="border-top-0">Open</th>
+                                                                <th class="border-top-0">Closed</th>
+                                                                <th class="border-top-0">Add Hours</th>
                                                             </tr>
                                                         </thead>
+
                                                         <tbody>
-
-                                                            @foreach($data['scheduleExceptionHolidayData'] as $holidayrow)
-                                                            <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
-                                                            <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="default_exceptional_holi_<?php echo $holidayrow->id; ?>">
-                                                                <td>
-                                                                    {{ $holidayrow->custom_date }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $holidayrow->note }}
-                                                                </td>
-                                                                <td>
-                                                                    {{ $holidayrow->day }}
-                                                                </td>
-                                                                <td>
-                                                                    <?php foreach($opentimeholiday as $extratime){?>
-                                                                    <p><?php echo "Open Time: ".$extratime->open_time; ?></p>
-                                                                    <?php } ?>
-
-                                                                </td>
-                                                                <td>
-                                                                    <?php foreach($opentimeholiday as $extratime){?>
-                                                                    <p><?php echo "Close Time: ".$extratime->close_time; ?></p>
-                                                                    <?php } ?>
-                                                                </td>
-                                                                <td>
-                                                                    @if($holidayrow->closed == 1 || $holidayrow->closed == 'Yes')
-                                                                        Yes
-                                                                    @else
-                                                                    No
-                                                                    @endif
-                                                                </td>
-                                                                <td class="delete_default_exceptional_dv">
-                                                                    <button type="button" class="btn btn-sm btn-danger delete_default_exceptional" data-id="{{ $holidayrow->id }}">Delete</button>
-                                                                </td>
-
-                                                            </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                        </table>
-                                                    </div>
-
-                                                    <?php /* ---------------------- START EDIT TEMPLATE SECTION Exceptional holidays --------------------------------  */ ?>
-                                                        <?php
-
-                                                        if($data['scheduleExceptionHolidayDatacount'] > 0){ ?>
-                                                        <div class="custom-control custom-checkbox editDataTemplateexception">
-                                                            <input type="checkbox" class="form-check-input" name="editDataTemplateexception" id="edit_tempalte_checkbox_exception" value="one">
-                                                            {{-- <label class="custom-control-label" for="1"><i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label> --}}
-                                                            <label class="custom-control-label btn btn-success" for="1" style="padding: 0px 20px 0px 28px; color: #fff;"><i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label>
-                                                        </div>
-                                                        <?php } ?>
-                                                        <div id="edit_template_exception_table">
-                                                            <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-                                                                    $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
-                                                                "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
-                                                                "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
+                                                            <?php
+                                                            $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+                                                            $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
+                                                        "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
+                                                        "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
                                                             ?>
 
-                                                            <?php if($data['scheduleExceptionHolidayDatacount']!=0){ ?>
-                                                                <table class="table table-bordered" >
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th class="border-top-0">Date</th>
-                                                                            <th class="border-top-0">Holiday</th>
-                                                                            <th class="border-top-0">Day</th>
-                                                                            <th class="border-top-0">Opening</th>
-                                                                            <th class="border-top-0">Closing</th>
-                                                                            <th class="border-top-0">Closed</th>
+                                                            <?php if(count($scheduleData)!=0 && $basicData->is_normaltemplate!='yes'){ ?>
+                                                            <?php foreach($scheduleData as $value=>$dayDetail){ ?>
+                                                            <?php $j=0; foreach($dayDetail as $dayData){ ?>
+                                                            <tr class=" <?= $value;?> <?= $value.'_row_'.$j;?>">
+                                                                <td> <?= $j==0?$value.':':''; ?></td>
+                                                                <td>
+                                                                    <?php if($j==0){?>
+                                                                    <input class="form-check-input" type="checkbox" name="<?php echo $value; ?>_is_closed" value="1" <?php if($dayData['is_closed']){echo "checked";}?>>
+                                                                    <?php  } ?>
+                                                                </td>
+                                                                <td>
+                                                                    <select class="form-control" name="<?= $value;?>_hours_min[]">
+                                                                        <?php foreach($timeValue as $rowtime){ ?>
+                                                                        <option value="<?php echo $rowtime ?>" <?php if($rowtime==$dayData['open_time']){echo "selected" ;}?>>
+                                                                            <?php echo $rowtime ?>
+                                                                        </option>
+                                                                        <?php } ?>
 
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @foreach($data['scheduleExceptionHolidayData'] as $holidayrow)
-                                                                        <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
-                                                                        <input type="hidden" name="template_real_id[]" value="{{ $holidayrow->id }}">
-                                                                        <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="yes_exceptional_holi_<?php echo $holidayrow->id; ?>">
-                                                                            <td>
-                                                                                <div class="col-md-12 border-bottom ">
-                                                                                    <input type="date" name="edit_template_custom_date[]" value="{{ $holidayrow->custom_date }}" class="form-control  border-0" autocomplete=off>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="col-md-12 border-bottom ">
-                                                                                    <input type="text" name="edit_template_note[]" value="{{ $holidayrow->note }}" placeholder="Add note" class="form-control border-0" autocomplete=off>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select class="form-control" name="<?= $value;?>_hours_max[]">
+                                                                        <?php foreach($timeValue as $rowtime){ ?>
+                                                                        <option value="<?php echo $rowtime ?>" <?php if($rowtime==$dayData['close_time']){echo "selected" ;}?>>
+                                                                            <?php echo $rowtime ?>
+                                                                        </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <?php if($j==0){?><button type="button" class="btn btn-info" id="" onclick="addDayBlock('<?= $value;?>')">+ Hours</button>
+                                                                    <?php }else{?>
+                                                                    <button class="btn btn-danger" type="button" onclick="removeDayBlock('<?= $value;?>',<?= $j;?>)">- Hours</button>
+                                                                    <?php } ?>
+                                                                <td>
+                                                            </tr>
+                                                            <?php $j++; } ?>
+                                                            <?php } ?>
+                                                            <?php }else{ ?>
+                                                            <?php foreach($days as $key => $value){ ?>
+                                                            <tr class=" <?= $value;?> <?= $value.'_row_0';?>">
+                                                                <td> <?php echo $value; ?>:</td>
+                                                                <td> <input class="form-check-input" type="checkbox" name="<?php echo $value; ?>_is_closed" value="1"></td>
+                                                                <td>
+                                                                    <select class="form-control" name="<?= $value;?>_hours_min[]">
+                                                                        <?php foreach($timeValue as $rowtime){ ?>
+                                                                        <option value="<?php echo $rowtime ?>">
+                                                                            <?php echo $rowtime ?>
+                                                                        </option>
+                                                                        <?php } ?>
 
-                                                                                <select class="form-control" name="edit_exceptional_day[]">
-                                                                                    <?php foreach($days as $rowval){ ?>
-                                                                                    <option value="<?php echo $rowval ?>" {{ $rowval == $holidayrow->day ? 'selected' : '' }}>
-                                                                                    <?php echo $rowval ?>
-                                                                                    </option>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select class="form-control" name="<?= $value;?>_hours_max[]">
+                                                                        <?php foreach($timeValue as $rowtime){ ?>
+                                                                        <option value="<?php echo $rowtime ?>">
+                                                                            <?php echo $rowtime ?>
+                                                                        </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td> <button type="button" class="btn btn-info" id="" onclick="addDayBlock('<?= $value;?>')">+ Hours</button>
+                                                                <td>
+                                                            </tr>
+
+                                                            <?php } ?>
+                                                            <?php } ?>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                @if(Helper::getFeatureUses('schedule-normal') == false)
+                                                <?php
+                                                    $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+                                                    $timeValue = array(
+                                                        "00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00",
+                                                        "05:30","06:00","06:30","07:00","07:30","08:00","08:30","09:00","09:30","10:00","10:30",
+                                                        "11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00",
+                                                        "16:30","17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30",
+                                                        "22:00","22:30","23:00","23:30","24:00");
+                                                ?>
+                                                    @endif
+                                            </div>
+
+
+
+                                            <div class="exceptional_days_div" id="exceptional_days_div" style="display:none;">
+                                                <?php /* ---------------------- START Exceptional holidays --------------------------------  */ ?>
+                                                <div class="row mb-4">
+                                                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                        <div class="panel-heading cust-tab-head">
+                                                            <h4 class="box-title"> Exceptional holidays</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="">
+                                                    <div class="row mb-4">
+                                                        <label class="col-md-12">Schedule Template</label>
+                                                        <div class="col-md-3">
+                                                        <div class="custom-control custom-radio">
+                                                                <input type="radio" class="pay" name="exception_days" value="no" id="pay" {{ $basicData->is_exceptionaltemplate=='no' ? 'checked' : '' }}>
+                                                                <label class="custom-control-label" for="1">No </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="custom-control custom-radio">
+                                                                <input type="radio" class="pay" name="exception_days" value="yes" id="nonpay" {{ $basicData->is_exceptionaltemplate=='yes' ? 'checked' : '' }}>
+                                                                <label class="custom-control-label" for="1">Yes</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group mb-4 row" style="margin: 2px;" id="exception_days-template">
+                                                    <label class="col-md-12 p-0">Exceptional Holidays Template</label>
+
+                                                    <div class="col-md-4 cus-title"><br>
+                                                        <div class="form-group mb-4">
+                                                            <label class="col-md-12 p-0">Template Name</label>
+                                                            <div class="col-md-12 border-bottom p-0">
+                                                                <input type="text" name="exceptional_template_name" id="exceptional_template_name" value="{{ old('exceptional_template_name') }}" placeholder="Enter Exceptional Template Name" class="form-control p-0 border-0" autocomplete=off>
+                                                            </div>
+                                                            <span class="text-danger">@error('exceptional_template_name'){{$message}} @enderror</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <button type="submit" id="exceptional_template_name_btn" style="margin: 55px 0px 2px;" class="btn btn-info">Add</button>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <hr>
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <select class="form-control" name="exception_daystemplateselect_admin" id="exception-daystemplateselect_admin" onchange ="getExceptionTemplateOption(this.value,'admin')" style="width:100%">
+                                                            <option value="none">Admin Template</option>
+                                                            @foreach($data['exeptionaldaysdata_admin'] as $exeptionaldaysdatarow)
+                                                            <option value="{{ $exeptionaldaysdatarow->id }}" {{ $exeptionaldaysdatarow->id == $basicData->is_exceptionaltemplate_id ? 'selected' : '' }}> {{ $exeptionaldaysdatarow->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-1">
+                                                    </div>
+                                                    <div class="col-md-2">
+                                                        <select class="form-control" name="exception_daystemplateselect" id="exception-daystemplateselect" onchange ="getExceptionTemplateOption(this.value,'vendor')" style="width:100%">
+                                                            <option value="none">Vendor Template</option>
+                                                            @foreach($data['exeptionaldaysdata'] as $exeptionaldaysdatarow)
+                                                            <option value="{{ $exeptionaldaysdatarow->id }}" {{ $exeptionaldaysdatarow->id == $basicData->is_exceptionaltemplate_id ? 'selected' : '' }}> {{ $exeptionaldaysdatarow->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input type="file" style="width: 219px;float: left;" target="_blank" name="exeptional_template_impt_file" id="exeptional_template_impt_file" style="float: left;width: 70%; margin: -2px 5px;" class="form-control">
+                                                        <a class="btn btn-success btn-sm" style="text-align: right;margin: 5px;color: #fff;" id="exeptional_templateimpt_btn">Import Data </a>
+                                                    </div>
+
+                                                    <div class="col-md-3 import-style">
+                                                        <a href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Exc format">
+                                                            <i style="font-size:25px;color: #e31212;" class="fa fa-download" aria-hidden="true"></i> Sample Format
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div id="exeptional_template_upload-status" style="text-align: right; text-align: right;margin: 5px 310px;"></div>
+                                                    </div>
+
+                                                </div>
+
+                                                <input type="hidden" name="exeActualdataforyesno" value="{{ $basicData->is_exceptionaltemplate }}">
+                                                <input type="hidden" name="exeActualdataforselectedTemplateId" value="{{ $basicData->is_exceptionaltemplate_id }}">
+
+                                                <?php if($basicData->is_exceptionaltemplate=='yes'){if($data['scheduleExceptionHolidayDatacount']!=0){ ?>
+                                                <div class="table-exceptional">
+                                                    <table id="temp-exceptiondaysdetails-table" class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-top-0">Date</th>
+                                                            <th class="border-top-0">Holiday</th>
+                                                            <th class="border-top-0">Day</th>
+                                                            <th class="border-top-0">Opening</th>
+                                                            <th class="border-top-0">Closing</th>
+                                                            <th class="border-top-0">Closed</th>
+                                                            <th class="border-top-0 delete_default_exceptional_dv">Action</th>
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @foreach($data['scheduleExceptionHolidayData'] as $holidayrow)
+                                                        <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
+                                                        <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="default_exceptional_holi_<?php echo $holidayrow->id; ?>">
+                                                            <td>
+                                                                {{ $holidayrow->custom_date }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $holidayrow->note }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $holidayrow->day }}
+                                                            </td>
+                                                            <td>
+                                                                <?php foreach($opentimeholiday as $extratime){?>
+                                                                <p><?php echo "Open Time: ".$extratime->open_time; ?></p>
+                                                                <?php } ?>
+
+                                                            </td>
+                                                            <td>
+                                                                <?php foreach($opentimeholiday as $extratime){?>
+                                                                <p><?php echo "Close Time: ".$extratime->close_time; ?></p>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td>
+                                                                @if($holidayrow->closed == 1 || $holidayrow->closed == 'Yes')
+                                                                    Yes
+                                                                @else
+                                                                No
+                                                                @endif
+                                                            </td>
+                                                            <td class="delete_default_exceptional_dv">
+                                                                <button type="button" class="btn btn-sm btn-danger delete_default_exceptional" data-id="{{ $holidayrow->id }}">Delete</button>
+                                                            </td>
+
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <?php /* ---------------------- START EDIT TEMPLATE SECTION Exceptional holidays --------------------------------  */ ?>
+                                                    <?php
+
+                                                    if($data['scheduleExceptionHolidayDatacount'] > 0){ ?>
+                                                    <div class="custom-control custom-checkbox editDataTemplateexception">
+                                                        <input type="checkbox" class="form-check-input" name="editDataTemplateexception" id="edit_tempalte_checkbox_exception" value="one">
+                                                        {{-- <label class="custom-control-label" for="1"><i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label> --}}
+                                                        <label class="custom-control-label btn btn-success" for="1" style="padding: 0px 20px 0px 28px; color: #fff;"><i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label>
+                                                    </div>
+                                                    <?php } ?>
+                                                    <div id="edit_template_exception_table">
+                                                        <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+                                                                $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
+                                                            "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
+                                                            "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
+                                                        ?>
+
+                                                        <?php if($data['scheduleExceptionHolidayDatacount']!=0){ ?>
+                                                            <table class="table table-bordered" >
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="border-top-0">Date</th>
+                                                                        <th class="border-top-0">Holiday</th>
+                                                                        <th class="border-top-0">Day</th>
+                                                                        <th class="border-top-0">Opening</th>
+                                                                        <th class="border-top-0">Closing</th>
+                                                                        <th class="border-top-0">Closed</th>
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($data['scheduleExceptionHolidayData'] as $holidayrow)
+                                                                    <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
+                                                                    <input type="hidden" name="template_real_id[]" value="{{ $holidayrow->id }}">
+                                                                    <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="yes_exceptional_holi_<?php echo $holidayrow->id; ?>">
+                                                                        <td>
+                                                                            <div class="col-md-12 border-bottom ">
+                                                                                <input type="date" name="edit_template_custom_date[]" value="{{ $holidayrow->custom_date }}" class="form-control  border-0" autocomplete=off>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="col-md-12 border-bottom ">
+                                                                                <input type="text" name="edit_template_note[]" value="{{ $holidayrow->note }}" placeholder="Add note" class="form-control border-0" autocomplete=off>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+
+                                                                            <select class="form-control" name="edit_exceptional_day[]">
+                                                                                <?php foreach($days as $rowval){ ?>
+                                                                                <option value="<?php echo $rowval ?>" {{ $rowval == $holidayrow->day ? 'selected' : '' }}>
+                                                                                <?php echo $rowval ?>
+                                                                                </option>
+                                                                                <?php } ?>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php foreach($opentimeholiday as $extratime){?>
+                                                                                <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_time_hours_min[]">
+                                                                                    <?php foreach($timeValue as $rowtime){?>
+                                                                                        <option value="{{ $rowtime }}" {{ $rowtime == $extratime->open_time ? 'selected' : '' }}> {{ $rowtime }}</option>
                                                                                     <?php } ?>
                                                                                 </select>
+                                                                            <?php } ?>
+
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php foreach($opentimeholiday as $extratime){?>
+                                                                                <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_time_hours_max[]">
+                                                                                    <?php foreach($timeValue as $rowtime){?>
+                                                                                        <option value="{{ $rowtime }}" {{ $rowtime == $extratime->close_time ? 'selected' : '' }}> {{ $rowtime }}</option>
+                                                                                    <?php } ?>
+                                                                                </select>
+                                                                            <?php } ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group mb-4">
+                                                                                <div class="col-md-12 border-bottom ">
+                                                                                    <select name="closed" class="form-control border-0">
+                                                                                        <option value="No">No</option>
+                                                                                        <option value="Yes">Yes</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        <?php } ?>
+
+                                                        <div class="form-group mb-4">
+                                                            <div class="col-sm-12">
+                                                                <button type="submit" class="btn btn-info listsubmit">Update</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php /* ---------------------- END EDIT TEMPLATE SECTION Exceptional holidays --------------------------------  */ ?>
+
+                                                <?php } } ?>
+                                                <?php if($basicData->is_exceptionaltemplate=='no'){
+                                                if($data['scheduleExceptionHolidayDatacount']!=0){ ?>
+                                                <div class="exceptional-schedule-table">
+                                                    <table id="exceptiondaysdetails-table" class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="border-top-0">Date</th>
+                                                            <th class="border-top-0">Holiday</th>
+                                                            <th class="border-top-0">Day</th>
+                                                            <th class="border-top-0">Opening</th>
+                                                            <th class="border-top-0">Closing</th>
+                                                            <th class="border-top-0">Closed</th>
+                                                            <th class="border-top-0">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach($data['scheduleExceptionHolidayData'] as $holidayrow)
+                                                        <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
+                                                        <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="no_exceptional_holi_<?php echo $holidayrow->id; ?>">
+                                                            <td>
+                                                                {{ $holidayrow->custom_date }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $holidayrow->note }}
+                                                            </td>
+                                                            <td>
+                                                                {{ $holidayrow->day }}
+                                                            </td>
+                                                            <td>
+                                                                <?php foreach($opentimeholiday as $extratime){?>
+                                                                <p><?php echo "Open Time: ".$extratime->open_time; ?></p>
+                                                                <?php } ?>
+
+                                                            </td>
+                                                            <td>
+                                                                <?php foreach($opentimeholiday as $extratime){?>
+                                                                <p><?php echo "Close Time: ".$extratime->close_time; ?></p>
+                                                                <?php } ?>
+                                                            </td>
+                                                            <td>
+                                                                {{ $holidayrow->closed }}
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn btn-sm btn-danger delete_no_exceptional" data-id="{{ $holidayrow->id }}">Delete</button>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <?php /* ---------------------- START EDIT SECTION Exceptional holidays --------------------------------  */ ?>
+
+                                                <div class="row exceptional_holidays_checkbox">
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="custom-control custom-checkbox ">
+                                                            <input type="checkbox" class="form-check-input" name="editDataexception" id="edit_checkboe_exception" value="one">
+                                                            <label class="custom-control-label btn btn-success" for="1" style="padding: 0px 20px 0px 28px; color: #fff;"><i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 import-style">
+                                                        <a href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Exc format">
+                                                            <i style="font-size:25px;color: #e31212;" class="fa fa-download" aria-hidden="true"></i> Sample Format
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <input type="file" style="width: 219px;float: left;" target="_blank" name="exceptional_file" id="exceptional_impt_file" style="float: left;width: 70%; margin: -2px 5px;" class="form-control">
+                                                            <a class="btn btn-success btn-sm" style="text-align: right;margin: 5px;color: #fff;" id="exceptional_impt_btn">Import Data</a>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div id="exceptional_upload_status" style="text-align: right;"></div>
+                                                    </div>
+                                                </div>
+
+                                                <div id="edit_exception_table">
+                                                        <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+                                                                $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
+                                                            "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
+                                                            "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
+                                                        ?>
+
+                                                        <?php if(count($data['scheduleExceptionHolidayData'])!=0){ ?>
+                                                            <table class="table table-bordered" >
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="border-top-0">Date</th>
+                                                                        <th class="border-top-0">Holiday</th>
+                                                                        <th class="border-top-0">Day</th>
+                                                                        <th class="border-top-0">Opening</th>
+                                                                        <th class="border-top-0">Closing</th>
+                                                                        <th class="border-top-0">Closed</th>
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($data['scheduleExceptionHolidayData'] as $key => $holidayrow)
+                                                                        <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
+                                                                        <input type="hidden" name="real_id[]" value="{{ $holidayrow->id }}">
+                                                                        <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="tblholi_<?php echo $holidayrow->id; ?>">
+                                                                            <td>
+                                                                                <div class="col-md-12 border-bottom ">
+
+                                                                                    <input type="date" name="edit_custom_date[]" value="{{ $holidayrow->custom_date }}" class="form-control  border-0" autocomplete=off>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="col-md-12 border-bottom ">
+                                                                                    <input type="text" name="edit_note[]" value="{{ $holidayrow->note }}" placeholder="Add note" class="form-control border-0" autocomplete=off>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="col-md-12 border-bottom ">
+                                                                                    <select class="form-control" name="edit_exceptional_day[]">
+                                                                                        <?php foreach($days as $rowval){ ?>
+                                                                                        <option value="<?php echo $rowval ?>" {{ $rowval == $holidayrow->day ? 'selected' : '' }}>
+                                                                                        <?php echo $rowval ?>
+                                                                                        </option>
+                                                                                        <?php } ?>
+                                                                                    </select>
+                                                                                </div>
                                                                             </td>
                                                                             <td>
                                                                                 <?php foreach($opentimeholiday as $extratime){?>
@@ -1656,7 +1775,6 @@ $instruction = $data['instruction'];
                                                                                         <?php } ?>
                                                                                     </select>
                                                                                 <?php } ?>
-
                                                                             </td>
                                                                             <td>
                                                                                 <?php foreach($opentimeholiday as $extratime){?>
@@ -1668,35 +1786,202 @@ $instruction = $data['instruction'];
                                                                                 <?php } ?>
                                                                             </td>
                                                                             <td>
-                                                                                <div class="form-group mb-4">
-                                                                                    <div class="col-md-12 border-bottom ">
-                                                                                        <select name="closed" class="form-control border-0">
-                                                                                            <option value="No">No</option>
-                                                                                            <option value="Yes">Yes</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </div>
+                                                                                <input type="hidden" name="template_exceptional_is_closed[{{ $key }}]" value="No">
+                                                                                <input class="form-check-input" type="checkbox" name="template_exceptional_is_closed[{{ $key }}]" value="Yes" {{ $holidayrow->closed === 'Yes' ? 'checked' : '' }}>
                                                                             </td>
-
                                                                         </tr>
                                                                     @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            <?php } ?>
-
-                                                            <div class="form-group mb-4">
-                                                                <div class="col-sm-12">
-                                                                    <button type="submit" class="btn btn-info listsubmit">Update</button>
-                                                                </div>
+                                                                </tbody>
+                                                            </table>
+                                                        <?php } ?>
+                                                        <div class="form-group mb-4">
+                                                            <div class="col-sm-12">
+                                                                <button type="submit" class="btn btn-info listsubmit">Update</button>
                                                             </div>
                                                         </div>
-                                                    <?php /* ---------------------- END EDIT TEMPLATE SECTION Exceptional holidays --------------------------------  */ ?>
+                                                    </div>
+                                                <?php /* ---------------------- END EDIT SECTION Exceptional holidays --------------------------------  */ ?>
+                                                <?php } } ?>
+                                                <div class="table-schedule">
+                                                    <table id="exceptiondays-table" class="table text-nowrap table-info table-placeholder-css" style="display:none;" >
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="border-top-0">Date</th>
+                                                                <th class="border-top-0">Holiday</th>
+                                                                <th class="border-top-0">Day</th>
+                                                                <th class="border-top-0">Opening</th>
+                                                                <th class="border-top-0">Closing</th>
+                                                                <th class="border-top-0">Closed</th>
+                                                                <th class="border-top-0">Add Hours</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="row_exceptional execption_time_slot_row_0">
+                                                                <td>
+                                                                    <div class="form-group mb-4">
+                                                                        <div class="col-md-12 border-bottom ">
+                                                                            <input type="date" name="exception_date" class="form-control  border-0" autocomplete=off>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group mb-4">
+                                                                        <div class="col-md-12 border-bottom ">
+                                                                            <input type="text" name="exception_note" placeholder="Holiday note" class="form-control border-0" autocomplete=off>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="col-md-12 border-bottom ">
+                                                                        <select class="form-control" name="exception_day">
+                                                                            <?php foreach($days as $rowval){ ?>
+                                                                            <option value="<?php echo $rowval ?>" >
+                                                                            <?php echo $rowval ?>
+                                                                            </option>
+                                                                            <?php } ?>
+                                                                        </select>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <select class="form-control" name="exception_time_hours_min[]">
+                                                                        <?php foreach($timeValue as $rowtime){ ?>
+                                                                        <option value="<?php echo $rowtime ?>">
+                                                                            <?php echo $rowtime ?>
+                                                                        </option>
+                                                                        <?php } ?>
 
-                                                    <?php } } ?>
-                                                    <?php if($basicData->is_exceptionaltemplate=='no'){
-                                                    if($data['scheduleExceptionHolidayDatacount']!=0){ ?>
-                                                    <div class="exceptional-schedule-table">
-                                                        <table id="exceptiondaysdetails-table" class="table table-bordered">
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select class="form-control" name="exception_time_hours_max[]">
+                                                                        <?php foreach($timeValue as $rowtime){ ?>
+                                                                        <option value="<?php echo $rowtime ?>">
+                                                                            <?php echo $rowtime ?>
+                                                                        </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group mb-4">
+                                                                        <div class="col-md-12 border-bottom ">
+                                                                            <select name="exception_closed" class="form-control border-0">
+                                                                                <option value="No">No</option>
+                                                                                <option value="Yes">Yes</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" class="btn btn-primary" id="" onclick="addTimeBlockException()">+ Hours</button>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4"></td>
+                                                                <td><button type="submit" id="listsubmit-schedule" class="btn btn-warning listsubmit">Save Time Slot</button></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <?php /* ---------------------- END Exceptional holidays --------------------------------  */ ?>
+                                            </div>
+
+                                            <div class="public_days_div" id="public_days_div" style="display:none;">
+                                                <?php /* ---------------------- Public holidays --------------------------------  */ ?>
+
+                                                <div class="row mb-4">
+                                                    <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                        <div class="panel-heading cust-tab-head">
+                                                            <h4 class="box-title">Public holidays</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="">
+                                                    <div class="row mb-4">
+                                                    <label class="col-md-12">Schedule Template</label>
+                                                        <div class="col-md-3">
+                                                            <div class="custom-control  custom-radio">
+                                                                <input type="radio" class="pay public_h_radio" name="publicdays" value="no" id="pay" {{ $basicData->is_publictemplate=='no' ? 'checked' : '' }}>
+                                                                <label class="custom-control-label" for="1">No </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="custom-control  custom-radio">
+                                                                <input type="radio" class="pay public_h_radio" name="publicdays" value="yes" id="nonpay" {{ $basicData->is_publictemplate=='yes' ? 'checked' : '' }}>
+                                                                <label class="custom-control-label" for="1">Yes</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group mb-4 row" style="margin: 2px;" id="publicdays-template" style="display:none;">
+
+                                                    <div class="col-md-4 cus-title"><br>
+                                                        <div class="form-group mb-4">
+                                                            <label class="col-md-12 p-0">Public Template Name</label>
+                                                            <div class="col-md-12 border-bottom p-0">
+                                                                <input type="text" name="public_template_name" id="public_template_name" value="{{ old('public_template_name') }}" placeholder="Enter Template Name" class="form-control p-0 border-0" autocomplete=off>
+                                                            </div>
+                                                            <span class="text-danger">@error('public_template_name'){{$message}} @enderror</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-8">
+                                                        <button type="submit" id="public_template_btn" style="margin: 55px 0px 2px;" class="btn btn-info">Add</button>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <hr>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <label class=" p-0">Public Holidays Template Admin</label>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label class=" p-0">Public Holidays Template Vendor</label>
+                                                    </div>
+                                                    <div class="col-md-2 import-style">
+                                                        <a href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Exc format">
+                                                            <i style="font-size:25px;color: #e31212;" class="fa fa-download" aria-hidden="true"></i> Sample Format
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <select class="form-control" name="publicdaystemplateselect_admin" id="publicdaystemplateselect_admin" onchange="getpublicTemplateOption(this.value,'admin');" style="width:100%">
+                                                            <option value="none">Select Template</option>
+                                                            @foreach($data['publicdaysdata_admin'] as $publicdaysdatarow)
+                                                            <option value="{{ $publicdaysdatarow->id }}" {{ $publicdaysdatarow->id == $basicData->is_publictemplate_id ? 'selected' : '' }}>
+                                                                {{ $publicdaysdatarow->name }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-1"> </div>
+                                                    <div class="col-md-3">
+                                                        <select class="form-control" name="publicdaystemplateselect" id="publicdaystemplateselect" onchange="getpublicTemplateOption(this.value,'vendor');" style="width:100%">
+                                                            <option value="none">Select Template</option>
+                                                            @foreach($data['publicdaysdata'] as $publicdaysdatarow)
+                                                            <option value="{{ $publicdaysdatarow->id }}" {{ $publicdaysdatarow->id == $basicData->is_publictemplate_id ? 'selected' : '' }}>
+                                                                {{ $publicdaysdatarow->name }}
+                                                            </option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                        <input type="file" style="width: 219px;float: left;" target="_blank" name="public_template_impt_file" id="public_template_impt_file" style="float: left;width: 70%; margin: -2px 5px;" class="form-control">
+                                                        <a class="btn btn-success btn-sm" style="text-align: right;margin: 5px;color: #fff;" id="public_templateimpt_btn">Import Template Data </a>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div id="template_upload-status" style="text-align: right; text-align: right;margin: 5px 310px;"></div>
+                                                    </div>
+
+                                                </div>
+
+                                                <input type="hidden" name="actualdataforyesno" value="{{ $basicData->is_publictemplate }}">
+                                                <input type="hidden" name="actualdataforselectedTemplateId" value="{{ $basicData->is_publictemplate_id }}">
+
+                                                <?php
+                                                if($basicData->is_publictemplate=='yes'){
+                                                    if($data['scheduleHolidayDatacount']!=0){
+                                                ?>
+
+                                                <div class="temp-schecule-table">
+                                                    <table id="temp-publicdaysdetails-table" class="table table-bordered">
                                                         <thead>
                                                             <tr>
                                                                 <th class="border-top-0">Date</th>
@@ -1706,12 +1991,13 @@ $instruction = $data['instruction'];
                                                                 <th class="border-top-0">Closing</th>
                                                                 <th class="border-top-0">Closed</th>
                                                                 <th class="border-top-0">Action</th>
+
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            @foreach($data['scheduleExceptionHolidayData'] as $holidayrow)
+                                                            @foreach($data['scheduleHolidayData'] as $holidayrow)
                                                             <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
-                                                            <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="no_exceptional_holi_<?php echo $holidayrow->id; ?>">
+                                                            <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="public_holi_<?php echo $holidayrow->id; ?>">
                                                                 <td>
                                                                     {{ $holidayrow->custom_date }}
                                                                 </td>
@@ -1719,7 +2005,7 @@ $instruction = $data['instruction'];
                                                                     {{ $holidayrow->note }}
                                                                 </td>
                                                                 <td>
-                                                                    {{ $holidayrow->day }}
+                                                                    {{ $holidayrow->day??'' }}
                                                                 </td>
                                                                 <td>
                                                                     <?php foreach($opentimeholiday as $extratime){?>
@@ -1733,1040 +2019,702 @@ $instruction = $data['instruction'];
                                                                     <?php } ?>
                                                                 </td>
                                                                 <td>
-                                                                    {{ $holidayrow->closed }}
+                                                                    <input class="form-check-input" type="checkbox" disabled value="Yes" {{ ($holidayrow->closed == '1' || $holidayrow->closed == 'Yes') ? 'checked' : '' }}>
+
                                                                 </td>
                                                                 <td>
-                                                                    <button type="button" class="btn btn-sm btn-danger delete_no_exceptional" data-id="{{ $holidayrow->id }}">Delete</button>
+                                                                    <button type="button" class="btn btn-danger deleterow" data-id="{{ $holidayrow->id }}">Delete</button>
                                                                 </td>
+
                                                             </tr>
                                                             @endforeach
                                                         </tbody>
-                                                        </table>
-                                                    </div>
+                                                    </table>
+                                                </div>
 
-                                                    <?php /* ---------------------- START EDIT SECTION Exceptional holidays --------------------------------  */ ?>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="form-check-input" name="editDataTemplatepublic" id="edit_tempalte_checkbox_public" value="one">
+                                                    <label class="custom-control-label btn btn-success" for="1" style="padding: 0px 20px 0px 28px; color: #fff;">
+                                                        <i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label>
+                                                </div>
+                                                <?php /* ---------------------- START EDIT TEMPLATE SECTION Public holidays --------------------------------  */ ?>
+                                                    <div id="edit_template_public_table">
+                                                        <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+                                                                $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
+                                                            "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
+                                                            "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
+                                                        ?>
 
-                                                    <div class="row exceptional_holidays_checkbox">
-                                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                                            <div class="custom-control custom-checkbox ">
-                                                                <input type="checkbox" class="form-check-input" name="editDataexception" id="edit_checkboe_exception" value="one">
-                                                                <label class="custom-control-label btn btn-success" for="1" style="padding: 0px 20px 0px 28px; color: #fff;"><i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 import-style">
-                                                            <a href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Exc format">
-                                                                <i style="font-size:25px;color: #e31212;" class="fa fa-download" aria-hidden="true"></i> Sample Format
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                                <input type="file" style="width: 219px;float: left;" target="_blank" name="exceptional_file" id="exceptional_impt_file" style="float: left;width: 70%; margin: -2px 5px;" class="form-control">
-                                                                <a class="btn btn-success btn-sm" style="text-align: right;margin: 5px;color: #fff;" id="exceptional_impt_btn">Import Data</a>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div id="exceptional_upload_status" style="text-align: right;"></div>
-                                                        </div>
-                                                    </div>
+                                                        <?php if($data['scheduleHolidayData']!=0){ ?>
+                                                            <table class="table table-bordered" >
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="border-top-0">Date</th>
+                                                                        <th class="border-top-0">Holiday</th>
+                                                                        <th class="border-top-0">Day</th>
+                                                                        <th class="border-top-0">Opening</th>
+                                                                        <th class="border-top-0">Closing</th>
+                                                                        <th class="border-top-0">Closed </th>
 
-                                                    <div id="edit_exception_table">
-                                                            <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-                                                                    $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
-                                                                "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
-                                                                "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
-                                                            ?>
-
-                                                            <?php if(count($data['scheduleExceptionHolidayData'])!=0){ ?>
-                                                                <table class="table table-bordered" >
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th class="border-top-0">Date</th>
-                                                                            <th class="border-top-0">Holiday</th>
-                                                                            <th class="border-top-0">Day</th>
-                                                                            <th class="border-top-0">Opening</th>
-                                                                            <th class="border-top-0">Closing</th>
-                                                                            <th class="border-top-0">Closed</th>
-
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @foreach($data['scheduleExceptionHolidayData'] as $key => $holidayrow)
-                                                                            <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
-                                                                            <input type="hidden" name="real_id[]" value="{{ $holidayrow->id }}">
-                                                                            <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="tblholi_<?php echo $holidayrow->id; ?>">
-                                                                                <td>
-                                                                                    <div class="col-md-12 border-bottom ">
-
-                                                                                        <input type="date" name="edit_custom_date[]" value="{{ $holidayrow->custom_date }}" class="form-control  border-0" autocomplete=off>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="col-md-12 border-bottom ">
-                                                                                        <input type="text" name="edit_note[]" value="{{ $holidayrow->note }}" placeholder="Add note" class="form-control border-0" autocomplete=off>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="col-md-12 border-bottom ">
-                                                                                        <select class="form-control" name="edit_exceptional_day[]">
-                                                                                            <?php foreach($days as $rowval){ ?>
-                                                                                            <option value="<?php echo $rowval ?>" {{ $rowval == $holidayrow->day ? 'selected' : '' }}>
-                                                                                            <?php echo $rowval ?>
-                                                                                            </option>
-                                                                                            <?php } ?>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <?php foreach($opentimeholiday as $extratime){?>
-                                                                                        <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_time_hours_min[]">
-                                                                                            <?php foreach($timeValue as $rowtime){?>
-                                                                                                <option value="{{ $rowtime }}" {{ $rowtime == $extratime->open_time ? 'selected' : '' }}> {{ $rowtime }}</option>
-                                                                                            <?php } ?>
-                                                                                        </select>
-                                                                                    <?php } ?>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <?php foreach($opentimeholiday as $extratime){?>
-                                                                                        <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_time_hours_max[]">
-                                                                                            <?php foreach($timeValue as $rowtime){?>
-                                                                                                <option value="{{ $rowtime }}" {{ $rowtime == $extratime->close_time ? 'selected' : '' }}> {{ $rowtime }}</option>
-                                                                                            <?php } ?>
-                                                                                        </select>
-                                                                                    <?php } ?>
-                                                                                </td>
-                                                                                <td>
-                                                                                    <input type="hidden" name="template_exceptional_is_closed[{{ $key }}]" value="No">
-                                                                                    <input class="form-check-input" type="checkbox" name="template_exceptional_is_closed[{{ $key }}]" value="Yes" {{ $holidayrow->closed === 'Yes' ? 'checked' : '' }}>
-                                                                                </td>
-                                                                            </tr>
-                                                                        @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            <?php } ?>
-                                                            <div class="form-group mb-4">
-                                                                <div class="col-sm-12">
-                                                                    <button type="submit" class="btn btn-info listsubmit">Update</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    <?php /* ---------------------- END EDIT SECTION Exceptional holidays --------------------------------  */ ?>
-                                                    <?php } } ?>
-                                                    <div class="table-schedule">
-                                                        <table id="exceptiondays-table" class="table text-nowrap table-info table-placeholder-css" style="display:none;" >
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="border-top-0">Date</th>
-                                                                    <th class="border-top-0">Holiday</th>
-                                                                    <th class="border-top-0">Day</th>
-                                                                    <th class="border-top-0">Opening</th>
-                                                                    <th class="border-top-0">Closing</th>
-                                                                    <th class="border-top-0">Closed</th>
-                                                                    <th class="border-top-0">Add Hours</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr class="row_exceptional execption_time_slot_row_0">
-                                                                    <td>
-                                                                        <div class="form-group mb-4">
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($data['scheduleHolidayData'] as $key => $holidayrow)
+                                                                    <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
+                                                                    <input type="hidden" name="public_template_real_id[]" value="{{ $holidayrow->id }}">
+                                                                    <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="public_holi_<?php echo $holidayrow->id; ?>">
+                                                                        <td>
                                                                             <div class="col-md-12 border-bottom ">
-                                                                                <input type="date" name="exception_date" class="form-control  border-0" autocomplete=off>
+
+                                                                                <input type="date" name="edit_public_template_custom_date[]" value="{{ $holidayrow->custom_date }}" class="form-control  border-0" autocomplete=off>
                                                                             </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-group mb-4">
+                                                                        </td>
+                                                                        <td>
                                                                             <div class="col-md-12 border-bottom ">
-                                                                                <input type="text" name="exception_note" placeholder="Holiday note" class="form-control border-0" autocomplete=off>
+                                                                                <input type="text" name="edit_public_template_note[]" value="{{ $holidayrow->note }}" placeholder="Add note" class="form-control border-0" autocomplete=off>
                                                                             </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="col-md-12 border-bottom ">
-                                                                            <select class="form-control" name="exception_day">
+                                                                        </td>
+                                                                        <td>
+                                                                            <select class="form-control" name="edit_day[]">
                                                                                 <?php foreach($days as $rowval){ ?>
-                                                                                <option value="<?php echo $rowval ?>" >
+                                                                                <option value="<?php echo $rowval ?>" {{ strtolower($rowval) == strtolower($holidayrow->day) ? 'selected' : '' }}>
                                                                                 <?php echo $rowval ?>
                                                                                 </option>
                                                                                 <?php } ?>
                                                                             </select>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <select class="form-control" name="exception_time_hours_min[]">
-                                                                            <?php foreach($timeValue as $rowtime){ ?>
-                                                                            <option value="<?php echo $rowtime ?>">
-                                                                                <?php echo $rowtime ?>
-                                                                            </option>
-                                                                            <?php } ?>
-
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <select class="form-control" name="exception_time_hours_max[]">
-                                                                            <?php foreach($timeValue as $rowtime){ ?>
-                                                                            <option value="<?php echo $rowtime ?>">
-                                                                                <?php echo $rowtime ?>
-                                                                            </option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-group mb-4">
-                                                                            <div class="col-md-12 border-bottom ">
-                                                                                <select name="exception_closed" class="form-control border-0">
-                                                                                    <option value="No">No</option>
-                                                                                    <option value="Yes">Yes</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-primary" id="" onclick="addTimeBlockException()">+ Hours</button>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td colspan="4"></td>
-                                                                    <td><button type="submit" id="listsubmit-schedule" class="btn btn-warning listsubmit">Save Time Slot</button></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-                                                    <?php /* ---------------------- END Exceptional holidays --------------------------------  */ ?>
-                                                </div>
-
-                                                <div class="public_days_div" id="public_days_div" style="display:none;">
-                                                    <?php /* ---------------------- Public holidays --------------------------------  */ ?>
-
-                                                    <div class="row mb-4">
-                                                        <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                            <div class="panel-heading cust-tab-head">
-                                                                <h4 class="box-title">Public holidays</h4>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="">
-                                                        <div class="row mb-4">
-                                                        <label class="col-md-12">Schedule Template</label>
-                                                            <div class="col-md-3">
-                                                                <div class="custom-control  custom-radio">
-                                                                    <input type="radio" class="pay public_h_radio" name="publicdays" value="no" id="pay" {{ $basicData->is_publictemplate=='no' ? 'checked' : '' }}>
-                                                                    <label class="custom-control-label" for="1">No </label>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-3">
-                                                                <div class="custom-control  custom-radio">
-                                                                    <input type="radio" class="pay public_h_radio" name="publicdays" value="yes" id="nonpay" {{ $basicData->is_publictemplate=='yes' ? 'checked' : '' }}>
-                                                                    <label class="custom-control-label" for="1">Yes</label>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group mb-4 row" style="margin: 2px;" id="publicdays-template" style="display:none;">
-
-                                                        <div class="col-md-4 cus-title"><br>
-                                                            <div class="form-group mb-4">
-                                                                <label class="col-md-12 p-0">Public Template Name</label>
-                                                                <div class="col-md-12 border-bottom p-0">
-                                                                    <input type="text" name="public_template_name" id="public_template_name" value="{{ old('public_template_name') }}" placeholder="Enter Template Name" class="form-control p-0 border-0" autocomplete=off>
-                                                                </div>
-                                                                <span class="text-danger">@error('public_template_name'){{$message}} @enderror</span>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-8">
-                                                            <button type="submit" id="public_template_btn" style="margin: 55px 0px 2px;" class="btn btn-info">Add</button>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <hr>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <label class=" p-0">Public Holidays Template Admin</label>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <label class=" p-0">Public Holidays Template Vendor</label>
-                                                        </div>
-                                                        <div class="col-md-2 import-style">
-                                                            <a href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Exc format">
-                                                                <i style="font-size:25px;color: #e31212;" class="fa fa-download" aria-hidden="true"></i> Sample Format
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <select class="form-control" name="publicdaystemplateselect_admin" id="publicdaystemplateselect_admin" onchange="getpublicTemplateOption(this.value,'admin');" style="width:100%">
-                                                                <option value="none">Select Template</option>
-                                                                @foreach($data['publicdaysdata_admin'] as $publicdaysdatarow)
-                                                                <option value="{{ $publicdaysdatarow->id }}" {{ $publicdaysdatarow->id == $basicData->is_publictemplate_id ? 'selected' : '' }}>
-                                                                    {{ $publicdaysdatarow->name }}
-                                                                </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-1"> </div>
-                                                        <div class="col-md-3">
-                                                            <select class="form-control" name="publicdaystemplateselect" id="publicdaystemplateselect" onchange="getpublicTemplateOption(this.value,'vendor');" style="width:100%">
-                                                                <option value="none">Select Template</option>
-                                                                @foreach($data['publicdaysdata'] as $publicdaysdatarow)
-                                                                <option value="{{ $publicdaysdatarow->id }}" {{ $publicdaysdatarow->id == $basicData->is_publictemplate_id ? 'selected' : '' }}>
-                                                                    {{ $publicdaysdatarow->name }}
-                                                                </option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                            <input type="file" style="width: 219px;float: left;" target="_blank" name="public_template_impt_file" id="public_template_impt_file" style="float: left;width: 70%; margin: -2px 5px;" class="form-control">
-                                                            <a class="btn btn-success btn-sm" style="text-align: right;margin: 5px;color: #fff;" id="public_templateimpt_btn">Import Template Data </a>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div id="template_upload-status" style="text-align: right; text-align: right;margin: 5px 310px;"></div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <input type="hidden" name="actualdataforyesno" value="{{ $basicData->is_publictemplate }}">
-                                                    <input type="hidden" name="actualdataforselectedTemplateId" value="{{ $basicData->is_publictemplate_id }}">
-
-                                                    <?php
-                                                    if($basicData->is_publictemplate=='yes'){
-                                                        if($data['scheduleHolidayDatacount']!=0){
-                                                    ?>
-
-                                                    <div class="temp-schecule-table">
-                                                        <table id="temp-publicdaysdetails-table" class="table table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="border-top-0">Date</th>
-                                                                    <th class="border-top-0">Holiday</th>
-                                                                    <th class="border-top-0">Day</th>
-                                                                    <th class="border-top-0">Opening</th>
-                                                                    <th class="border-top-0">Closing</th>
-                                                                    <th class="border-top-0">Closed</th>
-                                                                    <th class="border-top-0">Action</th>
-
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                @foreach($data['scheduleHolidayData'] as $holidayrow)
-                                                                <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
-                                                                <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="public_holi_<?php echo $holidayrow->id; ?>">
-                                                                    <td>
-                                                                        {{ $holidayrow->custom_date }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $holidayrow->note }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $holidayrow->day??'' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php foreach($opentimeholiday as $extratime){?>
-                                                                        <p><?php echo "Open Time: ".$extratime->open_time; ?></p>
-                                                                        <?php } ?>
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php foreach($opentimeholiday as $extratime){?>
-                                                                        <p><?php echo "Close Time: ".$extratime->close_time; ?></p>
-                                                                        <?php } ?>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-check-input" type="checkbox" disabled value="Yes" {{ ($holidayrow->closed == '1' || $holidayrow->closed == 'Yes') ? 'checked' : '' }}>
-
-                                                                    </td>
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-danger deleterow" data-id="{{ $holidayrow->id }}">Delete</button>
-                                                                    </td>
-
-                                                                </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="form-check-input" name="editDataTemplatepublic" id="edit_tempalte_checkbox_public" value="one">
-                                                        <label class="custom-control-label btn btn-success" for="1" style="padding: 0px 20px 0px 28px; color: #fff;">
-                                                            <i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label>
-                                                    </div>
-                                                    <?php /* ---------------------- START EDIT TEMPLATE SECTION Public holidays --------------------------------  */ ?>
-                                                        <div id="edit_template_public_table">
-                                                            <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-                                                                    $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
-                                                                "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
-                                                                "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
-                                                            ?>
-
-                                                            <?php if($data['scheduleHolidayData']!=0){ ?>
-                                                                <table class="table table-bordered" >
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th class="border-top-0">Date</th>
-                                                                            <th class="border-top-0">Holiday</th>
-                                                                            <th class="border-top-0">Day</th>
-                                                                            <th class="border-top-0">Opening</th>
-                                                                            <th class="border-top-0">Closing</th>
-                                                                            <th class="border-top-0">Closed </th>
-
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @foreach($data['scheduleHolidayData'] as $key => $holidayrow)
-                                                                        <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
-                                                                        <input type="hidden" name="public_template_real_id[]" value="{{ $holidayrow->id }}">
-                                                                        <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="public_holi_<?php echo $holidayrow->id; ?>">
-                                                                            <td>
-                                                                                <div class="col-md-12 border-bottom ">
-
-                                                                                    <input type="date" name="edit_public_template_custom_date[]" value="{{ $holidayrow->custom_date }}" class="form-control  border-0" autocomplete=off>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="col-md-12 border-bottom ">
-                                                                                    <input type="text" name="edit_public_template_note[]" value="{{ $holidayrow->note }}" placeholder="Add note" class="form-control border-0" autocomplete=off>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="form-control" name="edit_day[]">
-                                                                                    <?php foreach($days as $rowval){ ?>
-                                                                                    <option value="<?php echo $rowval ?>" {{ strtolower($rowval) == strtolower($holidayrow->day) ? 'selected' : '' }}>
-                                                                                    <?php echo $rowval ?>
-                                                                                    </option>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php foreach($opentimeholiday as $extratime){?>
+                                                                                <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_public_time_hours_min[]">
+                                                                                    <?php foreach($timeValue as $rowtime){?>
+                                                                                        <option value="{{ $rowtime }}" {{ $rowtime == $extratime->open_time ? 'selected' : '' }}> {{ $rowtime }}</option>
                                                                                     <?php } ?>
                                                                                 </select>
-                                                                            </td>
-                                                                            <td>
-                                                                                <?php foreach($opentimeholiday as $extratime){?>
-                                                                                    <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_public_time_hours_min[]">
-                                                                                        <?php foreach($timeValue as $rowtime){?>
-                                                                                            <option value="{{ $rowtime }}" {{ $rowtime == $extratime->open_time ? 'selected' : '' }}> {{ $rowtime }}</option>
-                                                                                        <?php } ?>
-                                                                                    </select>
-                                                                                <?php } ?>
+                                                                            <?php } ?>
 
-                                                                            </td>
-                                                                            <td>
-                                                                                <?php foreach($opentimeholiday as $extratime){?>
-                                                                                    <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_public_time_hours_max[]">
-                                                                                        <?php foreach($timeValue as $rowtime){?>
-                                                                                            <option value="{{ $rowtime }}" {{ $rowtime == $extratime->close_time ? 'selected' : '' }}> {{ $rowtime }}</option>
-                                                                                        <?php } ?>
-                                                                                    </select>
-                                                                                <?php } ?>
-                                                                            </td>
-
-                                                                            <td>
-                                                                                <input type="hidden" name="template_holiday_is_closed[{{ $key }}]" value="No">
-                                                                                <input class="form-check-input" type="checkbox" name="template_holiday_is_closed[{{ $key }}]" value="Yes" {{ $holidayrow->closed == 'Yes' || $holidayrow->closed === '1' ? 'checked' : '' }}>
-                                                                            </td>
-
-                                                                        </tr>
-                                                                    @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            <?php } ?>
-
-                                                            <div class="form-group mb-4">
-                                                                <div class="col-sm-12">
-                                                                    <button type="submit" class="btn btn-info listsubmit">Update</button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    <?php /* ---------------------- END EDIT TEMPLATE SECTION Public holidays --------------------------------  */ ?>
-
-                                                    <?php }} ?>
-                                                    <?php
-                                                    if($basicData->is_publictemplate=='no'){
-                                                        if($data['scheduleHolidayDatacount']!=0){
-                                                    ?>
-                                                    <div class="table-public">
-                                                        <table id="publicdaysdetails-table" class="table table-bordered">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="border-top-0">Date</th>
-                                                                    <th class="border-top-0">Holiday</th>
-                                                                    <th class="border-top-0">Day</th>
-                                                                    <th class="border-top-0">Opening</th>
-                                                                    <th class="border-top-0">Closing</th>
-                                                                    <th class="border-top-0">Closed</th>
-                                                                    <th class="border-top-0">Action</th>
-                                                                </tr>
-                                                            </thead>
-
-                                                            <tbody>
-                                                                @foreach($data['scheduleHolidayData'] as $key => $holidayrow)
-                                                                <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
-                                                                <tr id="tblholi_<?php echo $holidayrow->id; ?>" id="no_public_holi_<?php echo $holidayrow->id; ?>">
-                                                                    <td>
-                                                                        {{ $holidayrow->custom_date }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $holidayrow->note }}
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $holidayrow->day??'' }}
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php foreach($opentimeholiday as $extratime){?>
-                                                                        <p><?php echo "Open Time: ".$extratime->open_time; ?></p>
-                                                                        <?php } ?>
-                                                                    </td>
-                                                                    <td>
-                                                                        <?php foreach($opentimeholiday as $extratime){?>
-                                                                        <p><?php echo "Close Time: ".$extratime->close_time; ?></p>
-                                                                        <?php } ?>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input class="form-check-input" type="checkbox" disabled  value="Yes" {{ $holidayrow->closed === 'Yes' ? 'checked' : '' }}>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-danger deleterow" data-id="{{ $holidayrow->id }}">Delete</button>
-                                                                    </td>
-                                                                </tr>
-                                                                @endforeach
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
-
-                                                    <div class="row align-items-center public_h_checkbox">
-                                                        <div class="col-md-6 col-sm-6 col-xs-12">
-                                                            <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="form-check-input " name="editDataPublic" id="edit_checkbox_public" value="one">
-                                                                <label class="custom-control-label btn btn-success" for="1" style="padding: 0px 20px 0px 28px; color: #fff;">
-                                                                    <i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-2 import-style">
-                                                            <a href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Exc format">
-                                                                <i style="font-size:25px;color: #e31212;" class="fa fa-download" aria-hidden="true"></i> Sample Format
-                                                            </a>
-                                                        </div>
-                                                        <div class="col-md-4">
-                                                                <input type="file" style="width: 219px;float: left;" target="_blank" name="public_file" id="public_impt_file" style="float: left;width: 70%; margin: -2px 5px;" class="form-control">
-                                                                <a class="btn btn-success btn-sm" style="text-align: right;margin: 5px;color: #fff;" id="public_impt_btn">Import Data</a>
-                                                        </div>
-                                                        <div class="col-md-12">
-                                                            <div id="upload-status" style="text-align: right;"></div>
-                                                        </div>
-                                                    </div>
-
-                                                    <?php /* ---------------------- START EDIT SECTION Public holidays --------------------------------  */ ?>
-                                                        <div id="edit_public_table">
-                                                            <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-                                                                    $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
-                                                                "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
-                                                                "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
-                                                            ?>
-
-                                                            <?php if($data['scheduleHolidayData']!=0){ ?>
-                                                                <table class="table table-bordered" >
-                                                                    <thead>
-                                                                        <tr>
-                                                                            <th class="border-top-0">Date</th>
-                                                                            <th class="border-top-0">Holiday</th>
-                                                                            <th class="border-top-0">Day</th>
-                                                                            <th class="border-top-0">Opening</th>
-                                                                            <th class="border-top-0">Closing</th>
-                                                                            <th class="border-top-0">Closed</th>
-
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        @foreach($data['scheduleHolidayData'] as $key => $holidayrow)
-                                                                        <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
-                                                                        <input type="hidden" name="public_real_id[]" value="{{ $holidayrow->id }}">
-                                                                        <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="no_public_holi_<?php echo $holidayrow->id; ?>">
-                                                                            <td>
-                                                                                <div class="col-md-12 border-bottom ">
-
-                                                                                    <input type="date" name="edit_public_custom_date[]" value="{{ $holidayrow->custom_date }}" class="form-control  border-0" autocomplete=off>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <div class="col-md-12 border-bottom ">
-                                                                                    <input type="text" name="edit_public_note[]" value="{{ $holidayrow->note }}" placeholder="Add note" class="form-control border-0" autocomplete=off>
-                                                                                </div>
-                                                                            </td>
-                                                                            <td>
-                                                                                <select class="form-control" name="edit_day[]">
-                                                                                    <?php foreach($days as $rowval){ ?>
-                                                                                    <option value="<?php echo $rowval ?>" {{ $rowval == $holidayrow->day ? 'selected' : '' }}>
-                                                                                    <?php echo $rowval ?>
-                                                                                    </option>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php foreach($opentimeholiday as $extratime){?>
+                                                                                <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_public_time_hours_max[]">
+                                                                                    <?php foreach($timeValue as $rowtime){?>
+                                                                                        <option value="{{ $rowtime }}" {{ $rowtime == $extratime->close_time ? 'selected' : '' }}> {{ $rowtime }}</option>
                                                                                     <?php } ?>
                                                                                 </select>
-                                                                            </td>
-                                                                            <td>
-                                                                                <?php foreach($opentimeholiday as $extratime){?>
-                                                                                    <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_public_notemplate_time_hours_min[]">
-                                                                                        <?php foreach($timeValue as $rowtime){?>
-                                                                                            <option value="{{ $rowtime }}" {{ $rowtime == $extratime->open_time ? 'selected' : '' }}> {{ $rowtime }}</option>
-                                                                                        <?php } ?>
-                                                                                    </select>
-                                                                                <?php } ?>
+                                                                            <?php } ?>
+                                                                        </td>
 
-                                                                            </td>
-                                                                            <td>
-                                                                                <?php foreach($opentimeholiday as $extratime){?>
-                                                                                    <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_public_notemplate_time_hours_max[]">
-                                                                                        <?php foreach($timeValue as $rowtime){?>
-                                                                                            <option value="{{ $rowtime }}" {{ $rowtime == $extratime->close_time ? 'selected' : '' }}> {{ $rowtime }}</option>
-                                                                                        <?php } ?>
-                                                                                    </select>
-                                                                                <?php } ?>
-                                                                            </td>
-                                                                            <td>
-                                                                                <input type="hidden" name="template_holiday_is_closed[{{ $key }}]" value="No">
-                                                                                <input class="form-check-input" type="checkbox" name="template_holiday_is_closed[{{ $key }}]" value="Yes" {{ $holidayrow->closed === 'Yes' ? 'checked' : '' }}>
-                                                                            </td>
+                                                                        <td>
+                                                                            <input type="hidden" name="template_holiday_is_closed[{{ $key }}]" value="No">
+                                                                            <input class="form-check-input" type="checkbox" name="template_holiday_is_closed[{{ $key }}]" value="Yes" {{ $holidayrow->closed == 'Yes' || $holidayrow->closed === '1' ? 'checked' : '' }}>
+                                                                        </td>
 
-                                                                        </tr>
-                                                                    @endforeach
-                                                                    </tbody>
-                                                                </table>
-                                                            <?php } ?>
+                                                                    </tr>
+                                                                @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        <?php } ?>
 
-                                                            <div class="form-group mb-4">
-                                                                <div class="col-sm-12">
-                                                                    <button type="submit" class="btn btn-info listsubmit">Update</button>
-                                                                </div>
+                                                        <div class="form-group mb-4">
+                                                            <div class="col-sm-12">
+                                                                <button type="submit" class="btn btn-info listsubmit">Update</button>
                                                             </div>
                                                         </div>
-                                                    <?php /* ---------------------- END EDIT SECTION Public holidays --------------------------------  */ ?>
-
-                                                    <?php }} ?>
-                                                    <div class="table-schedule">
-                                                        <table id="publicdays-table" class="table text-nowrap table-info table-placeholder-css" style="display:none;">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="border-top-0">Date</th>
-                                                                    <th class="border-top-0">Holiday</th>
-                                                                    <th class="border-top-0">Day</th>
-                                                                    <th class="border-top-0">Opening</th>
-                                                                    <th class="border-top-0">Closing</th>
-                                                                    <th class="border-top-0">Add Hours</th>
-                                                                    <th class="border-top-0">Closed</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr class="row_public public_time_slot_row_0">
-                                                                    <td>
-                                                                        <div class="form-group mb-4">
-                                                                            <div class="col-md-12 border-bottom ">
-                                                                                <input type="date" name="custom_date" class="form-control  border-0" autocomplete=off>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-group mb-4">
-                                                                            <div class="col-md-12 border-bottom ">
-                                                                                <input type="text" name="note" placeholder="Holiday title" class="form-control border-0" autocomplete=off>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <select class="form-control" name="day">
-                                                                            <?php foreach($days as $rowval){ ?>
-                                                                            <option value="<?php echo $rowval ?>" >
-                                                                            <?php echo $rowval ?>
-                                                                            </option>
-                                                                            <?php } ?>
-
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <select class="form-control" name="time_hours_min[]">
-                                                                            <?php foreach($timeValue as $rowtime){ ?>
-                                                                            <option value="<?php echo $rowtime ?>">
-                                                                                <?php echo $rowtime ?>
-                                                                            </option>
-                                                                            <?php } ?>
-
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <select class="form-control" name="time_hours_max[]">
-                                                                            <?php foreach($timeValue as $rowtime){ ?>
-                                                                            <option value="<?php echo $rowtime ?>">
-                                                                                <?php echo $rowtime ?>
-                                                                            </option>
-                                                                            <?php } ?>
-                                                                        </select>
-                                                                    </td>
-                                                                    <td>
-                                                                        <button type="button" class="btn btn-primary" id="" onclick="addTimeBlockPublic()">+ Hours</button>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="form-group mb-4">
-                                                                            <div class="col-md-12 border-bottom ">
-                                                                                <select name="closed" class="form-control border-0">
-                                                                                    <option value="No">No</option>
-                                                                                    <option value="Yes">Yes</option>
-                                                                                </select>
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td colspan="4"></td>
-                                                                    <td><button type="submit" id="listsubmit-schedule" class="btn btn-warning listsubmit">Save Time Slot</button></td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
                                                     </div>
-                                                </div>
+                                                <?php /* ---------------------- END EDIT TEMPLATE SECTION Public holidays --------------------------------  */ ?>
 
-
-                                                @if ($user->hasPermission('update') == true)
-                                                    <button type="submit" id="listsubmit-schedule" class="btn btn-primary listsubmit">Save Changes</button>
-                                                @endif
-
-                                        </div>
-
-                                        <div class="tab-pane <?php active('type');?>" id="dirtype" role="tabpanel">
-
-                                            <div class="row">
-                                                <?php $radioselectecheckeddata = isset($directoryTypeData[0]->category_id)? $directoryTypeData[0]->category_id : 0;
-                                                $blockNum = isset($directoryTypeDatainreverse[0]->block_num)? $directoryTypeDatainreverse[0]->block_num : "novalue";
+                                                <?php }} ?>
+                                                <?php
+                                                if($basicData->is_publictemplate=='no'){
+                                                    if($data['scheduleHolidayDatacount']!=0){
                                                 ?>
-                                                @foreach($data['type'] as $typerow)
-                                                <div class="col-md-3 p-10">
-                                                    <div class="custom-control custom-radio">
-                                                        <input type="radio" class="typecat" name="hotel_type" value="{{ $typerow->id }}" {{ $radioselectecheckeddata==$typerow->id ? 'checked' : ''}} data_val="{{ $typerow->name }}">
-                                                        <label class="custom-control-label" for="1">{{ $typerow->name }} </label>
+                                                <div class="table-public">
+                                                    <table id="publicdaysdetails-table" class="table table-bordered">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="border-top-0">Date</th>
+                                                                <th class="border-top-0">Holiday</th>
+                                                                <th class="border-top-0">Day</th>
+                                                                <th class="border-top-0">Opening</th>
+                                                                <th class="border-top-0">Closing</th>
+                                                                <th class="border-top-0">Closed</th>
+                                                                <th class="border-top-0">Action</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>
+                                                            @foreach($data['scheduleHolidayData'] as $key => $holidayrow)
+                                                            <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
+                                                            <tr id="tblholi_<?php echo $holidayrow->id; ?>" id="no_public_holi_<?php echo $holidayrow->id; ?>">
+                                                                <td>
+                                                                    {{ $holidayrow->custom_date }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $holidayrow->note }}
+                                                                </td>
+                                                                <td>
+                                                                    {{ $holidayrow->day??'' }}
+                                                                </td>
+                                                                <td>
+                                                                    <?php foreach($opentimeholiday as $extratime){?>
+                                                                    <p><?php echo "Open Time: ".$extratime->open_time; ?></p>
+                                                                    <?php } ?>
+                                                                </td>
+                                                                <td>
+                                                                    <?php foreach($opentimeholiday as $extratime){?>
+                                                                    <p><?php echo "Close Time: ".$extratime->close_time; ?></p>
+                                                                    <?php } ?>
+                                                                </td>
+                                                                <td>
+                                                                    <input class="form-check-input" type="checkbox" disabled  value="Yes" {{ $holidayrow->closed === 'Yes' ? 'checked' : '' }}>
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" class="btn btn-danger deleterow" data-id="{{ $holidayrow->id }}">Delete</button>
+                                                                </td>
+                                                            </tr>
+                                                            @endforeach
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+
+                                                <div class="row align-items-center public_h_checkbox">
+                                                    <div class="col-md-6 col-sm-6 col-xs-12">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="form-check-input " name="editDataPublic" id="edit_checkbox_public" value="one">
+                                                            <label class="custom-control-label btn btn-success" for="1" style="padding: 0px 20px 0px 28px; color: #fff;">
+                                                                <i class="far fa-edit pub-holiday-css" title="Edit Data" style="color: #636363;"></i> Edit </label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 import-style">
+                                                        <a href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Exc format">
+                                                            <i style="font-size:25px;color: #e31212;" class="fa fa-download" aria-hidden="true"></i> Sample Format
+                                                        </a>
+                                                    </div>
+                                                    <div class="col-md-4">
+                                                            <input type="file" style="width: 219px;float: left;" target="_blank" name="public_file" id="public_impt_file" style="float: left;width: 70%; margin: -2px 5px;" class="form-control">
+                                                            <a class="btn btn-success btn-sm" style="text-align: right;margin: 5px;color: #fff;" id="public_impt_btn">Import Data</a>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <div id="upload-status" style="text-align: right;"></div>
                                                     </div>
                                                 </div>
-                                                @endforeach
+
+                                                <?php /* ---------------------- START EDIT SECTION Public holidays --------------------------------  */ ?>
+                                                    <div id="edit_public_table">
+                                                        <?php $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+                                                                $timeValue = array("00:00","00:30","01:00","01:30","02:00","02:30","03:00","03:30","04:00","04:30","05:00","05:30","06:00","06:30","07:00","07:30","08:00",
+                                                            "08:30","09:00","09:30","10:00","10:30","11:00","11:30","12:00","12:30","13:00","13:30","14:00","14:30","15:00","15:30","16:00","16:30",
+                                                            "17:00","17:30","18:00","18:30","19:00","19:30","20:00","20:30","21:00","21:30","22:00","22:30","23:00","23:30","24:00");
+                                                        ?>
+
+                                                        <?php if($data['scheduleHolidayData']!=0){ ?>
+                                                            <table class="table table-bordered" >
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th class="border-top-0">Date</th>
+                                                                        <th class="border-top-0">Holiday</th>
+                                                                        <th class="border-top-0">Day</th>
+                                                                        <th class="border-top-0">Opening</th>
+                                                                        <th class="border-top-0">Closing</th>
+                                                                        <th class="border-top-0">Closed</th>
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    @foreach($data['scheduleHolidayData'] as $key => $holidayrow)
+                                                                    <?php $opentimeholiday =   json_decode($holidayrow->custom_time); ?>
+                                                                    <input type="hidden" name="public_real_id[]" value="{{ $holidayrow->id }}">
+                                                                    <tr id="tblholi_<?php echo $holidayrow->id; ?>" class="no_public_holi_<?php echo $holidayrow->id; ?>">
+                                                                        <td>
+                                                                            <div class="col-md-12 border-bottom ">
+
+                                                                                <input type="date" name="edit_public_custom_date[]" value="{{ $holidayrow->custom_date }}" class="form-control  border-0" autocomplete=off>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="col-md-12 border-bottom ">
+                                                                                <input type="text" name="edit_public_note[]" value="{{ $holidayrow->note }}" placeholder="Add note" class="form-control border-0" autocomplete=off>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <select class="form-control" name="edit_day[]">
+                                                                                <?php foreach($days as $rowval){ ?>
+                                                                                <option value="<?php echo $rowval ?>" {{ $rowval == $holidayrow->day ? 'selected' : '' }}>
+                                                                                <?php echo $rowval ?>
+                                                                                </option>
+                                                                                <?php } ?>
+                                                                            </select>
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php foreach($opentimeholiday as $extratime){?>
+                                                                                <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_public_notemplate_time_hours_min[]">
+                                                                                    <?php foreach($timeValue as $rowtime){?>
+                                                                                        <option value="{{ $rowtime }}" {{ $rowtime == $extratime->open_time ? 'selected' : '' }}> {{ $rowtime }}</option>
+                                                                                    <?php } ?>
+                                                                                </select>
+                                                                            <?php } ?>
+
+                                                                        </td>
+                                                                        <td>
+                                                                            <?php foreach($opentimeholiday as $extratime){?>
+                                                                                <select class="form-control" name="<?php echo $holidayrow->id; ?>_edit_public_notemplate_time_hours_max[]">
+                                                                                    <?php foreach($timeValue as $rowtime){?>
+                                                                                        <option value="{{ $rowtime }}" {{ $rowtime == $extratime->close_time ? 'selected' : '' }}> {{ $rowtime }}</option>
+                                                                                    <?php } ?>
+                                                                                </select>
+                                                                            <?php } ?>
+                                                                        </td>
+                                                                        <td>
+                                                                            <input type="hidden" name="template_holiday_is_closed[{{ $key }}]" value="No">
+                                                                            <input class="form-check-input" type="checkbox" name="template_holiday_is_closed[{{ $key }}]" value="Yes" {{ $holidayrow->closed === 'Yes' ? 'checked' : '' }}>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                @endforeach
+                                                                </tbody>
+                                                            </table>
+                                                        <?php } ?>
+
+                                                        <div class="form-group mb-4">
+                                                            <div class="col-sm-12">
+                                                                <button type="submit" class="btn btn-info listsubmit">Update</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                <?php /* ---------------------- END EDIT SECTION Public holidays --------------------------------  */ ?>
+
+                                                <?php }} ?>
+                                                <div class="table-schedule">
+                                                    <table id="publicdays-table" class="table text-nowrap table-info table-placeholder-css" style="display:none;">
+                                                        <thead>
+                                                            <tr>
+                                                                <th class="border-top-0">Date</th>
+                                                                <th class="border-top-0">Holiday</th>
+                                                                <th class="border-top-0">Day</th>
+                                                                <th class="border-top-0">Opening</th>
+                                                                <th class="border-top-0">Closing</th>
+                                                                <th class="border-top-0">Add Hours</th>
+                                                                <th class="border-top-0">Closed</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="row_public public_time_slot_row_0">
+                                                                <td>
+                                                                    <div class="form-group mb-4">
+                                                                        <div class="col-md-12 border-bottom ">
+                                                                            <input type="date" name="custom_date" class="form-control  border-0" autocomplete=off>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group mb-4">
+                                                                        <div class="col-md-12 border-bottom ">
+                                                                            <input type="text" name="note" placeholder="Holiday title" class="form-control border-0" autocomplete=off>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <select class="form-control" name="day">
+                                                                        <?php foreach($days as $rowval){ ?>
+                                                                        <option value="<?php echo $rowval ?>" >
+                                                                        <?php echo $rowval ?>
+                                                                        </option>
+                                                                        <?php } ?>
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select class="form-control" name="time_hours_min[]">
+                                                                        <?php foreach($timeValue as $rowtime){ ?>
+                                                                        <option value="<?php echo $rowtime ?>">
+                                                                            <?php echo $rowtime ?>
+                                                                        </option>
+                                                                        <?php } ?>
+
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <select class="form-control" name="time_hours_max[]">
+                                                                        <?php foreach($timeValue as $rowtime){ ?>
+                                                                        <option value="<?php echo $rowtime ?>">
+                                                                            <?php echo $rowtime ?>
+                                                                        </option>
+                                                                        <?php } ?>
+                                                                    </select>
+                                                                </td>
+                                                                <td>
+                                                                    <button type="button" class="btn btn-primary" id="" onclick="addTimeBlockPublic()">+ Hours</button>
+                                                                </td>
+                                                                <td>
+                                                                    <div class="form-group mb-4">
+                                                                        <div class="col-md-12 border-bottom ">
+                                                                            <select name="closed" class="form-control border-0">
+                                                                                <option value="No">No</option>
+                                                                                <option value="Yes">Yes</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="4"></td>
+                                                                <td><button type="submit" id="listsubmit-schedule" class="btn btn-warning listsubmit">Save Time Slot</button></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
                                             </div>
-                                            <input type="hidden" id="total_block_from_database" name="block_number_from_database" value="{{ $blockNum }}">
-                                            <input type="hidden" id="directoryId" name="directory_Id" value="{{ isset($directoryTypeData[0]->directory_id)?$directoryTypeData[0]->directory_id:'' }}">
-                                            <input type="hidden" id="selected-cat-id" name="selected_cat_id" value="{{ isset($directoryTypeData[0]->category_id)?$directoryTypeData[0]->category_id:0 }}">
-                                            <input type="hidden" id="total_block" name="block_number" value="">
-                                            <div class="blocks" id="type_blocks"></div>
                                             @if ($user->hasPermission('update') == true)
-                                            <button type="submit" id="listsubmit-dirtype" class="btn btn-primary listsubmit">Save Changes</button>
+                                                <button type="submit" id="listsubmit-schedule" class="btn btn-primary listsubmit">Save Changes</button>
                                             @endif
+                                    </div>
+
+                                    <div class="tab-pane <?php active('type');?>" id="dirtype" role="tabpanel">
+
+                                        <div class="row">
+                                            <?php $radioselectecheckeddata = isset($directoryTypeData[0]->category_id)? $directoryTypeData[0]->category_id : 0;
+                                            $blockNum = isset($directoryTypeDatainreverse[0]->block_num)? $directoryTypeDatainreverse[0]->block_num : "novalue";
+                                            ?>
+                                            @foreach($data['type'] as $typerow)
+                                            <div class="col-md-3 p-10">
+                                                <div class="custom-control custom-radio">
+                                                    <input type="radio" class="typecat" name="hotel_type" value="{{ $typerow->id }}" {{ $radioselectecheckeddata==$typerow->id ? 'checked' : ''}} data_val="{{ $typerow->name }}">
+                                                    <label class="custom-control-label" for="1">{{ $typerow->name }} </label>
+                                                </div>
+                                            </div>
+                                            @endforeach
                                         </div>
+                                        <input type="hidden" id="total_block_from_database" name="block_number_from_database" value="{{ $blockNum }}">
+                                        <input type="hidden" id="directoryId" name="directory_Id" value="{{ isset($directoryTypeData[0]->directory_id)?$directoryTypeData[0]->directory_id:'' }}">
+                                        <input type="hidden" id="selected-cat-id" name="selected_cat_id" value="{{ isset($directoryTypeData[0]->category_id)?$directoryTypeData[0]->category_id:0 }}">
+                                        <input type="hidden" id="total_block" name="block_number" value="">
+                                        <div class="blocks" id="type_blocks"></div>
+                                        @if ($user->hasPermission('update') == true)
+                                        <button type="submit" id="listsubmit-dirtype" class="btn btn-primary listsubmit">Save Changes</button>
+                                        @endif
+                                    </div>
 
-                                        <div class="tab-pane <?php active('links');?>" id="links" role="tabpanel">
-                                            <div class="row mb-4">
-                                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                    <div class="panel-heading cust-tab-head">
-                                                        <h4 class="box-title">Basic Link Details</h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Website</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="website" value="{{ old('website', isset($contactData[0]->website)?$contactData[0]->website:'') }}" placeholder="Enter Website" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Facebook</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="facebook" value="{{ old('facebook', isset($contactData[0]->facebook)?$contactData[0]->facebook:'') }}" placeholder="www.facebook.com/abc/" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Twitter</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="twitter" value="{{ old('twitter', isset($contactData[0]->twitter)?$contactData[0]->twitter:'') }}" placeholder="www.twitter.com/abc/" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Linkedin</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="linkedin" value="{{ old('linkedin', isset($contactData[0]->linkedin)?$contactData[0]->linkedin:'') }}" placeholder="www.linkedin.com/abc/" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Pinterest</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="pinterest" value="{{ old('pinterest', isset($contactData[0]->pinterest)?$contactData[0]->pinterest:'') }}" placeholder="www.pinterest.com/abc/" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Whatsapp</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="whatsapp" value="{{ old('whatsapp', isset($contactData[0]->whatsapp)?$contactData[0]->whatsapp:'') }}" placeholder="www.whatsapp.com/abc/" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Instagram</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="instagram" value="{{ old('instagram', isset($contactData[0]->instagram)?$contactData[0]->instagram:'') }}" placeholder="www.instagram.com/abc/" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Tiktok</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="tiktok" value="{{ old('tiktok', isset($contactData[0]->tiktok)?$contactData[0]->tiktok:'') }}" placeholder="www.tiktok.com/abc/" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Youtube</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="youtube" value="{{ old('youtube', isset($contactData[0]->youtube)?$contactData[0]->youtube:'') }}" placeholder="www.youtube.com/abc/" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Snapchat</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="snapchat" value="{{ old('snapchat', isset($contactData[0]->snapchat)?$contactData[0]->snapchat:'') }}" placeholder="www.snapchat.com/abc/" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <input type="hidden" name="website_count" value="<?php echo count($websitelink); ?>" id="wesitecount" />
-                                            <input type="hidden" name="links_count" value="<?php echo ($getFeatureLinksValue); ?>" id="wesitelinkcount" />
-                                            <div class="row mb-4">
-                                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                    <div class="panel-heading cust-tab-head">
-                                                        <h4 class="box-title">Website Link (Max limit - <?php echo ($getFeatureLinksValue); ?>)</h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <?php $i=1; if(count($websitelink)!=0){ foreach($websitelink as $websitelinkrow){ ?>
-                                            <div id="weblink_<?php echo $i; ?>" class="row weblink">
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Website Name</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="website_name_<?php echo $i; ?>" value="{{ old('website', $websitelinkrow->name ?? '') }}" placeholder="Enter Website Name" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('website'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Website link</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="website_link_<?php echo $i; ?>" value="{{ old('website', $websitelinkrow->link ?? '') }}" placeholder="Enter Website link" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('website'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <?php if($i!=1){ ?>
-                                                    <button type="button" class="btn btn-danger" class="remove_web_button" title="remove field" onclick=removewebSection(<?php echo $i; ?>)>-</button>
-                                                    <?php }else{ ?>
-                                                    <button type="button" class="btn btn-success" class="add_web_button" title="Add field" onclick=addwebSection()>+</button>
-                                                    <?php } ?>
-                                                </div>
-                                            </div>
-                                            <?php $i++; } }else{ ?>
-                                            <div id="weblink_1" class="row weblink">
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Website Name</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="website_name_1" value="{{ old('website') }}" placeholder="Enter Website Name" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('website'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Website link</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="website_link_1" value="{{ old('website') }}" placeholder="Enter Website link" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('website'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <button type="button" class="btn btn-success" class="add_web_button" title="Add field" onclick=addwebSection()>+</button>
-                                                </div>
-                                            </div>
-
-                                            <?php } ?>
-
-                                            <div class="row mb-4">
-                                                <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
-                                                    <div class="panel-heading cust-tab-head">
-                                                        <h4 class="box-title">Assortment Link (Max limit - <?php echo ($getFeatureLinksValue); ?>)</h4>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <input type="hidden" name="assort_count" value="<?php echo count($assortlink); ?>" id="assortcount" />
-                                            <?php $ai=1; if(count($assortlink)!=0){ foreach($assortlink as $assortlinkrow){ ?>
-                                            <div id="assortlink_<?php echo $ai; ?>" class="row assortlink">
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Assortment Name</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="assortment_name_<?php echo $ai; ?>" value="{{ old('website', $assortlinkrow->name ?? '') }}" placeholder="Enter Assortment Name" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('assortment_name'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Assortment link</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="assortment_link_<?php echo $ai; ?>" value="{{ old('assortment_link', $assortlinkrow->link ?? '') }}" placeholder="Enter Assortment link" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('website'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <?php if($ai!=1){ ?>
-                                                    <button type="button" class="btn btn-danger" class="remove_assortment_button" title="remove field" onclick=removeAssortmentSection(<?php echo $ai; ?>)>-</button>
-                                                    <?php }else{ ?>
-                                                    <button type="button" class="btn btn-success" class="add_assortment_button" title="Add field" onclick=addAssortmentSection()>+</button>
-                                                    <?php } ?>
-
-                                                </div>
-                                            </div>
-                                            <?php $ai++; } }else{ ?>
-                                            <div id="assortlink_1" class="row assortlink">
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Assortment Name</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="assortment_name_1" value="{{ old('website') }}" placeholder="Enter Assortment Name" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('assortment_name'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-4">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Assortment link</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="assortment_link_1" value="{{ old('assortment_link') }}" placeholder="Enter Assortment link" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('website'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-1">
-                                                    <button type="button" class="btn btn-success" class="add_assortment_button" title="Add field" onclick=addAssortmentSection()>+</button>
-                                                </div>
-                                            </div>
-                                            <?php } ?>
-                                            @if ($user->hasPermission('update') == true)
-                                            <button type="submit" id="listsubmit-contact" class="btn btn-primary listsubmit">Save Changes</button>
-                                            @endif
-                                        </div>
-
-                                        <div class="tab-pane <?php active('claim');?>" id="claim" role="tabpanel">
-
-                                            <div id="claim_row_1" class="row claimlink">
-                                                <div class="col-md-12">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Claim Subject</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <input type="text" name="claim_subject" value="{{ old('claim_subject') }}" placeholder="Enter claim subject" class="form-control p-0 border-0" autocomplete=off>
-                                                        </div>
-                                                        <span class="text-danger">@error('claim_subject'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Claim Description</label>
-                                                        <div class="col-md-12 border-bottom p-0">
-                                                            <!-- <input type="text" name="website_link_1" value="{{ old('website') }}" placeholder="Enter Website link" class="form-control p-0 border-0" autocomplete=off> -->
-                                                            <textarea rows="3" placeholder="Enter Description" name="claim_description" id="claimtext" maxlength="500" onkeyup="charCount(this.value,this.id,500)" class="form-control p-0 border-0">{{ old('claim_description') }}</textarea>
-                                                        </div>
-                                                        <span class="text-danger">@error('claim_description'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-2">
-                                                    <button type="submit" id="listsubmit-claim" class="btn btn-success listsubmit">Add Claim</button>
-                                                    <!-- <button type="button" class="btn btn-success" class="add_claim_button" title="Add field" onclick=addmoreClaimintoTable($basicData->id)>Add Claim</button> -->
-                                                </div>
-                                            </div>
-                                            <hr/>
-                                            <?php if($data['directory_claim_count']>0){ ?>
-
-
-                                                    <?php foreach($data['directory_claim'] as $value){ ?>
-                                                        <div class="claim-data-result">
-                                                            <p><strong>Subject</strong></p>
-                                                            <p>{{ $value->subject }}</p>
-                                                            <p><strong>Description</strong></p>
-                                                            <p>{{ $value->description }}</p>
-                                                        </div>
-                                                    <?php } ?>
-
-
-
-                                            <?php } ?>
-
-
-                                            @if ($user->hasPermission('update') == true)
-                                            <button type="submit" id="listsubmit-claim-final" class="btn btn-info listsubmit">Save Changes</button>
-                                            @endif
-                                        </div>
-
-                                        <div class="tab-pane <?php active('services');?>" id="services" role="tabpanel">
-
-                                            <div id="claim_row_1" class="row claimlink">
-                                                <div class="col-md-12">
-                                                    <div class="form-group mb-4">
-                                                        <label class="col-md-12 p-0">Services List - will appear on contact us form on Company page, allowing customer to specify their question.</label>
-                                                        @php
-                                                        $directory_services = [];
-                                                        @endphp
-                                                        @foreach ($data['directory_services'] as $val)
-                                                        @php $directory_services[] = $val->name @endphp
-                                                        @endforeach
-
-                                                        <div class="col-md-12 border-bottom p-0">
-
-                                                            <input type="text" data-role="tagsinput" id="tags_name_directory_services" value="{{ old('directory_services', implode(',',$directory_services) ) }}" placeholder="Add Services" class="form-control p-0 border-0">
-                                                        </div>
-                                                        <span class="text-danger">@error('directory_services'){{$message}} @enderror</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <hr/>
-
-                                            <input type="hidden" id="active-tab" class="active-tab" name="active_tab" value="">
-                                            @if ($user->hasPermission('update') == true)
-                                            <button type="submit" id="listsubmit-services" class="btn btn-info listsubmit">Save Changes</button>
-                                            @endif
-                                        </div>
-
-
-                                        <div style="display:none;" class="tab-pane" id="finish" role="tabpanel">
-                                            <div class="col-sm-12">
-                                                <div class="text-center">
-                                                    <h2 class="mt-0">
-                                                        <i class="entypo-check"></i>
-                                                    </h2>
-                                                    <h3 class="mt-0">Thank you !</h3>
-                                                    <p class="w-75 mb-2 mx-auto">You are almost there. Please check if you have provided all the necessary things.</p>
-                                                    <input type="hidden" name="createdby" class="form-control" value="{{auth()->user()->id;}}">
-
-                                                    <p> <button type="submit" class="btn btn-info listsubmit">update</button></p>
-
+                                    <div class="tab-pane <?php active('links');?>" id="links" role="tabpanel">
+                                        <div class="row mb-4">
+                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                <div class="panel-heading cust-tab-head">
+                                                    <h4 class="box-title">Basic Link Details</h4>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Website</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="website" value="{{ old('website', isset($contactData[0]->website)?$contactData[0]->website:'') }}" placeholder="Enter Website" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Facebook</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="facebook" value="{{ old('facebook', isset($contactData[0]->facebook)?$contactData[0]->facebook:'') }}" placeholder="www.facebook.com/abc/" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Twitter</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="twitter" value="{{ old('twitter', isset($contactData[0]->twitter)?$contactData[0]->twitter:'') }}" placeholder="www.twitter.com/abc/" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Linkedin</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="linkedin" value="{{ old('linkedin', isset($contactData[0]->linkedin)?$contactData[0]->linkedin:'') }}" placeholder="www.linkedin.com/abc/" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Pinterest</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="pinterest" value="{{ old('pinterest', isset($contactData[0]->pinterest)?$contactData[0]->pinterest:'') }}" placeholder="www.pinterest.com/abc/" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Whatsapp</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="whatsapp" value="{{ old('whatsapp', isset($contactData[0]->whatsapp)?$contactData[0]->whatsapp:'') }}" placeholder="www.whatsapp.com/abc/" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Instagram</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="instagram" value="{{ old('instagram', isset($contactData[0]->instagram)?$contactData[0]->instagram:'') }}" placeholder="www.instagram.com/abc/" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Tiktok</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="tiktok" value="{{ old('tiktok', isset($contactData[0]->tiktok)?$contactData[0]->tiktok:'') }}" placeholder="www.tiktok.com/abc/" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Youtube</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="youtube" value="{{ old('youtube', isset($contactData[0]->youtube)?$contactData[0]->youtube:'') }}" placeholder="www.youtube.com/abc/" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Snapchat</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="snapchat" value="{{ old('snapchat', isset($contactData[0]->snapchat)?$contactData[0]->snapchat:'') }}" placeholder="www.snapchat.com/abc/" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <input type="hidden" name="website_count" value="<?php echo count($websitelink); ?>" id="wesitecount" />
+                                        <input type="hidden" name="links_count" value="<?php echo ($getFeatureLinksValue); ?>" id="wesitelinkcount" />
+                                        <div class="row mb-4">
+                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                <div class="panel-heading cust-tab-head">
+                                                    <h4 class="box-title">Website Link (Max limit - <?php echo ($getFeatureLinksValue); ?>)</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <?php $i=1; if(count($websitelink)!=0){ foreach($websitelink as $websitelinkrow){ ?>
+                                        <div id="weblink_<?php echo $i; ?>" class="row weblink">
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Website Name</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="website_name_<?php echo $i; ?>" value="{{ old('website', $websitelinkrow->name ?? '') }}" placeholder="Enter Website Name" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('website'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Website link</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="website_link_<?php echo $i; ?>" value="{{ old('website', $websitelinkrow->link ?? '') }}" placeholder="Enter Website link" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('website'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <?php if($i!=1){ ?>
+                                                <button type="button" class="btn btn-danger" class="remove_web_button" title="remove field" onclick=removewebSection(<?php echo $i; ?>)>-</button>
+                                                <?php }else{ ?>
+                                                <button type="button" class="btn btn-success" class="add_web_button" title="Add field" onclick=addwebSection()>+</button>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                        <?php $i++; } }else{ ?>
+                                        <div id="weblink_1" class="row weblink">
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Website Name</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="website_name_1" value="{{ old('website') }}" placeholder="Enter Website Name" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('website'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Website link</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="website_link_1" value="{{ old('website') }}" placeholder="Enter Website link" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('website'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-success" class="add_web_button" title="Add field" onclick=addwebSection()>+</button>
+                                            </div>
+                                        </div>
+
+                                        <?php } ?>
+
+                                        <div class="row mb-4">
+                                            <div class="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                                <div class="panel-heading cust-tab-head">
+                                                    <h4 class="box-title">Assortment Link (Max limit - <?php echo ($getFeatureLinksValue); ?>)</h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="assort_count" value="<?php echo count($assortlink); ?>" id="assortcount" />
+                                        <?php $ai=1; if(count($assortlink)!=0){ foreach($assortlink as $assortlinkrow){ ?>
+                                        <div id="assortlink_<?php echo $ai; ?>" class="row assortlink">
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Assortment Name</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="assortment_name_<?php echo $ai; ?>" value="{{ old('website', $assortlinkrow->name ?? '') }}" placeholder="Enter Assortment Name" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('assortment_name'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Assortment link</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="assortment_link_<?php echo $ai; ?>" value="{{ old('assortment_link', $assortlinkrow->link ?? '') }}" placeholder="Enter Assortment link" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('website'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <?php if($ai!=1){ ?>
+                                                <button type="button" class="btn btn-danger" class="remove_assortment_button" title="remove field" onclick=removeAssortmentSection(<?php echo $ai; ?>)>-</button>
+                                                <?php }else{ ?>
+                                                <button type="button" class="btn btn-success" class="add_assortment_button" title="Add field" onclick=addAssortmentSection()>+</button>
+                                                <?php } ?>
+
+                                            </div>
+                                        </div>
+                                        <?php $ai++; } }else{ ?>
+                                        <div id="assortlink_1" class="row assortlink">
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Assortment Name</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="assortment_name_1" value="{{ old('website') }}" placeholder="Enter Assortment Name" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('assortment_name'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Assortment link</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="assortment_link_1" value="{{ old('assortment_link') }}" placeholder="Enter Assortment link" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('website'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-1">
+                                                <button type="button" class="btn btn-success" class="add_assortment_button" title="Add field" onclick=addAssortmentSection()>+</button>
+                                            </div>
+                                        </div>
+                                        <?php } ?>
+                                        @if ($user->hasPermission('update') == true)
+                                        <button type="submit" id="listsubmit-contact" class="btn btn-primary listsubmit">Save Changes</button>
+                                        @endif
+                                    </div>
+
+                                    <div class="tab-pane <?php active('claim');?>" id="claim" role="tabpanel">
+
+                                        <div id="claim_row_1" class="row claimlink">
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Claim Subject</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="claim_subject" value="{{ old('claim_subject') }}" placeholder="Enter claim subject" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('claim_subject'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Claim Description</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <!-- <input type="text" name="website_link_1" value="{{ old('website') }}" placeholder="Enter Website link" class="form-control p-0 border-0" autocomplete=off> -->
+                                                        <textarea rows="3" placeholder="Enter Description" name="claim_description" id="claimtext" maxlength="500" onkeyup="charCount(this.value,this.id,500)" class="form-control p-0 border-0">{{ old('claim_description') }}</textarea>
+                                                    </div>
+                                                    <span class="text-danger">@error('claim_description'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <button type="submit" id="listsubmit-claim" class="btn btn-success listsubmit">Add Claim</button>
+                                                <!-- <button type="button" class="btn btn-success" class="add_claim_button" title="Add field" onclick=addmoreClaimintoTable($basicData->id)>Add Claim</button> -->
+                                            </div>
+                                        </div>
+                                        <hr/>
+                                        <?php if($data['directory_claim_count']>0){ ?>
+
+
+                                                <?php foreach($data['directory_claim'] as $value){ ?>
+                                                    <div class="claim-data-result">
+                                                        <p><strong>Subject</strong></p>
+                                                        <p>{{ $value->subject }}</p>
+                                                        <p><strong>Description</strong></p>
+                                                        <p>{{ $value->description }}</p>
+                                                    </div>
+                                                <?php } ?>
+
+
+
+                                        <?php } ?>
+
+
+                                        @if ($user->hasPermission('update') == true)
+                                        <button type="submit" id="listsubmit-claim-final" class="btn btn-info listsubmit">Save Changes</button>
+                                        @endif
+                                    </div>
+
+                                    <div class="tab-pane <?php active('services');?>" id="services" role="tabpanel">
+
+                                        <div id="claim_row_1" class="row claimlink">
+                                            <div class="col-md-12">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Services List - will appear on contact us form on Company page, allowing customer to specify their question.</label>
+                                                    @php
+                                                    $directory_services = [];
+                                                    @endphp
+                                                    @foreach ($data['directory_services'] as $val)
+                                                    @php $directory_services[] = $val->name @endphp
+                                                    @endforeach
+
+                                                    <div class="col-md-12 border-bottom p-0">
+
+                                                        <input type="text" data-role="tagsinput" id="tags_name_directory_services" value="{{ old('directory_services', implode(',',$directory_services) ) }}" placeholder="Add Services" class="form-control p-0 border-0">
+                                                    </div>
+                                                    <span class="text-danger">@error('directory_services'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr/>
+
+                                        <input type="hidden" id="active-tab" class="active-tab" name="active_tab" value="">
+                                        @if ($user->hasPermission('update') == true)
+                                        <button type="submit" id="listsubmit-services" class="btn btn-info listsubmit">Save Changes</button>
+                                        @endif
+                                    </div>
+
+                                    <div style="display:none;" class="tab-pane" id="finish" role="tabpanel">
+                                        <div class="col-sm-12">
+                                            <div class="text-center">
+                                                <h2 class="mt-0">
+                                                    <i class="entypo-check"></i>
+                                                </h2>
+                                                <h3 class="mt-0">Thank you !</h3>
+                                                <p class="w-75 mb-2 mx-auto">You are almost there. Please check if you have provided all the necessary things.</p>
+                                                <input type="hidden" name="createdby" class="form-control" value="{{auth()->user()->id;}}">
+
+                                                <p> <button type="submit" class="btn btn-info listsubmit">update</button></p>
+
+                                            </div>
+                                        </div>
+                                    </div>
                             </div>
                     </div>
                 </div>
-
 
                 </form>
             </div>
@@ -4812,168 +4760,6 @@ $instruction = $data['instruction'];
 </script>
 
 <script type="text/javascript">
-
-    // function initAutocomplete() {
-
-    //     let Map = {
-    //         mapContainer: document.getElementById('map')
-    //         , inputAutocomplete: document.getElementById('pac-input')
-    //         , inputLat: $("input[name=latitude]")
-    //         , inputLng: $("input[name=longitude]")
-    //         , inputCountry: $("input[name=country_id]")
-    //         , inputState: $("input[name=state_id]")
-    //         , inputzipcode: $("input[name=zipcode]")
-    //         , inputCity: $("input[name=city_id]")
-    //         , inputPlace: $("input[name=place]")
-    //         , map: {}
-    //         , geocoder: new google.maps.Geocoder()
-    //         , autocomplete: {}
-    //         , init: function() {
-    //             let _this = this;
-
-    //             this.autocomplete = new google.maps.places.Autocomplete(this.inputAutocomplete);
-
-    //             //let latLng = new google.maps.LatLng(-23.6815314, -46.875502);
-    //             //console.log(this.inputLat.val());
-    //             if (this.inputLat.val() && this.inputLng.val()) {
-    //                 latLng = new google.maps.LatLng(this.inputLat.val(), this.inputLng.val());
-    //             }
-
-    //             this.map = new google.maps.Map(this.mapContainer, {
-    //                 zoom: 15
-    //                 , center: latLng
-    //             });
-
-    //             var marker = new google.maps.Marker({
-    //                 position: latLng
-    //                 , map: this.map
-    //                 , title: 'Hello World!'
-    //                 , draggable: true
-    //             });
-
-    //             marker.addListener('dragend', function() {
-    //                 _this.inputLat.val(marker.getPosition().lat());
-    //                 _this.inputLng.val(marker.getPosition().lng());
-    //                 _this.geocodePosition(marker.getPosition());
-    //                 map.setCenter(marker.getPosition());
-    //             })
-
-    //             this.autocomplete.addListener('place_changed', function() {
-    //                 let place = _this.autocomplete.getPlace();
-    //                 _this.inputLat.val(place.geometry.location.lat());
-    //                 _this.inputLng.val(place.geometry.location.lng());
-
-    //                 var pin = place.address_components[place.address_components.length - 1].long_name;
-    //                 var country = place.address_components[place.address_components.length - 2].long_name;
-    //                 var state = place.address_components[place.address_components.length - 3].long_name;
-    //                 var city = place.address_components[place.address_components.length - 4].long_name;
-    //                 var placel = place.address_components[2].long_name;
-
-    //                 document.getElementById('country_id').value = country;
-    //                 document.getElementById('state_id').value = state;
-    //                 document.getElementById('city').value = city;
-    //                 document.getElementById('zipcode').value = pin;
-    //                 document.getElementById('place').value = placel;
-
-    //                 let latlng = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
-
-    //                 // create marker
-    //                 let marker = new google.maps.Marker({
-    //                     position: latlng
-    //                     , map: _this.map
-    //                     , draggable: true
-    //                 });
-    //                 _this.map.setCenter(latlng);
-
-    //                 marker.addListener('dragend', function() {
-    //                     //alert(marker);
-    //                     _this.inputLat.val(marker.getPosition().lat());
-    //                     _this.inputLng.val(marker.getPosition().lng());
-    //                     _this.geocodePosition(marker.getPosition());
-    //                     _this.map.setCenter(marker.getPosition());
-    //                 })
-
-    //             })
-    //         }
-    //         , geocodePosition: function(pos) {
-    //             let _this = this;
-
-    //             this.geocoder.geocode({
-    //                 latLng: pos
-    //             }, function(responses) {
-    //                 if (responses && responses.length > 0) {
-    //                     _this.updateMarkerAddress(responses[0].formatted_address);
-
-    //                     var pin = responses[0].address_components[responses[0].address_components.length - 1].long_name;
-    //                     var country = responses[0].address_components[responses[0].address_components.length - 2].long_name;
-    //                     var state = responses[0].address_components[responses[0].address_components.length - 3].long_name;
-    //                     var city = responses[0].address_components[responses[0].address_components.length - 4].long_name;
-    //                     var place = responses[0].address_components[2].long_name;
-
-    //                     document.getElementById('country_id').value = country;
-    //                     document.getElementById('state_id').value = state;
-    //                     document.getElementById('city').value = city;
-    //                     document.getElementById('zipcode').value = pin;
-    //                     document.getElementById('place').value = place;
-
-    //                 } else {
-    //                     _this.updateMarkerAddress('Nenhuma coordenada encontrada');
-    //                 }
-    //             });
-    //         }
-    //         , updateMarkerAddress: function(str) {
-    //             this.inputAutocomplete.value = str;
-    //         }
-    //         , renderMap: function($el) {
-    //             let _this = this;
-    //             let $markers = $el.find('.marker');
-
-    //             let args = {
-    //                 zoom: 16
-    //                 , center: new google.maps.LatLng(0, 0)
-    //                 , mapTypeId: google.maps.MapTypeId.ROADMAP
-    //                 , streetViewControl: false
-    //                 , mapTypeControl: false
-    //             };
-
-    //             let map = new google.maps.Map($el[0], args);
-    //             map.markers = [];
-    //             $markers.each(function() {
-    //                 _this.add_marker($(this), map);
-    //             });
-
-    //             _this.center_map(map);
-    //         }
-    //         , add_marker: function($marker, map) {
-    //             let latlng = new google.maps.LatLng($marker.attr('data-lat'), $marker.attr('data-lng'));
-    //             let marker = new google.maps.Marker({
-    //                 position: latlng
-    //                 , map: map
-    //             });
-    //             map.markers.push(marker);
-    //         }
-    //         , center_map: function(map) {
-    //             let bounds = new google.maps.LatLngBounds();
-
-    //             $.each(map.markers, function(i, marker) {
-    //                 let latlng = new google.maps.LatLng(marker.position.lat(), marker.position.lng());
-    //                 bounds.extend(latlng);
-    //             });
-
-    //             if (map.markers.length == 1) {
-    //                 map.setCenter(bounds.getCenter());
-    //                 map.setZoom(16);
-    //             } else {
-    //                 map.fitBounds(bounds);
-    //             }
-    //         },
-
-    //     };
-
-    //     $(document).ready(function() {
-    //         Map.init();
-    //     });
-    // }
 
     function directory_pdf_type_delete(id,key,cat_id,directory_id,block_num) {
 

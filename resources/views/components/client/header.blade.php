@@ -40,14 +40,17 @@
 
                         <h3> <?php echo isset($data['headerData']->banner_title)?$data['headerData']->banner_title:""; ?> </h3>
                         <p> <?php echo isset($data['headerData']->banner_sub_title)?$data['headerData']->banner_sub_title:""; ?> </p>
-                        <select class="wide" name="type" id="type_listing_pro">
+                        {{-- <select class="wide" name="type" id="type_listing_pro">
                             <option class="notranslate" value="listing" selected>Companies</option>
                             <option value="product">Products </option>
-                        </select>
+                        </select> --}}
                         <form action="{{ route('listing') }}" method="get" class="type_listing">
+
+                            <input type="hidden" name="type" id="type_listing_pro" value="listing">
+
                             <div class="row no-gutters custom-search-input-2">
-                                <div class="col-lg-2"></div>
-                                <div class="col-lg-4 notranslate">
+                                {{-- <div class="col-lg-2"></div> --}}
+                                <div class="col-lg-6 notranslate">
                                     <input class="typeahead form-control searchquery" type="text" id="searchquerylisting" name="search_string" placeholder='{{__("message.header_search_text")}}' autocomplete="off">
                                     {{-- <i class="fa fa-search" aria-hidden="true"></i> --}}
                                     <i class="fa fa-microphone" style="color: #fe0536;" aria-hidden="true" id="start-recording"></i>

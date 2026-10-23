@@ -2774,6 +2774,7 @@ class CompanyController extends Controller
                 'title'                         => $name_en ? $name_en : "",
                 'slug'                          => $seo_en ? $seo_en : "",
                 'description'                   => isset($description_en) ? $description_en : "",
+                'description_button_link'       => $request->input('description_button_link')??'',
                 'feature_type'                  => $request->input('featuretype'),
                 'company_color'                 => $request->input('company_color'),
                 'google_analytics_id'           => $request->input('google_ana_id'),

@@ -1344,6 +1344,7 @@ class Listing extends Controller
                     ->where('company_imp_product_tags.company_id', $id)
                     //->orderBy('company_imp_product_tags.tags', 'ASC')
                     ->pluck('tag_product_translations.title', 'company_imp_product_tags.ptag_id')
+                    ->take(10)
                     ->toArray();
 
                 $data['bookingdata'] = Booking::query()->where('directory_id', $id)->orderBy('id', 'desc')->take(5)->get();
