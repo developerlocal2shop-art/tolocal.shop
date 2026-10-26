@@ -58,8 +58,12 @@ class OfferControllers extends Controller
         $longitude       =       "'$longitude1'";
 
         $data=array();
-        $id = DB::table('offer')->select('id','slug')->where('slug', $text)->first();
-        $id = $id->id;
+        $offer = DB::table('offer')->select('id', 'slug')->where('slug', $text)->first();
+        if (!$offer && ctype_digit((string) $text)) {
+            $offer = DB::table('offer')->select('id', 'slug')->where('id', (int) $text)->first();
+        }
+        abort_unless($offer, 404);
+        $id = $offer->id;
 
         $data['offerData']      = Offer::with('directorySlug')->where('id',$id)->first();
         $visitors = Helper::visitors('offer',$id);

@@ -1130,7 +1130,8 @@
                                 <?php
                                 $siteOfferUrlFacebook = url('share/offer-facebook-share/'.$row->id);
                                 $discritionOffer = ($row->title!='')?$row->title:$row->title;
-                                $siteOfferUrlTwitter = route('offer.detail', ['id' => $row->slug]);
+                                $offerRouteId = !empty($row->slug) ? $row->slug : $row->id;
+                                $siteOfferUrlTwitter = route('offer.detail', ['id' => $offerRouteId]);
                                 ?>
                                 <div class="item">
 
@@ -1158,23 +1159,23 @@
                                                 $getOfferGallery = Helper::getOfferGallery($row->id);
                                                 if(!empty($row->video)){
                                             ?>
-                                            <a href="{{ route('offer.detail', ['id' => $row->slug]) }}">
+                                            <a href="{{ route('offer.detail', ['id' => $offerRouteId]) }}">
                                                 <video width="400" height="320" style="opacity: 1;" controls autoplay muted loop>
                                                     <source src="{{ env('IMAGE_PATH').'files/offer/'.$row->video }}" type="video/mp4">
                                                 </video>
                                             </a>
                                             <?php }else{
                                                 if(!empty($imagename)){ ?>
-                                                <a href="{{ route('offer.detail', ['id' => $row->slug]) }}">
+                                                <a href="{{ route('offer.detail', ['id' => $offerRouteId]) }}">
                                                     <img src="{{ env('IMAGE_PATH').'images/offer/'.$imagename[0]->name_thumbnail.'.webp' }}"  alt="" width="400" height="266">
                                                 </a>
                                                 <?php }else{ ?>
-                                                <a href="{{ route('offer.detail', ['id' => $row->slug]) }}">
+                                                <a href="{{ route('offer.detail', ['id' => $offerRouteId]) }}">
                                                     <img src="{{ asset('assets/plugins/images/placeholder.png') }}"  alt="" width="400" height="266"></a>
                                             <?php } } ?>
 
                                             <small>
-                                                {{ $row->title }}
+                                                <span class="offer-card-title">{{ $row->title }}</span>
                                                 @if($row->discount_selectedvalue == 'pricediscount')
                                                     <i class="p-discount"> -{{ $row->discount_firstvalue }} </i>
                                                 @elseif($row->discount_selectedvalue == 'percentagediscount')
