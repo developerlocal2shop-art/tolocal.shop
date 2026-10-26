@@ -444,7 +444,16 @@ $instruction = $data['instruction'];
 
                                         <div class="row">
 
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Description Button Text</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="text" name="discription_button_text" value="{{ old('$discription_button_text', $basicData->discription_button_text ?? '') }}" placeholder="Enter description button text" class="form-control p-0 border-0" autocomplete=off>
+                                                    </div>
+                                                    <span class="text-danger">@error('discription_button_text'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
                                                 <div class="form-group mb-4">
                                                     <label class="col-md-12 p-0">Description Button Link</label>
                                                     <div class="col-md-12 border-bottom p-0">

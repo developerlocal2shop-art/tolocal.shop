@@ -931,9 +931,13 @@
 
                 <div class="listing-print-banner__cta">
                     @if($data['mainDirectoryDetails']->description_button_link)
-                        <a href="{{ $data['mainDirectoryDetails']->description_button_link??'' }}" id="down-to-contact" class="listing-print-banner__btn">Order here!</a>
+                        <a href="{{ $data['mainDirectoryDetails']->description_button_link??'' }}" id="down-to-contact" class="listing-print-banner__btn">
+                            {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
+                        </a>
                     @else
-                        <a href="{{ url('contact') }}" id="down-to-contact" class="listing-print-banner__btn">Order here!</a>
+                        <a href="mailto:{{ $data['default_email'] ?? '' }}" id="down-to-contact" class="listing-print-banner__btn">
+                             {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
+                        </a>
                     @endif
 
                     {{-- <div class="listing-print-banner__text">Special text only - with Link Button to change text in Possible to set colour.</div> --}}
@@ -1081,9 +1085,13 @@
                         <div class="listing-print-banner__cta">
 
                             @if($data['mainDirectoryDetails']->description_button_link)
-                                <a href="{{ $data['mainDirectoryDetails']->description_button_link??'' }}" target="_blank" id="down-to-contact" class="listing-print-banner__btn">Order here!</a>
+                                <a href="{{ $data['mainDirectoryDetails']->description_button_link??'' }}" target="_blank" id="down-to-contact" class="listing-print-banner__btn">
+                                     {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
+                                </a>
                             @else
-                                <a href="{{ url('contact') }}" id="down-to-contact" target="_blank" class="listing-print-banner__btn">Order here!</a>
+                                <a href="mailto:{{ $data['default_email'] ?? '' }}" id="down-to-contact" class="listing-print-banner__btn">
+                                     {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
+                                </a>
                             @endif
                         </div>
                     </div>
@@ -1122,7 +1130,7 @@
                                 <?php
                                 $siteOfferUrlFacebook = url('share/offer-facebook-share/'.$row->id);
                                 $discritionOffer = ($row->title!='')?$row->title:$row->title;
-                                $siteOfferUrlTwitter = url('offer/detail/'.$row->slug);
+                                $siteOfferUrlTwitter = route('offer.detail', ['id' => $row->slug]);
                                 ?>
                                 <div class="item">
 
@@ -1150,18 +1158,18 @@
                                                 $getOfferGallery = Helper::getOfferGallery($row->id);
                                                 if(!empty($row->video)){
                                             ?>
-                                            <a href="<?php echo url('offer/detail', ['id' => $row->slug]); ?>">
+                                            <a href="{{ route('offer.detail', ['id' => $row->slug]) }}">
                                                 <video width="400" height="320" style="opacity: 1;" controls autoplay muted loop>
                                                     <source src="{{ env('IMAGE_PATH').'files/offer/'.$row->video }}" type="video/mp4">
                                                 </video>
                                             </a>
                                             <?php }else{
                                                 if(!empty($imagename)){ ?>
-                                                <a href="<?php echo url('offer/detail', ['id' => $row->slug]); ?>">
+                                                <a href="{{ route('offer.detail', ['id' => $row->slug]) }}">
                                                     <img src="{{ env('IMAGE_PATH').'images/offer/'.$imagename[0]->name_thumbnail.'.webp' }}"  alt="" width="400" height="266">
                                                 </a>
                                                 <?php }else{ ?>
-                                                <a href="<?php echo url('offer/detail', ['id' => $row->slug]); ?>">
+                                                <a href="{{ route('offer.detail', ['id' => $row->slug]) }}">
                                                     <img src="{{ asset('assets/plugins/images/placeholder.png') }}"  alt="" width="400" height="266"></a>
                                             <?php } } ?>
 

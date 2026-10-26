@@ -1349,7 +1349,7 @@ class Listing extends Controller
 
                 $data['bookingdata'] = Booking::query()->where('directory_id', $id)->orderBy('id', 'desc')->take(5)->get();
                 $data['frontend_setting'] = Frontendsetting::first();
-
+                $data['default_email'] = DB::table('system_setting')->value('system_email');
 
                 $wishlists = array();
                 $wishlists_dir = array();

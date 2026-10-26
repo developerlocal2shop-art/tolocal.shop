@@ -111,7 +111,7 @@
                 <div class="box_contacts">
                     <i class="fa fa-suitcase" aria-hidden="true"></i>
                     <h2>{{__("message.question_text")}}</h2>
-                    <a href="tel:1234567890">{{$contactdata->phone}}</a> - <a href="mailto:company@example.com">{{$contactdata->system_email}}</a>
+                    <a href="tel:{{$contactdata->phone}}">{{$contactdata->phone}}</a> - <a href="mailto:{{$contactdata->system_email}}">{{$contactdata->system_email}}</a>
                 </div>
                 <div class="box_contacts">
                     <i class="fa fa-home" aria-hidden="true"></i>
