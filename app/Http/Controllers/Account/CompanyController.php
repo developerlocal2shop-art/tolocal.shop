@@ -2570,6 +2570,7 @@ class CompanyController extends Controller
             'image' => 'required|image|mimes:jpeg,jpg,png,gif,bmp,webp|max:10240',
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:5000',
+            'cover_image_url' => 'nullable|url|max:2048',
         ]);
 
         $directoryId = $user->directory_id;
@@ -2601,6 +2602,7 @@ class CompanyController extends Controller
             $coverImage->payable = DirectoryMediaCover::where('directory_id', $directoryId)->value('payable') ?? 0;
             $coverImage->title = $validated['title'];
             $coverImage->description = $validated['description'];
+            $coverImage->url = $validated['cover_image_url'] ?? null;
             $coverImage->save();
 
             return response()->json([
@@ -2608,6 +2610,7 @@ class CompanyController extends Controller
                 'image' => [
                     'title' => $coverImage->title,
                     'description' => $coverImage->description,
+                    'url' => $coverImage->url,
                 ],
             ], 201);
         } catch (\Throwable $exception) {
@@ -2648,6 +2651,7 @@ class CompanyController extends Controller
             'image' => 'required|image|mimes:jpeg,jpg,png,gif,bmp,webp|max:10240',
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:5000',
+            'cover_image_url' => 'nullable|url|max:2048',
         ]);
 
         $directoryId = $user->directory_id;
@@ -2677,6 +2681,7 @@ class CompanyController extends Controller
             $galleryImage->payable = DirectoryMedia::where('directory_id', $directoryId)->value('payable') ?? 0;
             $galleryImage->title = $validated['title'];
             $galleryImage->description = $validated['description'];
+            $galleryImage->url = $validated['cover_image_url'] ?? null;
             $galleryImage->save();
 
             return response()->json([
@@ -2684,6 +2689,7 @@ class CompanyController extends Controller
                 'image' => [
                     'title' => $galleryImage->title,
                     'description' => $galleryImage->description,
+                    'url' => $galleryImage->url,
                 ],
             ], 201);
         } catch (\Throwable $exception) {

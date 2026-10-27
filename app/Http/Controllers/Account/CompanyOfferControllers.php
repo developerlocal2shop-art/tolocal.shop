@@ -41,7 +41,7 @@ class CompanyOfferControllers extends Controller
             $totalOngoingOfferCount = Offer::query()->where('created_by', Auth::user()->id)->where('deleted', '0')->where('offer_active_date', '<=', $currentdate)->where('offer_expire_date', '>=', $currentdate)->get()->count();
             $totalExpiredOfferCount = Offer::query()->where('created_by', Auth::user()->id)->where('deleted', '0')->where('offer_expire_date', '<=', $currentdate)->get()->count();
             $totalUpcomingOffer = Offer::query()->where('created_by', Auth::user()->id)->where('deleted', '0')->where('offer_active_date', '>', $currentdate)->get()->count();
-          
+
             if ($request->input('search')) {
                 $query = $request->all();
                 $searchQuery = $request->input('searchtext');
@@ -62,7 +62,7 @@ class CompanyOfferControllers extends Controller
             } else {
                 $offerdata = Offer::where('deleted', '0')->Where('offer_directory_link', Auth::user()->directory_id)->orderBy('id', 'desc')->paginate(20);
                 $searchtext = isset($searchQuery) ? $request->input('searchtext') : "";
-               
+
                 return view('account.company.offer.index', ['offerdata' => $offerdata, 'instruction'=>$instruction,'textsearch' => $searchtext, 'offerdataCount' => $offerdataCount, 'totalOngoingOfferCount' => $totalOngoingOfferCount, 'totalExpiredOfferCount' => $totalExpiredOfferCount, 'totalUpcomingOffer' => $totalUpcomingOffer]);
             }
         }
@@ -86,10 +86,12 @@ class CompanyOfferControllers extends Controller
     public function submit(Request $request)
     {
 
+    //dd($request->all());
+
         if($request->offer_discount == 'new'){
             $this->validate($request, [
                 'directoryId'               => 'required',
-                'productId'                 => 'required',
+                'productId'                 => 'nullable|array',
                 'offer_title_en'            => 'required|max:40',
                 'offer_description_en'      => 'required|max:500',
                 'offer_gallery_image'       => 'required|array|max:20',
@@ -105,7 +107,7 @@ class CompanyOfferControllers extends Controller
         }else{
             $this->validate($request, [
                 'directoryId'               => 'required',
-                'productId'                 => 'required',
+                'productId'                 => 'nullable|array',
                 'offer_title_en'            => 'required|max:40',
                 'offer_description_en'      => 'required|max:500',
                 'offer_gallery_image'       => 'required|array|max:20',
@@ -121,28 +123,29 @@ class CompanyOfferControllers extends Controller
                 'video.max' => 'The video may not be greater than 5 MB.',
             ]);
         }
-        
+
 
         $latitude = $request->input('lati');
         $longitude = $request->input('long');
-        $dirId = $request->input('directoryId'); 
+        $dirId = $request->input('directoryId');
         $dirlocationdetails = DiectoryLocation::where('directory_id', $dirId)->first();
         if (!empty($dirlocationdetails)) {
             if($dirlocationdetails['latitude']!=0 && $dirlocationdetails['longitude']!=0){
                 $latitude = $dirlocationdetails['latitude'];
-                $longitude = $dirlocationdetails['longitude']; 
+                $longitude = $dirlocationdetails['longitude'];
             }
         }
 
         $name_en = $request->input('offer_title_en');
         $seo_en = $request->input('seo_en');
+        $productIds = $request->input('productId') ?? [];
         $productvalidid = array();
-        foreach ($request->input('productId') as $pcatrow) {
+        foreach ($productIds as $pcatrow) {
             $productvalidid[] = $pcatrow;
         }
         $proID = implode(",", $productvalidid);
         $resultid = array();
-        $pro_id = explode(",", $proID);
+        $pro_id = $productvalidid ? explode(",", $proID) : [];
         foreach ($pro_id as $id) {
             $resultid[$id] = count(Helper::getValidityOfOffer($id));
         }
@@ -225,9 +228,9 @@ class CompanyOfferControllers extends Controller
             }
             $offerinsert->offer_type_selectedvalue          = 'product';
 
-            if ($request->input('productId')) {
+            if (!empty($productIds)) {
                 $productid = array();
-                foreach ($request->input('productId') as $pcatrow) {
+                foreach ($productIds as $pcatrow) {
                     $productid[] = $pcatrow;
                 }
                 $offerinsert->offer_product_id            =  implode(",", $productid);
@@ -275,14 +278,19 @@ class CompanyOfferControllers extends Controller
                 $customerclubdata = CustomerClubs::where('seller_id', Auth::user()->directory_id)->groupBy('email')->orderBy('id', 'desc')->get();
                 if(count($customerclubdata) > 0){
                     foreach($customerclubdata as $cc_val){
+                        $email = trim((string) $cc_val->email);
+                        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                            continue;
+                        }
+
                         $OffersEmailNotificationHistory = new OffersEmailNotificationHistory();
                         $OffersEmailNotificationHistory->seller_id      = Auth::user()->directory_id;
                         $OffersEmailNotificationHistory->offer_id       = $offer_id;
                         $OffersEmailNotificationHistory->offer_type     = 'offers';
-                        $OffersEmailNotificationHistory->user_email     = $cc_val->email;
+                        $OffersEmailNotificationHistory->user_email     = $email;
                         $OffersEmailNotificationHistory->offer_code     = $offerData->voucher_code??'';
                         $OffersEmailNotificationHistory->save();
-                        Mail::to($cc_val->email)->send(new OffersMail($offerData));
+                        Mail::to($email)->send(new OffersMail($offerData));
                     }
                 }
             }
@@ -302,8 +310,8 @@ class CompanyOfferControllers extends Controller
                 $imageName2 = time() . $name2;
                 $imageName = Helper::getSeoUrl($imageName2);
                     $imagepath = 'images/offer/' . $imageName;
-                    $convertext = "webp";        
-                    $image_resize = Image::make($imgbanner->getRealPath())->stream($convertext,50);        
+                    $convertext = "webp";
+                    $image_resize = Image::make($imgbanner->getRealPath())->stream($convertext,50);
                     Storage::disk('images')->put('offer/'.$imageName.'.'.$convertext,$image_resize);
                 $productmainimage_insert                    = new OfferImage;
                 $productmainimage_insert->offer_id          = $offer_id;
@@ -329,8 +337,8 @@ class CompanyOfferControllers extends Controller
                 */
 
                     $imagepath = 'images/offer/' . $imageName;
-                    $convertext = "webp";        
-                    $image_resize = Image::make($imgfile->getRealPath())->stream($convertext,50);        
+                    $convertext = "webp";
+                    $image_resize = Image::make($imgfile->getRealPath())->stream($convertext,50);
                     Storage::disk('images')->put('offer/'.$imageName.'.'.$convertext,$image_resize);
 
                 $productmainimage_insert                    = new OfferImage;
@@ -370,7 +378,7 @@ class CompanyOfferControllers extends Controller
                 $offer_des_content          = $tr->setSource('en')->setTarget($lang->code)->translate($request->input('offer_description_en')??'');
                 $offer_meta_title           = $tr->setSource('en')->setTarget($lang->code)->translate($request->input('meta_title_en')??'');
                 $offer_meta_description     = $tr->setSource('en')->setTarget($lang->code)->translate($request->input('meta_description_en')??'');
-                
+
                 $offershortinsert = new OfferTranslation;
                 $offershortinsert->offer_id             = $offer_id;
                 $offershortinsert->language_id          = $lang->id;
@@ -402,7 +410,7 @@ class CompanyOfferControllers extends Controller
                     $hidenarry = [];
                 }
                 foreach ($imgfilegal as $imgrow) {
-                    
+
                     $ext = $imgrow->getClientOriginalExtension();
                     $name2 = $imgrow->getClientOriginalName();
                     $imageName2 = time() . $name2;
@@ -415,8 +423,8 @@ class CompanyOfferControllers extends Controller
                     */
 
                         $imagepath = 'images/offer/' . $imageName;
-                        $convertext = "webp";        
-                        $image_resize = Image::make($imgrow->getRealPath())->stream($convertext,50);        
+                        $convertext = "webp";
+                        $image_resize = Image::make($imgrow->getRealPath())->stream($convertext,50);
                         Storage::disk('images')->put('offer/'.$imageName.'.'.$convertext,$image_resize);
 
                     $productmainimage_insert                    = new OfferImage;
@@ -451,14 +459,14 @@ class CompanyOfferControllers extends Controller
         $data['offer_translationDesData'] = DB::table('offer as o')->select('*')
             ->join('offer_translations as ot', 'o.id', '=', 'ot.offer_id')
             ->where('ot.offer_id',  $id)->get();
-        
+
         $data['offerMetaTag'] = DB::table('directory_seo as dse')->select('*')
             ->where('dse.module_id',  $id)->where('page_type','offer')->first();
 
         $data['productsdata'] = Product::where('deleted', '0')->where("directory_id", Auth::user()->directory_id)->get(["name", "id"])->toArray();
 
         $data['pro_subcat']       = Productcategory::where('parent_id',$data['offerEditDetails']->search_parent_category)->where('status','Active')->orderBy('name', 'ASC')->get()->toArray();
-        
+
         $data['tags']         = ProductTags::whereIn('child_cat_id',  explode(",",$data['offerEditDetails']->search_child_category))->where('status','Active')->orderBy('tags', 'ASC')->get()->toArray();
         //dd($data['tags']);
 
@@ -467,15 +475,13 @@ class CompanyOfferControllers extends Controller
 
     public function update(Request $request, $offer_id)
     {
-
         //dd($request->all());
-
         if($request->offer_discount == 'new'){
             $this->validate($request, [
                 'offer_title_en'  => 'required|max:40',
                 'offer_description_en' => 'required|max:500',
                 'offer_gallery_image'   => 'array|max:20',
-                'productId'             => 'required',
+                'productId'             => 'nullable|array',
                 'active_date'           => 'required',
                 'expiry_date'           => 'required|after_or_equal:active_date',
                 'video' => 'nullable|file|max:5120', // 10240 KB = 5 MB
@@ -487,7 +493,7 @@ class CompanyOfferControllers extends Controller
                 'offer_title_en'  => 'required|max:40',
                 'offer_description_en' => 'required|max:500',
                 'offer_gallery_image'   => 'array|max:20',
-                'productId'             => 'required',
+                'productId'             => 'nullable|array',
                 'voucher_code'          => 'required',
                 'minimum_amount'        => 'required',
                 'active_date'           => 'required',
@@ -497,15 +503,15 @@ class CompanyOfferControllers extends Controller
                 'video.max' => 'The video may not be greater than 5 MB.',
             ]);
         }
-        
+
 
         $name_en = $request->input('offer_title_en');
         $seo_en = $request->input('seo_en');
         $offerEditDetails = Offer::findOrFail($offer_id);
         $offerEditDetails = explode(",", $offerEditDetails->offer_product_id);
-        
+
         $offerproID = implode(",", $offerEditDetails);
-        
+
         $offerdata = DB::table('offer')->select('*')->whereRaw('FIND_IN_SET("'.$offerproID.'",offer_product_id)')->where('offer_expire_date',"<=", date('y-m-d'))->where('id',$offer_id)->where('deleted', '0')->count();
         //dd($offerdata);
         $existproOffer = "no";
@@ -516,7 +522,7 @@ class CompanyOfferControllers extends Controller
             foreach ($pro_offer_id as $idoffer) {
                 $resultproid[$idoffer] = DB::table('offer')->select('*')->whereRaw('FIND_IN_SET("'.$idoffer.'",offer_product_id)')->where('offer_expire_date',">=", date('y-m-d'))->where('deleted', '0')->count();
             }
-            
+
             foreach ($resultproid as $rowoffer) {
                 if ($rowoffer > 0) {
                     $existproOffer = "yes";
@@ -526,7 +532,7 @@ class CompanyOfferControllers extends Controller
                 }
             }
         }
-        $newProductids = $request->input('productId');
+        $newProductids = $request->input('productId') ?? [];
         $result = array();
         foreach ($newProductids as $key => $value) {
             if (!in_array($value, $offerEditDetails))
@@ -552,15 +558,15 @@ class CompanyOfferControllers extends Controller
         }
         if($offerdata === 0 || $existproOffer != 'yes'){
             if ($existOffer != 'yes') {
-                
+
                 $latitude = $request->input('lati');
                 $longitude = $request->input('long');
-                $dirId = $request->input('directoryId'); 
+                $dirId = $request->input('directoryId');
                 $dirlocationdetails = DiectoryLocation::where('directory_id', $dirId)->first();
                 if (!empty($dirlocationdetails)) {
                     if($dirlocationdetails['latitude']!=0 && $dirlocationdetails['longitude']!=0){
                         $latitude = $dirlocationdetails['latitude'];
-                        $longitude = $dirlocationdetails['longitude']; 
+                        $longitude = $dirlocationdetails['longitude'];
                     }
                 }
 
@@ -598,7 +604,7 @@ class CompanyOfferControllers extends Controller
                 } else {
                     $price_after_discount = 0;
                 }
-    
+
                 if ($request->input('spent')) {
                     $spent = $request->input('spent');
                 } else {
@@ -664,14 +670,14 @@ class CompanyOfferControllers extends Controller
                     foreach ($request->input('childcategory') as $childcatrow) {
                         $childCategory[] = $childcatrow;
                     }
-                    $offerinsert->search_child_category             =  implode(",", $childCategory);  
+                    $offerinsert->search_child_category             =  implode(",", $childCategory);
                 }
                 if ($request->input('offertags')) {
                     $offerTags = array();
                     foreach ($request->input('offertags') as $tagsrow) {
                         $offerTags[] = $tagsrow;
                     }
-                    $offerinsert->tags                              =  implode(",", $offerTags);  
+                    $offerinsert->tags                              =  implode(",", $offerTags);
                 }
                 $videofile = $request->file('video');
                 if ($videofile) {
@@ -688,17 +694,17 @@ class CompanyOfferControllers extends Controller
                 $offerinsert->voucher_code                      = $request->input('voucher_code');
                 $offerinsert->created_by                        = $request->input('createdby');
                 $offerinsert->save();
-    
-    
+
+
                 $languages = Helper::getAllLanguages();
 
                 foreach ($languages as $lang) {
-    
+
                     $languageTranslation_id = $request->input('langtranlation_' . $lang->code);
                     $offer_title = $request->input('offer_title_' . $lang->code);
                     $seo_title = $request->input('meta_title_' . $lang->code);
                     $seo_meta_description = $request->input('meta_description_' . $lang->code);
-    
+
                     if ($request->input('langtranlation_id') == 0) {
                         $udircttrans =  new SeoTranslation();
                     } else {
@@ -712,8 +718,8 @@ class CompanyOfferControllers extends Controller
                     $udircttrans->module_name       = 'Offer';
                     $udircttrans->save();
                 }
-    
-               
+
+
                 $offerdescription = $request->input('offer_description_en');
                 $metatitle        = $request->input('meta_title_en');
                 $metadescription  = $request->input('meta_description_en');
@@ -729,7 +735,7 @@ class CompanyOfferControllers extends Controller
 
                 if($is_not_change_en_language){
                     foreach ($languages as $lang) {
-                        
+
                         $title_name = $request->input('offer_title_' . $lang->code);
                         $description_code = $request->input('offer_description_' . $lang->code);
                         $offer_meta_title = $request->input('meta_title_' . $lang->code);
@@ -748,7 +754,7 @@ class CompanyOfferControllers extends Controller
                         $offershortinsert->save();
                     }
                 }else{
-                    
+
                     OfferTranslation::where('offer_id', $offer_id)->delete();
                     foreach ($languages as $lang) {
 
@@ -773,8 +779,8 @@ class CompanyOfferControllers extends Controller
                 }
 
 
-                
-    
+
+
                 $product_id = $request->input('productId');
                 if (!empty($product_id)) {
                     foreach ($product_id as $id) {
@@ -789,10 +795,10 @@ class CompanyOfferControllers extends Controller
                     $imageName2 = time() . $name2;
                     $imageName = Helper::getSeoUrl($imageName2);
                     $imagepath = 'images/offer/' . $imageName;
-                    $convertext = "webp";        
-                    $image_resize = Image::make($imgbanner->getRealPath())->stream($convertext,50);        
+                    $convertext = "webp";
+                    $image_resize = Image::make($imgbanner->getRealPath())->stream($convertext,50);
                     Storage::disk('images')->put('offer/'.$imageName.'.'.$convertext,$image_resize);
-    
+
                     $productmainimage_insert                    = new OfferImage;
                     $productmainimage_insert->offer_id          = $offer_id;
                     $productmainimage_insert->main_image        = "banner";
@@ -802,7 +808,7 @@ class CompanyOfferControllers extends Controller
                     $productmainimage_insert->path              = $imagepath;
                     $productmainimage_insert->save();
                 }
-    
+
                 $imgfile = $request->file('offer_image');
                 if ($imgfile) {
                     $ext = $imgfile->getClientOriginalExtension();
@@ -817,8 +823,8 @@ class CompanyOfferControllers extends Controller
                     */
 
                     $imagepath = 'images/offer/' . $imageName;
-                    $convertext = "webp";        
-                    $image_resize = Image::make($imgfile->getRealPath())->stream($convertext,50);        
+                    $convertext = "webp";
+                    $image_resize = Image::make($imgfile->getRealPath())->stream($convertext,50);
                     Storage::disk('images')->put('offer/'.$imageName.'.'.$convertext,$image_resize);
 
                     $productmainimage_insert                    = new OfferImage;
@@ -835,7 +841,7 @@ class CompanyOfferControllers extends Controller
                 $page_type = $request->input('page_type');
                 $offer_meta_title = $request->input('meta_title_en');
                 $seo_meta_description_en = $request->input('meta_description_en');
-        
+
                 if (!empty($module_id) && (!empty($page_type))) {
                     DirectorySeo::where('module_id', $offer_id)->where('page_type', 'offer')
                         ->update([
@@ -851,12 +857,12 @@ class CompanyOfferControllers extends Controller
                     $dirtseo->meta_description  = (isset($seo_meta_description_en)) ? $seo_meta_description_en : "";
                     $dirtseo->save();
                 }
-                
-    
+
+
                 $imgfilegal = $request->file('offergal_image');
                 if ($imgfilegal) {
                     foreach ($imgfilegal as $imgrow) {
-                      
+
                         $ext = $imgrow->getClientOriginalExtension();
                         $name2 = $imgrow->getClientOriginalName();
                         $imageName2 = time() . $name2;
@@ -868,8 +874,8 @@ class CompanyOfferControllers extends Controller
                         */
 
                         $imagepath = 'images/offer/' . $imageName;
-                        $convertext = "webp";        
-                        $image_resize = Image::make($imgrow->getRealPath())->stream($convertext,50);        
+                        $convertext = "webp";
+                        $image_resize = Image::make($imgrow->getRealPath())->stream($convertext,50);
                         Storage::disk('images')->put('offer/'.$imageName.'.'.$convertext,$image_resize);
 
                         $productmainimage_insert                    = new OfferImage;
@@ -901,7 +907,7 @@ class CompanyOfferControllers extends Controller
         }else{
             return redirect('company/product/offer-edit/' . $offer_id)->with('product_add_error', 'Offer Already Applied on the Given Product Id!');
         }
-        
+
     }
 
     public function destroy($id)

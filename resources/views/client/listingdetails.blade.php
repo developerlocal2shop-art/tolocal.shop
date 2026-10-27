@@ -26,6 +26,9 @@
         .weoffer_comman.listing-print-banner {
             background: {{ $data['mainDirectoryDetails']->company_color ?: '#2ec1de' }};
         }
+        .btn_1.full-width.purchase, a.btn_1.full-width.purchase {
+            background-color: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
+        }
     </style>
 @else
     <style>
@@ -448,16 +451,18 @@
                     <div class="hero_in shop_detail listing-banner-slide">
                         <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" alt="{{ $rowgallery->title ?: $data['mainDirectoryDetails']->title }}">
                         @if($rowgallery->title || $rowgallery->description)
-                        <div class="listing-banner-caption">
-                            <div class="listing-banner-caption__content">
-                                @if($rowgallery->title)
-                                <h2>{{ $rowgallery->title }}</h2>
-                                @endif
-                                @if($rowgallery->description)
-                                <p>{{ $rowgallery->description }}</p>
-                                @endif
+                        <a href="{{ $rowgallery->url??'' }}" target="_blank" rel="noopener noreferrer">
+                            <div class="listing-banner-caption">
+                                <div class="listing-banner-caption__content">
+                                    @if($rowgallery->title)
+                                    <h2>{{ $rowgallery->title }}</h2>
+                                    @endif
+                                    @if($rowgallery->description)
+                                    <p>{{ $rowgallery->description }}</p>
+                                    @endif
+                                </div>
                             </div>
-                        </div>
+                        </a>
                         @endif
                     </div>
                 </div>
@@ -1039,24 +1044,32 @@
     <div class="container-fluid row">
 
         <?php if(!empty($data['galleryImageChunk'])){ ?>
-            <div class="container-fluid">
+            <div class="container-fluid company_gallery">
                 <div id="sploffer" class="owl-carousel owl-theme listing_gllary_img gallimageslength">
                     <?php foreach($data['galleryImageChunk'] as $rowgalleryres){
                         foreach($rowgalleryres as $rowgallery){
-                        ?>
+                    ?>
                     <div class="item">
                         <div class="strip grid">
+
+                            <h2> {{ $rowgallery->title??'' }}</h2>
+
                             <figure>
-                            @if(!empty($rowgallery->name_thumbnail))
-                                <a href="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" data-lightbox="topGalleryList">
-                                    <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" class="" alt="" width="400" height="266">
-                                </a>
-                            @else
-                                <a href="{{ asset('assets/plugins/images/placeholder.png') }}" data-lightbox="topGalleryList">
-                                    <img src="{{ asset('assets/plugins/images/placeholder.png') }}" class="" alt="" width="400" height="266">
-                                </a>
-                            @endif
+                                @if(!empty($rowgallery->name_thumbnail))
+                                    <a href="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" data-lightbox="topGalleryList">
+                                        <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" class="" alt="" width="400" height="266">
+                                    </a>
+                                @else
+                                    <a href="{{ asset('assets/plugins/images/placeholder.png') }}" data-lightbox="topGalleryList">
+                                        <img src="{{ asset('assets/plugins/images/placeholder.png') }}" class="" alt="" width="400" height="266">
+                                    </a>
+                                @endif
                             </figure>
+
+                            <a href="{{ $rowgallery->url??'' }}">
+                                <p>{{ $rowgallery->description??'' }}</p>
+                            </a>
+
                         </div>
                     </div>
                     <?php } } ?>
@@ -1804,13 +1817,6 @@
 
                         <div class="row add_bottom_30">
 
-                        @if($ismobiledevice != 1)
-                            <style>
-
-                            </style>
-                        @endif
-
-
                         <?php //if($ismobiledevice == 1){ ?>
 
                             <ul style="padding: 3px 0px 0px 30px; width:100%" class="row">
@@ -1854,133 +1860,138 @@
                         <?php //} ?>
 
                     </div>
-                    <hr>
+
                     <?php } ?>
 
 
-                   <div id="accordion" class="tree-stuc">
+
+                <div id="accordion" class="tree-stuc listing-type-accordion">
                     <!-- Listing Type Wise Inner Page -->
                     <?php
-                    $category_id = isset($data['directoryTypeData'][0]->category_id)?$data['directoryTypeData'][0]->category_id:"";
-                    if(!empty($category_id)){
+                        $category_id = isset($data['directoryTypeData'][0]->category_id)?$data['directoryTypeData'][0]->category_id:"";
+                        if(!empty($category_id)){
                     ?>
-                    <h5>
-                       <?php $typeName = Helper::getTypeCategory($category_id); ?>
-                    </h5>
+                    <h5> <?php $typeName = Helper::getTypeCategory($category_id); ?></h5>
                     <?php
                         $reverseData = array_reverse($data['directoryTypeData']);
                         $numberofblock = isset($reverseData[0]->block_num)?$reverseData[0]->block_num+1:"";
                         if(!empty($data['directoryTypeDataPosition'])){
                             $dtp_i=0;
                             foreach($data['directoryTypeDataPosition'] as $key => $positionvaluedata){
-
-                                if($data['directoryTypeData'][$positionvaluedata->block_num]->column_value!=""){
+                                $blockTitle = '';
+                                foreach($data['directoryTypeData'] as $typerow){
+                                    if($typerow->block_num == $positionvaluedata->block_num && strtolower($typerow->column_name) == 'item' && !empty($typerow->column_value)){
+                                        $blockTitle = $typerow->column_value;
+                                        break;
+                                    }
+                                }
+                                //dd($positionvaluedata);
+                                if($blockTitle === ''){
+                                    $blockTitle = 'Item ' . ($positionvaluedata->block_num + 1);
+                                }
                                 $getDirectoryTypeGalleries = Helper::getDirectoryTypeGalleries($positionvaluedata->category_id,$positionvaluedata->block_num, $positionvaluedata->directory_id);
                                 $getDirectoryTypePdf = Helper::getDirectoryTypePdf($positionvaluedata->category_id,$positionvaluedata->block_num, $positionvaluedata->directory_id);
                     ?>
-                                <div class="room_type first schedulenewtable2 <?php if($dtp_i > 0){ ?> schedulenewtable_more <?php } ?>" style="display: <?php if($dtp_i > 0){ ?> none; <?php } ?>">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <a role="button" data-toggle="collapse" href="#collapse_dd-<?php echo $positionvaluedata->block_num; ?>" aria-expanded="true" aria-controls="collapse_dd-<?php echo $positionvaluedata->block_num; ?>" class="toggle-btn @if($positionvaluedata->block_num != 0) collapsed @endif">
-                                                <?php
-                                                    foreach($data['directoryTypeData'] as $key => $typerow){
-                                                        if ($typerow->block_num == $positionvaluedata->block_num && strtolower($typerow->column_name) == 'item') {
-                                                        echo "<h4 style='background: #ebeff6; width: 100%;padding: 5px 10px; border-bottom: 1px solid rgba(0, 0, 0, .1);'>". htmlspecialchars($typerow->column_value, ENT_QUOTES, 'UTF-8') . "</h4>";
-                                                    }
-                                                    }
-                                                ?>
-                                                <span class="dropdown-icon">
-                                                    <i class="fas fa-chevron-down"></i>
+                        <div class="room_type first schedulenewtable2 <?php if($dtp_i > 0){ ?> schedulenewtable_more <?php } ?>" style="display: <?php if($dtp_i > 0){ ?> none; <?php } ?>">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <a id="listing-type-heading-<?php echo $positionvaluedata->block_num; ?>" role="button" data-toggle="collapse" data-target="#listing-type-collapse-<?php echo $positionvaluedata->block_num; ?>" href="#listing-type-collapse-<?php echo $positionvaluedata->block_num; ?>" aria-expanded="<?php echo $positionvaluedata->block_num == 0 ? 'true' : 'false'; ?>" aria-controls="listing-type-collapse-<?php echo $positionvaluedata->block_num; ?>" class="toggle-btn @if($positionvaluedata->block_num != 0) collapsed @endif">
+                                        <h4 style="background: #ebeff6; width: 100%;padding: 5px 10px; border-bottom: 1px solid rgba(0, 0, 0, .1);">{{ $blockTitle }}</h4>
+                                        <span class="dropdown-icon">
+                                            <i class="fas fa-chevron-down"></i>
+                                        </span>
+                                    </a>
+                                </div>
+
+                                {{-- <div role="button" data-toggle="collapse" href="#collapse_dd-{{ $positionvaluedata->block_num }}" aria-expanded="true" aria-controls="collapse-1"> --}}
+                                    <div id="listing-type-collapse-<?php echo $positionvaluedata->block_num; ?>" class="collapse <?php if($positionvaluedata->block_num == 0){ ?>show<?php } ?>" aria-labelledby="listing-type-heading-<?php echo $positionvaluedata->block_num; ?>" data-parent=".listing-type-accordion">
+                                    <div class="col-md-4">
+                                        <?php if($data['directoryTypeimage'][$positionvaluedata->block_num]->image_name!=""){ ?>
+                                            <img src="{{ env('IMAGE_PATH').'files/directorytypeimage/'.$data['directoryTypeimage'][$positionvaluedata->block_num]->image_name }}" class="img-fluid" alt="">
+                                        <?php }else{ ?>
+                                            <img src="{{ asset('assets/client/images/ca79c3f27e26aa3d727ba906a4e21d64.jpg') }}" class="img-fluid" alt="">
+                                        <?php } ?>
+                                        @if(count($getDirectoryTypeGalleries) > 0)
+
+                                            <span style="color: #4fa94f;" onClick="view_type_gallery_button({{ $positionvaluedata->category_id }},{{ $positionvaluedata->directory_id }},{{ $positionvaluedata->block_num }})" class="closebtn see_more_gallery_type" id="view_type_gallery_button">
+                                                <i style="margin: 0px 5px;" class="fa fa-eye" aria-hidden="true"></i> See More
+                                            </span>
+                                        @else
+                                            @if(count($getDirectoryTypePdf) > 0)
+                                                <span style="color: #dc3545" onClick="view_type_pdf_button({{ $positionvaluedata->category_id }},{{ $positionvaluedata->directory_id }},{{ $positionvaluedata->block_num }})" class="closebtn see_more_gallery_type" id="view_type_pdf_button">
+                                                    <i style="margin: 0px 5px;" class="fa fa-eye" aria-hidden="true"></i> More PDF
                                                 </span>
-                                            </a>
-                                        </div>
-
-                                        {{-- <div role="button" data-toggle="collapse" href="#collapse_dd-{{ $positionvaluedata->block_num }}" aria-expanded="true" aria-controls="collapse-1"> --}}
-                                            <div id="collapse_dd-<?php echo $positionvaluedata->block_num; ?>" class="collapse row" aria-labelledby="collapse_dd-<?php echo $positionvaluedata->block_num; ?>" data-parent=".schedulenewtable2">
-                                            <div class="col-md-4">
-                                                <?php if($data['directoryTypeimage'][$positionvaluedata->block_num]->image_name!=""){ ?>
-                                                    <img src="{{ env('IMAGE_PATH').'files/directorytypeimage/'.$data['directoryTypeimage'][$positionvaluedata->block_num]->image_name }}" class="img-fluid" alt="">
-                                                <?php }else{ ?>
-                                                    <img src="{{ asset('assets/client/images/ca79c3f27e26aa3d727ba906a4e21d64.jpg') }}" class="img-fluid" alt="">
-                                                <?php } ?>
-                                                @if(count($getDirectoryTypeGalleries) > 0)
-
-                                                    <span style="color: #4fa94f;" onClick="view_type_gallery_button({{ $positionvaluedata->category_id }},{{ $positionvaluedata->directory_id }},{{ $positionvaluedata->block_num }})" class="closebtn see_more_gallery_type" id="view_type_gallery_button">
-                                                        <i style="margin: 0px 5px;" class="fa fa-eye" aria-hidden="true"></i> See More
-                                                    </span>
-                                                @else
-                                                    @if(count($getDirectoryTypePdf) > 0)
-                                                        <span style="color: #dc3545" onClick="view_type_pdf_button({{ $positionvaluedata->category_id }},{{ $positionvaluedata->directory_id }},{{ $positionvaluedata->block_num }})" class="closebtn see_more_gallery_type" id="view_type_pdf_button">
-                                                            <i style="margin: 0px 5px;" class="fa fa-eye" aria-hidden="true"></i> More PDF
-                                                        </span>
+                                            @endif
+                                        @endif
+                                    </div>
+                                    <div class="col-md-8">
+                                        <ul class="hotel_facilities">
+                                            <?php foreach($data['directoryTypeData'] as $typerow){
+                                                if($typerow->block_num == $positionvaluedata->block_num){
+                                                    if($typerow->column_name!="position" && $typerow->column_name!="see_more_link"){ ?>
+                                                    @if($typerow->column_value)
+                                                        <li><i class="fas fa-hand-point-right" aria-hidden="true"></i>{{ " ".$typerow->column_value }}</li>
                                                     @endif
-                                                @endif
-                                            </div>
-                                            <div class="col-md-8">
-                                                <ul class="hotel_facilities">
-                                                    <?php foreach($data['directoryTypeData'] as $typerow){
-                                                        if($typerow->block_num == $positionvaluedata->block_num){
-                                                            if($typerow->column_name!="position" && $typerow->column_name!="see_more_link"){ ?>
-                                                            <li><i class="fas fa-hand-point-right" aria-hidden="true"></i>{{ " ".$typerow->column_value }}</li>
-                                                        <?php  }else{ ?>
-                                                            <?php if($typerow->column_name == "see_more_link" && $typerow->column_value != ""){ ?>
-                                                            <br>
-                                                                <span class="loc_open mr-2" style="background-color: #b5b9b7;color: #000!important;border: 1px solid #b5b9b7;border-radius: 50px;">
-                                                                    <a target="_blank" href="{{ $typerow->column_value }}" style="color: #000;"><i class="fas fa-external-link-alt" aria-hidden="true"></i>  more link</a>
-                                                                </span>
-                                                        <?php
-                                                            }
-                                                            }
-                                                            } }
-                                                        ?>
-                                                </ul>
-                                            </div>
-                                        </div>
-
+                                                <?php  }else{ ?>
+                                                    <?php if($typerow->column_name == "see_more_link" && $typerow->column_value != ""){ ?>
+                                                    <br>
+                                                        <span class="loc_open mr-2" style="background-color: #b5b9b7;color: #000!important;border: 1px solid #b5b9b7;border-radius: 50px;">
+                                                            <a target="_blank" href="{{ $typerow->column_value }}" style="color: #000;"><i class="fas fa-external-link-alt" aria-hidden="true"></i>  more link</a>
+                                                        </span>
+                                                <?php
+                                                    }
+                                                    }
+                                                    } }
+                                                ?>
+                                        </ul>
                                     </div>
                                 </div>
-                        <?php $dtp_i++;  } } }else{ ?>
-                            <?php if($numberofblock!=0 ){
-                                for($i=0;$i<$numberofblock;$i++){
-                                    if($data['directoryTypeData'][$i]->column_value!=""){ ?>
-                                    <div class="room_type first">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <?php if($data['directoryTypeimage'][$i]->image_name!=""){ ?>
-                                                    <img src="{{ env('IMAGE_PATH').'files/directorytypeimage/'.$data['directoryTypeimage'][$i]->image_name }}" class="img-fluid" alt="">
-                                                <?php } else{ ?>
-                                                <img src="{{ asset('assets/client/images/ca79c3f27e26aa3d727ba906a4e21d64.jpg') }}" class="img-fluid" alt="">
-                                                <?php } ?>
-                                            </div>
-                                            <div class="col-md-8">
 
-                                                <ul class="hotel_facilities">
-                                                    <?php foreach($data['directoryTypeData'] as $typerow){
-                                                        if($typerow->block_num == $i){
-                                                            if($typerow->column_name!="position" && $typerow->column_name!="see_more_link"){ ?>
-                                                            <?php /* ?><li><label>{{ $typerow->label }}</label>: {{ $typerow->column_value }}</li><?php */ ?>
-                                                            <li><i class="fas fa-hand-point-right" aria-hidden="true"></i>{{ " ".$typerow->column_value }}</li>
-                                                    <?php  }else{ ?>
-                                                        <?php if($typerow->column_name == "see_more_link" && $typerow->column_value != ""){ ?>
-                                                            <li>
-                                                                <span class="loc_open mr-2" style="background-color: #b5b9b7;color: #000!important;border: 1px solid #b5b9b7;border-radius: 50px;">
-                                                                    <a target="_blank" href="{{ $typerow->column_value }}" style="color: #000;"><i class="fas fa-external-link-alt" aria-hidden="true"></i>  more link</a>
-                                                                </span>
-                                                            </li>
-                                                        <?php } ?>
-                                                    <?php } } } ?>
-                                                </ul>
-                                            </div>
+                            </div>
+                        </div>
+                    <?php  $dtp_i++;  } }else{ ?>
+                        <?php if($numberofblock!=0 ){
+                            for($i=0;$i<$numberofblock;$i++){
+                                if($data['directoryTypeData'][$i]->column_value!=""){ ?>
+                                <div class="room_type first">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <?php if($data['directoryTypeimage'][$i]->image_name!=""){ ?>
+                                                <img src="{{ env('IMAGE_PATH').'files/directorytypeimage/'.$data['directoryTypeimage'][$i]->image_name }}" class="img-fluid" alt="">
+                                            <?php } else{ ?>
+                                            <img src="{{ asset('assets/client/images/ca79c3f27e26aa3d727ba906a4e21d64.jpg') }}" class="img-fluid" alt="">
+                                            <?php } ?>
+                                        </div>
+                                        <div class="col-md-8">
+
+                                            <ul class="hotel_facilities">
+                                                <?php foreach($data['directoryTypeData'] as $typerow){
+                                                    if($typerow->block_num == $i){
+                                                        if($typerow->column_name!="position" && $typerow->column_name!="see_more_link"){ ?>
+                                                        <?php /* ?><li><label>{{ $typerow->label }}</label>: {{ $typerow->column_value }}</li><?php */ ?>
+                                                        <li><i class="fas fa-hand-point-right" aria-hidden="true"></i>{{ " ".$typerow->column_value }}</li>
+                                                <?php  }else{ ?>
+                                                    <?php if($typerow->column_name == "see_more_link" && $typerow->column_value != ""){ ?>
+                                                        <li>
+                                                            <span class="loc_open mr-2" style="background-color: #b5b9b7;color: #000!important;border: 1px solid #b5b9b7;border-radius: 50px;">
+                                                                <a target="_blank" href="{{ $typerow->column_value }}" style="color: #000;"><i class="fas fa-external-link-alt" aria-hidden="true"></i>  more link</a>
+                                                            </span>
+                                                        </li>
+                                                    <?php } ?>
+                                                <?php } } } ?>
+                                            </ul>
                                         </div>
                                     </div>
-                            <?php  } } } ?>
-                        <?php } } //die; ?>
-                        </div>
-                        @if(count($data['directoryTypeData']) > 0)
-                            <a id="more_type" class="more_type">
-                                See More<i class="fas fa-chevron-down"></i>
-                            </a>
-                        @endif
+                                </div>
+                        <?php  } } } ?>
+                    <?php } } //die; ?>
+                </div>
+
+                @if(count($data['directoryTypeData']) > 0)
+                    <a id="more_type" class="more_type">
+                        See More<i class="fas fa-chevron-down"></i>
+                    </a>
+                @endif
 
 
                         <?php /* if($numberofblock!=0 ){
@@ -2018,7 +2029,6 @@
                     if(!empty($vediolink)){
                     ?>
                     <hr>
-
                     <h3>{{__("message.video_text")}}  </h3>
                     <div class="" style="text-align: center;">
 

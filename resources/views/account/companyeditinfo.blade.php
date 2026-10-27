@@ -913,6 +913,7 @@ $instruction = $data['instruction'];
                                                             <div class="image-metadata-overlay">
                                                                 @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
                                                                 @if($imagenamerow->description)<span>{{ $imagenamerow->description }}</span>@endif
+                                                                @if($imagenamerow->url)<span>{{ $imagenamerow->url }}</span>@endif
                                                             </div>
                                                             @endif
                                                             <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
@@ -1032,6 +1033,7 @@ $instruction = $data['instruction'];
                                                                 <div class="image-metadata-overlay">
                                                                     @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
                                                                     @if($imagenamerow->description)<span>{{ $imagenamerow->description }}</span>@endif
+                                                                    @if($imagenamerow->url)<span>{{ $imagenamerow->url }}</span>@endif
                                                                 </div>
                                                                 @endif
                                                                 <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
@@ -2755,11 +2757,15 @@ $instruction = $data['instruction'];
                     </div>
                     <div class="form-group">
                         <label for="company-cover-image-title">Title</label>
-                        <input type="text" class="form-control" id="company-cover-image-title" name="title" maxlength="255" required>
+                        <input type="text" class="form-control" id="company-cover-image-title" placeholder="Title" name="title" maxlength="255" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="company-cover-image-title">Url</label>
+                        <input type="text" class="form-control" id="companycover-image-url" placeholder="Cover image url" name="cover_image_url" >
                     </div>
                     <div class="form-group">
                         <label for="company-cover-image-description">Description</label>
-                        <textarea class="form-control" id="company-cover-image-description" name="description" rows="4" maxlength="5000" required></textarea>
+                        <textarea class="form-control" id="company-cover-image-description" placeholder="Description" name="description" rows="4" maxlength="5000" ></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -2786,16 +2792,20 @@ $instruction = $data['instruction'];
                     <div id="companyGalleryImageTextUploadErrors" class="alert alert-danger" style="display: none;" role="alert"></div>
                     <div id="companyGalleryImageTextUploadSuccess" class="alert alert-success" style="display: none;" role="status"></div>
                     <div class="form-group">
-                        <label for="company-gallery-image-file">Image File</label>
+                        <label for="company-gallery-image-file"> Gallery File</label>
                         <input type="file" class="form-control" id="company-gallery-image-file" name="image" accept="image/jpeg,image/png,image/gif,image/bmp,image/webp" required>
                     </div>
                     <div class="form-group">
-                        <label for="company-gallery-image-title">Title</label>
-                        <input type="text" class="form-control" id="company-gallery-image-title" name="title" maxlength="255" required>
+                        <label for="company-gallery-image-title">Gallery Title</label>
+                        <input type="text" class="form-control" id="company-gallery-image-title" name="title" placeholder="Gallery title" maxlength="255" required>
                     </div>
                     <div class="form-group">
-                        <label for="company-gallery-image-description">Description</label>
-                        <textarea class="form-control" id="company-gallery-image-description" name="description" rows="4" maxlength="5000" required></textarea>
+                        <label for="company-gallery-image-url">Url</label>
+                        <input type="url" class="form-control" id="companygallery-image-url" placeholder="Gallery image url" name="cover_image_url">
+                    </div>
+                    <div class="form-group">
+                        <label for="company-gallery-image-description">Gallery Description</label>
+                        <textarea class="form-control" id="company-gallery-image-description" name="description" placeholder="Gallery description" rows="4" maxlength="5000" required></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
