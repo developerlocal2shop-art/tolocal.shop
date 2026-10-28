@@ -1904,7 +1904,7 @@
                                 </div>
 
                                 {{-- <div role="button" data-toggle="collapse" href="#collapse_dd-{{ $positionvaluedata->block_num }}" aria-expanded="true" aria-controls="collapse-1"> --}}
-                                    <div id="listing-type-collapse-<?php echo $positionvaluedata->block_num; ?>" class="collapse <?php if($positionvaluedata->block_num == 0){ ?>show<?php } ?>" aria-labelledby="listing-type-heading-<?php echo $positionvaluedata->block_num; ?>" data-parent=".listing-type-accordion">
+                                    <div id="listing-type-collapse-<?php echo $positionvaluedata->block_num; ?>" class="collapse <?php if($positionvaluedata->block_num == 0){ ?>show<?php } ?> row" aria-labelledby="listing-type-heading-<?php echo $positionvaluedata->block_num; ?>" data-parent=".listing-type-accordion">
                                     <div class="col-md-4">
                                         <?php if($data['directoryTypeimage'][$positionvaluedata->block_num]->image_name!=""){ ?>
                                             <img src="{{ env('IMAGE_PATH').'files/directorytypeimage/'.$data['directoryTypeimage'][$positionvaluedata->block_num]->image_name }}" class="img-fluid" alt="">

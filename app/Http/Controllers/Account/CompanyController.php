@@ -2935,7 +2935,6 @@ class CompanyController extends Controller
             }
         }
 
-
         $newOwnTagsids = array();
         $createnewowntag = $request->input('createnewowntag');
         if ($createnewowntag != "") {
@@ -2960,8 +2959,8 @@ class CompanyController extends Controller
                 $owntagsInsertData->save();
             }
         }
-         /* Directory Own Tags Ends */
 
+        /* Directory Own Tags Ends */
         $offerdescription = $request->input('description_en');
         $weoffer_en        = $request->input('weoffer_en');
         $aboutus_en  = $request->input('aboutus_en');
@@ -2972,10 +2971,8 @@ class CompanyController extends Controller
             ->where('we_offer',$weoffer_en)
             ->where('about_us',$aboutus_en)
             ->where('directory_id',$id)->exists();
-
         $languages = Helper::getAllLanguages();
         $tr = new GoogleTranslate();
-
             if($is_not_change_en_language){
                 foreach ($languages as $lang) {
 
@@ -3088,6 +3085,7 @@ class CompanyController extends Controller
                 'video_url'  => $request->input('videourl'),
                 'payable'  => $payval,
             ]);
+
         if ($request->input('payimage') == "payable") {
             DirectoryMediaListing::where(['directory_id' => $id, 'payable' => 0])->delete();
             DirectoryMediaCover::where(['directory_id' => $id, 'payable' => 0])->delete();
@@ -3298,6 +3296,7 @@ class CompanyController extends Controller
 
         }
         /* MEDIA EDIT END */
+
         /* Seo Entries start */
         $seo_title_en = $request->input('meta_keywords_en');
         $seo_meta_description_en = $request->input('meta_description_en');
@@ -3307,17 +3306,6 @@ class CompanyController extends Controller
                 'meta_keyword' => (isset($seo_title_en)) ? $seo_title_en : "",
                 'meta_description' => isset($seo_meta_description_en) ? $seo_meta_description_en : "",
             ]);
-
-        // foreach ($languages as $lang) {
-        //     $seo_title = $request->input('meta_keywords_' . $lang->code);
-        //     $seo_meta_description = $request->input('meta_description_' . $lang->code);
-        //     $seoTranslation_id = $request->input('seolangtranlation_' . $lang->code);
-        //     $seodircttrans =  DirectorySeoTranslation::find($seoTranslation_id);
-        //     $seodircttrans->meta_title        = $seo_title ?? "";
-        //     $seodircttrans->meta_keyword        = $seo_title ?? "";
-        //     $seodircttrans->meta_description  = $seo_meta_description ?? "";
-        //     $seodircttrans->save();
-        // }
 
         foreach ($languages as $lang) {
 
@@ -3387,6 +3375,115 @@ class CompanyController extends Controller
         }
         /* HOLIDAY TIME ADD */
 
+        if ($request->input('exception_days') == "no") {
+            if($request->input('exception_days')!=$request->input('exeActualdataforyesno') )
+            DirectoryExceptionHoliday::where('directory_id', $id)->delete();
+            if ($request->input('editDataexception') == "one") {
+                $edit_real_id           = $request->input('real_id');
+                $edit_custom_date       = $request->input('edit_custom_date');
+                $edit_note              = $request->input('edit_note');
+                $edit_exceptional_day       = $request->input('edit_exceptional_day');
+                $edit_exceptional_is_closed = $request->input('template_exceptional_is_closed');
+
+                    for ($i = 0; $i < count($edit_custom_date); $i++) {
+                        $edit_final_custom_time = [];
+                        $edit_time_hours_min    = $request->input($edit_real_id[$i].'_edit_time_hours_min');
+                        $edit_time_hours_max    = $request->input($edit_real_id[$i].'_edit_time_hours_max');
+                        for ($j = 0; $j < count($edit_time_hours_min); $j++) {
+                            $arr['open_time']           = $edit_time_hours_min[$j];
+                            $arr['close_time']          = $edit_time_hours_max[$j];
+                            $edit_final_custom_time[]   = $arr;
+                        }
+                        DirectoryExceptionHoliday::where('id', $edit_real_id[$i])
+                        ->update([
+                            'custom_date'       => $edit_custom_date[$i],
+                            'note'              => $edit_note[$i],
+                            'day'               => $edit_exceptional_day[$i],
+                            'closed'            => $edit_exceptional_is_closed[$i],
+                            'custom_time'       => json_encode($edit_final_custom_time),
+                        ]);
+                    }
+            }
+            if ($request->input('exception_date') != "") {
+                $custom_date = $request->input('exception_date');
+                $note = $request->input('exception_note');
+                $exception_day = $request->input('exception_day');
+                $exception_closed = $request->input('exception_closed');
+                $time_hours_min = $request->input('exception_time_hours_min');
+                $time_hours_max = $request->input('exception_time_hours_max');
+                $final_custom_time = [];
+                if (count($time_hours_min)) {
+                    for ($i = 0; $i < count($time_hours_min); $i++) {
+                        $arr['open_time'] = $time_hours_min[$i];
+                        $arr['close_time'] = $time_hours_max[$i];
+                        $final_custom_time[] = $arr;
+                    }
+                }
+                $final_custom_time = json_encode($final_custom_time);
+                $dirctcustom_holiday = new DirectoryExceptionHoliday;
+                $dirctcustom_holiday->directory_id = $id;
+                $dirctcustom_holiday->custom_date = $custom_date;
+                $dirctcustom_holiday->note = $note;
+                $dirctcustom_holiday->day = $exception_day;
+                $dirctcustom_holiday->closed = $exception_closed;
+                $dirctcustom_holiday->custom_time = $final_custom_time;
+                $dirctcustom_holiday->save();
+            }
+        }
+        if ($request->input('exception_days') == "yes") {
+            if($request->input('exception_daystemplateselect')!=$request->input('exeActualdataforselectedTemplateId'))
+            {
+                DirectoryExceptionHoliday::where('directory_id', $id)->delete();
+            }
+            $sele_ids = $request->input('exception_template_id');
+            $ids = ($sele_ids!="")?$sele_ids:($ids=array());
+            if(count($ids)){
+                foreach($ids as $val) {
+                    $time_hours_min = $request->input($val.'_exc_time_hours_min');
+                    $time_hours_max = $request->input($val.'_exc_time_hours_max');
+                    $final_custom_time = [];
+                    if (count($time_hours_min)) {
+                        for ($j = 0; $j < count($time_hours_min); $j++) {
+                            $arr['open_time'] = $time_hours_min[$j];
+                            $arr['close_time'] = $time_hours_max[$j];
+                            $final_custom_time[] = $arr;
+                        }
+                    }
+                    $final_custom_time = json_encode($final_custom_time);
+                    $dirctexception_holiday = new DirectoryExceptionHoliday;
+                    $dirctexception_holiday->directory_id = $id;
+                    $dirctexception_holiday->custom_date = $request->input($val.'_exception_date');
+                    $dirctexception_holiday->closed = $request->input($val.'_exception_closed')??'No';
+                    $dirctexception_holiday->day = $request->input($val.'_exception_day');
+                    $dirctexception_holiday->note = $request->input($val.'_exception_note');
+                    $dirctexception_holiday->custom_time = $final_custom_time;
+                    $dirctexception_holiday->save();
+                }
+            }
+            if ($request->input('editDataTemplateexception') == "one") {
+                $edit_tempalte_real_id           = $request->input('template_real_id');
+                $edit_template_custom_date       = $request->input('edit_template_custom_date');
+                $edit_template_note              = $request->input('edit_template_note');
+
+                    for ($i = 0; $i < count($edit_template_custom_date); $i++) {
+                        $edit_template_final_custom_time = [];
+                        $edit_time_hours_min    = $request->input($edit_tempalte_real_id[$i].'_edit_time_hours_min');
+                        $edit_time_hours_max    = $request->input($edit_tempalte_real_id[$i].'_edit_time_hours_max');
+                        for ($j = 0; $j < count($edit_time_hours_min); $j++) {
+                            $arr['open_time']           = $edit_time_hours_min[$j];
+                            $arr['close_time']          = $edit_time_hours_max[$j];
+                            $edit_template_final_custom_time[]   = $arr;
+                        }
+                        DirectoryExceptionHoliday::where('id', $edit_tempalte_real_id[$i])
+                        ->update([
+                            'custom_date'       => $edit_template_custom_date[$i],
+                            'note'              => $edit_template_note[$i],
+                            'custom_time'       => json_encode($edit_template_final_custom_time),
+                        ]);
+                    }
+            }
+        }
+
         //DirectoryCustomHoliday::where('directory_id', $id)->delete();
         if ($request->input('publicdays') == "no") {
             if($request->input('publicdays')!=$request->input('actualdataforyesno') )
@@ -3446,6 +3543,7 @@ class CompanyController extends Controller
         }
 
         if ($request->input('publicdays') == "yes") {
+
             if ($request->input('editDataTemplatepublic') != "one") {
                 if($request->input('publicdaystemplateselect')!=$request->input('actualdataforselectedTemplateId')){
                     DirectoryCustomHoliday::where('directory_id', $id)->delete();
@@ -3508,115 +3606,7 @@ class CompanyController extends Controller
             }
         }
 
-        if ($request->input('exception_days') == "no") {
-            if($request->input('exception_days')!=$request->input('exeActualdataforyesno') )
-            DirectoryExceptionHoliday::where('directory_id', $id)->delete();
-            if ($request->input('editDataexception') == "one") {
-                $edit_real_id           = $request->input('real_id');
-                $edit_custom_date       = $request->input('edit_custom_date');
-                $edit_note              = $request->input('edit_note');
-                $edit_exceptional_day       = $request->input('edit_exceptional_day');
-                $edit_exceptional_is_closed = $request->input('template_exceptional_is_closed');
 
-                    for ($i = 0; $i < count($edit_custom_date); $i++) {
-                        $edit_final_custom_time = [];
-                        $edit_time_hours_min    = $request->input($edit_real_id[$i].'_edit_time_hours_min');
-                        $edit_time_hours_max    = $request->input($edit_real_id[$i].'_edit_time_hours_max');
-                        for ($j = 0; $j < count($edit_time_hours_min); $j++) {
-                            $arr['open_time']           = $edit_time_hours_min[$j];
-                            $arr['close_time']          = $edit_time_hours_max[$j];
-                            $edit_final_custom_time[]   = $arr;
-                        }
-                        DirectoryExceptionHoliday::where('id', $edit_real_id[$i])
-                        ->update([
-                            'custom_date'       => $edit_custom_date[$i],
-                            'note'              => $edit_note[$i],
-                            'day'               => $edit_exceptional_day[$i],
-                            'closed'            => $edit_exceptional_is_closed[$i],
-                            'custom_time'       => json_encode($edit_final_custom_time),
-                        ]);
-                    }
-            }
-            if ($request->input('exception_date') != "") {
-                $custom_date = $request->input('exception_date');
-                $note = $request->input('exception_note');
-                $exception_day = $request->input('exception_day');
-                $exception_closed = $request->input('exception_closed');
-                $time_hours_min = $request->input('exception_time_hours_min');
-                $time_hours_max = $request->input('exception_time_hours_max');
-                $final_custom_time = [];
-                if (count($time_hours_min)) {
-                    for ($i = 0; $i < count($time_hours_min); $i++) {
-                        $arr['open_time'] = $time_hours_min[$i];
-                        $arr['close_time'] = $time_hours_max[$i];
-                        $final_custom_time[] = $arr;
-                    }
-                }
-                $final_custom_time = json_encode($final_custom_time);
-                $dirctcustom_holiday = new DirectoryExceptionHoliday;
-                $dirctcustom_holiday->directory_id = $id;
-                $dirctcustom_holiday->custom_date = $custom_date;
-                $dirctcustom_holiday->note = $note;
-                $dirctcustom_holiday->day = $exception_day;
-                $dirctcustom_holiday->closed = $exception_closed;
-                $dirctcustom_holiday->custom_time = $final_custom_time;
-                $dirctcustom_holiday->save();
-            }
-        }
-
-        if ($request->input('exception_days') == "yes") {
-            if($request->input('exception_daystemplateselect')!=$request->input('exeActualdataforselectedTemplateId'))
-            {
-                DirectoryExceptionHoliday::where('directory_id', $id)->delete();
-            }
-            $sele_ids = $request->input('exception_template_id');
-            $ids = ($sele_ids!="")?$sele_ids:($ids=array());
-            if(count($ids)){
-                foreach($ids as $val) {
-                    $time_hours_min = $request->input($val.'_exc_time_hours_min');
-                    $time_hours_max = $request->input($val.'_exc_time_hours_max');
-                    $final_custom_time = [];
-                    if (count($time_hours_min)) {
-                        for ($j = 0; $j < count($time_hours_min); $j++) {
-                            $arr['open_time'] = $time_hours_min[$j];
-                            $arr['close_time'] = $time_hours_max[$j];
-                            $final_custom_time[] = $arr;
-                        }
-                    }
-                    $final_custom_time = json_encode($final_custom_time);
-                    $dirctexception_holiday = new DirectoryExceptionHoliday;
-                    $dirctexception_holiday->directory_id = $id;
-                    $dirctexception_holiday->custom_date = $request->input($val.'_exception_date');
-                    $dirctexception_holiday->closed = $request->input($val.'_exception_closed')??'No';
-                    $dirctexception_holiday->day = $request->input($val.'_exception_day');
-                    $dirctexception_holiday->note = $request->input($val.'_exception_note');
-                    $dirctexception_holiday->custom_time = $final_custom_time;
-                    $dirctexception_holiday->save();
-                }
-            }
-            if ($request->input('editDataTemplateexception') == "one") {
-                $edit_tempalte_real_id           = $request->input('template_real_id');
-                $edit_template_custom_date       = $request->input('edit_template_custom_date');
-                $edit_template_note              = $request->input('edit_template_note');
-
-                    for ($i = 0; $i < count($edit_template_custom_date); $i++) {
-                        $edit_template_final_custom_time = [];
-                        $edit_time_hours_min    = $request->input($edit_tempalte_real_id[$i].'_edit_time_hours_min');
-                        $edit_time_hours_max    = $request->input($edit_tempalte_real_id[$i].'_edit_time_hours_max');
-                        for ($j = 0; $j < count($edit_time_hours_min); $j++) {
-                            $arr['open_time']           = $edit_time_hours_min[$j];
-                            $arr['close_time']          = $edit_time_hours_max[$j];
-                            $edit_template_final_custom_time[]   = $arr;
-                        }
-                        DirectoryExceptionHoliday::where('id', $edit_tempalte_real_id[$i])
-                        ->update([
-                            'custom_date'       => $edit_template_custom_date[$i],
-                            'note'              => $edit_template_note[$i],
-                            'custom_time'       => json_encode($edit_template_final_custom_time),
-                        ]);
-                    }
-            }
-        }
         /* END SCHEDUAL ENTRIES */
 
 

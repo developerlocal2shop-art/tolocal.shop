@@ -104,6 +104,97 @@ $instruction = $data['instruction'];
     .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active {
         background-color: #edebeb;
     }
+    .public_filter_section {
+        margin: 1px 1px 0.5rem !important;
+        padding: 15px 0px 0px 30px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+    }
+    .public_filter_section .public-template-create {
+        padding-bottom: 20px;
+        margin-bottom: 20px;
+        border-bottom: 1px solid #e2e8f0;
+    }
+    .public_filter_section .form-group {
+        margin-bottom: 16px;
+    }
+    .public_filter_section label {
+        margin-bottom: 8px;
+        color: #344054;
+        font-weight: 600;
+    }
+    .public_filter_section .form-control {
+        min-height: 42px;
+        border: 1px solid #d0d5dd;
+        border-radius: 6px;
+        padding: 8px 12px !important;
+        background-color: #fff;
+        margin: 0px -4px;
+    }
+    .public_filter_section .btn {
+        min-height: 30px;
+        padding: 8px 15px;
+        border-radius: 6px;
+        margin: 16px;
+        color: #fff !important;
+    }
+    .public_filter_section .public-template-import-action {
+        display: flex;
+        align-items: flex-end;
+    }
+    .public_filter_section .public-template-download {
+        display: inline-flex;
+        min-height: 60px;
+        align-items: center;
+        gap: 5px;
+        color: #344054;
+        font-weight: 600;
+        text-decoration: none;
+        margin: 5px 15px;
+    }
+    .public_filter_section .public-template-download:hover {
+        color: #157347;
+    }
+    .public_filter_section .public-template-download i {
+        color: #e31212;
+        font-size: 20px;
+    }
+    .public-template-options {
+        padding: 5px 25px;
+        margin: 0 0 20px;
+        background: #e1e5e5;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+    }
+    .custom-radio label.custom-control-label {
+        padding: 0;
+        padding-left: 5px;
+        line-height: 10px;
+    }
+    .public-template-options label {
+        font-weight: 700;
+    }
+    .custom-control-input {
+        position: relative;
+        z-index: 1;
+        opacity: 1;
+    }
+    #template_upload-status {
+        margin: 8px 0 0 !important;
+        text-align: left !important;
+    }
+    @media (max-width: 767.98px) {
+        .public_filter_section {
+            padding: 16px;
+        }
+        .public_filter_section .public-template-download {
+            margin-bottom: 16px;
+        }
+        .public-template-options {
+            padding: 16px;
+        }
+    }
 </style>
 <div class="sub_header_in sticky_header filter_sub_blue_header">
     <div class="container">
@@ -1416,8 +1507,6 @@ $instruction = $data['instruction'];
                                                     @endif
                                             </div>
 
-
-
                                             <div class="exceptional_days_div" id="exceptional_days_div" style="display:none;">
                                                 <?php /* ---------------------- START Exceptional holidays --------------------------------  */ ?>
                                                 <div class="row mb-4">
@@ -1907,80 +1996,87 @@ $instruction = $data['instruction'];
                                                     </div>
                                                 </div>
                                                 <div class="">
-                                                    <div class="row mb-4">
-                                                    <label class="col-md-12">Schedule Template</label>
-                                                        <div class="col-md-3">
-                                                            <div class="custom-control  custom-radio">
-                                                                <input type="radio" class="pay public_h_radio" name="publicdays" value="no" id="pay" {{ $basicData->is_publictemplate=='no' ? 'checked' : '' }}>
-                                                                <label class="custom-control-label" for="1">No </label>
+                                                    <div class="public-template-options">
+                                                        <label>Schedule Template</label>
+                                                        <div class="row">
+                                                            <div class="col-6 col-md-3">
+                                                                <div class="custom-control custom-radio public-template-choice">
+                                                                    <input type="radio" class="custom-control-input pay public_h_radio" name="publicdays" value="no" id="publicdays-no" {{ $basicData->is_publictemplate=='no' ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label" for="publicdays-no">No</label>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <div class="custom-control  custom-radio">
-                                                                <input type="radio" class="pay public_h_radio" name="publicdays" value="yes" id="nonpay" {{ $basicData->is_publictemplate=='yes' ? 'checked' : '' }}>
-                                                                <label class="custom-control-label" for="1">Yes</label>
+                                                            <div class="col-6 col-md-3">
+                                                                <div class="custom-control custom-radio public-template-choice">
+                                                                    <input type="radio" class="custom-control-input pay public_h_radio" name="publicdays" value="yes" id="publicdays-yes" {{ $basicData->is_publictemplate=='yes' ? 'checked' : '' }}>
+                                                                    <label class="custom-control-label" for="publicdays-yes">Yes</label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group mb-4 row" style="margin: 2px;" id="publicdays-template" style="display:none;">
-
-                                                    <div class="col-md-4 cus-title"><br>
-                                                        <div class="form-group mb-4">
-                                                            <label class="col-md-12 p-0">Public Template Name</label>
-                                                            <div class="col-md-12 border-bottom p-0">
-                                                                <input type="text" name="public_template_name" id="public_template_name" value="{{ old('public_template_name') }}" placeholder="Enter Template Name" class="form-control p-0 border-0" autocomplete=off>
+                                                <div class="public_filter_section form-group mb-4" id="publicdays-template" style="display:none;">
+                                                    <div class="row align-items-end public-template-create">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="public_template_name">Public Template Name</label>
+                                                                <input type="text" name="public_template_name" id="public_template_name" value="{{ old('public_template_name') }}" placeholder="Enter Template Name" class="form-control" autocomplete="off">
+                                                                <span class="text-danger">@error('public_template_name'){{$message}} @enderror</span>
                                                             </div>
-                                                            <span class="text-danger">@error('public_template_name'){{$message}} @enderror</span>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button type="submit" id="public_template_btn" class="btn btn-info">Add</button>
+                                                        </div>
+
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label for="public_template_impt_file">Import Template File</label>
+                                                                <input type="file" name="public_template_impt_file" id="public_template_impt_file" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2 public-template-import-action">
+                                                            <a class="btn btn-success" id="public_templateimpt_btn">Import Template Data</a>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <div id="template_upload-status"></div>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                    <div class="row align-items-end">
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="publicdaystemplateselect_admin">Public Holidays Template Admin</label>
+                                                                <select class="form-control" name="publicdaystemplateselect_admin" id="publicdaystemplateselect_admin" onchange="getpublicTemplateOption(this.value,'admin');">
+                                                                    <option value="none">Select Template</option>
+                                                                    @foreach($data['publicdaysdata_admin'] as $publicdaysdatarow)
+                                                                    <option value="{{ $publicdaysdatarow->id }}" {{ $publicdaysdatarow->id == $basicData->is_publictemplate_id ? 'selected' : '' }}>
+                                                                        {{ $publicdaysdatarow->name }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <div class="form-group">
+                                                                <label for="publicdaystemplateselect">Public Holidays Template Vendor</label>
+                                                                <select class="form-control" name="publicdaystemplateselect" id="publicdaystemplateselect" onchange="getpublicTemplateOption(this.value,'vendor');">
+                                                                    <option value="none">Select Template</option>
+                                                                    @foreach($data['publicdaysdata'] as $publicdaysdatarow)
+                                                                    <option value="{{ $publicdaysdatarow->id }}" {{ $publicdaysdatarow->id == $basicData->is_publictemplate_id ? 'selected' : '' }}>
+                                                                        {{ $publicdaysdatarow->name }}
+                                                                    </option>
+                                                                    @endforeach
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <a class="public-template-download" href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Excel format">
+                                                                <i class="fa fa-download" aria-hidden="true"></i> Sample Format
+                                                            </a>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-8">
-                                                        <button type="submit" id="public_template_btn" style="margin: 55px 0px 2px;" class="btn btn-info">Add</button>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <hr>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <label class=" p-0">Public Holidays Template Admin</label>
-                                                    </div>
-                                                    <div class="col-md-6">
-                                                        <label class=" p-0">Public Holidays Template Vendor</label>
-                                                    </div>
-                                                    <div class="col-md-2 import-style">
-                                                        <a href="{{ asset('assets/client/format_Import_holidaytemplate_inner.xlsx') }}" download title="Download Exc format">
-                                                            <i style="font-size:25px;color: #e31212;" class="fa fa-download" aria-hidden="true"></i> Sample Format
-                                                        </a>
-                                                    </div>
-                                                    <div class="col-md-3">
-                                                        <select class="form-control" name="publicdaystemplateselect_admin" id="publicdaystemplateselect_admin" onchange="getpublicTemplateOption(this.value,'admin');" style="width:100%">
-                                                            <option value="none">Select Template</option>
-                                                            @foreach($data['publicdaysdata_admin'] as $publicdaysdatarow)
-                                                            <option value="{{ $publicdaysdatarow->id }}" {{ $publicdaysdatarow->id == $basicData->is_publictemplate_id ? 'selected' : '' }}>
-                                                                {{ $publicdaysdatarow->name }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-1"> </div>
-                                                    <div class="col-md-3">
-                                                        <select class="form-control" name="publicdaystemplateselect" id="publicdaystemplateselect" onchange="getpublicTemplateOption(this.value,'vendor');" style="width:100%">
-                                                            <option value="none">Select Template</option>
-                                                            @foreach($data['publicdaysdata'] as $publicdaysdatarow)
-                                                            <option value="{{ $publicdaysdatarow->id }}" {{ $publicdaysdatarow->id == $basicData->is_publictemplate_id ? 'selected' : '' }}>
-                                                                {{ $publicdaysdatarow->name }}
-                                                            </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-4">
-                                                        <input type="file" style="width: 219px;float: left;" target="_blank" name="public_template_impt_file" id="public_template_impt_file" style="float: left;width: 70%; margin: -2px 5px;" class="form-control">
-                                                        <a class="btn btn-success btn-sm" style="text-align: right;margin: 5px;color: #fff;" id="public_templateimpt_btn">Import Template Data </a>
-                                                    </div>
-                                                    <div class="col-md-12">
-                                                        <div id="template_upload-status" style="text-align: right; text-align: right;margin: 5px 310px;"></div>
-                                                    </div>
-
                                                 </div>
 
                                                 <input type="hidden" name="actualdataforyesno" value="{{ $basicData->is_publictemplate }}">
@@ -3237,9 +3333,9 @@ $instruction = $data['instruction'];
                 },
                 dataType: 'html',
                 success: function(result) {
-                    $('#temp-publicdaysdetails-table').hide();
-                    $('#public-template').remove();
-                    $('#publicdays-table').after(result);
+                    //$('#temp-publicdaysdetails-table').hide();
+                    //$('#public-template').remove();
+                    //$('#publicdays-table').after(result);
                 }
             });
         }
@@ -3250,6 +3346,7 @@ $instruction = $data['instruction'];
 
         $("#publicdaystemplateselect").change(function(){
             $('#publicdaystemplateselect_admin').val('none');
+            $('.custom-checkbox').hide();
         });
 
         $("#exception-daystemplateselect_admin").change(function(){
@@ -4000,27 +4097,7 @@ $instruction = $data['instruction'];
         }
     });
 
-    var public_h_radio_val = $('.public_h_radio').val();
-       if(public_h_radio_val == 'yes'){
-            $('.public_h_checkbox').hide();
-            $('#edit_public_table').hide();
-       }else{
-        $('.public_h_checkbox').show();
-        $('#edit_public_table').show();
-       }
 
-    $(".public_h_radio").change(function() {
-
-       var public_h_radio_val = $(this).val();
-       if(public_h_radio_val == 'yes'){
-            $('.public_h_checkbox').hide();
-            $('#edit_public_table').hide();
-       }else{
-        $('.public_h_checkbox').show();
-        $('#edit_public_table').show();
-       }
-
-    });
 
     $("input[name=normaldays]").change(function() {
 
@@ -4047,6 +4124,8 @@ $instruction = $data['instruction'];
             $('#temp-publicdaysdetails-table').hide();
             $('#public-template').hide();
             $('#publicdaystemplateselect').val("none");
+            $('.custom-checkbox').hide();
+
         } else {
             $('#publicdays-template').show();
             $('#publicdays-table').hide();
@@ -4081,6 +4160,24 @@ $instruction = $data['instruction'];
     });
 
 
+    function togglePublicHolidayFields() {
+        var public_h_radio_val = $('.public_h_radio:checked').val();
+        if (public_h_radio_val === 'yes') {
+            $('.public_h_checkbox, #edit_public_table').hide();
+            //$('#temp-publicdaysdetails-table').show();
+            $('#public-template').hide();
+
+        } else {
+            $('.public_h_checkbox, #edit_public_table').show();
+            $('#temp-publicdaysdetails-table').hide();
+            $('#public-template').hide();
+
+        }
+    }
+    // Run on page load
+    togglePublicHolidayFields();
+    // Run when the radio selection changes
+    $('.public_h_radio').on('change', togglePublicHolidayFields);
 
     function changeSimpletags(sel) {
 
@@ -4168,6 +4265,9 @@ $instruction = $data['instruction'];
                     // console.log('imageid',result);
                     if (result == true) {
                         $(tblrow).remove();
+                        setTimeout(() => {
+                            location.reload();
+                        }, 2000);
                     }
 
                 }
