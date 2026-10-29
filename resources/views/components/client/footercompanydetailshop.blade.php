@@ -23,11 +23,7 @@ if(in_array("rydholms-dammodehus", $currenturl)){
     $companyEmail = $data['mainDirectoryDetails']->email ?? $data['footerData']->system_email ?? '';
     $companyWebsite = $data['mainDirectoryDetails']->website ?? '';
 
-    $openingHours = [
-        ['label' => 'Vardagar', 'value' => '10 - 18'],
-        ['label' => 'Lördagar', 'value' => '10 - 13'],
-        ['label' => 'Söndag', 'value' => 'Stängt'],
-    ];
+    $openingHours = $data['openingHours'] ?? [];
 @endphp
 
 <footer class="company_detail_shop footer-company-detail" style="background-image: -webkit-gradient(linear, left bottom, left top, from({{ $data['mainDirectoryDetails']->company_color??'#fff' }}), to(#ffffff)) !important;">

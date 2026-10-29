@@ -1233,7 +1233,6 @@
 
                     <!--------------Shopping card section---------->
                     <?php if(!empty($data['shoppingcardData'])){ ?>
-                        <hr>
 
                         <section class="listing-shopping-cards" aria-labelledby="listing-shopping-cards-title">
                             <div class="listing-shopping-cards__heading">
@@ -1352,7 +1351,7 @@
 
 
                     <?php if(!empty($data['adevertiseData'])){ ?>
-                        <hr>
+
                         <div class="container-fluid sec-bg adevertiseDatad competition_div">
                             @if(count($data['adevertiseData']) > 0)
                                 <div class="main_title_2">
@@ -1411,7 +1410,7 @@
                     <?php } ?>
 
                    @if(count($data['blogData']) > 0)
-
+                     <hr>
                     <section class="container-fluid sec-bg adevertiseDatad listing-blogs-section" aria-labelledby="listing-blogs-title">
                         <div class="listing-blogs-heading">
                             <div>
@@ -1757,8 +1756,10 @@
                                 <div class="schedulenewtable">
                                     <table class="table-schedule-new">
                                         <span style="color: #004dda;"><b>Opening hours changes below.</b></span>
-                                        <?php foreach($data['next_threedata_exception_and_public'] as $public_exception_data){
-                                        $openpuplictimeholiday =  json_decode($public_exception_data->custom_time); ?>
+                                        <?php
+                                        foreach($data['next_threedata_exception_and_public'] as $public_exception_data){
+                                        $openpuplictimeholiday =  json_decode($public_exception_data->custom_time);
+                                        ?>
                                         <tr>
                                             <td>{{ $public_exception_data->custom_date }}</td>
                                             <td>
@@ -1797,7 +1798,6 @@
                     </div>
                     <!-- End Map -->
 
-                    <hr>
                     <?php if(!empty($data['assortment_links'])){ ?>
                         <hr>
                         <h5 class="add_bottom_15 link-headings">{{__("message.assortment_links")}}</h5>
