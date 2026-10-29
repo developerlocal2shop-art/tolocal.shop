@@ -923,6 +923,7 @@ $instruction = $data['instruction'];
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6 infoicon-listingcover-align" id="multi-listingCover">
                                                 <div class="form-group mb-4">
                                                     <div class="d-flex align-items-center justify-content-between">
@@ -947,6 +948,7 @@ $instruction = $data['instruction'];
                                                         <button type="button" class="btn btn-default" style="background: white; color: rgb(58, 160, 255); pointer-events: initial;">or select file to upload</button>
                                                         <input type="hidden" name="array_cover_listing[]" class="form-control" id="listing-cover-array" value="">
                                                         <input type="hidden" name="array_cover_images" class="form-control" id="listing-cover-arrayimage">
+                                                        <input type="hidden" name="array_cover_order" id="listing-cover-order" value="[]">
 
                                                         <input type="file" class="form-control" name="listing_cover[]" multiple id="cover-img">
                                                         <span class="text-danger">@error('listing_cover'){{$message}} @enderror</span>
@@ -983,8 +985,9 @@ $instruction = $data['instruction'];
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6">
-                                                <div class="form-group mb-4 previewBlocks">
+                                                <div class="form-group mb-4 previewBlocks company_cover_image_preview">
                                                     <label class="col-md-12 p-0">Preview</label>
                                                     <div class="col-md-12 imgPreview" id="imgPreview">
                                                         @php
@@ -998,30 +1001,37 @@ $instruction = $data['instruction'];
                                                         ?>
                                                         @foreach($imagenamecover as $imagenamerow)
 
-                                                        <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-coverimages="{{ $imagenamerow->name_thumbnail }}">
+                                                        <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-coverimages="{{ $imagenamerow->name_thumbnail }}" @if ($user->hasPermission('update')) tabindex="0" role="group" aria-label="Cover image details. Focus to edit." @endif>
                                                             <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="cover">
-                                                            @if($imagenamerow->title || $imagenamerow->description)
-                                                            <div class="image-metadata-overlay">
-                                                                @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
-                                                                @if($imagenamerow->description)<span>{{ $imagenamerow->description }}</span>@endif
-                                                                @if($imagenamerow->url)<span>{{ $imagenamerow->url }}</span>@endif
-                                                            </div>
-                                                            @endif
-                                                            <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
 
+                                                            <div class="image-metadata-overlay cover-image-edit-panel" data-update-url="{{ route('company.cover-image.update', $imagenamerow->id) }}">
+                                                                @if ($user->hasPermission('update'))
+                                                                    <label for="cover-image-title-{{ $imagenamerow->id }}">Title</label>
+                                                                    <input type="text" id="cover-image-title-{{ $imagenamerow->id }}" class="form-control cover-image-title" value="{{ $imagenamerow->title }}" maxlength="255" placeholder="Image title">
+                                                                    <label for="cover-image-description-{{ $imagenamerow->id }}">Description</label>
+                                                                    <textarea id="cover-image-description-{{ $imagenamerow->id }}" class="form-control cover-image-description" rows="3" maxlength="5000" placeholder="Image description">{{ $imagenamerow->description }}</textarea>
+                                                                    <label for="cover-image-link-{{ $imagenamerow->id }}">Link</label>
+                                                                    <input type="url" id="cover-image-link-{{ $imagenamerow->id }}" class="form-control cover-image-link" value="{{ $imagenamerow->link }}" maxlength="2048" placeholder="https://example.com">
+                                                                    <button type="button" class="btn btn-primary btn-sm cover-image-update-button">Update</button>
+                                                                    <span class="cover-image-update-status" role="status" aria-live="polite"></span>
+                                                                @else
+                                                                    <strong>{{ $imagenamerow->title ?: 'No title' }}</strong>
+                                                                    <span>{{ $imagenamerow->description ?: 'No description' }}</span>
+                                                                    @if ($imagenamerow->link)<span>{{ $imagenamerow->link }}</span>@endif
+                                                                @endif
+                                                            </div>
+                                                            <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
                                                         </div>
                                                         @endforeach
-
                                                         <?php } else{ ?>
-
                                                         <!-- <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-cover-img" alt="directory-img" width="70px" height="70px" class="previewBlocks" /> -->
                                                         <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-cover-img" class="previewBlocks" alt="media-img" width="70px" height="70px" />
                                                         <?php } ?>
-
                                                         <input type="hidden" id="lastpositioncoverValue" value="<?php echo isset($last_position->position)?$last_position->position:'-1'  ?>" />
                                                     </div>
                                                 </div>
                                             </div>
+
                                         </div>
                                         <hr>
                                         <div class="row">
@@ -1123,8 +1133,10 @@ $instruction = $data['instruction'];
                                                                 @if($imagenamerow->title || $imagenamerow->description)
                                                                 <div class="image-metadata-overlay">
                                                                     @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
+                                                                    <hr>
                                                                     @if($imagenamerow->description)<span>{{ $imagenamerow->description }}</span>@endif
-                                                                    @if($imagenamerow->url)<span>{{ $imagenamerow->url }}</span>@endif
+                                                                    <hr>
+                                                                    @if($imagenamerow->link)<span>{{ $imagenamerow->link }}</span>@endif
                                                                 </div>
                                                                 @endif
                                                                 <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
@@ -2849,7 +2861,7 @@ $instruction = $data['instruction'];
                     <div id="companyCoverImageUploadSuccess" class="alert alert-success" style="display: none;" role="status"></div>
                     <div class="form-group">
                         <label for="company-cover-image-file">Image File</label>
-                        <input type="file" class="form-control" id="company-cover-image-file" name="image" accept="image/jpeg,image/png,image/gif,image/bmp,image/webp" required>
+                        <input type="file" class="form-control" id="company-cover-image-file" name="image" accept="image/*" required>
                     </div>
                     <div class="form-group">
                         <label for="company-cover-image-title">Title</label>
@@ -2857,7 +2869,7 @@ $instruction = $data['instruction'];
                     </div>
                     <div class="form-group">
                         <label for="company-cover-image-title">Url</label>
-                        <input type="text" class="form-control" id="companycover-image-url" placeholder="Cover image url" name="cover_image_url" >
+                        <input type="text" class="form-control" id="companycover-image-url" placeholder="Url" name="cover_image_url" >
                     </div>
                     <div class="form-group">
                         <label for="company-cover-image-description">Description</label>
@@ -2889,7 +2901,7 @@ $instruction = $data['instruction'];
                     <div id="companyGalleryImageTextUploadSuccess" class="alert alert-success" style="display: none;" role="status"></div>
                     <div class="form-group">
                         <label for="company-gallery-image-file"> Gallery File</label>
-                        <input type="file" class="form-control" id="company-gallery-image-file" name="image" accept="image/jpeg,image/png,image/gif,image/bmp,image/webp" required>
+                        <input type="file" class="form-control" id="company-gallery-image-file" name="image" accept="image/*" required>
                     </div>
                     <div class="form-group">
                         <label for="company-gallery-image-title">Gallery Title</label>
@@ -2897,7 +2909,7 @@ $instruction = $data['instruction'];
                     </div>
                     <div class="form-group">
                         <label for="company-gallery-image-url">Url</label>
-                        <input type="url" class="form-control" id="companygallery-image-url" placeholder="Gallery image url" name="cover_image_url">
+                        <input type="url" class="form-control" id="companygallery-image-url" placeholder="Url" name="gallery_image_url">
                     </div>
                     <div class="form-group">
                         <label for="company-gallery-image-description">Gallery Description</label>
@@ -2918,13 +2930,70 @@ $instruction = $data['instruction'];
         $('#imgPreview').on('mouseenter focusin', '.thumbnail:has(.image-metadata-overlay)', function () {
             $('#imgPreview').addClass('metadata-popup-active');
         }).on('mouseleave focusout', '.thumbnail:has(.image-metadata-overlay)', function () {
-            $('#imgPreview').removeClass('metadata-popup-active');
+            var $preview = $('#imgPreview');
+            window.setTimeout(function () {
+                if (!$preview.find('.thumbnail:hover, .thumbnail:focus-within').length) {
+                    $preview.removeClass('metadata-popup-active');
+                }
+            }, 0);
         });
 
         $('#listgallerypreview').on('mouseenter focusin', '.thumbnail:has(.image-metadata-overlay)', function () {
             $('#listgallerypreview').addClass('metadata-popup-active');
         }).on('mouseleave focusout', '.thumbnail:has(.image-metadata-overlay)', function () {
-            $('#listgallerypreview').removeClass('metadata-popup-active');
+            var $preview = $('#listgallerypreview');
+            window.setTimeout(function () {
+                if (!$preview.find('.thumbnail:hover, .thumbnail:focus-within').length) {
+                    $preview.removeClass('metadata-popup-active');
+                }
+            }, 0);
+        });
+
+        $('#imgPreview').on('click', '.cover-image-update-button', function () {
+            var $button = $(this);
+            var $panel = $button.closest('.cover-image-edit-panel');
+            var $status = $panel.find('.cover-image-update-status');
+
+            $button.prop('disabled', true).text('Updating...');
+            $status.removeClass('text-success text-danger').text('');
+
+            $.ajax({
+                url: $panel.data('update-url'),
+                method: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    title: $panel.find('.cover-image-title').val(),
+                    description: $panel.find('.cover-image-description').val(),
+                    link: $panel.find('.cover-image-link').val()
+                },
+                headers: {
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    $status.addClass('text-success').text(response.message);
+                },
+                error: function (xhr) {
+                    var response = xhr.responseJSON;
+                    var message = response && response.message
+                        ? response.message
+                        : 'Could not update this cover image. Please try again.';
+
+                    if (response && response.errors) {
+                        var validationMessages = [];
+                        $.each(response.errors, function (field, messages) {
+                            $.each(messages, function (index, validationMessage) {
+                                validationMessages.push(validationMessage);
+                            });
+                        });
+                        message = validationMessages.join(' ');
+                    }
+
+                    $status.addClass('text-danger').text(message);
+                },
+                complete: function () {
+                    $button.prop('disabled', false).text('Update');
+                }
+            });
         });
 
         var $form = $('#companyCoverImageUploadForm');
@@ -4752,7 +4821,14 @@ $instruction = $data['instruction'];
     });
 
     $(document).ready(function() {
-        $("#imgPreview,#thumbnailimgPreview,#listgallerypreview").sortable();
+        $("#imgPreview").sortable({
+            items: "> .thumbnail",
+            cancel: "input,textarea,button,select,option,.cover-image-edit-panel",
+            update: function() {
+                syncCoverImageOrder();
+            }
+        });
+        $("#thumbnailimgPreview,#listgallerypreview").sortable();
 
         $('#helpiconText').show();
 
@@ -4806,10 +4882,31 @@ $instruction = $data['instruction'];
         });
     });
 
+    function syncCoverImageOrder() {
+        var positions = [];
+        var imageNames = [];
+        var coverOrder = [];
+
+        $('#imgPreview > .thumbnail').each(function(index) {
+            $(this).attr('data-position', index).data('position', index);
+            positions.push(index);
+            imageNames.push($(this).attr('data-coverimages') || '');
+
+            var imageId = $(this).find('img[data-value="cover"]').attr('data-id');
+            if (imageId) {
+                coverOrder.push(imageId);
+            }
+        });
+
+        $('#listing-cover-array').val(positions.join(','));
+        $('#listing-cover-arrayimage').val(imageNames.join(','));
+        $('#listing-cover-order').val(JSON.stringify(coverOrder));
+    }
+
     function submitForm() {
+
         var image_thumb_arr_exist = [];
         var image_thumb_arr_new = [];
-        var image_cover_arr = [];
         var image_gal_arr = [];
         var image_trade_arr = [];
         // get image ids order listsubmit
@@ -4825,18 +4922,9 @@ $instruction = $data['instruction'];
             thumbimages.push($(this).data('thumbimages'));
         });
         $('#thumb_hidden_img').val(thumbimages.join(','));
-        $('#imgPreview div').each(function() {
-            if ($(this).hasClass("newimage") || $(this).hasClass("existing-img")) {
-                var id = $(this).data('position');
-                image_cover_arr.push(id);
-                $("#listing-cover-array").val(image_cover_arr);
-            }
-        });
-        var coverimg = [];
-        $('.imgPreview div').each(function() {
-            coverimg.push($(this).data('coverimages'));
-        });
-        $('#listing-cover-arrayimage').val(coverimg.join(','));
+
+        syncCoverImageOrder();
+
         $('#listgallerypreview div').each(function() {
             if ($(this).hasClass("newimage") || $(this).hasClass("existing-img")) {
                 var id = $(this).data('position');
@@ -5556,8 +5644,46 @@ $instruction = $data['instruction'];
         display: block;
     }
 
+    .cover-image-edit-panel {
+        z-index: 3;
+        width: 300px;
+        max-height: 340px;
+    }
+
+    .cover-image-edit-panel label {
+        margin: 0 0 4px;
+        color: #344054;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .cover-image-edit-panel .form-control {
+        min-height: 34px;
+        margin-bottom: 8px;
+        padding: 6px 8px;
+        font-size: 12px;
+    }
+
+    .cover-image-edit-panel textarea.form-control {
+        min-height: 72px;
+        resize: vertical;
+    }
+
+    .cover-image-edit-panel .cover-image-update-button {
+        margin: 2px 6px 0 0;
+    }
+
+    .cover-image-edit-panel .cover-image-update-status {
+        font-size: 11px;
+    }
+
     .thumbnail:hover {
         z-index: 2;
+    }
+
+    .thumbnail:focus {
+        outline: 2px solid #3aa0ff;
+        outline-offset: 3px;
     }
 
     .thumbnail:hover .image-metadata-overlay,

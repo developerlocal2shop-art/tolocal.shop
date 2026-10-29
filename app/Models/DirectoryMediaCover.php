@@ -10,11 +10,14 @@ class DirectoryMediaCover extends Model
     use HasFactory;
     protected $table = 'directory_media_cover';
     protected $fillable = [
-        'directory_id', 
+        'directory_id',
         'position',
         'name_thumbnail',
         'name_large',
         'extension',
-        'path'
+        'path',
+        'title',
+        'description',
+        'link'
     ];
 }

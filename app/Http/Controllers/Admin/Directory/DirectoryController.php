@@ -2154,7 +2154,10 @@ class DirectoryController extends Controller
     }
     public static function getCoverImage($directyId)
     {
-        $getcoverimageData = DirectoryMediaCover::where(['directory_id' => $directyId])->orderBy('id', 'asc')->get();
+        $getcoverimageData = DirectoryMediaCover::where(['directory_id' => $directyId])
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'asc')
+            ->get();
         return $getcoverimageData;
     }
     public static function getTrademarkImage($directyId)

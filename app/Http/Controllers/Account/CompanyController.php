@@ -2561,13 +2561,15 @@ class CompanyController extends Controller
     */
     public function uploadCompanyCoverImage(Request $request)
     {
+        //dd($request->all());
+
         $user = Auth::user();
         if (!$user->hasPermission('update')) {
             return response()->json(['message' => 'You do not have permission to upload cover images.'], 403);
         }
 
         $validated = $request->validate([
-            'image' => 'required|image|mimes:jpeg,jpg,png,gif,bmp,webp|max:10240',
+            'image' => 'required|image|mimes:jpg,jpeg,png,webp',
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:5000',
             'cover_image_url' => 'nullable|url|max:2048',
@@ -2583,6 +2585,7 @@ class CompanyController extends Controller
         $fileStored = false;
 
         try {
+
             $imageStream = Image::make($request->file('image')->getRealPath())
                 ->resize(960, 450)
                 ->stream('webp', 50);
@@ -2602,7 +2605,7 @@ class CompanyController extends Controller
             $coverImage->payable = DirectoryMediaCover::where('directory_id', $directoryId)->value('payable') ?? 0;
             $coverImage->title = $validated['title'];
             $coverImage->description = $validated['description'];
-            $coverImage->url = $validated['cover_image_url'] ?? null;
+            $coverImage->link = $validated['cover_image_url'] ?? null;
             $coverImage->save();
 
             return response()->json([
@@ -2610,9 +2613,10 @@ class CompanyController extends Controller
                 'image' => [
                     'title' => $coverImage->title,
                     'description' => $coverImage->description,
-                    'url' => $coverImage->url,
+                    'url' => $coverImage->link,
                 ],
             ], 201);
+
         } catch (\Throwable $exception) {
             if ($fileStored) {
                 try {
@@ -2638,6 +2642,50 @@ class CompanyController extends Controller
 
             return response()->json(['message' => 'The image could not be uploaded. Please try again.'], 500);
         }
+
+    }
+
+    public function updateCompanyCoverImage(Request $request, $id)
+    {
+        $user = Auth::user();
+        if (!$user->hasPermission('update')) {
+            return response()->json(['message' => 'You do not have permission to update cover images.'], 403);
+        }
+
+        $validated = $request->validate([
+            'title' => 'sometimes|nullable|string|max:255',
+            'description' => 'sometimes|nullable|string|max:5000',
+            'link' => 'sometimes|nullable|url|max:2048',
+        ]);
+
+        $coverImage = DirectoryMediaCover::where('id', $id)
+            ->where('directory_id', $user->directory_id)
+            ->first();
+
+        if (!$coverImage) {
+            return response()->json(['message' => 'Cover image not found.'], 404);
+        }
+
+        if (array_key_exists('title', $validated)) {
+            $coverImage->title = $validated['title'];
+        }
+        if (array_key_exists('description', $validated)) {
+            $coverImage->description = $validated['description'];
+        }
+        if (array_key_exists('link', $validated)) {
+            $coverImage->link = $validated['link'];
+        }
+        $coverImage->save();
+
+        return response()->json([
+            'message' => 'Cover image details updated successfully.',
+            'image' => [
+                'id' => $coverImage->id,
+                'title' => $coverImage->title,
+                'description' => $coverImage->description,
+                'link' => $coverImage->link,
+            ],
+        ]);
     }
 
     public function uploadCompanyGalleryImageWithText(Request $request)
@@ -2648,10 +2696,10 @@ class CompanyController extends Controller
         }
 
         $validated = $request->validate([
-            'image' => 'required|image|mimes:jpeg,jpg,png,gif,bmp,webp|max:10240',
+            'image' => 'required|image',
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:5000',
-            'cover_image_url' => 'nullable|url|max:2048',
+            'gallery_image_url' => 'nullable|url|max:2048',
         ]);
 
         $directoryId = $user->directory_id;
@@ -2681,7 +2729,7 @@ class CompanyController extends Controller
             $galleryImage->payable = DirectoryMedia::where('directory_id', $directoryId)->value('payable') ?? 0;
             $galleryImage->title = $validated['title'];
             $galleryImage->description = $validated['description'];
-            $galleryImage->url = $validated['cover_image_url'] ?? null;
+            $galleryImage->link = $validated['gallery_image_url'] ?? null;
             $galleryImage->save();
 
             return response()->json([
@@ -2689,7 +2737,7 @@ class CompanyController extends Controller
                 'image' => [
                     'title' => $galleryImage->title,
                     'description' => $galleryImage->description,
-                    'url' => $galleryImage->url,
+                    'url' => $galleryImage->link,
                 ],
             ], 201);
         } catch (\Throwable $exception) {
@@ -3018,7 +3066,7 @@ class CompanyController extends Controller
 
             }
 
-        DiectoryLocation::where('directory_id', $id)
+            DiectoryLocation::where('directory_id', $id)
             ->update([
                 'country_id'    => $request->input('country_id') ? $request->input('country_id') : 0,
                 'state_id'      => $request->input('state_id') ? $request->input('state_id') : 0,
@@ -3115,6 +3163,7 @@ class CompanyController extends Controller
             Diectory::where('id', $id)->update(['company_logo' => $imagePath]);
         }
 
+    if($request->active_tab == 'Media'){
 
         if ($request->hasFile('listing_thumb')) {
             if ($request->input('payimage') != "payable") {
@@ -3181,6 +3230,7 @@ class CompanyController extends Controller
         }
 
         if ($request->hasFile('listing_cover')) {
+
             if ($request->input('payimage') != "payable") {
                 DirectoryMediaCover::where(['directory_id' => $id, 'payable' => 0])->delete();
             }
@@ -3218,17 +3268,56 @@ class CompanyController extends Controller
                     }
             }
         } else {
-            $hidenarr = $request->input('array_cover_listing');
-            $hidenarry = explode(',', $hidenarr[0]);
-            $hidenarrimg = $request->input('array_cover_images');
-            $hidenarryimages = explode(',', $hidenarrimg);
-            $details = DirectoryMediaCover::where('directory_id', $id)->get();
-            if ($details->count() > 0) {
-                foreach ($details as $key => $detail) {
-                    $detail->position = $hidenarry[$key];
-                    $detail->name_thumbnail = $hidenarryimages[$key];
-                    $detail->name_large = $hidenarryimages[$key];
-                    $detail->save();
+            $coverOrder = $request->input('array_cover_order', []);
+            if (is_string($coverOrder)) {
+                $coverOrder = json_decode($coverOrder, true);
+            }
+
+            if (is_array($coverOrder)) {
+                $coverIds = [];
+                foreach ($coverOrder as $coverId) {
+                    if (filter_var($coverId, FILTER_VALIDATE_INT) !== false && (int) $coverId > 0) {
+                        $coverIds[] = (int) $coverId;
+                    }
+                }
+                $coverIds = array_values(array_unique($coverIds));
+                $coversById = DirectoryMediaCover::where('directory_id', $id)
+                    ->whereIn('id', $coverIds)
+                    ->get()
+                    ->keyBy('id');
+                $position = 0;
+                foreach ($coverIds as $coverId) {
+                    $cover = $coversById->get($coverId);
+                    if (!$cover) {
+                        continue;
+                    }
+                    $cover->position = $position++;
+                    $cover->save();
+                }
+            } else {
+                // Preserve compatibility with requests from older versions of the form.
+                $positions = $request->input('array_cover_listing', []);
+                $imageNames = $request->input('array_cover_images', []);
+                if (is_string($positions)) {
+                    $positions = explode(',', $positions);
+                } elseif (isset($positions[0]) && is_string($positions[0])) {
+                    $positions = explode(',', $positions[0]);
+                }
+                if (is_string($imageNames)) {
+                    $imageNames = explode(',', $imageNames);
+                }
+
+                foreach ($imageNames as $index => $imageName) {
+                    if ($imageName === '') {
+                        continue;
+                    }
+                    $cover = DirectoryMediaCover::where('directory_id', $id)
+                        ->where('name_thumbnail', trim($imageName))
+                        ->first();
+                    if ($cover && isset($positions[$index])) {
+                        $cover->position = (int) trim($positions[$index]);
+                        $cover->save();
+                    }
                 }
             }
         }
@@ -3296,6 +3385,8 @@ class CompanyController extends Controller
 
         }
         /* MEDIA EDIT END */
+    }
+
 
         /* Seo Entries start */
         $seo_title_en = $request->input('meta_keywords_en');
