@@ -2139,17 +2139,32 @@ class DirectoryController extends Controller
     }
     public static function getgalImage($directyId)
     {
-        $getimageData = DB::table('directory_gallery_images')->select('*')->where(['directory_id' => $directyId])->get()->toArray();
+        $getimageData = DB::table('directory_gallery_images')
+            ->where(['directory_id' => $directyId])
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'asc')
+            ->get()
+            ->toArray();
         return $getimageData;
     }
     public static function getgalImageChunk($directyId)
     {
-        $getimageData = DB::table('directory_gallery_images')->select('*')->where(['directory_id' => $directyId])->get()->chunk(10);
+        $getimageData = DB::table('directory_gallery_images')
+            ->where(['directory_id' => $directyId])
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'asc')
+            ->get()
+            ->chunk(10);
         return $getimageData;
     }
     public static function getallgalImage($directyId)
     {
-        $getallimageData = DB::table('directory_gallery_images')->select('*')->where(['directory_id' => $directyId])->get()->toArray();
+        $getallimageData = DB::table('directory_gallery_images')
+            ->where(['directory_id' => $directyId])
+            ->orderBy('position', 'asc')
+            ->orderBy('id', 'asc')
+            ->get()
+            ->toArray();
         return $getallimageData;
     }
     public static function getCoverImage($directyId)

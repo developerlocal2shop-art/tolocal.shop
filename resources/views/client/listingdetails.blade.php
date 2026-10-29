@@ -301,15 +301,25 @@
                         if(!empty($data['allgalleryImageChunk'])){ ?>
                         @foreach($data['allgalleryImageChunk'] as $rowgalleryrest)
                             @foreach($rowgalleryrest as $rowgallery)
-                            <div class="thumbnail existing-img col-md-4 col-6" >
+                            <div class="thumbnail existing-img col-md-4 col-6 listing-gallery-card">
+
+                                <h3 class="listing-gallery-card__title">{{ $rowgallery->title }}</h3>
+
                                 @if($rowgallery->name_thumbnail)
                                 <a href="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" data-lightbox="allGalleryImages">
-                                    <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" class="img-fluid" alt="" >
+                                    <img src="{{env('IMAGE_PATH').'images/directory/'.$rowgallery->name_thumbnail.'.webp' }}" class="img-fluid listing-gallery-card__image" alt="{{ $rowgallery->title ?? '' }}" >
                                 </a>
 
                                 @else
-                                    <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-gal-img" alt="directory-img" class="previewBlocks" />
+                                    <img src="{{ asset('assets/plugins/images/placeholder.png') }}" alt="{{ $rowgallery->title ?? 'Gallery image' }}" class="img-fluid listing-gallery-card__image" />
                                 @endif
+
+
+                                    <a href="{{ $rowgallery->link??'' }}" target="_blank" rel="noopener noreferrer">
+                                    <p class="listing-gallery-card__description">{{ $rowgallery->description }}</p>
+                                    </a>
+
+
                             </div>
                             @endforeach
                         @endforeach
@@ -487,7 +497,9 @@
         <div class="col-md-5 schedule-info-column">
             <?php
             $totalpublicschedule = count($data['publicScheduleData']);
+
             $totalexceptionschedule = count($data['exceptionScheduleData']);
+            //dd($totalexceptionschedule);
             ?>
             <nav class="secondary_nav sticky_horizontal_2 sticky-listingdetails-header" style="background: #f8f8f8;">
                 <div class="container-fluid">
@@ -530,7 +542,7 @@
                                 </button>
                                 <input type="hidden" class="get_endtime" name="get_endtime" value="<?php echo $exeholi->close_time; ?>">
                             </li>
-                        <?php } ?>
+                            <?php } ?>
 
                         <?php if($openCloseTags>0){ ?>
                             <li>
@@ -572,8 +584,9 @@
                             </li>
                         <?php } ?>
 
-                        <?php }else if($totalpublicschedule>0){
+                        <?php }elseif($totalpublicschedule>0){
                             $totalpublicscheduledata = $data['publicScheduleData'][0]->custom_time;
+
                             $totalholiday = json_decode($totalpublicscheduledata);
                             foreach($totalholiday as $pubholi){
                                 $publicopentime = explode(":",$pubholi->open_time);
@@ -1739,7 +1752,6 @@
                         <?php /* --------------------- START EXTRA TIME AND COMMENT UPCOMING HOLIDAY DETAILS ------------------------- */ ?>
 
                         <div class="row">
-
                             <div class="col-md-8">
                                 @if($data['next_threedata_exception_and_public'])
                                 <div class="schedulenewtable">
@@ -1772,10 +1784,8 @@
 
                             </div>
                         </div>
-
                         <?php /* --------------------- END EXTRA TIME AND COMMENT UPCOMING HOLIDAY DETAILS -------------------------*/ ?>
                     </div>
-
 
                     <hr id="locationmap">
                     <!-- <h3>{{__("message.location")}}</h3> -->
@@ -1786,8 +1796,6 @@
                         <iframe data-consent-category="functional" data-consent-src="https://maps.google.com/maps?q=<?php echo e($data['address'][0]->latitude); ?>,<?php echo e($data['address'][0]->longitude); ?>&amp;hl=es;z=14&amp;output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                     </div>
                     <!-- End Map -->
-
-
 
                     <hr>
                     <?php if(!empty($data['assortment_links'])){ ?>
@@ -1802,10 +1810,9 @@
                         </div>
                     <?php } ?>
 
-
                     <?php if(!empty($data['amenityData'])){ ?>
-                            <!-- <h5 class="add_bottom_15">{{__("message.filters_amenities_subtitle")}}</h5> -->
-                            <?php
+                        <!-- <h5 class="add_bottom_15">{{__("message.filters_amenities_subtitle")}}</h5> -->
+                        <?php
                             if (isset($data['amenityData'])) {
                                 $amenitydataidNew		= (isset($data['amenityData'][0]->amenities_id) ? $data['amenityData'][0]->amenities_id : "");
                                 $amenitydataidExisting 	= (isset($data['amenityData'][1]->amenities_id) ? $data['amenityData'][1]->amenities_id : "");
@@ -1813,12 +1820,9 @@
                                 $amenityDataExisting 	= explode(',', $amenitydataidExisting);
                                 $amenityData            = array_merge($amenityDataExisting,$amenityDataNew);
                             }
-                            ?>
+                        ?>
 
                         <div class="row add_bottom_30">
-
-                        <?php //if($ismobiledevice == 1){ ?>
-
                             <ul style="padding: 3px 0px 0px 30px; width:100%" class="row">
                                     <?php $anemitycounter = 1;
                                     foreach($data['amenity'] as $amenityrow){
@@ -1841,25 +1845,7 @@
                                     <?php $anemitycounter++; }  } ?>
                                     <span style="float: left; width: 100%;"><a href="javascript::" id="amenity-toggle-btn" style="color: #004dda !important;" onclick="showToggle(this, 'hidden-amenities')">{{__("message.show_more")}}</a></span>
                             </ul>
-
-                        <?php //}else{ ?>
-
-                            {{-- @foreach($data['amenity'] as $amenityrow)
-                            <?php //if(in_array($amenityrow->id, $amenityData)){ ?>
-                                <div class="col-md-4">
-                                    <ul class="">
-                                        <?php //if($amenityrow->icon_class!=""){ ?>
-                                            <li><i class="{{ $amenityrow->icon_class }}" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
-                                        <?php //}else{ ?>
-                                            <li><i class="fas fa-check" aria-hidden="true"></i> {{ $amenityrow->title }}</li>
-                                        <?php //} ?>
-                                    </ul>
-                                </div>
-                            <?php //} ?>
-                            @endforeach --}}
-                        <?php //} ?>
-
-                    </div>
+                        </div>
 
                     <?php } ?>
 
@@ -1992,36 +1978,6 @@
                         See More<i class="fas fa-chevron-down"></i>
                     </a>
                 @endif
-
-
-                        <?php /* if($numberofblock!=0 ){
-                            for($i=0;$i<$numberofblock;$i++){
-                                if($data['directoryTypeData'][$i]->column_value!=""){ ?>
-                                <div class="room_type first">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <?php if($data['directoryTypeimage'][$i]->image_name!=""){ ?>
-                                                <img src="{{ env('IMAGE_PATH').'files/directorytypeimage/'.$data['directoryTypeimage'][$i]->image_name }}" class="img-fluid" alt="">
-                                            <?php } else{ ?>
-                                            <img src="{{ asset('assets/client/images/ca79c3f27e26aa3d727ba906a4e21d64.jpg') }}" class="img-fluid" alt="">
-                                            <?php } ?>
-                                        </div>
-                                        <div class="col-md-8">
-
-                                            <ul class="hotel_facilities">
-                                                <?php foreach($data['directoryTypeData'] as $typerow){
-                                                    if($typerow->block_num == $i){
-                                                        if($typerow->column_name!="position"){ ?>
-                                                        <?php /* ?><li><label>{{ $typerow->label }}</label>: {{ $typerow->column_value }}</li><?php */ ?>
-                                                        <?php /* ?><li><i class="fas fa-hand-point-right" aria-hidden="true"></i>{{ " ".$typerow->column_value }}</li>
-                                                <?php  } } } ?>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                </div>
-                        <?php  } } }else{ ?>
-                            <h4>No Data</h4>
-                        <?php }  } */ //die; ?>
 
                     <!-- Video File Base On Package-->
 
@@ -3577,9 +3533,71 @@
 
 </script>
 <style>
+#allgalleryimages_model .listing-gallery-card {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    margin-bottom: 24px;
+    padding: 16px;
+    overflow: hidden;
+    background: #fff;
+    border: 1px solid #e6eaf0;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(24, 39, 75, 0.08);
+}
+
+#allgalleryimages_model .listing-gallery-card__title {
+    margin: 0 0 12px;
+    color: #1f2937;
+    font-size: 17px;
+    font-weight: 600;
+    line-height: 1.4;
+    overflow-wrap: anywhere;
+}
+
+#allgalleryimages_model .listing-gallery-card > a {
+    display: block;
+}
+
+#allgalleryimages_model .listing-gallery-card__image {
+    display: block;
+    width: 100%;
+    height: 400px;
+    object-fit: cover;
+    background: #f3f5f8;
+    border-radius: 8px;
+}
+
+#allgalleryimages_model .listing-gallery-card__description {
+    margin: 12px 0 0;
+    color: #5b6472;
+    font-size: 14px;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+
 .strip ul {
     bottom: 0px !important;
     padding: 4px 0px 4px 10px !important;
+}
+
+@media (max-width: 575.98px) {
+    #allgalleryimages_model .listing-gallery-card {
+        margin-bottom: 16px;
+        padding: 10px;
+    }
+
+    #allgalleryimages_model .listing-gallery-card__title {
+        font-size: 15px;
+    }
+
+    #allgalleryimages_model .listing-gallery-card__image {
+        height: 180px;
+    }
+
+    #allgalleryimages_model .listing-gallery-card__description {
+        font-size: 13px;
+    }
 }
 </style>
 

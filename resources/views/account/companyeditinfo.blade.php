@@ -1095,6 +1095,8 @@ $instruction = $data['instruction'];
 
                                                         <input type="hidden" name="array_gallery_listing[]" class="form-control" id="listing-gallery-array" value="">
                                                         <input type="hidden" name="array_gallery_images" class="form-control" id="listing-gallery-arrayimage">
+                                                        <input type="hidden" name="array_gallery_order" id="listing-gallery-order" value="[]">
+                                                        <input type="hidden" name="array_gallery_new_positions" id="listing-gallery-new-positions" value="[]">
                                                         <input type="file" id="gallist" class="form-control" name="listing_gallery[]" multiple>
                                                     </div>
 
@@ -1127,28 +1129,31 @@ $instruction = $data['instruction'];
                                                             foreach($imagenamegalleryChunk as $imageDirectory){
                                                                 foreach($imageDirectory as $imagenamerow){
                                                         ?>
-                                                        @if($imagenamerow->name_thumbnail)
-                                                            <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
+                                                            <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}" @if ($user->hasPermission('update')) tabindex="0" role="group" aria-label="Gallery image details. Focus to edit." @endif>
+                                                                @if($imagenamerow->name_thumbnail)
                                                                 <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
-                                                                @if($imagenamerow->title || $imagenamerow->description)
-                                                                <div class="image-metadata-overlay">
-                                                                    @if($imagenamerow->title)<strong>{{ $imagenamerow->title }}</strong>@endif
-                                                                    <hr>
-                                                                    @if($imagenamerow->description)<span>{{ $imagenamerow->description }}</span>@endif
-                                                                    <hr>
-                                                                    @if($imagenamerow->link)<span>{{ $imagenamerow->link }}</span>@endif
-                                                                </div>
-                                                                @endif
-                                                                <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
-                                                                <input type="checkbox" name="gal_ids" class="cb-element" value="{{ $imagenamerow->id }}">
-                                                            </div>
-                                                        @else
-                                                            <div class="thumbnail existing-img" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
+                                                                @else
                                                                 <img src="{{ asset('assets/plugins/images/placeholder.png') }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
+                                                                @endif
+                                                                <div class="image-metadata-overlay gallery-image-edit-panel" data-update-url="{{ route('company.gallery-image.update', $imagenamerow->id) }}">
+                                                                    @if ($user->hasPermission('update'))
+                                                                        <label for="gallery-image-title-{{ $imagenamerow->id }}">Title</label>
+                                                                        <input type="text" id="gallery-image-title-{{ $imagenamerow->id }}" class="form-control gallery-image-title" value="{{ $imagenamerow->title }}" maxlength="255" placeholder="Image title">
+                                                                        <label for="gallery-image-description-{{ $imagenamerow->id }}">Description</label>
+                                                                        <textarea id="gallery-image-description-{{ $imagenamerow->id }}" class="form-control gallery-image-description" rows="3" maxlength="5000" placeholder="Image description">{{ $imagenamerow->description }}</textarea>
+                                                                        <label for="gallery-image-link-{{ $imagenamerow->id }}">Link</label>
+                                                                        <input type="url" id="gallery-image-link-{{ $imagenamerow->id }}" class="form-control gallery-image-link" value="{{ $imagenamerow->link }}" maxlength="2048" placeholder="https://example.com">
+                                                                        <button type="button" class="btn btn-primary btn-sm gallery-image-update-button">Update</button>
+                                                                        <span class="gallery-image-update-status" role="status" aria-live="polite"></span>
+                                                                    @else
+                                                                        <strong>{{ $imagenamerow->title ?: 'No title' }}</strong>
+                                                                        <span>{{ $imagenamerow->description ?: 'No description' }}</span>
+                                                                        @if ($imagenamerow->link)<span>{{ $imagenamerow->link }}</span>@endif
+                                                                    @endif
+                                                                </div>
                                                                 <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
                                                                 <input type="checkbox" name="gal_ids" class="cb-element" value="{{ $imagenamerow->id }}">
                                                             </div>
-                                                        @endif
 
                                                         <?php } }  } else{ ?>
                                                         <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-gal-img" alt="directory-img" width="70px" height="70px" class="previewBlocks" />
@@ -2996,6 +3001,53 @@ $instruction = $data['instruction'];
             });
         });
 
+        $('#listgallerypreview').on('click', '.gallery-image-update-button', function () {
+            var $button = $(this);
+            var $panel = $button.closest('.gallery-image-edit-panel');
+            var $status = $panel.find('.gallery-image-update-status');
+
+            $button.prop('disabled', true).text('Updating...');
+            $status.removeClass('text-success text-danger').text('');
+
+            $.ajax({
+                url: $panel.data('update-url'),
+                method: 'POST',
+                data: {
+                    _token: $('meta[name="csrf-token"]').attr('content'),
+                    title: $panel.find('.gallery-image-title').val(),
+                    description: $panel.find('.gallery-image-description').val(),
+                    link: $panel.find('.gallery-image-link').val()
+                },
+                headers: {
+                    'Accept': 'application/json'
+                },
+                success: function (response) {
+                    $status.addClass('text-success').text(response.message);
+                },
+                error: function (xhr) {
+                    var response = xhr.responseJSON;
+                    var message = response && response.message
+                        ? response.message
+                        : 'Could not update this gallery image. Please try again.';
+
+                    if (response && response.errors) {
+                        var validationMessages = [];
+                        $.each(response.errors, function (field, messages) {
+                            $.each(messages, function (index, validationMessage) {
+                                validationMessages.push(validationMessage);
+                            });
+                        });
+                        message = validationMessages.join(' ');
+                    }
+
+                    $status.addClass('text-danger').text(message);
+                },
+                complete: function () {
+                    $button.prop('disabled', false).text('Update');
+                }
+            });
+        });
+
         var $form = $('#companyCoverImageUploadForm');
         var $errors = $('#companyCoverImageUploadErrors');
         var $success = $('#companyCoverImageUploadSuccess');
@@ -4647,32 +4699,32 @@ $instruction = $data['instruction'];
             var imgPreviewPlaceholder = $(imgPreviewPlaceholder);
 
             $(".imageuploadify-overlay" + type).css("display", "block");
-                    for (var i=0; i<input.files.length; i++) {
-                        var ext = input.files[i].name.substr(-3);
+                    var acceptedFiles = 0;
+                    for (let i=0; i<input.files.length; i++) {
+                        var file = input.files[i];
+                        var ext = file.name.substr(-3);
                         if(ext!== "mp4" && ext!== "m4v" && ext!== "fv4" && ext!== "MOV" && ext!== "WMV" && ext!== "HTML5" && ext!== "AVI")  {
 
                             if (typeof(FileReader) != "undefined") {
-                            var total = k - 1;
+                            let total = k + i;
                             var reader = new FileReader();
                             reader.onload = function(event) {
-                                total += 1;
-
-                                $("<div class=\"thumbnail newimage ui-state-default ui-sortable-handle\" data-position=" + total + ">" +
+                                var $newImage = $("<div class=\"thumbnail newimage ui-state-default ui-sortable-handle\" data-position=\"" + total + "\" data-file-index=\"" + i + "\">" +
                                     "<img src=\"" + event.target.result + "\" width=\"100px\" height=\"100px\" />" +
                                     "<br/><span class=\"closebtn\"><i class=\"fas fa-trash\" style=\"color:#ff0505; \" aria-hidden=\"true\"></i></span>" +
-                                    "</div>").appendTo(imgPreviewPlaceholder);
-                                $(".closebtn").click(function() {
-                                    $(this).parent(".thumbnail").remove();
+                                    "</div>");
+                                $newImage.appendTo(imgPreviewPlaceholder);
+                                $newImage.find(".closebtn").on('click', function() {
+                                    $newImage.remove();
                                 });
-
-                                i++;
                             }
+                            acceptedFiles++;
                             setTimeout(() => {
-                                $(positionId).val(i - 1);
+                                $(positionId).val(k + acceptedFiles - 1);
                                 $(".imageuploadify-overlay" + type).css("display", "none");
                             }, 1000);
                             imgPreviewPlaceholder.show();
-                            reader.readAsDataURL(input.files[i]);
+                            reader.readAsDataURL(file);
                              } else {
                                 alert("This browser does not support FileReader.");
                                 $(".imageuploadify-overlay" + type).css("display", "none");
@@ -4828,7 +4880,14 @@ $instruction = $data['instruction'];
                 syncCoverImageOrder();
             }
         });
-        $("#thumbnailimgPreview,#listgallerypreview").sortable();
+        $("#listgallerypreview").sortable({
+            items: "> .thumbnail",
+            cancel: "input,textarea,button,select,option,.image-metadata-overlay",
+            update: function() {
+                syncGalleryImageOrder();
+            }
+        });
+        $("#thumbnailimgPreview").sortable();
 
         $('#helpiconText').show();
 
@@ -4903,11 +4962,42 @@ $instruction = $data['instruction'];
         $('#listing-cover-order').val(JSON.stringify(coverOrder));
     }
 
+    function syncGalleryImageOrder() {
+        var positions = [];
+        var imageNames = [];
+        var galleryOrder = [];
+        var newPositions = [];
+
+        $('#listgallerypreview > .thumbnail').each(function(index) {
+            $(this).attr('data-position', index).data('position', index);
+            positions.push(index);
+            imageNames.push($(this).attr('data-galimages') || '');
+
+            if ($(this).hasClass('newimage')) {
+                var fileIndex = parseInt($(this).attr('data-file-index'), 10);
+                newPositions[fileIndex] = index;
+                return;
+            }
+
+            var imageId = $(this).find('img[data-value="gal"]').attr('data-id');
+            if (imageId) {
+                galleryOrder.push({
+                    id: imageId,
+                    position: index
+                });
+            }
+        });
+
+        $('#listing-gallery-array').val(positions.join(','));
+        $('#listing-gallery-arrayimage').val(imageNames.join(','));
+        $('#listing-gallery-order').val(JSON.stringify(galleryOrder));
+        $('#listing-gallery-new-positions').val(JSON.stringify(newPositions));
+    }
+
     function submitForm() {
 
         var image_thumb_arr_exist = [];
         var image_thumb_arr_new = [];
-        var image_gal_arr = [];
         var image_trade_arr = [];
         // get image ids order listsubmit
         $('#thumbnailimgPreview div').each(function() {
@@ -4925,18 +5015,7 @@ $instruction = $data['instruction'];
 
         syncCoverImageOrder();
 
-        $('#listgallerypreview div').each(function() {
-            if ($(this).hasClass("newimage") || $(this).hasClass("existing-img")) {
-                var id = $(this).data('position');
-                image_gal_arr.push(id);
-                $("#listing-gallery-array").val(image_gal_arr);
-            }
-        });
-        var gallerypreview = [];
-        $('.listgallerypreview div').each(function() {
-            gallerypreview.push($(this).data('galimages'));
-        });
-        $('#listing-gallery-arrayimage').val(gallerypreview.join(','));
+        syncGalleryImageOrder();
         return;
     }
 
@@ -5527,6 +5606,12 @@ $instruction = $data['instruction'];
 </script>
 
 <style>
+    input[type=checkbox], input[type=radio] {
+        z-index: 0 !important;
+    }
+    .thumbnail:hover .image-metadata-overlay, .thumbnail:focus-within .image-metadata-overlay {
+        z-index: 2000;
+    }
     .btn-info:hover {
         color: #fff;
         background-color: rgb(255 157 7);
@@ -5644,36 +5729,42 @@ $instruction = $data['instruction'];
         display: block;
     }
 
-    .cover-image-edit-panel {
+    .cover-image-edit-panel,
+    .gallery-image-edit-panel {
         z-index: 3;
         width: 300px;
         max-height: 340px;
     }
 
-    .cover-image-edit-panel label {
+    .cover-image-edit-panel label,
+    .gallery-image-edit-panel label {
         margin: 0 0 4px;
         color: #344054;
         font-size: 12px;
         font-weight: 600;
     }
 
-    .cover-image-edit-panel .form-control {
+    .cover-image-edit-panel .form-control,
+    .gallery-image-edit-panel .form-control {
         min-height: 34px;
         margin-bottom: 8px;
         padding: 6px 8px;
         font-size: 12px;
     }
 
-    .cover-image-edit-panel textarea.form-control {
+    .cover-image-edit-panel textarea.form-control,
+    .gallery-image-edit-panel textarea.form-control {
         min-height: 72px;
         resize: vertical;
     }
 
-    .cover-image-edit-panel .cover-image-update-button {
+    .cover-image-edit-panel .cover-image-update-button,
+    .gallery-image-edit-panel .gallery-image-update-button {
         margin: 2px 6px 0 0;
     }
 
-    .cover-image-edit-panel .cover-image-update-status {
+    .cover-image-edit-panel .cover-image-update-status,
+    .gallery-image-edit-panel .gallery-image-update-status {
         font-size: 11px;
     }
 

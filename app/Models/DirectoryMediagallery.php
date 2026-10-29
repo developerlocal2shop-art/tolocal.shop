@@ -15,6 +15,9 @@ class DirectoryMediagallery extends Model
         'name_thumbnail',
         'name_large',
         'extension',
-        'path'
+        'path',
+        'title',
+        'description',
+        'link'
     ];
 }

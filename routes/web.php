@@ -300,6 +300,7 @@ Route::group(['middleware' => ['isuserlogin']], function () {
         Route::post('/company-information/cover-image', [CompanyController::class, 'uploadCompanyCoverImage'])->name('company.cover-image.upload');
         Route::post('/company-information/cover-image/{id}', [CompanyController::class, 'updateCompanyCoverImage'])->name('company.cover-image.update');
         Route::post('/company-information/gallery-image-with-text', [CompanyController::class, 'uploadCompanyGalleryImageWithText'])->name('company.gallery-image-with-text.upload');
+        Route::post('/company-information/gallery-image/{id}', [CompanyController::class, 'updateCompanyGalleryImage'])->name('company.gallery-image.update');
         Route::get('/company/products', [CompanyController::class, 'companyproducts'])->name('company.products')->middleware('ModuleAuth');
         Route::post('/company/products', [CompanyController::class, 'companyproducts'])->name('company.products.save');
         Route::post('/company/get-trademarks-by-categoriesid', [CompanyController::class, 'getTrademarksByCatid']);
