@@ -2767,8 +2767,53 @@ class CompanyController_bkp extends Controller
         }
     }
 
+    public function updateCompanyGalleryImage(Request $request, $id)
+    {
+        $user = Auth::user();
+        if (!$user->hasPermission('update')) {
+            return response()->json(['message' => 'You do not have permission to update gallery images.'], 403);
+        }
+
+        $validated = $request->validate([
+            'title' => 'sometimes|nullable|string|max:255',
+            'description' => 'sometimes|nullable|string|max:5000',
+            'link' => 'sometimes|nullable|url|max:2048',
+        ]);
+
+        $galleryImage = DirectoryMediagallery::where('id', $id)
+            ->where('directory_id', $user->directory_id)
+            ->first();
+
+        if (!$galleryImage) {
+            return response()->json(['message' => 'Gallery image not found.'], 404);
+        }
+
+        if (array_key_exists('title', $validated)) {
+            $galleryImage->title = $validated['title'];
+        }
+        if (array_key_exists('description', $validated)) {
+            $galleryImage->description = $validated['description'];
+        }
+        if (array_key_exists('link', $validated)) {
+            $galleryImage->link = $validated['link'];
+        }
+        $galleryImage->save();
+
+        return response()->json([
+            'message' => 'Gallery image details updated successfully.',
+            'image' => [
+                'id' => $galleryImage->id,
+                'title' => $galleryImage->title,
+                'description' => $galleryImage->description,
+                'link' => $galleryImage->link,
+            ],
+        ]);
+    }
+
     public function updatecompanyinformation(Request $request)
     {
+
+
 
         $id = Auth::user()->directory_id;
         $user_id = Auth::user()->id;
@@ -3163,216 +3208,270 @@ class CompanyController_bkp extends Controller
             Diectory::where('id', $id)->update(['company_logo' => $imagePath]);
         }
 
+        if($request->active_tab == 'Media'){
 
-        if ($request->hasFile('listing_thumb')) {
-            if ($request->input('payimage') != "payable") {
-                DirectoryMediaListing::where(['directory_id' => $id, 'payable' => 0])->delete();
-            }
-            $imgfile = $request->file('listing_thumb');
-            $i = 0;
-            $hidenarry = $request->input('array_thumb_listing_new');
-            if (!is_array($hidenarry[0])) {
-                $hidenarry = explode(',', $hidenarry[0]);
-            }
-
-            foreach ($imgfile as $imgrow) {
-                $ext = $imgrow->getClientOriginalExtension();
-                $name2 = $imgrow->getClientOriginalName();
-                $allowed =  array('jpeg','jpg', "png", "gif", "bmp", "jfif", "JPEG","JPG", "PNG", "GIF", "BMP", "JFIF");
-                    if(!in_array($ext,$allowed) ) {
-                        return redirect()->back()->with('errorimg', 'Images must be an extension of JPG, JPEG, PNG, GIF.');
-                    } else {
-                        $imageName2 = time() . $name2;
-                        $imageName = Helper::getSeoUrl($imageName2);
-                        $imagepath = 'images/directory/' . $imageName;
-                        /*
-                        //$imgrow->move(public_path('files/directory/'), $imageName);
-                        $image_resize = Image::make($imgrow->getRealPath());
-                        //$image_resize->resize(700, 700);
-                        $image_resize->save(public_path('files/directory/' .$imageName));
-                        */
-
-                        $convertext = "webp";
-                        $image_resize = Image::make($imgrow->getRealPath())->stream($convertext,50);
-                        Storage::disk('images')->put('directory/'.$imageName.'.'.$convertext,$image_resize);
-
-                        $dirtmediathumb = new DirectoryMediaListing;
-                        $dirtmediathumb->directory_id    = $id;
-                        $dirtmediathumb->position        = isset($hidenarry[$i]) ? $hidenarry[$i] : 0;
-                        $dirtmediathumb->name_thumbnail  = $imageName;
-                        $dirtmediathumb->name_large      = $imageName;
-                        $dirtmediathumb->extension       = $ext;
-                        $dirtmediathumb->path            = $imagepath;
-                        $dirtmediathumb->payable        = $payval;
-                        $dirtmediathumb->save();
-                        $i++;
-                    }
-
-            }
-        } else {
-
-            $hidenarrythumb = $request->input('array_thumb_listing_new');
-            if (!is_array($hidenarrythumb[0])) {
-                $hidenarrythumb = explode(',', $hidenarrythumb[0]);
-            }
-            $thumb_hidden_img = $request->input('thumb_hidden_img');
-            $hiddenarray_thumb_hidden_img = explode(',', $thumb_hidden_img);
-            $details = DirectoryMediaListing::where('directory_id', $id)->get();
-            if ($details->count() > 0) {
-                foreach ($details as $key => $detail) {
-                    $detail->position = $hidenarrythumb[$key];
-                    $detail->name_thumbnail = $hiddenarray_thumb_hidden_img[$key];
-                    $detail->name_large = $hiddenarray_thumb_hidden_img[$key];
-                    $detail->save();
+            if ($request->hasFile('listing_thumb')) {
+                if ($request->input('payimage') != "payable") {
+                    DirectoryMediaListing::where(['directory_id' => $id, 'payable' => 0])->delete();
                 }
-            }
-        }
-
-        if ($request->hasFile('listing_cover')) {
-
-            if ($request->input('payimage') != "payable") {
-                DirectoryMediaCover::where(['directory_id' => $id, 'payable' => 0])->delete();
-            }
-            $imgfile = $request->file('listing_cover');
-            $i = 0;
-            $hidenarry = $request->input('array_cover_listing');
-            if (!is_array($hidenarry[0])) {
-                $hidenarry = explode(',', $hidenarry[0]);
-            }
-            foreach ($imgfile as $imgrow) {
-                $ext = $imgrow->getClientOriginalExtension();
-                $name2 = $imgrow->getClientOriginalName();
-                $allowed =  array('jpeg','jpg', "png", "gif", "bmp", "jfif", "JPEG","JPG", "PNG", "GIF", "BMP", "JFIF");
-                   if(!in_array($ext,$allowed) ) {
-                        return redirect()->back()->with('errorimg', 'Images must be an extension of JPG, JPEG, PNG, GIF.');
-                    } else {
-                        $imageName2 = time() . $name2;
-                        $imageName = Helper::getSeoUrl($imageName2);
-                        $imagepath = 'images/directory/' . $imageName;
-                        $convertext = "webp";
-                        $image_resize = Image::make($imgrow->getRealPath());
-                        $image_resize->resize(960, 450);
-                        $image_resize->save(public_path('images/directory/'.$imageName.'.'.$convertext,$image_resize));
-
-                        $dirtmediacover = new DirectoryMediaCover;
-                        $dirtmediacover->directory_id    = $id;
-                        $dirtmediacover->position        = isset($hidenarry[$i]) ? $hidenarry[$i] : 0;
-                        $dirtmediacover->name_thumbnail  = $imageName;
-                        $dirtmediacover->name_large      = $imageName;
-                        $dirtmediacover->extension       = $ext;
-                        $dirtmediacover->path            = $imagepath;
-                        $dirtmediacover->payable         = $payval;
-                        $dirtmediacover->save();
-                        $i++;
-                    }
-            }
-        } else {
-            // $hidenarr = $request->input('array_cover_listing');
-            // $hidenarry = explode(',', $hidenarr[0]);
-            // $hidenarrimg = $request->input('array_cover_images');
-            // $hidenarryimages = explode(',', $hidenarrimg);
-            // $details = DirectoryMediaCover::where('directory_id', $id)->get();
-            // if ($details->count() > 0) {
-            //     foreach ($details as $key => $detail) {
-            //         $detail->position = $hidenarry[$key];
-            //         $detail->name_thumbnail = $hidenarryimages[$key];
-            //         $detail->name_large = $hidenarryimages[$key];
-            //         $detail->save();
-            //     }
-            // }
-
-            $hidenarr = $request->input('array_cover_listing', []);
-            $hidenarrimg = $request->input('array_cover_images', []);
-            if (is_string($hidenarr)) {
-                $hidenarr = explode(',', $hidenarr);
-            }
-            if (is_string($hidenarrimg)) {
-                $hidenarrimg = explode(',', $hidenarrimg);
-            }
-            // If array_cover_listing contains a comma-separated string
-            if (isset($hidenarr[0]) && is_string($hidenarr[0]) && str_contains($hidenarr[0], ',')) {
-                $hidenarr = explode(',', $hidenarr[0]);
-            }
-            // Remove unnecessary whitespace
-            $hidenarr = array_map('trim', $hidenarr);
-            $hidenarrimg = array_map('trim', $hidenarrimg);
-            $details = DirectoryMediaCover::where('directory_id', $id)->get();
-
-            foreach ($details as $key => $detail) {
-                if (!isset($hidenarr[$key], $hidenarrimg[$key])) { continue; }
-                $detail->position = $hidenarr[$key];
-                if ($hidenarrimg[$key] !== '') {
-                    $detail->name_thumbnail = $hidenarrimg[$key];
-                    $detail->name_large = $hidenarrimg[$key];
+                $imgfile = $request->file('listing_thumb');
+                $i = 0;
+                $hidenarry = $request->input('array_thumb_listing_new');
+                if (!is_array($hidenarry[0])) {
+                    $hidenarry = explode(',', $hidenarry[0]);
                 }
-                $detail->save();
-            }
 
-        }
+                foreach ($imgfile as $imgrow) {
+                    $ext = $imgrow->getClientOriginalExtension();
+                    $name2 = $imgrow->getClientOriginalName();
+                    $allowed =  array('jpeg','jpg', "png", "gif", "bmp", "jfif", "JPEG","JPG", "PNG", "GIF", "BMP", "JFIF");
+                        if(!in_array($ext,$allowed) ) {
+                            return redirect()->back()->with('errorimg', 'Images must be an extension of JPG, JPEG, PNG, GIF.');
+                        } else {
+                            $imageName2 = time() . $name2;
+                            $imageName = Helper::getSeoUrl($imageName2);
+                            $imagepath = 'images/directory/' . $imageName;
+                            /*
+                            //$imgrow->move(public_path('files/directory/'), $imageName);
+                            $image_resize = Image::make($imgrow->getRealPath());
+                            //$image_resize->resize(700, 700);
+                            $image_resize->save(public_path('files/directory/' .$imageName));
+                            */
 
-        if ($request->hasFile('listing_gallery')) {
+                            $convertext = "webp";
+                            $image_resize = Image::make($imgrow->getRealPath())->stream($convertext,50);
+                            Storage::disk('images')->put('directory/'.$imageName.'.'.$convertext,$image_resize);
 
-            $imgfilegal = $request->file('listing_gallery');
-            $i = 0;
-            $hidenarry = $request->input('array_gallery_listing');
-            if (!is_array($hidenarry[0])) {
-                $hidenarry = explode(',', $hidenarry[0]);
+                            $dirtmediathumb = new DirectoryMediaListing;
+                            $dirtmediathumb->directory_id    = $id;
+                            $dirtmediathumb->position        = isset($hidenarry[$i]) ? $hidenarry[$i] : 0;
+                            $dirtmediathumb->name_thumbnail  = $imageName;
+                            $dirtmediathumb->name_large      = $imageName;
+                            $dirtmediathumb->extension       = $ext;
+                            $dirtmediathumb->path            = $imagepath;
+                            $dirtmediathumb->payable        = $payval;
+                            $dirtmediathumb->save();
+                            $i++;
+                        }
+
+                }
             } else {
+
+                $hidenarrythumb = $request->input('array_thumb_listing_new');
+                if (!is_array($hidenarrythumb[0])) {
+                    $hidenarrythumb = explode(',', $hidenarrythumb[0]);
+                }
+                $thumb_hidden_img = $request->input('thumb_hidden_img');
+                $hiddenarray_thumb_hidden_img = explode(',', $thumb_hidden_img);
+                $details = DirectoryMediaListing::where('directory_id', $id)->get();
+                if ($details->count() > 0) {
+                    foreach ($details as $key => $detail) {
+                        $detail->position = $hidenarrythumb[$key];
+                        $detail->name_thumbnail = $hiddenarray_thumb_hidden_img[$key];
+                        $detail->name_large = $hiddenarray_thumb_hidden_img[$key];
+                        $detail->save();
+                    }
+                }
             }
 
-            foreach ($imgfilegal as $imgalrow) {
+            if ($request->hasFile('listing_cover')) {
 
-                $ext = $imgalrow->getClientOriginalExtension();
-                $name3 = $imgalrow->getClientOriginalName();
-
-                $allowed =  array('jpeg','jpg', "png", "gif", "bmp", "jfif", "JPEG","JPG", "PNG", "GIF", "BMP", "JFIF", "webp");
-                   if(!in_array($ext,$allowed) ) {
-                        return redirect()->back()->with('errorimg', 'Images must be an extension of JPG, JPEG, PNG, GIF.');
-                    } else {
-
-                        $is_images_exist = DirectoryMediagallery::where('name_large',$name3)->where('directory_id',$id)->first();
-                        if($is_images_exist){}else{
-
-                            $imageName2 = time() . $name3;
+                if ($request->input('payimage') != "payable") {
+                    DirectoryMediaCover::where(['directory_id' => $id, 'payable' => 0])->delete();
+                }
+                $imgfile = $request->file('listing_cover');
+                $i = 0;
+                $hidenarry = $request->input('array_cover_listing');
+                if (!is_array($hidenarry[0])) {
+                    $hidenarry = explode(',', $hidenarry[0]);
+                }
+                foreach ($imgfile as $imgrow) {
+                    $ext = $imgrow->getClientOriginalExtension();
+                    $name2 = $imgrow->getClientOriginalName();
+                    $allowed =  array('jpeg','jpg', "png", "gif", "bmp", "jfif", "JPEG","JPG", "PNG", "GIF", "BMP", "JFIF");
+                    if(!in_array($ext,$allowed) ) {
+                            return redirect()->back()->with('errorimg', 'Images must be an extension of JPG, JPEG, PNG, GIF.');
+                        } else {
+                            $imageName2 = time() . $name2;
                             $imageName = Helper::getSeoUrl($imageName2);
                             $imagepath = 'images/directory/' . $imageName;
                             $convertext = "webp";
-                            $image_resize = Image::make($imgalrow->getRealPath())->stream($convertext,50);
-                            Storage::disk('images')->put('directory/'.$imageName.'.'.$convertext,$image_resize);
+                            $image_resize = Image::make($imgrow->getRealPath());
+                            $image_resize->resize(960, 450);
+                            $image_resize->save(public_path('images/directory/'.$imageName.'.'.$convertext,$image_resize));
 
-                            $dirtmediagallery = new DirectoryMediagallery;
-                            $dirtmediagallery->directory_id    = $id;
-                            $dirtmediagallery->position        = isset($hidenarry[$i]) ? $hidenarry[$i] : 0;
-                            $dirtmediagallery->name_thumbnail  = $imageName;
-                            $dirtmediagallery->name_large      = $name3;
-                            $dirtmediagallery->extension       = $ext;
-                            $dirtmediagallery->path            = $imagepath;
-                            $dirtmediagallery->payable        = $payval;
-                            $dirtmediagallery->save();
+                            $dirtmediacover = new DirectoryMediaCover;
+                            $dirtmediacover->directory_id    = $id;
+                            $dirtmediacover->position        = isset($hidenarry[$i]) ? $hidenarry[$i] : 0;
+                            $dirtmediacover->name_thumbnail  = $imageName;
+                            $dirtmediacover->name_large      = $imageName;
+                            $dirtmediacover->extension       = $ext;
+                            $dirtmediacover->path            = $imagepath;
+                            $dirtmediacover->payable         = $payval;
+                            $dirtmediacover->save();
                             $i++;
                         }
-                    }
-            }
-        } else {
+                }
+            } else {
+                $coverOrder = $request->input('array_cover_order', []);
+                if (is_string($coverOrder)) {
+                    $coverOrder = json_decode($coverOrder, true);
+                }
 
-            $hidenarrygallery = $request->input('array_gallery_listing');
-            if (!is_array($hidenarrygallery[0])) {
-                $hidenarrygall = explode(',', $hidenarrygallery[0]);
-            }
-            $hidenarrGalleryimg = $request->input('array_gallery_images');
-            $hiddenarray_gallery_images = explode(',', $hidenarrGalleryimg);
-            ///dd($hiddenarray_gallery_images);
-            $details = DirectoryMediagallery::where('directory_id', $id)->get();
-            if ($details->count() > 0) {
-                foreach ($details as $key => $detail) {
-                    $detail->position = $hidenarrygall[$key] ?? '';
-                    $detail->name_thumbnail = $hiddenarray_gallery_images[$key] ?? '';
-                    $detail->save();
+                if (is_array($coverOrder)) {
+                    $coverIds = [];
+                    foreach ($coverOrder as $coverId) {
+                        if (filter_var($coverId, FILTER_VALIDATE_INT) !== false && (int) $coverId > 0) {
+                            $coverIds[] = (int) $coverId;
+                        }
+                    }
+                    $coverIds = array_values(array_unique($coverIds));
+                    $coversById = DirectoryMediaCover::where('directory_id', $id)
+                        ->whereIn('id', $coverIds)
+                        ->get()
+                        ->keyBy('id');
+                    $position = 0;
+                    foreach ($coverIds as $coverId) {
+                        $cover = $coversById->get($coverId);
+                        if (!$cover) {
+                            continue;
+                        }
+                        $cover->position = $position++;
+                        $cover->save();
+                    }
+                } else {
+                    // Preserve compatibility with requests from older versions of the form.
+                    $positions = $request->input('array_cover_listing', []);
+                    $imageNames = $request->input('array_cover_images', []);
+                    if (is_string($positions)) {
+                        $positions = explode(',', $positions);
+                    } elseif (isset($positions[0]) && is_string($positions[0])) {
+                        $positions = explode(',', $positions[0]);
+                    }
+                    if (is_string($imageNames)) {
+                        $imageNames = explode(',', $imageNames);
+                    }
+
+                    foreach ($imageNames as $index => $imageName) {
+                        if ($imageName === '') {
+                            continue;
+                        }
+                        $cover = DirectoryMediaCover::where('directory_id', $id)
+                            ->where('name_thumbnail', trim($imageName))
+                            ->first();
+                        if ($cover && isset($positions[$index])) {
+                            $cover->position = (int) trim($positions[$index]);
+                            $cover->save();
+                        }
+                    }
                 }
             }
 
+            $galleryOrder = json_decode($request->input('array_gallery_order', ''), true);
+            $newGalleryPositions = json_decode($request->input('array_gallery_new_positions', ''), true);
+            if (is_array($galleryOrder)) {
+                $galleryIds = [];
+                $galleryPositions = [];
+                foreach ($galleryOrder as $galleryItem) {
+                    if (!is_array($galleryItem)
+                        || !isset($galleryItem['id'], $galleryItem['position'])
+                        || filter_var($galleryItem['id'], FILTER_VALIDATE_INT) === false
+                        || filter_var($galleryItem['position'], FILTER_VALIDATE_INT) === false
+                        || (int) $galleryItem['id'] <= 0
+                        || (int) $galleryItem['position'] < 0
+                    ) {
+                        continue;
+                    }
+                    $galleryId = (int) $galleryItem['id'];
+                    $galleryIds[] = $galleryId;
+                    $galleryPositions[$galleryId] = (int) $galleryItem['position'];
+                }
+                $galleryIds = array_values(array_unique($galleryIds));
+                $galleriesById = DirectoryMediagallery::where('directory_id', $id)
+                    ->whereIn('id', $galleryIds)
+                    ->get()
+                    ->keyBy('id');
+                foreach ($galleryIds as $galleryId) {
+                    $galleryImage = $galleriesById->get($galleryId);
+                    if ($galleryImage) {
+                        $galleryImage->position = $galleryPositions[$galleryId];
+                        $galleryImage->save();
+                    }
+                }
+            }
+
+            if ($request->hasFile('listing_gallery')) {
+
+                $imgfilegal = $request->file('listing_gallery');
+                foreach ($imgfilegal as $fileIndex => $imgalrow) {
+
+                    $ext = $imgalrow->getClientOriginalExtension();
+                    $name3 = $imgalrow->getClientOriginalName();
+
+                    $allowed =  array('jpeg','jpg', "png", "gif", "bmp", "jfif", "JPEG","JPG", "PNG", "GIF", "BMP", "JFIF", "webp");
+                    if(!in_array($ext,$allowed) ) {
+                            return redirect()->back()->with('errorimg', 'Images must be an extension of JPG, JPEG, PNG, GIF.');
+                        } else {
+
+                            $is_images_exist = DirectoryMediagallery::where('name_large',$name3)->where('directory_id',$id)->first();
+                            if(!$is_images_exist){
+
+                                $imageName2 = time() . $name3;
+                                $imageName = Helper::getSeoUrl($imageName2);
+                                $imagepath = 'images/directory/' . $imageName;
+                                $convertext = "webp";
+                                $image_resize = Image::make($imgalrow->getRealPath())->stream($convertext,50);
+                                Storage::disk('images')->put('directory/'.$imageName.'.'.$convertext,$image_resize);
+
+                                $dirtmediagallery = new DirectoryMediagallery;
+                                $dirtmediagallery->directory_id    = $id;
+                                $dirtmediagallery->position        = isset($newGalleryPositions[$fileIndex])
+                                    ? (int) $newGalleryPositions[$fileIndex]
+                                    : ((int) DirectoryMediagallery::where('directory_id', $id)->max('position') + 1);
+                                $dirtmediagallery->name_thumbnail  = $imageName;
+                                $dirtmediagallery->name_large      = $name3;
+                                $dirtmediagallery->extension       = $ext;
+                                $dirtmediagallery->path            = $imagepath;
+                                $dirtmediagallery->payable        = $payval;
+                                $dirtmediagallery->save();
+                            }
+                        }
+                }
+            } else {
+                if (!is_array($galleryOrder)) {
+                    $positions = $request->input('array_gallery_listing', []);
+                    $imageNames = $request->input('array_gallery_images', []);
+                    if (is_string($positions)) {
+                        $positions = explode(',', $positions);
+                    } elseif (isset($positions[0]) && is_string($positions[0])) {
+                        $positions = explode(',', $positions[0]);
+                    }
+                    if (is_string($imageNames)) {
+                        $imageNames = explode(',', $imageNames);
+                    }
+                    if (!is_array($positions)) {
+                        $positions = [];
+                    }
+                    if (!is_array($imageNames)) {
+                        $imageNames = [];
+                    }
+
+                    foreach ($imageNames as $index => $imageName) {
+                        if ($imageName === '') {
+                            continue;
+                        }
+                        $galleryImage = DirectoryMediagallery::where('directory_id', $id)
+                            ->where('name_thumbnail', trim($imageName))
+                            ->first();
+                        if ($galleryImage && isset($positions[$index])) {
+                            $galleryImage->position = (int) trim($positions[$index]);
+                            $galleryImage->save();
+                        }
+                    }
+                }
+            }
+            /* MEDIA EDIT END */
         }
-        /* MEDIA EDIT END */
 
         /* Seo Entries start */
         $seo_title_en = $request->input('meta_keywords_en');
@@ -3411,9 +3510,12 @@ class CompanyController_bkp extends Controller
         }
 
         /* Seo Entries End */
+
+    if($request->active_tab == 'Schedule'){
         /* START SCHEDUAL ENTRIES */
-        DirectorySchedual::where('directory_id', $id)->delete();
+
         if ($request->input('normaldays') == "no") {
+            DirectorySchedual::where('directory_id', $id)->delete();
             $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
             foreach ($days as $key => $value) {
                 $count = count($request->input($value . "_hours_min"));
@@ -3623,6 +3725,7 @@ class CompanyController_bkp extends Controller
 
             if ($request->input('editDataTemplatepublic') != "one") {
                 if($request->input('publicdaystemplateselect')!=$request->input('actualdataforselectedTemplateId')){
+                    //dd(1);
                     DirectoryCustomHoliday::where('directory_id', $id)->delete();
                 }
             }
@@ -3682,10 +3785,8 @@ class CompanyController_bkp extends Controller
                     }
             }
         }
-
-
         /* END SCHEDUAL ENTRIES */
-
+    }
 
 
         /* Contact Entries start */

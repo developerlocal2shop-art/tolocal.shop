@@ -2836,12 +2836,7 @@ class CompanyController extends Controller
             'trademarkcategory.required'    => 'The trademark category field is required.',
         ]
         );
-        $is_normaltemplate = $request->input('normaldays');
         $is_publictemplate = $request->input('publicdays');
-        if ($is_normaltemplate == 'yes') {
-
-            DirectorySchedual::where('directory_id', $id)->delete();
-        }
 
         $name_en = $request->input('name_en');
         $seo_en = $request->input('seo_en');
@@ -3513,8 +3508,9 @@ class CompanyController extends Controller
 
     if($request->active_tab == 'Schedule'){
         /* START SCHEDUAL ENTRIES */
-        DirectorySchedual::where('directory_id', $id)->delete();
-        if ($request->input('normaldays') == "no") {
+
+        if ($request->input('holiday_status') == 'normal_holiday' && $request->input('normaldays') == "no") {
+            DirectorySchedual::where('directory_id', $id)->delete();
             $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
             foreach ($days as $key => $value) {
                 $count = count($request->input($value . "_hours_min"));
@@ -3531,7 +3527,8 @@ class CompanyController extends Controller
                 }
             }
         }
-        if ($request->input('normaldays') == "yes") {
+        if ($request->input('holiday_status') == 'normal_holiday' && $request->input('normaldays') == "yes") {
+            DirectorySchedual::where('directory_id', $id)->delete();
             /* START SCHEDUAL ENTRIES */
             $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
             foreach ($days as $key => $value) {
@@ -3553,7 +3550,7 @@ class CompanyController extends Controller
         }
         /* HOLIDAY TIME ADD */
 
-        if ($request->input('exception_days') == "no") {
+        if ($request->input('holiday_status') == 'exceptional_holiday' && $request->input('exception_days') == "no") {
             if($request->input('exception_days')!=$request->input('exeActualdataforyesno') )
             DirectoryExceptionHoliday::where('directory_id', $id)->delete();
             if ($request->input('editDataexception') == "one") {
@@ -3608,7 +3605,7 @@ class CompanyController extends Controller
                 $dirctcustom_holiday->save();
             }
         }
-        if ($request->input('exception_days') == "yes") {
+        if ($request->input('holiday_status') == 'exceptional_holiday' && $request->input('exception_days') == "yes") {
             if($request->input('exception_daystemplateselect')!=$request->input('exeActualdataforselectedTemplateId'))
             {
                 DirectoryExceptionHoliday::where('directory_id', $id)->delete();
@@ -3663,7 +3660,7 @@ class CompanyController extends Controller
         }
 
         //DirectoryCustomHoliday::where('directory_id', $id)->delete();
-        if ($request->input('publicdays') == "no") {
+        if ($request->input('holiday_status') == 'public_holiday' && $request->input('publicdays') == "no") {
             if($request->input('publicdays')!=$request->input('actualdataforyesno') )
             DirectoryCustomHoliday::where('directory_id', $id)->delete();
             if ($request->input('editDataPublic') == "one") {
@@ -3720,10 +3717,11 @@ class CompanyController extends Controller
             }
         }
 
-        if ($request->input('publicdays') == "yes") {
+        if ($request->input('holiday_status') == 'public_holiday' && $request->input('publicdays') == "yes") {
 
             if ($request->input('editDataTemplatepublic') != "one") {
-                if($request->input('publicdaystemplateselect')!=$request->input('actualdataforselectedTemplateId')){
+                if($publicdaystemplateselect != $request->input('actualdataforselectedTemplateId')){
+                    //dd(1);
                     DirectoryCustomHoliday::where('directory_id', $id)->delete();
                 }
             }

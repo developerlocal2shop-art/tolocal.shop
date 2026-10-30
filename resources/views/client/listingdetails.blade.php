@@ -10,6 +10,11 @@
 @endif
 @section('content')
 
+@if (empty($data['mainDirectoryDetails']->company_logo))
+    <style>
+        .mobile.company_title_mobile {  display: none !important; }
+    </style>
+@endif
 @if ($data['mainDirectoryDetails']->company_color)
     <style>
         .btn-custom { color: #fff; border-radius: 5px; font-weight: bold; background-color: {{ $data['mainDirectoryDetails']->company_color }};}
@@ -754,7 +759,7 @@
         <div class="col-md-1">
         </div>
         <div class="col-md-2 listing-shop-column">
-        <?php if(!empty($data['directoryProductData'])){ ?>
+        <?php //if(!empty($data['directoryProductData'])){ ?>
             <a class="listing-info-card shop-visit-cta" target="_blank" rel="noopener noreferrer" href="{{ url('listings-product', ['id' => $data['mainDirectoryDetails']->slug]) }}">
                 <span class="shop-visit-cta__icon" aria-hidden="true">
                     <svg viewBox="0 0 24 24" focusable="false">
@@ -771,7 +776,7 @@
                     </svg>
                 </span>
             </a>
-        <?php } ?>
+        <?php //} ?>
         </div>
         <div class="col-md-4 listing-address-column">
             @if($data['address'][0]->address)

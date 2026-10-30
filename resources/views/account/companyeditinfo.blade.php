@@ -5606,6 +5606,9 @@ $instruction = $data['instruction'];
 </script>
 
 <style>
+    .custom-control.custom-checkbox input[type="checkbox"] {
+        z-index: 1 !important;
+    }
     input[type=checkbox], input[type=radio] {
         z-index: 0 !important;
     }
