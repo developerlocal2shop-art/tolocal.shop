@@ -45,6 +45,7 @@
         @if (request()->routeIs('listing.details') || request()->routeIs('directory.product'))
         <link rel="stylesheet" href="{{ asset('assets/client/css/company_detail_shop.css') }}">
         @endif
+        <link rel='stylesheet' href="{{ asset('assets/client/css/lightbox.min.css') }}">
         <link rel="stylesheet" href="{{ URL::asset('assets/css/fontawesome-iconpicker.min.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/jquery.datetimepicker.css') }}" />
         <link rel='stylesheet' href="{{ asset('assets/client/css/owl.carousel.min.css') }}">
@@ -53,7 +54,6 @@
         <link rel='stylesheet' href="{{ asset('assets/client/css/jquery-ui.css') }}">
         <script src="{{ asset('assets/plugins/bower_components/jquery/dist/jquery.min.js') }}"></script>
     <?php if(!in_array("listings", $currenturl)){?>
-        <link rel='stylesheet' href="{{ asset('assets/client/css/lightbox.min.css') }}">
         <link href="{{ asset('assets/client/css/tables.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/client/css/bootstrap-tagsinput.css') }}" rel="stylesheet">
         <link href="{{ asset('assets/client/css/toastr.min.css') }}" rel="stylesheet">
