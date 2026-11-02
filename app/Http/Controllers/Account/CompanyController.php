@@ -2059,6 +2059,8 @@ class CompanyController extends Controller
             $dircttrans->about_us     = isset($aboutus_val) ? $aboutus_val : $aboutus_en;
             $dircttrans->save();
         }
+
+
         /* directory Location start */
         $countryId = $request->input('country_id');
         $stateId = $request->input('state_id');
@@ -2813,8 +2815,6 @@ class CompanyController extends Controller
     public function updatecompanyinformation(Request $request)
     {
 
-
-
         $id = Auth::user()->directory_id;
         $user_id = Auth::user()->id;
 
@@ -2825,29 +2825,29 @@ class CompanyController extends Controller
             'weoffer_en'            => 'required|string',
             'aboutus_en'            => 'required|string',
             'email'                 => 'email|required',
+            'description_text_color' => ['nullable', 'regex:/^#[0-9A-Fa-f]{6}$/'],
             'trademarkcategory'     => 'required',
             'phone_number'          => 'required|numeric|digits_between:8,10',
             'listing_thumb'         => 'array|max:20',
             'listing_cover'         => 'array|max:20',
             'listing_gallery'       => 'array|max:20',
             'paypal_email'          => 'required',
-        ],
-        [
-            'trademarkcategory.required'    => 'The trademark category field is required.',
-        ]
+            ],
+            [
+                'trademarkcategory.required'    => 'The trademark category field is required.',
+            ]
         );
+
         $is_publictemplate = $request->input('publicdays');
 
         $name_en = $request->input('name_en');
         $seo_en = $request->input('seo_en');
-        $activeTab = $request->input('active_tab');
-
+        $activeTab = strtolower((string) $request->input('active_tab', ''));
         //dd($activeTab);
 
         $description_en = $request->input('description_en');
         $weoffer_en = $request->input('weoffer_en');
         $aboutus_en = $request->input('aboutus_en');
-
 
         $publicdaystemplateselect = $request->input('publicdaystemplateselect');
         if($publicdaystemplateselect == 'none'){
@@ -2870,6 +2870,7 @@ class CompanyController extends Controller
                 'description'                   => isset($description_en) ? $description_en : "",
                 'description_button_link'       => $request->input('description_button_link')??'',
                 'discription_button_text'       => $request->input('discription_button_text')??'',
+                'description_text_color'        => $request->input('description_text_color'),
                 'feature_type'                  => $request->input('featuretype'),
                 'company_color'                 => $request->input('company_color'),
                 'google_analytics_id'           => $request->input('google_ana_id'),
@@ -2885,239 +2886,43 @@ class CompanyController extends Controller
                 'holiday_status'                => $request->input('holiday_status')??'normal_holiday',
             ]);
 
-        /* Directory Category Starts */
-        $categories = $request->input('sub_category');
-        DirectoryCategory::where('directory_id', $id)->delete();
-                $categoryInsertData = new DirectoryCategory;
-                $categoryInsertData->directory_id  = $id;
-                $categoryInsertData->category_id  = $request->input('category');
-                $categoryInsertData->save();
-
-
-        /*--------------- Directory own amenity --------------------*/
-        $directory_own_amenity = $request->input('directory_own_amenity');
-        Amenity::where('directory_id', $id)->delete();
-        DirectoryAmenity::where('directory_id', $id)->delete();
-
-        if ($directory_own_amenity != "") {
-            $dir_own_amenity = explode(',', $directory_own_amenity);
-
-            foreach ($dir_own_amenity as $value) {
-                $own_amenity = new Amenity();
-                $own_amenity->title             = $value;
-                $own_amenity->slug              = Str::of($value)->slug('-');
-                //$own_amenity->category_id       = $request->input('amenitycat_id');
-                $own_amenity->created_by        = $request->input('createdby');
-                $own_amenity->directory_id      = $id;
-                $own_amenity->save();
-                $own_amenity_id = $own_amenity->id;
-
-                   $dirtamenity = new DirectoryAmenity;
-                   $dirtamenity->directory_id  = $id;
-                   //$dirtamenity->amenitycat_id  = $request->input('amenitycat_id');
-                   $dirtamenity->amenities_id  = $own_amenity_id;
-                   $dirtamenity->typeofdata  = 'new';
-                   $dirtamenity->save();
-
-            }
-        }
-
-        $directory_services = $request->directory_services;
-        DirectoryServices::where('directory_id', $id)->delete();
-        if ($directory_services != "") {
-            $dir_own_services = explode(',', $directory_services);
-
-            foreach ($dir_own_services as $value) {
-                $own_service = new DirectoryServices();
-                $own_service->directory_id      = $id;
-                $own_service->name              = $value;
-                $own_service->slug              = Str::of($value)->slug('-');
-                $own_service->save();
-                $own_amenity_id = $own_service->id;
-            }
-        }
-
-        /* Directory Category Ends */
-        /* Directory Trademark Starts */
-        $trademark = $request->input('trademark');
-        DirectoryMediaTrademarks::where('directory_id', $id)->delete();
-        if (!empty($trademark)) {
-            foreach ($trademark as $cat => $value) {
-                $trademarkInsertData                    = new DirectoryMediaTrademarks;
-                $trademarkInsertData->directory_id      = $id;
-                $trademarkInsertData->trademarkcat_id   = $request->input('trademarkcategory')??'0';
-                $trademarkInsertData->trademark_id      = $value;
-                $trademarkInsertData->save();
-            }
-        }else{
-                $trademarkInsertData = new DirectoryMediaTrademarks;
-                $trademarkInsertData->directory_id      = $id;
-                $trademarkInsertData->trademarkcat_id   = $request->input('trademarkcategory')??'0';
-                $trademarkInsertData->trademark_id      = $request->input('trademark')??'0';
-                $trademarkInsertData->save();
-        }
-        /* Directory Trademark Ends */
-
-
-        if($request->active_tab == 'SEO'){
-
-            $sub_categories = $request->input('sub_category');
-            DirectorySubCategory::where('directory_id', $id)->delete();
-            DirectoryTags::where('directory_id', $id)->delete();
-            tagTranslation::where('company_id', $id)->delete();
-
-            $languages = Helper::getAllLanguages();
-            $tr = new GoogleTranslate();
-            if (!empty($sub_categories)) {
-                foreach ($sub_categories as $cat => $value) {
-                    $categoryInsertData = new DirectorySubCategory;
-                    $categoryInsertData->directory_id  = $id;
-                    $categoryInsertData->sub_category_id  = $value;
-                    $categoryInsertData->save();
-
+            /* Directory Tags Ends */
+            /* Directory Own Tags Starts */
+            $owntags = $request->input('owntags');
+            DirectoryOwnTags::where('directory_id', $id)->delete();
+            if (!empty($owntags)) {
+                foreach ($owntags as $owntgs => $value) {
+                    $owntagsInsertData = new DirectoryOwnTags;
+                    $owntagsInsertData->directory_id  = $id;
+                    $owntagsInsertData->owntags_id  = $value;
+                    $owntagsInsertData->save();
                 }
             }
 
-            /* Directory Tags Starts */
-            $simpletags = $request->input('simpletags');
-            //dd($id);
-            if (!empty($simpletags)) {
-                foreach ($simpletags as $value) {
-                    $simpletagsInsertData = new DirectoryTags();
-                    $simpletagsInsertData->directory_id = $id;
-                    $simpletagsInsertData->tags_id = $value;
-                    $simpletagsInsertData->save();
-                    $gettagsName = Tags::where('id', $value)->where('status', 'Active')->first();
-                    if ($gettagsName) {
-                        foreach ($languages as $lang) {
-                            $title_name = $tr->setSource('en')->setTarget($lang->code)->translate($gettagsName->tags);
-                            $description_code = $tr->setSource('en')->setTarget($lang->code)->translate($gettagsName->tags);
-                            $title_name = $title_name ?: $gettagsName->tags;
-                            $tagtrans = new tagTranslation();
-                            $tagtrans->company_id = $id;
-                            $tagtrans->tag_id = $value;
-                            $tagtrans->category_id = $request->input('category');
-                            $tagtrans->language_id = $lang->id;
-                            $tagtrans->title = $title_name;
-                            $tagtrans->description = $description_code;
-                            $tagtrans->seo_url = Helper::getSeoUrl($title_name);
-                            $tagtrans->save();
-                        }
-                    }
-
+            $newOwnTagsids = array();
+            $createnewowntag = $request->input('createnewowntag');
+            if ($createnewowntag != "") {
+                $owntagsName = explode(',', $createnewowntag);
+                foreach ($owntagsName as $tag) {
+                    $tags_insert = new DirectoryCreateOwnTags;
+                    $tags_insert->directory_id              = $id;
+                    $tags_insert->tag_name                  = $tag;
+                    $tags_insert->add_to_directory_page     = 'yes';
+                    $tags_insert->created_by        = $request->input('createdby');
+                    $tags_insert->save();
+                    $lastenter_id = $tags_insert->id;
+                    $newOwnTagsids[] = $lastenter_id;
                 }
             }
 
-        }
-
-        /* Directory Tags Ends */
-        /* Directory Own Tags Starts */
-        $owntags = $request->input('owntags');
-        DirectoryOwnTags::where('directory_id', $id)->delete();
-        if (!empty($owntags)) {
-            foreach ($owntags as $owntgs => $value) {
-                $owntagsInsertData = new DirectoryOwnTags;
-                $owntagsInsertData->directory_id  = $id;
-                $owntagsInsertData->owntags_id  = $value;
-                $owntagsInsertData->save();
-            }
-        }
-
-        $newOwnTagsids = array();
-        $createnewowntag = $request->input('createnewowntag');
-        if ($createnewowntag != "") {
-            $owntagsName = explode(',', $createnewowntag);
-            foreach ($owntagsName as $tag) {
-                $tags_insert = new DirectoryCreateOwnTags;
-                $tags_insert->directory_id              = $id;
-                $tags_insert->tag_name                  = $tag;
-                $tags_insert->add_to_directory_page     = 'yes';
-                $tags_insert->created_by        = $request->input('createdby');
-                $tags_insert->save();
-                $lastenter_id = $tags_insert->id;
-                $newOwnTagsids[] = $lastenter_id;
-            }
-        }
-
-        if (!empty($newOwnTagsids)) {
-            foreach ($newOwnTagsids as $owntgs => $value) {
-                $owntagsInsertData = new DirectoryNewOwnTags;
-                $owntagsInsertData->directory_id  = $id;
-                $owntagsInsertData->owntags_id  = $value;
-                $owntagsInsertData->save();
-            }
-        }
-
-        /* Directory Own Tags Ends */
-        $offerdescription = $request->input('description_en');
-        $weoffer_en        = $request->input('weoffer_en');
-        $aboutus_en  = $request->input('aboutus_en');
-
-        $is_not_change_en_language = DiectoryTranslation::where('language_id',1)
-            ->where('title',$name_en)
-            ->where('description',$offerdescription)
-            ->where('we_offer',$weoffer_en)
-            ->where('about_us',$aboutus_en)
-            ->where('directory_id',$id)->exists();
-        $languages = Helper::getAllLanguages();
-        $tr = new GoogleTranslate();
-            if($is_not_change_en_language){
-                foreach ($languages as $lang) {
-
-
-                    $title_name = $request->input('name_' . $lang->code);
-                    $description_code = $request->input('description_' . $lang->code);
-                    $languageTranslation_id = $request->input('langtranlation_' . $lang->code);
-                    $seo_val = Helper::getSeoUrl($request->input('seo_' . $lang->code));
-                    $weoffer_val = $request->input('weoffer_' . $lang->code);
-                    $aboutus_val = $request->input('aboutus_' . $lang->code);
-
-                    $offershortinsert =  DiectoryTranslation::find($languageTranslation_id);
-                    $offershortinsert->title              = isset($title_name) ? $title_name : $name_en;
-                    $offershortinsert->description        = isset($description_code) ? $description_code : $offerdescription;
-                    $offershortinsert->seo_url            = $seo_val;
-                    $offershortinsert->we_offer           = isset($weoffer_val) ? $weoffer_val : $weoffer_en;
-                    $offershortinsert->about_us           = isset($aboutus_val) ? $aboutus_val : $aboutus_en;
-                    $offershortinsert->save();
+            if (!empty($newOwnTagsids)) {
+                foreach ($newOwnTagsids as $owntgs => $value) {
+                    $owntagsInsertData = new DirectoryNewOwnTags;
+                    $owntagsInsertData->directory_id  = $id;
+                    $owntagsInsertData->owntags_id  = $value;
+                    $owntagsInsertData->save();
                 }
-            }else{
-
-                DiectoryTranslation::where('directory_id', $id)->delete();
-                foreach ($languages as $lang) {
-
-                    if ($lang->code !== 'en') {
-                        $name        = $tr->setSource('en')->setTarget($lang->code)->translate($name_en);
-                        $description = $tr->setSource('en')->setTarget($lang->code)->translate($offerdescription);
-                        $seo_en         = $tr->setSource('en')->setTarget($lang->code)->translate($request->input('seo_en'));
-                        $weofferen      = $tr->setSource('en')->setTarget($lang->code)->translate($weoffer_en);
-                        $aboutusen      = $tr->setSource('en')->setTarget($lang->code)->translate($aboutus_en);
-                    }
-
-                    DiectoryTranslation::create([
-                        'directory_id'     => $id,
-                        'language_id'      => $lang->id,
-                        'title'            => $name ?? $name_en,
-                        'description'      => $description ?? $offerdescription,
-                        'seo_url'          => $seo_en ?? $request->input('seo_en'),
-                        'we_offer'         => $weofferen ?? $weoffer_en,
-                        'about_us'         => $aboutusen ?? $aboutus_en,
-                    ]);
-                }
-
             }
-
-            DiectoryLocation::where('directory_id', $id)
-            ->update([
-                'country_id'    => $request->input('country_id') ? $request->input('country_id') : 0,
-                'state_id'      => $request->input('state_id') ? $request->input('state_id') : 0,
-                'city_id'       => $request->input('city_id') ? $request->input('city_id') : 0,
-                'address'       => $request->input('address'),
-                'place'         => $request->input('place'),
-                'city_name'     => $request->input('city_id'),
-                'zipcode'       => $request->input('zipcode'),
-                'latitude'      => $request->input('latitude'),
-                'longitude'     => $request->input('longitude')
-            ]);
 
             Product::where('directory_id', $id)
             ->update([
@@ -3151,59 +2956,132 @@ class CompanyController extends Controller
                 'paypal_merchant_id'      => $request->input('paypal_merchant_id'),
             ]);
 
-            if ($request->input('amenities')) {
-                    $dirtamenity = new DirectoryAmenity;
-                    $dirtamenity->directory_id  = $id;
-                    $dirtamenity->amenitycat_id  = implode(",", $request->input('amenitycat_id'));
-                    $dirtamenity->amenities_id  = implode(",", $request->input('amenities'));
-                    $dirtamenity->typeofdata  = 'existing';
-                    $dirtamenity->save();
+
+
+             /* Directory Own Tags Ends */
+            $offerdescription = $request->input('description_en');
+            $weoffer_en        = $request->input('weoffer_en');
+            $aboutus_en  = $request->input('aboutus_en');
+
+            $is_not_change_en_language = DiectoryTranslation::where('language_id',1)
+                ->where('title',$name_en)
+                ->where('description',$offerdescription)
+                ->where('we_offer',$weoffer_en)
+                ->where('about_us',$aboutus_en)
+                ->where('directory_id',$id)->exists();
+            $languages = Helper::getAllLanguages();
+            $tr = new GoogleTranslate();
+                if($is_not_change_en_language){
+                    foreach ($languages as $lang) {
+
+                        $title_name = $request->input('name_' . $lang->code);
+                        $description_code = $request->input('description_' . $lang->code);
+                        $languageTranslation_id = $request->input('langtranlation_' . $lang->code);
+                        $seo_val = Helper::getSeoUrl($request->input('seo_' . $lang->code));
+                        $weoffer_val = $request->input('weoffer_' . $lang->code);
+                        $aboutus_val = $request->input('aboutus_' . $lang->code);
+
+                        $offershortinsert =  DiectoryTranslation::find($languageTranslation_id);
+                        $offershortinsert->title              = isset($title_name) ? $title_name : $name_en;
+                        $offershortinsert->description        = isset($description_code) ? $description_code : $offerdescription;
+                        $offershortinsert->seo_url            = $seo_val;
+                        $offershortinsert->we_offer           = isset($weoffer_val) ? $weoffer_val : $weoffer_en;
+                        $offershortinsert->about_us           = isset($aboutus_val) ? $aboutus_val : $aboutus_en;
+                        $offershortinsert->save();
+                    }
+                }else{
+
+                    DiectoryTranslation::where('directory_id', $id)->delete();
+                    foreach ($languages as $lang) {
+
+                        if ($lang->code !== 'en') {
+                            $name        = $tr->setSource('en')->setTarget($lang->code)->translate($name_en);
+                            $description = $tr->setSource('en')->setTarget($lang->code)->translate($offerdescription);
+                            $seo_en         = $tr->setSource('en')->setTarget($lang->code)->translate($request->input('seo_en'));
+                            $weofferen      = $tr->setSource('en')->setTarget($lang->code)->translate($weoffer_en);
+                            $aboutusen      = $tr->setSource('en')->setTarget($lang->code)->translate($aboutus_en);
+                        }
+
+                        DiectoryTranslation::create([
+                            'directory_id'     => $id,
+                            'language_id'      => $lang->id,
+                            'title'            => $name ?? $name_en,
+                            'description'      => $description ?? $offerdescription,
+                            'seo_url'          => $seo_en ?? $request->input('seo_en'),
+                            'we_offer'         => $weofferen ?? $weoffer_en,
+                            'about_us'         => $aboutusen ?? $aboutus_en,
+                        ]);
+                    }
+
+                }
+
+            if ($request->hasFile('company_logo')) {
+                $company_logo = $request->file('company_logo');
+                $ext = strtolower($company_logo->getClientOriginalExtension());
+
+                $allowed = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'jfif'];
+
+                if (!in_array($ext, $allowed)) {
+                    return redirect()->back()->with('errorimg', 'Images must be an extension of JPG, JPEG, PNG, GIF.');
+                }
+
+                $imageName = Helper::getSeoUrl(time() . pathinfo($company_logo->getClientOriginalName(), PATHINFO_FILENAME));
+                $imagePath = "images/directory/{$imageName}.webp";
+
+                $image = Image::make($company_logo->getRealPath())->stream('webp', 50);
+                Storage::disk('images')->put("directory/{$imageName}.webp", $image);
+
+                Diectory::where('id', $id)->update(['company_logo' => $imagePath]);
             }
 
-        /* MEDIA EDIT START */
-        $payablevalue = $request->input('payimage');
-        if ($payablevalue != 'payable') {
-            $payval = 0;
-        } else {
-            $payval = 1;
-        }
-        DirectoryMedia::where('directory_id', $id)
-            ->update([
-                'video_provider'  => $request->input('video_provider'),
-                'video_url'  => $request->input('videourl'),
-                'payable'  => $payval,
-            ]);
-
-        if ($request->input('payimage') == "payable") {
-            DirectoryMediaListing::where(['directory_id' => $id, 'payable' => 0])->delete();
-            DirectoryMediaCover::where(['directory_id' => $id, 'payable' => 0])->delete();
-            DirectoryMediagallery::where(['directory_id' => $id, 'payable' => 0])->delete();
-        } else {
-            DirectoryMediaListing::where(['directory_id' => $id, 'payable' => 1])->delete();
-            DirectoryMediaCover::where(['directory_id' => $id, 'payable' => 1])->delete();
-            DirectoryMediagallery::where(['directory_id' => $id, 'payable' => 1])->delete();
-        }
-
-        if ($request->hasFile('company_logo')) {
-            $company_logo = $request->file('company_logo');
-            $ext = strtolower($company_logo->getClientOriginalExtension());
-
-            $allowed = ['jpeg', 'jpg', 'png', 'gif', 'bmp', 'jfif'];
-
-            if (!in_array($ext, $allowed)) {
-                return redirect()->back()->with('errorimg', 'Images must be an extension of JPG, JPEG, PNG, GIF.');
+            /* Directory Category Ends */
+            /* Directory Trademark Starts */
+            $trademark = $request->input('trademark');
+            DirectoryMediaTrademarks::where('directory_id', $id)->delete();
+            if (!empty($trademark)) {
+                foreach ($trademark as $cat => $value) {
+                    $trademarkInsertData                    = new DirectoryMediaTrademarks;
+                    $trademarkInsertData->directory_id      = $id;
+                    $trademarkInsertData->trademarkcat_id   = $request->input('trademarkcategory')??'0';
+                    $trademarkInsertData->trademark_id      = $value;
+                    $trademarkInsertData->save();
+                }
+            }else{
+                    $trademarkInsertData = new DirectoryMediaTrademarks;
+                    $trademarkInsertData->directory_id      = $id;
+                    $trademarkInsertData->trademarkcat_id   = $request->input('trademarkcategory')??'0';
+                    $trademarkInsertData->trademark_id      = $request->input('trademark')??'0';
+                    $trademarkInsertData->save();
             }
+            /* Directory Trademark Ends */
 
-            $imageName = Helper::getSeoUrl(time() . pathinfo($company_logo->getClientOriginalName(), PATHINFO_FILENAME));
-            $imagePath = "images/directory/{$imageName}.webp";
 
-            $image = Image::make($company_logo->getRealPath())->stream('webp', 50);
-            Storage::disk('images')->put("directory/{$imageName}.webp", $image);
 
-            Diectory::where('id', $id)->update(['company_logo' => $imagePath]);
-        }
+        if ($activeTab === 'media') {
 
-        if($request->active_tab == 'Media'){
+            /* MEDIA EDIT START */
+            $payablevalue = $request->input('payimage');
+            if ($payablevalue != 'payable') {
+                $payval = 0;
+            } else {
+                $payval = 1;
+            }
+            DirectoryMedia::where('directory_id', $id)
+                ->update([
+                    'video_provider'  => $request->input('video_provider'),
+                    'video_url'  => $request->input('videourl'),
+                    'payable'  => $payval,
+                ]);
+
+            if ($request->input('payimage') == "payable") {
+                DirectoryMediaListing::where(['directory_id' => $id, 'payable' => 0])->delete();
+                DirectoryMediaCover::where(['directory_id' => $id, 'payable' => 0])->delete();
+                DirectoryMediagallery::where(['directory_id' => $id, 'payable' => 0])->delete();
+            } else {
+                DirectoryMediaListing::where(['directory_id' => $id, 'payable' => 1])->delete();
+                DirectoryMediaCover::where(['directory_id' => $id, 'payable' => 1])->delete();
+                DirectoryMediagallery::where(['directory_id' => $id, 'payable' => 1])->delete();
+            }
 
             if ($request->hasFile('listing_thumb')) {
                 if ($request->input('payimage') != "payable") {
@@ -3468,365 +3346,496 @@ class CompanyController extends Controller
             /* MEDIA EDIT END */
         }
 
-        /* Seo Entries start */
-        $seo_title_en = $request->input('meta_keywords_en');
-        $seo_meta_description_en = $request->input('meta_description_en');
-        DirectorySeo::where('module_id', $id)
-            ->update([
-                'page_type'    =>'directory',
-                'meta_keyword' => (isset($seo_title_en)) ? $seo_title_en : "",
-                'meta_description' => isset($seo_meta_description_en) ? $seo_meta_description_en : "",
-            ]);
+        if ($activeTab === 'seo') {
 
-        foreach ($languages as $lang) {
+            /* Directory Category Starts */
+            $categories = $request->input('sub_category');
+            DirectoryCategory::where('directory_id', $id)->delete();
+                    $categoryInsertData = new DirectoryCategory;
+                    $categoryInsertData->directory_id  = $id;
+                    $categoryInsertData->category_id  = $request->input('category');
+                    $categoryInsertData->save();
 
-            $seo_title = $request->input('meta_keywords_' . $lang->code);
-            $seo_meta_description = $request->input('meta_description_' . $lang->code);
-            $seoTranslation_id = $request->input('seolangtranlation_' . $lang->code);
+            /* Seo Entries start */
+            $seo_title_en = $request->input('meta_keywords_en');
+            $seo_meta_description_en = $request->input('meta_description_en');
+            DirectorySeo::where('module_id', $id)
+                ->update([
+                    'page_type'    =>'directory',
+                    'meta_keyword' => (isset($seo_title_en)) ? $seo_title_en : "",
+                    'meta_description' => isset($seo_meta_description_en) ? $seo_meta_description_en : "",
+                ]);
 
-            $seodircttrans = DirectorySeoTranslation::find($seoTranslation_id);
+            foreach ($languages as $lang) {
 
-            if ($seodircttrans) {
-                // Update existing record
-                $seodircttrans->meta_title = $seo_title ?? "";
-                $seodircttrans->meta_keyword = $seo_title ?? "";
-                $seodircttrans->meta_description = $seo_meta_description ?? "";
-            } else {
-                // Create new record (important fix)
-                $seodircttrans = new DirectorySeoTranslation();
-                $seodircttrans->directory_id = $id; // make sure this exists in table
-                $seodircttrans->language_id = $lang->id; // adjust column name if needed
-                $seodircttrans->meta_title = $seo_title ?? "";
-                $seodircttrans->meta_keyword = $seo_title ?? "";
-                $seodircttrans->meta_description = $seo_meta_description ?? "";
+                $seo_title = $request->input('meta_keywords_' . $lang->code);
+                $seo_meta_description = $request->input('meta_description_' . $lang->code);
+                $seoTranslation_id = $request->input('seolangtranlation_' . $lang->code);
+
+                $seodircttrans = DirectorySeoTranslation::find($seoTranslation_id);
+
+                if ($seodircttrans) {
+                    // Update existing record
+                    $seodircttrans->meta_title = $seo_title ?? "";
+                    $seodircttrans->meta_keyword = $seo_title ?? "";
+                    $seodircttrans->meta_description = $seo_meta_description ?? "";
+                } else {
+                    // Create new record (important fix)
+                    $seodircttrans = new DirectorySeoTranslation();
+                    $seodircttrans->directory_id = $id; // make sure this exists in table
+                    $seodircttrans->language_id = $lang->id; // adjust column name if needed
+                    $seodircttrans->meta_title = $seo_title ?? "";
+                    $seodircttrans->meta_keyword = $seo_title ?? "";
+                    $seodircttrans->meta_description = $seo_meta_description ?? "";
+                }
+
+                $seodircttrans->save();
             }
-
-            $seodircttrans->save();
+            /* Seo Entries End */
         }
 
-        /* Seo Entries End */
+        if ($activeTab === 'amenities') {
+            /*--------------- Directory own amenity --------------------*/
+            $directory_own_amenity = $request->input('directory_own_amenity');
+            Amenity::where('directory_id', $id)->delete();
+            DirectoryAmenity::where('directory_id', $id)->delete();
+            if ($directory_own_amenity != "") {
+                $dir_own_amenity = explode(',', $directory_own_amenity);
 
-    if($request->active_tab == 'Schedule'){
-        /* START SCHEDUAL ENTRIES */
+                foreach ($dir_own_amenity as $value) {
+                    $own_amenity = new Amenity();
+                    $own_amenity->title             = $value;
+                    $own_amenity->slug              = Str::of($value)->slug('-');
+                    //$own_amenity->category_id       = $request->input('amenitycat_id');
+                    $own_amenity->created_by        = $request->input('createdby');
+                    $own_amenity->directory_id      = $id;
+                    $own_amenity->save();
+                    $own_amenity_id = $own_amenity->id;
 
-        if ($request->input('holiday_status') == 'normal_holiday' && $request->input('normaldays') == "no") {
-            DirectorySchedual::where('directory_id', $id)->delete();
-            $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-            foreach ($days as $key => $value) {
-                $count = count($request->input($value . "_hours_min"));
-                $minHours = $request->input($value . "_hours_min");
-                $maxHours = $request->input($value . "_hours_max");
-                for ($i = 0; $i < $count; $i++) {
-                    $dirctschedual = new DirectorySchedual;
-                    $dirctschedual->directory_id    = $id;
-                    $dirctschedual->day             = $value;
-                    $dirctschedual->is_closed       = $request->input($value . "_is_closed") ? '1' : '0';
-                    $dirctschedual->open_time       = $minHours[$i];
-                    $dirctschedual->close_time      = $maxHours[$i];
-                    $dirctschedual->save();
+                    $dirtamenity = new DirectoryAmenity;
+                    $dirtamenity->directory_id  = $id;
+                    //$dirtamenity->amenitycat_id  = $request->input('amenitycat_id');
+                    $dirtamenity->amenities_id  = $own_amenity_id;
+                    $dirtamenity->typeofdata  = 'new';
+                    $dirtamenity->save();
+
                 }
             }
+
+            if ($request->input('amenities')) {
+                $dirtamenity = new DirectoryAmenity;
+                $dirtamenity->directory_id  = $id;
+                $dirtamenity->amenitycat_id  = implode(",", $request->input('amenitycat_id'));
+                $dirtamenity->amenities_id  = implode(",", $request->input('amenities'));
+                $dirtamenity->typeofdata  = 'existing';
+                $dirtamenity->save();
+            }
+
         }
-        if ($request->input('holiday_status') == 'normal_holiday' && $request->input('normaldays') == "yes") {
-            DirectorySchedual::where('directory_id', $id)->delete();
+
+            $directory_services = $request->directory_services;
+            DirectoryServices::where('directory_id', $id)->delete();
+            if ($directory_services != "") {
+                $dir_own_services = explode(',', $directory_services);
+
+                foreach ($dir_own_services as $value) {
+                    $own_service = new DirectoryServices();
+                    $own_service->directory_id      = $id;
+                    $own_service->name              = $value;
+                    $own_service->slug              = Str::of($value)->slug('-');
+                    $own_service->save();
+                    $own_amenity_id = $own_service->id;
+                }
+            }
+
+        if ($activeTab === 'seo') {
+
+            $sub_categories = $request->input('sub_category');
+            DirectorySubCategory::where('directory_id', $id)->delete();
+            DirectoryTags::where('directory_id', $id)->delete();
+            tagTranslation::where('company_id', $id)->delete();
+
+            $languages = Helper::getAllLanguages();
+            $tr = new GoogleTranslate();
+            if (!empty($sub_categories)) {
+                foreach ($sub_categories as $cat => $value) {
+                    $categoryInsertData = new DirectorySubCategory;
+                    $categoryInsertData->directory_id  = $id;
+                    $categoryInsertData->sub_category_id  = $value;
+                    $categoryInsertData->save();
+
+                }
+            }
+
+            /* Directory Tags Starts */
+            $simpletags = $request->input('simpletags');
+            //dd($id);
+            if (!empty($simpletags)) {
+                foreach ($simpletags as $value) {
+                    $simpletagsInsertData = new DirectoryTags();
+                    $simpletagsInsertData->directory_id = $id;
+                    $simpletagsInsertData->tags_id = $value;
+                    $simpletagsInsertData->save();
+                    $gettagsName = Tags::where('id', $value)->where('status', 'Active')->first();
+                    if ($gettagsName) {
+                        foreach ($languages as $lang) {
+                            $title_name = $tr->setSource('en')->setTarget($lang->code)->translate($gettagsName->tags);
+                            $description_code = $tr->setSource('en')->setTarget($lang->code)->translate($gettagsName->tags);
+                            $title_name = $title_name ?: $gettagsName->tags;
+                            $tagtrans = new tagTranslation();
+                            $tagtrans->company_id = $id;
+                            $tagtrans->tag_id = $value;
+                            $tagtrans->category_id = $request->input('category');
+                            $tagtrans->language_id = $lang->id;
+                            $tagtrans->title = $title_name;
+                            $tagtrans->description = $description_code;
+                            $tagtrans->seo_url = Helper::getSeoUrl($title_name);
+                            $tagtrans->save();
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+        DiectoryLocation::where('directory_id', $id)
+            ->update([
+                'country_id'    => $request->input('country_id') ? $request->input('country_id') : 0,
+                'state_id'      => $request->input('state_id') ? $request->input('state_id') : 0,
+                'city_id'       => $request->input('city_id') ? $request->input('city_id') : 0,
+                'address'       => $request->input('address'),
+                'place'         => $request->input('place'),
+                'city_name'     => $request->input('city_id'),
+                'zipcode'       => $request->input('zipcode'),
+                'latitude'      => $request->input('latitude'),
+                'longitude'     => $request->input('longitude')
+            ]);
+
+
+        if ($activeTab === 'schedule') {
             /* START SCHEDUAL ENTRIES */
-            $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
-            foreach ($days as $key => $value) {
-                if(!empty($request->input($value . "_template_hours_min"))){
-                    $count = count($request->input($value . "_template_hours_min"));
-                    $minHours = $request->input($value . "_template_hours_min");
-                    $maxHours = $request->input($value . "_template_hours_max");
+
+            if ($request->input('holiday_status') == 'normal_holiday' && $request->input('normaldays') == "no") {
+                DirectorySchedual::where('directory_id', $id)->delete();
+                $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+                foreach ($days as $key => $value) {
+                    $count = count($request->input($value . "_hours_min"));
+                    $minHours = $request->input($value . "_hours_min");
+                    $maxHours = $request->input($value . "_hours_max");
                     for ($i = 0; $i < $count; $i++) {
                         $dirctschedual = new DirectorySchedual;
                         $dirctschedual->directory_id    = $id;
                         $dirctschedual->day             = $value;
-                        $dirctschedual->is_closed       = $request->input($value . "_template_is_closed") ? '1' : '0';
+                        $dirctschedual->is_closed       = $request->input($value . "_is_closed") ? '1' : '0';
                         $dirctschedual->open_time       = $minHours[$i];
                         $dirctschedual->close_time      = $maxHours[$i];
                         $dirctschedual->save();
                     }
                 }
             }
-        }
-        /* HOLIDAY TIME ADD */
-
-        if ($request->input('holiday_status') == 'exceptional_holiday' && $request->input('exception_days') == "no") {
-            if($request->input('exception_days')!=$request->input('exeActualdataforyesno') )
-            DirectoryExceptionHoliday::where('directory_id', $id)->delete();
-            if ($request->input('editDataexception') == "one") {
-                $edit_real_id           = $request->input('real_id');
-                $edit_custom_date       = $request->input('edit_custom_date');
-                $edit_note              = $request->input('edit_note');
-                $edit_exceptional_day       = $request->input('edit_exceptional_day');
-                $edit_exceptional_is_closed = $request->input('template_exceptional_is_closed');
-
-                    for ($i = 0; $i < count($edit_custom_date); $i++) {
-                        $edit_final_custom_time = [];
-                        $edit_time_hours_min    = $request->input($edit_real_id[$i].'_edit_time_hours_min');
-                        $edit_time_hours_max    = $request->input($edit_real_id[$i].'_edit_time_hours_max');
-                        for ($j = 0; $j < count($edit_time_hours_min); $j++) {
-                            $arr['open_time']           = $edit_time_hours_min[$j];
-                            $arr['close_time']          = $edit_time_hours_max[$j];
-                            $edit_final_custom_time[]   = $arr;
+            if ($request->input('holiday_status') == 'normal_holiday' && $request->input('normaldays') == "yes") {
+                DirectorySchedual::where('directory_id', $id)->delete();
+                /* START SCHEDUAL ENTRIES */
+                $days = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+                foreach ($days as $key => $value) {
+                    if(!empty($request->input($value . "_template_hours_min"))){
+                        $count = count($request->input($value . "_template_hours_min"));
+                        $minHours = $request->input($value . "_template_hours_min");
+                        $maxHours = $request->input($value . "_template_hours_max");
+                        for ($i = 0; $i < $count; $i++) {
+                            $dirctschedual = new DirectorySchedual;
+                            $dirctschedual->directory_id    = $id;
+                            $dirctschedual->day             = $value;
+                            $dirctschedual->is_closed       = $request->input($value . "_template_is_closed") ? '1' : '0';
+                            $dirctschedual->open_time       = $minHours[$i];
+                            $dirctschedual->close_time      = $maxHours[$i];
+                            $dirctschedual->save();
                         }
-                        DirectoryExceptionHoliday::where('id', $edit_real_id[$i])
-                        ->update([
-                            'custom_date'       => $edit_custom_date[$i],
-                            'note'              => $edit_note[$i],
-                            'day'               => $edit_exceptional_day[$i],
-                            'closed'            => $edit_exceptional_is_closed[$i],
-                            'custom_time'       => json_encode($edit_final_custom_time),
-                        ]);
-                    }
-            }
-            if ($request->input('exception_date') != "") {
-                $custom_date = $request->input('exception_date');
-                $note = $request->input('exception_note');
-                $exception_day = $request->input('exception_day');
-                $exception_closed = $request->input('exception_closed');
-                $time_hours_min = $request->input('exception_time_hours_min');
-                $time_hours_max = $request->input('exception_time_hours_max');
-                $final_custom_time = [];
-                if (count($time_hours_min)) {
-                    for ($i = 0; $i < count($time_hours_min); $i++) {
-                        $arr['open_time'] = $time_hours_min[$i];
-                        $arr['close_time'] = $time_hours_max[$i];
-                        $final_custom_time[] = $arr;
                     }
                 }
-                $final_custom_time = json_encode($final_custom_time);
-                $dirctcustom_holiday = new DirectoryExceptionHoliday;
-                $dirctcustom_holiday->directory_id = $id;
-                $dirctcustom_holiday->custom_date = $custom_date;
-                $dirctcustom_holiday->note = $note;
-                $dirctcustom_holiday->day = $exception_day;
-                $dirctcustom_holiday->closed = $exception_closed;
-                $dirctcustom_holiday->custom_time = $final_custom_time;
-                $dirctcustom_holiday->save();
             }
-        }
-        if ($request->input('holiday_status') == 'exceptional_holiday' && $request->input('exception_days') == "yes") {
-            if($request->input('exception_daystemplateselect')!=$request->input('exeActualdataforselectedTemplateId'))
-            {
+            /* HOLIDAY TIME ADD */
+
+            if ($request->input('holiday_status') == 'exceptional_holiday' && $request->input('exception_days') == "no") {
+                if($request->input('exception_days')!=$request->input('exeActualdataforyesno') )
                 DirectoryExceptionHoliday::where('directory_id', $id)->delete();
-            }
-            $sele_ids = $request->input('exception_template_id');
-            $ids = ($sele_ids!="")?$sele_ids:($ids=array());
-            if(count($ids)){
-                foreach($ids as $val) {
-                    $time_hours_min = $request->input($val.'_exc_time_hours_min');
-                    $time_hours_max = $request->input($val.'_exc_time_hours_max');
+                if ($request->input('editDataexception') == "one") {
+                    $edit_real_id           = $request->input('real_id');
+                    $edit_custom_date       = $request->input('edit_custom_date');
+                    $edit_note              = $request->input('edit_note');
+                    $edit_exceptional_day       = $request->input('edit_exceptional_day');
+                    $edit_exceptional_is_closed = $request->input('template_exceptional_is_closed');
+
+                        for ($i = 0; $i < count($edit_custom_date); $i++) {
+                            $edit_final_custom_time = [];
+                            $edit_time_hours_min    = $request->input($edit_real_id[$i].'_edit_time_hours_min');
+                            $edit_time_hours_max    = $request->input($edit_real_id[$i].'_edit_time_hours_max');
+                            for ($j = 0; $j < count($edit_time_hours_min); $j++) {
+                                $arr['open_time']           = $edit_time_hours_min[$j];
+                                $arr['close_time']          = $edit_time_hours_max[$j];
+                                $edit_final_custom_time[]   = $arr;
+                            }
+                            DirectoryExceptionHoliday::where('id', $edit_real_id[$i])
+                            ->update([
+                                'custom_date'       => $edit_custom_date[$i],
+                                'note'              => $edit_note[$i],
+                                'day'               => $edit_exceptional_day[$i],
+                                'closed'            => $edit_exceptional_is_closed[$i],
+                                'custom_time'       => json_encode($edit_final_custom_time),
+                            ]);
+                        }
+                }
+                if ($request->input('exception_date') != "") {
+                    $custom_date = $request->input('exception_date');
+                    $note = $request->input('exception_note');
+                    $exception_day = $request->input('exception_day');
+                    $exception_closed = $request->input('exception_closed');
+                    $time_hours_min = $request->input('exception_time_hours_min');
+                    $time_hours_max = $request->input('exception_time_hours_max');
                     $final_custom_time = [];
                     if (count($time_hours_min)) {
-                        for ($j = 0; $j < count($time_hours_min); $j++) {
-                            $arr['open_time'] = $time_hours_min[$j];
-                            $arr['close_time'] = $time_hours_max[$j];
+                        for ($i = 0; $i < count($time_hours_min); $i++) {
+                            $arr['open_time'] = $time_hours_min[$i];
+                            $arr['close_time'] = $time_hours_max[$i];
                             $final_custom_time[] = $arr;
                         }
                     }
                     $final_custom_time = json_encode($final_custom_time);
-                    $dirctexception_holiday = new DirectoryExceptionHoliday;
-                    $dirctexception_holiday->directory_id = $id;
-                    $dirctexception_holiday->custom_date = $request->input($val.'_exception_date');
-                    $dirctexception_holiday->closed = $request->input($val.'_exception_closed')??'No';
-                    $dirctexception_holiday->day = $request->input($val.'_exception_day');
-                    $dirctexception_holiday->note = $request->input($val.'_exception_note');
-                    $dirctexception_holiday->custom_time = $final_custom_time;
-                    $dirctexception_holiday->save();
+                    $dirctcustom_holiday = new DirectoryExceptionHoliday;
+                    $dirctcustom_holiday->directory_id = $id;
+                    $dirctcustom_holiday->custom_date = $custom_date;
+                    $dirctcustom_holiday->note = $note;
+                    $dirctcustom_holiday->day = $exception_day;
+                    $dirctcustom_holiday->closed = $exception_closed;
+                    $dirctcustom_holiday->custom_time = $final_custom_time;
+                    $dirctcustom_holiday->save();
                 }
             }
-            if ($request->input('editDataTemplateexception') == "one") {
-                $edit_tempalte_real_id           = $request->input('template_real_id');
-                $edit_template_custom_date       = $request->input('edit_template_custom_date');
-                $edit_template_note              = $request->input('edit_template_note');
-
-                    for ($i = 0; $i < count($edit_template_custom_date); $i++) {
-                        $edit_template_final_custom_time = [];
-                        $edit_time_hours_min    = $request->input($edit_tempalte_real_id[$i].'_edit_time_hours_min');
-                        $edit_time_hours_max    = $request->input($edit_tempalte_real_id[$i].'_edit_time_hours_max');
-                        for ($j = 0; $j < count($edit_time_hours_min); $j++) {
-                            $arr['open_time']           = $edit_time_hours_min[$j];
-                            $arr['close_time']          = $edit_time_hours_max[$j];
-                            $edit_template_final_custom_time[]   = $arr;
+            if ($request->input('holiday_status') == 'exceptional_holiday' && $request->input('exception_days') == "yes") {
+                if($request->input('exception_daystemplateselect')!=$request->input('exeActualdataforselectedTemplateId'))
+                {
+                    DirectoryExceptionHoliday::where('directory_id', $id)->delete();
+                }
+                $sele_ids = $request->input('exception_template_id');
+                $ids = ($sele_ids!="")?$sele_ids:($ids=array());
+                if(count($ids)){
+                    foreach($ids as $val) {
+                        $time_hours_min = $request->input($val.'_exc_time_hours_min');
+                        $time_hours_max = $request->input($val.'_exc_time_hours_max');
+                        $final_custom_time = [];
+                        if (count($time_hours_min)) {
+                            for ($j = 0; $j < count($time_hours_min); $j++) {
+                                $arr['open_time'] = $time_hours_min[$j];
+                                $arr['close_time'] = $time_hours_max[$j];
+                                $final_custom_time[] = $arr;
+                            }
                         }
-                        DirectoryExceptionHoliday::where('id', $edit_tempalte_real_id[$i])
-                        ->update([
-                            'custom_date'       => $edit_template_custom_date[$i],
-                            'note'              => $edit_template_note[$i],
-                            'custom_time'       => json_encode($edit_template_final_custom_time),
-                        ]);
+                        $final_custom_time = json_encode($final_custom_time);
+                        $dirctexception_holiday = new DirectoryExceptionHoliday;
+                        $dirctexception_holiday->directory_id = $id;
+                        $dirctexception_holiday->custom_date = $request->input($val.'_exception_date');
+                        $dirctexception_holiday->closed = $request->input($val.'_exception_closed')??'No';
+                        $dirctexception_holiday->day = $request->input($val.'_exception_day');
+                        $dirctexception_holiday->note = $request->input($val.'_exception_note');
+                        $dirctexception_holiday->custom_time = $final_custom_time;
+                        $dirctexception_holiday->save();
                     }
-            }
-        }
+                }
+                if ($request->input('editDataTemplateexception') == "one") {
+                    $edit_tempalte_real_id           = $request->input('template_real_id');
+                    $edit_template_custom_date       = $request->input('edit_template_custom_date');
+                    $edit_template_note              = $request->input('edit_template_note');
 
-        //DirectoryCustomHoliday::where('directory_id', $id)->delete();
-        if ($request->input('holiday_status') == 'public_holiday' && $request->input('publicdays') == "no") {
-            if($request->input('publicdays')!=$request->input('actualdataforyesno') )
-            DirectoryCustomHoliday::where('directory_id', $id)->delete();
-            if ($request->input('editDataPublic') == "one") {
-                $edit_tempalte_real_id           = $request->input('public_real_id');
-                $edit_template_custom_date       = $request->input('edit_public_custom_date');
-                $edit_template_note              = $request->input('edit_public_note');
-                $edit_template_day               = $request->input('edit_day');
-                $edit_template_closed            = $request->input('template_holiday_is_closed');
-
-                    for ($i = 0; $i < count($edit_template_custom_date); $i++) {
-
-                        $edit_template_final_custom_time = [];
-                        $edit_time_hours_min    = $request->input($edit_tempalte_real_id[$i].'_edit_public_notemplate_time_hours_min');
-                        $edit_time_hours_max    = $request->input($edit_tempalte_real_id[$i].'_edit_public_notemplate_time_hours_max');
-                        for ($j = 0; $j < count($edit_time_hours_min); $j++) {
-                            $arr['open_time']           = $edit_time_hours_min[$j];
-                            $arr['close_time']          = $edit_time_hours_max[$j];
-                            $edit_template_final_custom_time[]   = $arr;
+                        for ($i = 0; $i < count($edit_template_custom_date); $i++) {
+                            $edit_template_final_custom_time = [];
+                            $edit_time_hours_min    = $request->input($edit_tempalte_real_id[$i].'_edit_time_hours_min');
+                            $edit_time_hours_max    = $request->input($edit_tempalte_real_id[$i].'_edit_time_hours_max');
+                            for ($j = 0; $j < count($edit_time_hours_min); $j++) {
+                                $arr['open_time']           = $edit_time_hours_min[$j];
+                                $arr['close_time']          = $edit_time_hours_max[$j];
+                                $edit_template_final_custom_time[]   = $arr;
+                            }
+                            DirectoryExceptionHoliday::where('id', $edit_tempalte_real_id[$i])
+                            ->update([
+                                'custom_date'       => $edit_template_custom_date[$i],
+                                'note'              => $edit_template_note[$i],
+                                'custom_time'       => json_encode($edit_template_final_custom_time),
+                            ]);
                         }
-                        DirectoryCustomHoliday::where('id', $edit_tempalte_real_id[$i])
-                        ->update([
-                            'custom_date'       => $edit_template_custom_date[$i],
-                            'closed'            => $edit_template_closed[$i]??'No',
-                            'note'              => $edit_template_note[$i],
-                            'day'               => $edit_template_day[$i],
-                            'custom_time'       => json_encode($edit_template_final_custom_time),
-                        ]);
-                    }
-            }
-            if ($request->input('custom_date') != "") {
-                $custom_date                    = $request->input('custom_date');
-                $note                           = $request->input('note');
-                $add_template_day               = $request->input('day');
-                $add_template_closed            = $request->input('closed');
-                $time_hours_min                 = $request->input('time_hours_min');
-                $time_hours_max                 = $request->input('time_hours_max');
-                $final_custom_time = [];
-                if (count($time_hours_min)) {
-                    for ($i = 0; $i < count($time_hours_min); $i++) {
-                        $arr['open_time'] = $time_hours_min[$i];
-                        $arr['close_time'] = $time_hours_max[$i];
-                        $final_custom_time[] = $arr;
-                    }
-                }
-                $final_custom_time = json_encode($final_custom_time);
-                $dirctcustom_holiday = new DirectoryCustomHoliday;
-                $dirctcustom_holiday->directory_id = $id;
-                $dirctcustom_holiday->custom_date = $custom_date;
-                $dirctcustom_holiday->day = $add_template_day;
-                $dirctcustom_holiday->note = $note;
-                $dirctcustom_holiday->closed = $add_template_closed;
-                $dirctcustom_holiday->custom_time = $final_custom_time;
-                $dirctcustom_holiday->save();
-            }
-        }
-
-        if ($request->input('holiday_status') == 'public_holiday' && $request->input('publicdays') == "yes") {
-
-            if ($request->input('editDataTemplatepublic') != "one") {
-                if($publicdaystemplateselect != $request->input('actualdataforselectedTemplateId')){
-                    //dd(1);
-                    DirectoryCustomHoliday::where('directory_id', $id)->delete();
                 }
             }
-            $sele_ids = $request->input('template_id');
-            $ids = ($sele_ids!="")?$sele_ids:($ids=array());
-            if(count($ids)){
-                foreach($ids as $val) {
-                    $time_hours_min = $request->input($val.'_temp_time_hours_min');
-                    $time_hours_max = $request->input($val.'_temp_time_hours_max');
+
+            //DirectoryCustomHoliday::where('directory_id', $id)->delete();
+            if ($request->input('holiday_status') == 'public_holiday' && $request->input('publicdays') == "no") {
+                if($request->input('publicdays')!=$request->input('actualdataforyesno') )
+                DirectoryCustomHoliday::where('directory_id', $id)->delete();
+                if ($request->input('editDataPublic') == "one") {
+                    $edit_tempalte_real_id           = $request->input('public_real_id');
+                    $edit_template_custom_date       = $request->input('edit_public_custom_date');
+                    $edit_template_note              = $request->input('edit_public_note');
+                    $edit_template_day               = $request->input('edit_day');
+                    $edit_template_closed            = $request->input('template_holiday_is_closed');
+
+                        for ($i = 0; $i < count($edit_template_custom_date); $i++) {
+
+                            $edit_template_final_custom_time = [];
+                            $edit_time_hours_min    = $request->input($edit_tempalte_real_id[$i].'_edit_public_notemplate_time_hours_min');
+                            $edit_time_hours_max    = $request->input($edit_tempalte_real_id[$i].'_edit_public_notemplate_time_hours_max');
+                            for ($j = 0; $j < count($edit_time_hours_min); $j++) {
+                                $arr['open_time']           = $edit_time_hours_min[$j];
+                                $arr['close_time']          = $edit_time_hours_max[$j];
+                                $edit_template_final_custom_time[]   = $arr;
+                            }
+                            DirectoryCustomHoliday::where('id', $edit_tempalte_real_id[$i])
+                            ->update([
+                                'custom_date'       => $edit_template_custom_date[$i],
+                                'closed'            => $edit_template_closed[$i]??'No',
+                                'note'              => $edit_template_note[$i],
+                                'day'               => $edit_template_day[$i],
+                                'custom_time'       => json_encode($edit_template_final_custom_time),
+                            ]);
+                        }
+                }
+                if ($request->input('custom_date') != "") {
+                    $custom_date                    = $request->input('custom_date');
+                    $note                           = $request->input('note');
+                    $add_template_day               = $request->input('day');
+                    $add_template_closed            = $request->input('closed');
+                    $time_hours_min                 = $request->input('time_hours_min');
+                    $time_hours_max                 = $request->input('time_hours_max');
                     $final_custom_time = [];
-                    if (is_array($time_hours_min) && count($time_hours_min) > 0) {
-                    //if (count($time_hours_min)) {
-                        for ($j = 0; $j < count($time_hours_min); $j++) {
-                            $arr['open_time'] = $time_hours_min[$j];
-                            $arr['close_time'] = $time_hours_max[$j];
+                    if (count($time_hours_min)) {
+                        for ($i = 0; $i < count($time_hours_min); $i++) {
+                            $arr['open_time'] = $time_hours_min[$i];
+                            $arr['close_time'] = $time_hours_max[$i];
                             $final_custom_time[] = $arr;
                         }
                     }
                     $final_custom_time = json_encode($final_custom_time);
                     $dirctcustom_holiday = new DirectoryCustomHoliday;
                     $dirctcustom_holiday->directory_id = $id;
-                    $dirctcustom_holiday->custom_date = $request->input($val.'_custom_date');
-                    $dirctcustom_holiday->closed = $request->input($val.'_temp_holiday_closed');
-                    $dirctcustom_holiday->note = $request->input($val.'_note');
-                    $dirctcustom_holiday->day = $request->input($val.'_day');
+                    $dirctcustom_holiday->custom_date = $custom_date;
+                    $dirctcustom_holiday->day = $add_template_day;
+                    $dirctcustom_holiday->note = $note;
+                    $dirctcustom_holiday->closed = $add_template_closed;
                     $dirctcustom_holiday->custom_time = $final_custom_time;
                     $dirctcustom_holiday->save();
                 }
             }
 
-            if ($request->input('editDataTemplatepublic') == "one") {
-                $edit_tempalte_real_id           = $request->input('public_template_real_id');
-                $edit_template_custom_date       = $request->input('edit_public_template_custom_date');
-                $edit_template_note              = $request->input('edit_public_template_note');
-                $edit_template_day               = $request->input('edit_day');
-                $edit_template_holiday_is_closed = $request->input('template_holiday_is_closed');
+            if ($request->input('holiday_status') == 'public_holiday' && $request->input('publicdays') == "yes") {
 
-                    for ($i = 0; $i < count($edit_template_custom_date); $i++) {
-
-                        $edit_template_final_custom_time = [];
-                        $edit_time_hours_min    = $request->input($edit_tempalte_real_id[$i].'_edit_public_time_hours_min');
-                        $edit_time_hours_max    = $request->input($edit_tempalte_real_id[$i].'_edit_public_time_hours_max');
-                        for ($j = 0; $j < count($edit_time_hours_min); $j++) {
-                            $arr['open_time']           = $edit_time_hours_min[$j];
-                            $arr['close_time']          = $edit_time_hours_max[$j];
-                            $edit_template_final_custom_time[]   = $arr;
-                        }
-                        //dd($edit_template_day[$i]);
-                        DirectoryCustomHoliday::where('id', $edit_tempalte_real_id[$i])
-                        ->update([
-                            'custom_date'       => $edit_template_custom_date[$i],
-                            'note'              => $edit_template_note[$i],
-                            'day'               => $edit_template_day[$i],
-                            'custom_time'       => json_encode($edit_template_final_custom_time),
-                            'closed'            => $edit_template_holiday_is_closed[$i]??'No',
-                        ]);
+                if ($request->input('editDataTemplatepublic') != "one") {
+                    if($publicdaystemplateselect != $request->input('actualdataforselectedTemplateId')){
+                        //dd(1);
+                        DirectoryCustomHoliday::where('directory_id', $id)->delete();
                     }
-            }
-        }
-        /* END SCHEDUAL ENTRIES */
-    }
+                }
+                $sele_ids = $request->input('template_id');
+                $ids = ($sele_ids!="")?$sele_ids:($ids=array());
+                if(count($ids)){
+                    foreach($ids as $val) {
+                        $time_hours_min = $request->input($val.'_temp_time_hours_min');
+                        $time_hours_max = $request->input($val.'_temp_time_hours_max');
+                        $final_custom_time = [];
+                        if (is_array($time_hours_min) && count($time_hours_min) > 0) {
+                        //if (count($time_hours_min)) {
+                            for ($j = 0; $j < count($time_hours_min); $j++) {
+                                $arr['open_time'] = $time_hours_min[$j];
+                                $arr['close_time'] = $time_hours_max[$j];
+                                $final_custom_time[] = $arr;
+                            }
+                        }
+                        $final_custom_time = json_encode($final_custom_time);
+                        $dirctcustom_holiday = new DirectoryCustomHoliday;
+                        $dirctcustom_holiday->directory_id = $id;
+                        $dirctcustom_holiday->custom_date = $request->input($val.'_custom_date');
+                        $dirctcustom_holiday->closed = $request->input($val.'_temp_holiday_closed');
+                        $dirctcustom_holiday->note = $request->input($val.'_note');
+                        $dirctcustom_holiday->day = $request->input($val.'_day');
+                        $dirctcustom_holiday->custom_time = $final_custom_time;
+                        $dirctcustom_holiday->save();
+                    }
+                }
 
+                if ($request->input('editDataTemplatepublic') == "one") {
+                    $edit_tempalte_real_id           = $request->input('public_template_real_id');
+                    $edit_template_custom_date       = $request->input('edit_public_template_custom_date');
+                    $edit_template_note              = $request->input('edit_public_template_note');
+                    $edit_template_day               = $request->input('edit_day');
+                    $edit_template_holiday_is_closed = $request->input('template_holiday_is_closed');
 
-        /* Contact Entries start */
-        DirectoryContact::where('directory_id', $id)
-            ->update([
-                'name'          => $request->input('name'),
-                'website'       => $request->input('website'),
-                'email'         => $request->input('email'),
-                'phone'         => $request->input('phone_number'),
-                'facebook'      => $request->input('facebook'),
-                'twitter'       => $request->input('twitter'),
-                'linkedin'      => $request->input('linkedin'),
-                'pinterest'     => $request->input('pinterest'),
-                'whatsapp'      => $request->input('whatsapp'),
-                'instagram'     => $request->input('instagram'),
-                'tiktok'        => $request->input('tiktok'),
-                'youtube'       => $request->input('youtube'),
-                'snapchat'      => $request->input('snapchat')
-            ]);
-        Websitelinks::where('directory_id', $id)->delete();
-        $website_number_count = $request->input('website_count') ? $request->input('website_count') : 1;
-        $firstrow = $request->input("website_name_1");
-        $j = 1;
-        for ($i = 1; $i <= $website_number_count; $i++) {
-            $websitelink = new Websitelinks;
-            $websitelink->directory_id    =   $id;
-            $websitelink->name            =   $request->input("website_name_" . $j);
-            $websitelink->link            =   $request->input("website_link_" . $j);
-            $websitelink->save();
-            $j++;
-        }
-        Assortmentlinks::where('directory_id', $id)->delete();
-        $assortment_number_count = $request->input('assort_count') ? $request->input('assort_count') : 1;
-        $firstrowass = $request->input("assortment_name_1");
-        for ($i = 1; $i <= $assortment_number_count; $i++) {
-            if ($firstrowass) {
-                $assortmentlink = new Assortmentlinks;
-                $assortmentlink->directory_id    =   $id;
-                $assortmentlink->name            =   $request->input("assortment_name_" . $i);
-                $assortmentlink->link            =   $request->input("assortment_link_" . $i);
-                $assortmentlink->save();
+                        for ($i = 0; $i < count($edit_template_custom_date); $i++) {
+
+                            $edit_template_final_custom_time = [];
+                            $edit_time_hours_min    = $request->input($edit_tempalte_real_id[$i].'_edit_public_time_hours_min');
+                            $edit_time_hours_max    = $request->input($edit_tempalte_real_id[$i].'_edit_public_time_hours_max');
+                            for ($j = 0; $j < count($edit_time_hours_min); $j++) {
+                                $arr['open_time']           = $edit_time_hours_min[$j];
+                                $arr['close_time']          = $edit_time_hours_max[$j];
+                                $edit_template_final_custom_time[]   = $arr;
+                            }
+                            //dd($edit_template_day[$i]);
+                            DirectoryCustomHoliday::where('id', $edit_tempalte_real_id[$i])
+                            ->update([
+                                'custom_date'       => $edit_template_custom_date[$i],
+                                'note'              => $edit_template_note[$i],
+                                'day'               => $edit_template_day[$i],
+                                'custom_time'       => json_encode($edit_template_final_custom_time),
+                                'closed'            => $edit_template_holiday_is_closed[$i]??'No',
+                            ]);
+                        }
+                }
             }
+            /* END SCHEDUAL ENTRIES */
         }
-        /* Contact Entries end */
+
+        if ($activeTab === 'links') {
+            /* Contact Entries start */
+            DirectoryContact::where('directory_id', $id)
+                ->update([
+                    'name'          => $request->input('name'),
+                    'website'       => $request->input('website'),
+                    'email'         => $request->input('email'),
+                    'phone'         => $request->input('phone_number'),
+                    'facebook'      => $request->input('facebook'),
+                    'twitter'       => $request->input('twitter'),
+                    'linkedin'      => $request->input('linkedin'),
+                    'pinterest'     => $request->input('pinterest'),
+                    'whatsapp'      => $request->input('whatsapp'),
+                    'instagram'     => $request->input('instagram'),
+                    'tiktok'        => $request->input('tiktok'),
+                    'youtube'       => $request->input('youtube'),
+                    'snapchat'      => $request->input('snapchat')
+                ]);
+            Websitelinks::where('directory_id', $id)->delete();
+            $website_number_count = $request->input('website_count') ? $request->input('website_count') : 1;
+            $firstrow = $request->input("website_name_1");
+            $j = 1;
+            for ($i = 1; $i <= $website_number_count; $i++) {
+                $websitelink = new Websitelinks;
+                $websitelink->directory_id    =   $id;
+                $websitelink->name            =   $request->input("website_name_" . $j);
+                $websitelink->link            =   $request->input("website_link_" . $j);
+                $websitelink->save();
+                $j++;
+            }
+            Assortmentlinks::where('directory_id', $id)->delete();
+            $assortment_number_count = $request->input('assort_count') ? $request->input('assort_count') : 1;
+            $firstrowass = $request->input("assortment_name_1");
+            for ($i = 1; $i <= $assortment_number_count; $i++) {
+                if ($firstrowass) {
+                    $assortmentlink = new Assortmentlinks;
+                    $assortmentlink->directory_id    =   $id;
+                    $assortmentlink->name            =   $request->input("assortment_name_" . $i);
+                    $assortmentlink->link            =   $request->input("assortment_link_" . $i);
+                    $assortmentlink->save();
+                }
+            }
+            /* Contact Entries end */
+        }
+
         /* ------- Claim Entries  START -----*/
             if($request->input("claim_subject")!=''){
                 $ClaimInsert = new Claim();
@@ -3837,147 +3846,179 @@ class CompanyController extends Controller
             }
         /* ------- Claim Entries  END -----*/
 
-        /* TYPE ENTRIES START */
-        $catid = $request->input('hotel_type');
-        if ($catid != "") {
+        if ($activeTab === 'type') {
+            /* TYPE ENTRIES START */
+            $catid = $request->input('hotel_type');
+            if ($catid != "") {
 
-            $coulnmname = $this->gettypeCoulmnName($catid);
-            if ($request->input('selected_cat_id') != $catid) {
-                $insertedBlockCount = "novalue";
-            } else {
-                $insertedBlockCount = $request->input('block_number_from_database') ? $request->input('block_number_from_database') : "";
-            }
-            $newBlockCount = $request->input('block_number') ? $request->input('block_number') : 0;
+                $coulnmname = $this->gettypeCoulmnName($catid);
+                if ($request->input('selected_cat_id') != $catid) {
+                    $insertedBlockCount = "novalue";
+                } else {
+                    $insertedBlockCount = $request->input('block_number_from_database') ? $request->input('block_number_from_database') : "";
+                }
+                $newBlockCount = $request->input('block_number') ? $request->input('block_number') : 0;
 
-            if ($request->input('selected_cat_id') == $catid) {
+                if ($request->input('selected_cat_id') == $catid) {
 
-                $countDirectoryTypeGallery = DirectoryTypeGallery::where('directory_id', $id)->where('block_num', $newBlockCount)->where('category_id', $catid)->count();
-                $gallery_image_available = 'gallery_image';
-                        $gallery_imgfile = $request->file($gallery_image_available);
-                        if (is_array($gallery_imgfile)) {
+                    $countDirectoryTypeGallery = DirectoryTypeGallery::where('directory_id', $id)->where('block_num', $newBlockCount)->where('category_id', $catid)->count();
+                    $gallery_image_available = 'gallery_image';
+                            $gallery_imgfile = $request->file($gallery_image_available);
+                            if (is_array($gallery_imgfile)) {
 
-                            foreach ($gallery_imgfile as $key => $gallery_imgfile2){
-                                $position_key = $countDirectoryTypeGallery+1;
-                                foreach ($gallery_imgfile2 as  $imgfile) {
-                                    if($imgfile){
-                                        $ext = $imgfile->getClientOriginalExtension();
-                                        $name2 = $imgfile->getClientOriginalName();
-                                        $imageName2 = time() . $name2;
-                                        $imageName = Helper::getSeoUrl($imageName2);
-                                        $image_resize = Image::make($imgfile->getRealPath());
-                                        $image_resize->save(public_path('files/directorytypeimage/' .$imageName.'.'.$ext));
+                                foreach ($gallery_imgfile as $key => $gallery_imgfile2){
+                                    $position_key = $countDirectoryTypeGallery+1;
+                                    foreach ($gallery_imgfile2 as  $imgfile) {
+                                        if($imgfile){
+                                            $ext = $imgfile->getClientOriginalExtension();
+                                            $name2 = $imgfile->getClientOriginalName();
+                                            $imageName2 = time() . $name2;
+                                            $imageName = Helper::getSeoUrl($imageName2);
+                                            $image_resize = Image::make($imgfile->getRealPath());
+                                            $image_resize->save(public_path('files/directorytypeimage/' .$imageName.'.'.$ext));
 
-                                        $dirtTypegallery = new DirectoryTypeGallery;
-                                        $dirtTypegallery->directory_id = $id;
-                                        $dirtTypegallery->category_id = $catid;
-                                        $dirtTypegallery->image_name = $imageName.'.'.$ext;
-                                        $dirtTypegallery->block_num = $key;
-                                        $dirtTypegallery->position = $position_key++;
-                                        $dirtTypegallery->save(); // Save the image details to the database
-                                    }
-
-                                }
-                            }
-                        }
-
-                $countDirectoryTypePdfs = DirectoryTypePdfs::where('directory_id', $id)->where('block_num', $newBlockCount)->where('category_id', $catid)->count();
-                $gallery_pdf_available = 'gallery_type_pdf';
-                        $gallery_pdf_file = $request->file($gallery_pdf_available);
-                        if (is_array($gallery_pdf_file)) {
-                            foreach ($gallery_pdf_file as $key => $gallery_pdf_file2){
-                                $position_key = $countDirectoryTypePdfs+1;
-                                foreach ($gallery_pdf_file2 as  $pdf_file) {
-                                    if($pdf_file){
-                                        $ext = $pdf_file->getClientOriginalExtension();
-                                        if ($ext === 'pdf') {
-                                            $name2 = $pdf_file->getClientOriginalName();
-                                            $pdfName = time().'_'.$name2;
-                                            $pdf_file->move(public_path('files/directorytypeimage/'), $pdfName);
-
-                                            $dirtTypegallery = new DirectoryTypePdfs;
+                                            $dirtTypegallery = new DirectoryTypeGallery;
                                             $dirtTypegallery->directory_id = $id;
                                             $dirtTypegallery->category_id = $catid;
-                                            $dirtTypegallery->pdf_name = $pdfName;
+                                            $dirtTypegallery->image_name = $imageName.'.'.$ext;
                                             $dirtTypegallery->block_num = $key;
                                             $dirtTypegallery->position = $position_key++;
                                             $dirtTypegallery->save(); // Save the image details to the database
                                         }
+
                                     }
                                 }
                             }
+
+                    $countDirectoryTypePdfs = DirectoryTypePdfs::where('directory_id', $id)->where('block_num', $newBlockCount)->where('category_id', $catid)->count();
+                    $gallery_pdf_available = 'gallery_type_pdf';
+                            $gallery_pdf_file = $request->file($gallery_pdf_available);
+                            if (is_array($gallery_pdf_file)) {
+                                foreach ($gallery_pdf_file as $key => $gallery_pdf_file2){
+                                    $position_key = $countDirectoryTypePdfs+1;
+                                    foreach ($gallery_pdf_file2 as  $pdf_file) {
+                                        if($pdf_file){
+                                            $ext = $pdf_file->getClientOriginalExtension();
+                                            if ($ext === 'pdf') {
+                                                $name2 = $pdf_file->getClientOriginalName();
+                                                $pdfName = time().'_'.$name2;
+                                                $pdf_file->move(public_path('files/directorytypeimage/'), $pdfName);
+
+                                                $dirtTypegallery = new DirectoryTypePdfs;
+                                                $dirtTypegallery->directory_id = $id;
+                                                $dirtTypegallery->category_id = $catid;
+                                                $dirtTypegallery->pdf_name = $pdfName;
+                                                $dirtTypegallery->block_num = $key;
+                                                $dirtTypegallery->position = $position_key++;
+                                                $dirtTypegallery->save(); // Save the image details to the database
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+
+                    for ($i = 0; $i <= $insertedBlockCount; $i++) {
+                        foreach ($coulnmname as $rowdata) {
+
+                            $imageavailable = 'image_'.$i;
+                            if($request->hasFile($imageavailable)){
+                                $imgfile        = $request->file($imageavailable);
+                                $ext            = $imgfile->getClientOriginalExtension();
+                                $name2          = $imgfile->getClientOriginalName();
+                                $imageName2     = time() . $name2;
+                                $imageName      = Helper::getSeoUrl($imageName2);
+                                $image_resize   = Image::make($imgfile->getRealPath());
+                                $image_resize->save(public_path('files/directorytypeimage/' .$imageName));
+                                DirectoryType::where('directory_id', $id)->where('category_id', $catid)->where('block_num', $i)
+                                ->update(['image_name' => $imageName]);
+                            }
+
+
+                            // try {
+                            //     $galleryTypePdfInputName = 'gallery_type_pdf_' . $i;
+                            //     if ($request->hasFile($galleryTypePdfInputName)) {
+                            //         $file = $request->file($galleryTypePdfInputName);
+                            //         $ext = $file->getClientOriginalExtension();
+
+                            //         if ($ext === 'pdf') {
+                            //             $name2 = $file->getClientOriginalName();
+                            //             $fileName = time().'_'.$name2;
+                            //             //$fileName = Helper::getSeoUrl($fileName);
+                            //             $file->move(public_path('files/directorytypeimage/'), $fileName);
+
+                            //             DirectoryType::where('directory_id', $id)
+                            //                 ->where('category_id', $catid)
+                            //                 ->where('block_num', $i)
+                            //                 ->update(['pdf_doc' => $fileName]);
+                            //         } else {
+                            //             $name2 = $file->getClientOriginalName();
+                            //             $imageName2 = time() . $name2;
+                            //             $imageName = Helper::getSeoUrl($imageName2);
+                            //             $image_resize = Image::make($file->getRealPath());
+                            //             $image_resize->save(public_path('files/directorytypeimage/' . $imageName));
+
+                            //             DirectoryType::where('directory_id', $id)
+                            //                 ->where('category_id', $catid)
+                            //                 ->where('block_num', $i)
+                            //                 ->update(['pdf_doc' => $imageName]);
+                            //         }
+                            //     }
+                            // } catch (Exception $e) {
+
+                            // }
+
+
+                            DirectoryType::where('directory_id', $id)->where('column_name', $rowdata->name)->where('block_num', $i)
+                                ->update([
+                                    'category_id'       => $request->input('hotel_type'),
+                                    'column_name'       => $rowdata->name,
+                                    'column_value'      => $request->input($rowdata->name . "_" . $i),
+                                    'label'             => $rowdata->label,
+                                    'block_num'         => $i
+                                ]);
                         }
-
-                for ($i = 0; $i <= $insertedBlockCount; $i++) {
-                    foreach ($coulnmname as $rowdata) {
-
-                        $imageavailable = 'image_'.$i;
-                        if($request->hasFile($imageavailable)){
-                            $imgfile        = $request->file($imageavailable);
-                            $ext            = $imgfile->getClientOriginalExtension();
-                            $name2          = $imgfile->getClientOriginalName();
-                            $imageName2     = time() . $name2;
-                            $imageName      = Helper::getSeoUrl($imageName2);
-                            $image_resize   = Image::make($imgfile->getRealPath());
-                            $image_resize->save(public_path('files/directorytypeimage/' .$imageName));
-                            DirectoryType::where('directory_id', $id)->where('category_id', $catid)->where('block_num', $i)
-                            ->update(['image_name' => $imageName]);
-                        }
-
-
-                        // try {
-                        //     $galleryTypePdfInputName = 'gallery_type_pdf_' . $i;
-                        //     if ($request->hasFile($galleryTypePdfInputName)) {
-                        //         $file = $request->file($galleryTypePdfInputName);
-                        //         $ext = $file->getClientOriginalExtension();
-
-                        //         if ($ext === 'pdf') {
-                        //             $name2 = $file->getClientOriginalName();
-                        //             $fileName = time().'_'.$name2;
-                        //             //$fileName = Helper::getSeoUrl($fileName);
-                        //             $file->move(public_path('files/directorytypeimage/'), $fileName);
-
-                        //             DirectoryType::where('directory_id', $id)
-                        //                 ->where('category_id', $catid)
-                        //                 ->where('block_num', $i)
-                        //                 ->update(['pdf_doc' => $fileName]);
-                        //         } else {
-                        //             $name2 = $file->getClientOriginalName();
-                        //             $imageName2 = time() . $name2;
-                        //             $imageName = Helper::getSeoUrl($imageName2);
-                        //             $image_resize = Image::make($file->getRealPath());
-                        //             $image_resize->save(public_path('files/directorytypeimage/' . $imageName));
-
-                        //             DirectoryType::where('directory_id', $id)
-                        //                 ->where('category_id', $catid)
-                        //                 ->where('block_num', $i)
-                        //                 ->update(['pdf_doc' => $imageName]);
-                        //         }
-                        //     }
-                        // } catch (Exception $e) {
-
-                        // }
-
-
-                        DirectoryType::where('directory_id', $id)->where('column_name', $rowdata->name)->where('block_num', $i)
-                            ->update([
-                                'category_id'       => $request->input('hotel_type'),
-                                'column_name'       => $rowdata->name,
-                                'column_value'      => $request->input($rowdata->name . "_" . $i),
-                                'label'             => $rowdata->label,
-                                'block_num'         => $i
-                            ]);
                     }
                 }
-            }
 
-            if ($insertedBlockCount < $newBlockCount || $insertedBlockCount == "novalue") {
+                if ($insertedBlockCount < $newBlockCount || $insertedBlockCount == "novalue") {
 
-                if ($insertedBlockCount != "novalue") {
-                    for ($i = (int)$insertedBlockCount + 1; $i <= $newBlockCount; $i++) {
-                        foreach ($coulnmname as $rowdatanew) {
+                    if ($insertedBlockCount != "novalue") {
+                        for ($i = (int)$insertedBlockCount + 1; $i <= $newBlockCount; $i++) {
+                            foreach ($coulnmname as $rowdatanew) {
 
-                            $imgfile    = $request->file('image_'.$i);
-                            if ($imgfile) {
+                                $imgfile    = $request->file('image_'.$i);
+                                if ($imgfile) {
+                                    $ext        = $imgfile->getClientOriginalExtension();
+                                    $name2      = $imgfile->getClientOriginalName();
+                                    $imageName2 = time() . $name2;
+                                    $imageName  = Helper::getSeoUrl($imageName2);
+                                    $imagepath  = 'files/directorytypeimage/' . $imageName;
+                                    $image_resize = Image::make($imgfile->getRealPath());
+                                    $image_resize->save(public_path('files/directorytypeimage/' .$imageName));
+
+                                    $dirctType = new DirectoryType;
+                                    $dirctType->directory_id    =   $id;
+                                    $dirctType->category_id     =   $request->input('hotel_type');
+                                    $dirctType->input_type      =   $rowdatanew->type;
+                                    $dirctType->column_name     =   $rowdatanew->name;
+                                    $dirctType->column_value    =   $request->input($rowdatanew->name . "_" . $i);
+                                    $dirctType->label           =   $rowdatanew->label;
+                                    $dirctType->block_num       =   $i;
+                                    $dirctType->image_name      =   $imageName;
+                                    $dirctType->save();
+                                }
+
+
+                            }
+                        }
+                    } else {
+                        if ($request->input('selected_cat_id') != $catid) {
+                            DirectoryType::where('directory_id', $id)->where('category_id', $request->input('selected_cat_id'))->delete();
+                        }
+                        for ($i = 0; $i <= $newBlockCount; $i++) {
+                            foreach ($coulnmname as $rowdatanew) {
+
+                                $imgfile    = $request->file('image_'.$i);
                                 $ext        = $imgfile->getClientOriginalExtension();
                                 $name2      = $imgfile->getClientOriginalName();
                                 $imageName2 = time() . $name2;
@@ -3986,57 +4027,25 @@ class CompanyController extends Controller
                                 $image_resize = Image::make($imgfile->getRealPath());
                                 $image_resize->save(public_path('files/directorytypeimage/' .$imageName));
 
-                                $dirctType = new DirectoryType;
-                                $dirctType->directory_id    =   $id;
-                                $dirctType->category_id     =   $request->input('hotel_type');
-                                $dirctType->input_type      =   $rowdatanew->type;
-                                $dirctType->column_name     =   $rowdatanew->name;
-                                $dirctType->column_value    =   $request->input($rowdatanew->name . "_" . $i);
-                                $dirctType->label           =   $rowdatanew->label;
-                                $dirctType->block_num       =   $i;
-                                $dirctType->image_name      =   $imageName;
-                                $dirctType->save();
+                                $dirctType1 = new DirectoryType;
+                                $dirctType1->directory_id       =   $id;
+                                $dirctType1->category_id        =   $request->input('hotel_type');
+                                $dirctType1->input_type         =   $rowdatanew->type;
+                                $dirctType1->column_name        =   $rowdatanew->name;
+                                $dirctType1->column_value       =   $request->input($rowdatanew->name . "_" . $i);
+                                $dirctType1->label              =   $rowdatanew->label;
+                                $dirctType1->block_num          =   $i;
+                                $dirctType1->image_name         =   $imageName;
+                                $dirctType1->save();
                             }
-
-
-                        }
-                    }
-                } else {
-                    if ($request->input('selected_cat_id') != $catid) {
-                        DirectoryType::where('directory_id', $id)->where('category_id', $request->input('selected_cat_id'))->delete();
-                    }
-                    for ($i = 0; $i <= $newBlockCount; $i++) {
-                        foreach ($coulnmname as $rowdatanew) {
-
-                            $imgfile    = $request->file('image_'.$i);
-                            $ext        = $imgfile->getClientOriginalExtension();
-                            $name2      = $imgfile->getClientOriginalName();
-                            $imageName2 = time() . $name2;
-                            $imageName  = Helper::getSeoUrl($imageName2);
-                            $imagepath  = 'files/directorytypeimage/' . $imageName;
-                            $image_resize = Image::make($imgfile->getRealPath());
-                            $image_resize->save(public_path('files/directorytypeimage/' .$imageName));
-
-                            $dirctType1 = new DirectoryType;
-                            $dirctType1->directory_id       =   $id;
-                            $dirctType1->category_id        =   $request->input('hotel_type');
-                            $dirctType1->input_type         =   $rowdatanew->type;
-                            $dirctType1->column_name        =   $rowdatanew->name;
-                            $dirctType1->column_value       =   $request->input($rowdatanew->name . "_" . $i);
-                            $dirctType1->label              =   $rowdatanew->label;
-                            $dirctType1->block_num          =   $i;
-                            $dirctType1->image_name         =   $imageName;
-                            $dirctType1->save();
                         }
                     }
                 }
+
             }
-
+            /* TYPE ENTRIES END */
         }
-        /* TYPE ENTRIES END */
 
-
-        $activeTab = strtolower($activeTab);
         return redirect('company-information?target=' . $activeTab)->with('msg', "Company's Information Updated");
     }
 

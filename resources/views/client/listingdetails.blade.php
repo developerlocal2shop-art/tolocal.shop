@@ -944,11 +944,13 @@
     @if($data['mainDirectoryDetails']->directoryLanguage[0]->description)
         <div class="container-fluid print_mobile" style="display: none;">
             <div class="weoffer_comman listing-print-banner" >
-                <div class="listing-print-banner__copy listing-print-banner__copy--mobile">
+                <div class="listing-print-banner__copy listing-print-banner__copy--mobile" style="color: {{ preg_match('/^#[0-9a-fA-F]{6}$/', $data['mainDirectoryDetails']->description_text_color ?? '') ? $data['mainDirectoryDetails']->description_text_color : 'inherit' }};">
                     {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
                 </div>
                 @if(\Illuminate\Support\Str::length($data['mainDirectoryDetails']->directoryLanguage[0]->description ?? '') > 180)
-                    <button type="button" class="listing-print-banner__toggle" aria-expanded="false">See more</button>
+                    <button type="button" class="listing-print-banner__toggle" aria-expanded="false" style="color: {{ preg_match('/^#[0-9a-fA-F]{6}$/', $data['mainDirectoryDetails']->description_text_color ?? '') ? $data['mainDirectoryDetails']->description_text_color : 'inherit' }};">
+                        See more
+                    </button>
                 @endif
 
 
@@ -1110,7 +1112,7 @@
 
                 @if($data['mainDirectoryDetails']->directoryLanguage[0]->description)
                     <div class="weoffer_comman listing-print-banner print_desktop">
-                        <div class="listing-print-banner__copy">
+                        <div class="listing-print-banner__copy" style="color: {{ preg_match('/^#[0-9a-fA-F]{6}$/', $data['mainDirectoryDetails']->description_text_color ?? '') ? $data['mainDirectoryDetails']->description_text_color : 'inherit' }};">
                             {{ \Illuminate\Support\Str::words($data['mainDirectoryDetails']->directoryLanguage[0]->description, 70, '.') }}
                         </div>
                         <div class="listing-print-banner__cta">

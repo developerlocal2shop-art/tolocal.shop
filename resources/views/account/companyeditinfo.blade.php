@@ -59,6 +59,10 @@ $instruction = $data['instruction'];
 }
 @endphp
 <style>
+    div#dirtype input.typecat {
+        left: -11px;
+        top: 5px;
+    }
     div#directory_tabscon {
         min-height: 500px !important;
     }
@@ -535,7 +539,7 @@ $instruction = $data['instruction'];
 
                                         <div class="row">
 
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
                                                 <div class="form-group mb-4">
                                                     <label class="col-md-12 p-0">Description Button Text</label>
                                                     <div class="col-md-12 border-bottom p-0">
@@ -544,7 +548,16 @@ $instruction = $data['instruction'];
                                                     <span class="text-danger">@error('discription_button_text'){{$message}} @enderror</span>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
+                                            <div class="col-md-4">
+                                                <div class="form-group mb-4">
+                                                    <label class="col-md-12 p-0">Description Text Color</label>
+                                                    <div class="col-md-12 border-bottom p-0">
+                                                        <input type="color" name="description_text_color" value="{{ old('description_text_color', $basicData->description_text_color ?? '#000000') }}" class="form-control input-lg">
+                                                    </div>
+                                                    <span class="text-danger">@error('description_text_color'){{$message}} @enderror</span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
                                                 <div class="form-group mb-4">
                                                     <label class="col-md-12 p-0">Description Button Link</label>
                                                     <div class="col-md-12 border-bottom p-0">
@@ -1233,7 +1246,6 @@ $instruction = $data['instruction'];
                                                     </select>
                                                 </div>
                                             </div>
-
 
                                             <div class="form-group mb-4">
                                                 <label class="col-md-12 p-0">Sub Category (Package limit - {{ $getsubCategoryValue }})</label>
@@ -2770,9 +2782,8 @@ $instruction = $data['instruction'];
                                             </div>
                                         </div>
                                         <hr/>
+
                                         <?php if($data['directory_claim_count']>0){ ?>
-
-
                                                 <?php foreach($data['directory_claim'] as $value){ ?>
                                                     <div class="claim-data-result">
                                                         <p><strong>Subject</strong></p>
@@ -2781,11 +2792,7 @@ $instruction = $data['instruction'];
                                                         <p>{{ $value->description }}</p>
                                                     </div>
                                                 <?php } ?>
-
-
-
                                         <?php } ?>
-
 
                                         @if ($user->hasPermission('update') == true)
                                         <button type="submit" id="listsubmit-claim-final" class="btn btn-info listsubmit">Save Changes</button>
@@ -4995,6 +5002,8 @@ $instruction = $data['instruction'];
     }
 
     function submitForm() {
+        var activeTab = $('#directory_tabs > li > a.active').attr('href');
+        $('#active-tab').val(activeTab ? activeTab.replace(/^#/, '') : '');
 
         var image_thumb_arr_exist = [];
         var image_thumb_arr_new = [];
