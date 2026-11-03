@@ -458,6 +458,111 @@
     </div>
 </div>
 
+<div class="modal fade listing-local-search-modal" id="listing-local-search" tabindex="-1" role="dialog" aria-labelledby="listing-local-search-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div>
+                    <h5 class="modal-title" id="listing-local-search-title">Search locally</h5>
+                    <p class="listing-local-search-modal__description">Find MORE local shopping to relax.</p>
+                </div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                <div class="listing-menu-container">
+
+                    @if(count($data['related_tags']) > 0)
+                    <section class="listing-menu-section" aria-labelledby="listing-menu-title">
+                        <div class="add_bottom_15 listing-menu-categories">
+                            <div class="listing-menu-heading">
+                                <div>
+                                    <h2 id="listing-menu-title"> <span>Browse categories</span></h2>
+                                </div>
+                            </div>
+
+                            <div id="company_imp_tags_div">
+                                @if(count($data['imp_ptags']) > 0)
+                                    @foreach ($data['imp_ptags'] as $key => $tagval)
+                                        <span class="listing-menu-tag notranslate">
+                                            <a href="{{ url('listings-product/'.$data['mainDirectoryDetails']->slug.'?tags='.$key??'') }}" target="_blank" rel="noopener noreferrer" class="company_imp_tags2">
+                                                {{ $tagval }}
+                                            </a>
+                                            @if(auth()->check())
+                                                @if(auth()->user()->directory_id == $data['mainDirectoryDetails']->id)
+                                                    <i class="fa fa-times tag_delete" data-impid="{{ $key }}" style="cursor:pointer;"></i>
+                                                @endif
+                                            @endif
+                                        </span>
+                                    @endforeach
+                                @endif
+                                @if(count($data['imp_ptags']) > 0)
+                                    @if(auth()->check())
+                                        @if(auth()->user()->directory_id == $data['mainDirectoryDetails']->id)
+                                            <button type="button" id="btn_defaulttags" class="listing-menu-toggle">
+                                                <span>See More</span><i class="fas fa-chevron-down" aria-hidden="true"></i>
+                                            </button>
+                                        @endif
+                                    @endif
+                                @endif
+                            </div>
+
+                            <div class="defaulttags listing-menu-tags" style="{{ count($data['imp_ptags']) > 0 ? 'display: none;' : '' }}">
+                                <?php
+                                foreach($data['related_tags'] as $tagkey => $tagstitle){
+                                ?>
+                                <span class="listing-menu-tag notranslate">
+                                    <a target="_blank" rel="noopener noreferrer" class="company_imp_tags" data-companyid="{{ $data['mainDirectoryDetails']->id }}" data-id="{{ $tagkey??'' }}" data-title="{{ $tagstitle??'' }}">
+                                        {{ $tagstitle??'' }}
+                                    </a>
+                                </span>
+                                <?php } ?>
+                            </div>
+                        </div>
+
+                        <form action="{{ route('directory.product',request()->id) }}" method="GET">
+                            <div class="custom-search-input-2 inner listing-menu-search">
+                                <label class="listing-menu-search__field">
+                                    <span class="sr-only">{{ __('message.header_search_text') }}</span>
+                                    <span class="listing-menu-search__icon" aria-hidden="true">
+                                        <svg viewBox="0 0 24 24" focusable="false">
+                                            <circle cx="11" cy="11" r="7"></circle>
+                                            <path d="m16 16 5 5"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="form-group">
+                                        <input class="form-control" name="search_string" id="search_string" type="text" value="" placeholder="{{__("message.header_search_text")}}">
+                                        <i class="fa fa-microphone" style="color: #fe0536;" aria-hidden="true" id="start-recording"></i>
+                                    </span>
+                                </label>
+                                <button type="submit" class="listing-menu-search__submit" aria-label="{{ __('message.header_search_text_search_btn') }}">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                        <circle cx="11" cy="11" r="7"></circle>
+                                        <path d="m16 16 5 5"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </form>
+                    </section>
+                    @endif
+                </div>
+
+                {{-- <form action="{{ route('listing') }}" method="GET" class="listing-local-search-form">
+                    <label for="listing-local-search-query">What are you looking for?</label>
+                    <div class="listing-local-search-form__control">
+                        <input type="search" class="form-control" id="listing-local-search-query" name="search_string" placeholder="{{ __('message.header_search_text') }}" required>
+                        <button type="submit" class="listing-local-search-form__submit">
+                            <span>Search</span>
+                        </button>
+                    </div>
+                </form> --}}
+            </div>
+        </div>
+    </div>
+</div>
+
 <main>
     <?php if(!empty($data['directory_media_cover'])){ ?>
         <div id="listing_banner" class="owl-carousel owl-theme">
@@ -972,19 +1077,59 @@
     @endif
 
     <script>
-        document.querySelectorAll('.listing-print-banner__toggle').forEach(function (toggle) {
-            toggle.addEventListener('click', function () {
-                var copy = toggle.previousElementSibling;
-                var isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+        document.addEventListener('click', function (event) {
+            var toggle = event.target.closest('.listing-print-banner__toggle');
+            if (!toggle) {
+                return;
+            }
 
-                copy.classList.toggle('is-expanded', !isExpanded);
-                toggle.setAttribute('aria-expanded', String(!isExpanded));
-                toggle.textContent = isExpanded ? 'See more' : 'See less';
-            });
+            var copy = toggle.previousElementSibling;
+            var isExpanded = toggle.getAttribute('aria-expanded') === 'true';
+
+            copy.classList.toggle('is-expanded', !isExpanded);
+            toggle.setAttribute('aria-expanded', String(!isExpanded));
+            toggle.textContent = isExpanded ? 'See more' : 'See less';
         });
     </script>
+    <style>
+        .listing-print-banner__copy:not(.is-expanded) {
+            max-height: 5.9em;
+            overflow: hidden;
+        }
 
-    <div class="container listing-menu-container">
+        .listing-print-banner__copy.is-expanded {
+            max-height: none;
+        }
+
+        .des_seemore {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 10px;
+            padding: 7px 14px;
+            border: 1px solid #d5dce5;
+            border-radius: 999px;
+            background: #fff;
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.4;
+            cursor: pointer;
+            transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .des_seemore:hover {
+            background: #f5f7fa;
+            border-color: #b8c2cf;
+            box-shadow: 0 2px 6px rgba(16, 24, 40, 0.08);
+        }
+
+        .des_seemore:focus-visible {
+            outline: 3px solid rgba(49, 104, 173, 0.25);
+            outline-offset: 2px;
+        }
+    </style>
+
+    {{-- <div class="container listing-menu-container">
 
         @if(count($data['related_tags']) > 0)
         <section class="listing-menu-section" aria-labelledby="listing-menu-title">
@@ -1059,7 +1204,7 @@
             </form>
         </section>
         @endif
-    </div>
+    </div> --}}
 
     <div class="container-fluid row">
 
@@ -1113,8 +1258,13 @@
                 @if($data['mainDirectoryDetails']->directoryLanguage[0]->description)
                     <div class="weoffer_comman listing-print-banner print_desktop">
                         <div class="listing-print-banner__copy" style="color: {{ preg_match('/^#[0-9a-fA-F]{6}$/', $data['mainDirectoryDetails']->description_text_color ?? '') ? $data['mainDirectoryDetails']->description_text_color : 'inherit' }};">
-                            {{ \Illuminate\Support\Str::words($data['mainDirectoryDetails']->directoryLanguage[0]->description, 70, '.') }}
+                            {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
                         </div>
+                        @if(\Illuminate\Support\Str::length($data['mainDirectoryDetails']->directoryLanguage[0]->description ?? '') > 180)
+                            <button type="button" class="listing-print-banner__toggle des_seemore" aria-expanded="false" >
+                                See more
+                            </button>
+                        @endif
                         <div class="listing-print-banner__cta">
 
                             @if($data['mainDirectoryDetails']->description_button_link)
@@ -1897,7 +2047,7 @@
                                 </div>
 
                                 {{-- <div role="button" data-toggle="collapse" href="#collapse_dd-{{ $positionvaluedata->block_num }}" aria-expanded="true" aria-controls="collapse-1"> --}}
-                                    <div id="listing-type-collapse-<?php echo $positionvaluedata->block_num; ?>" class="collapse <?php if($positionvaluedata->block_num == 0){ ?>show<?php } ?> row" aria-labelledby="listing-type-heading-<?php echo $positionvaluedata->block_num; ?>" data-parent=".listing-type-accordion">
+                                    <div id="listing-type-collapse-<?php echo $positionvaluedata->block_num; ?>" class="collapse <?php if($positionvaluedata->block_num == 0){ ?>show<?php } ?> row mobile_type" aria-labelledby="listing-type-heading-<?php echo $positionvaluedata->block_num; ?>" data-parent=".listing-type-accordion">
                                     <div class="col-md-4">
                                         <?php if($data['directoryTypeimage'][$positionvaluedata->block_num]->image_name!=""){ ?>
                                             <img src="{{ env('IMAGE_PATH').'files/directorytypeimage/'.$data['directoryTypeimage'][$positionvaluedata->block_num]->image_name }}" class="img-fluid" alt="">

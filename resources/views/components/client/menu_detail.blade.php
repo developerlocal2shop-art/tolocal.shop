@@ -233,6 +233,12 @@
     <div class="listing-local-promo">
         <p class="listing-local-promo__text">Find MORE local shopping and relaxation HERE:</p>
         <img src="{{ asset('assets/client/images/company_detail_logo.jpg') }}" alt="Other Local" class="company_details_logo_img">
+        <button type="button" class="listing-local-search-trigger" data-toggle="modal" data-target="#listing-local-search" aria-label="Search local listings" title="Search local listings">
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                <circle cx="11" cy="11" r="7"></circle>
+                <path d="m16 16 5 5"></path>
+            </svg>
+        </button>
         @if (!empty($mainDirectoryD->company_logo))@else
         <h2 class="notranslate logo_normal_center mobile company_title_mobile">
             {{ $mainDirectoryD->title }}
