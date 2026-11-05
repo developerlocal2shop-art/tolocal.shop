@@ -11,9 +11,14 @@ class ClientmenuListingDetail extends Component
 {
     
     public $mainDirectoryDetails;
-    public function __construct($mainDirectoryDetails)
+    public $bookingListingData;
+    public $bookingUserData;
+
+    public function __construct($mainDirectoryDetails, $bookingListingData = [], $bookingUserData = null)
     {
         $this->mainDirectoryDetails = $mainDirectoryDetails;
+        $this->bookingListingData = $bookingListingData;
+        $this->bookingUserData = $bookingUserData;
     }
     public function render()
     {

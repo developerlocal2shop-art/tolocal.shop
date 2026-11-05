@@ -39,7 +39,11 @@
             <div class="listing-detail-page-content">
                 <!-- Header -->
                 <header class="header mm-slideout menu_fixed container-fluid listing-detail-header header_in" style="background-color: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};">
-                    <x-ClientmenuListingDetail :mainDirectoryDetails="$data['mainDirectoryDetails']" />
+                    <x-ClientmenuListingDetail
+                        :mainDirectoryDetails="$data['mainDirectoryDetails']"
+                        :bookingListingData="$data"
+                        :bookingUserData="isset($userData) ? $userData : data_get($data, 'mainDirectoryDetails.user')"
+                    />
                 </header>
                 @yield('content')
             </div>

@@ -380,6 +380,8 @@ class Pages extends Controller
     public function getCities(Request $request)
     {
         if (!$request['search'] == '') {
+            $latitude1 = session('latitude') ?? '57.107118';
+            $longitude1 = session('logitude') ?? '12.252091';
 
             if (session('latitude') == null) {
                 $userIP = getenv('REMOTE_ADDR');
@@ -388,7 +390,7 @@ class Pages extends Controller
                     if ($userIP == '127.0.0.1' || $userIP == 'localhost') {
                         $latitude1 = '28.6542';
                         $longitude1 = '77.2373';
-                    } else {
+                    } elseif (isset($counrtyDetails['lat'], $counrtyDetails['lon'])) {
                         $latitude1       =       $counrtyDetails['lat'];
                         $longitude1      =       $counrtyDetails['lon'];
                     }
@@ -443,8 +445,15 @@ class Pages extends Controller
         $city_name = $request->input('city_name');
         $getCountryByCityName = Helper::getCountryByCityName($city_name);
 
+        $latitude = $request->session()->get('latitude_city')
+            ?? $request->session()->get('latitude')
+            ?? '57.107118';
+        $longitude = $request->session()->get('logitude_city')
+            ?? $request->session()->get('logitude')
+            ?? '12.252091';
+
         $getLatLog = $this->get_lat_long($city_name);
-        if ($getLatLog) {
+        if (isset($getLatLog[0], $getLatLog[1])) {
             $latitude       =       $getLatLog[0];
             $longitude      =       $getLatLog[1];
         }
@@ -472,7 +481,11 @@ class Pages extends Controller
     {
         try {
             $address = str_replace(" ", "+", $address);
-            $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?key=AIzaSyBxzKYI3QrSnkPY08S8-KpvlI5QqjOLNhU&address=$address&sensor=false&region=$address");
+            $json = file_get_contents(
+                        "https://maps.googleapis.com/maps/api/geocode/json?key=" .
+                        env('GOOGLE_MAP_API_KEY') .
+                        "&address=" . urlencode($address)
+                    );
             $json = json_decode($json);
             $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
             $long = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lng'};

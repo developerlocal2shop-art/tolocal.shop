@@ -77,7 +77,7 @@ class Listing extends Controller
     function get_lat_long($address){
         try{
             $address = str_replace(" ", "+", $address);
-            $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?key=AIzaSyBxzKYI3QrSnkPY08S8-KpvlI5QqjOLNhU&address=$address&sensor=false&region=$address");
+            $json = file_get_contents("https://maps.google.com/maps/api/geocode/json?key=" . env('GOOGLE_MAP_API_KEY') . "&address=$address&sensor=false&region=$address");
             $json = json_decode($json);
             //dd($json);
             $lat = $json->{'results'}[0]->{'geometry'}->{'location'}->{'lat'};
@@ -1157,7 +1157,7 @@ class Listing extends Controller
         $data['galleryImageChunk']          = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->limit(20)->get()->chunk(10);
         $data['allgalleryImageChunk']       = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->get()->chunk(10);
 
-        $data['directory_media_cover']      = DB::table('directory_media_cover')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['directory_media_cover']      = DB::table('directory_media_cover')->where('directory_id', $id)->orderby('position', 'asc')->get();
         $data['amenity']                    = Helper::getAmenity();                 /* get amenity */
         $data['amenityData']                = DB::table('directory_amenities')->select('*')->where('directory_id', $id)->get()->toArray();
         $data['directoryTypeimage']         = DB::table('directory_type')->select('*')->where('directory_id',  $id)->groupBy('block_num')->get()->toArray();

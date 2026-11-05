@@ -257,17 +257,26 @@ $(document).ready(function() {
         $('#type_galleryModal').modal('hide');
     });
 
-    $('#booking_date').datetimepicker({
+    $(document).on('mousedown.bookingDatePicker', function(event) {
+        if ($(event.target).closest('.contact_us_header, .xdsoft_datetimepicker').length === 0) {
+            $('.main-menu li.booking-date-picker-open').removeClass('booking-date-picker-open');
+        }
+    });
+
+    $('.booking-date-input').datetimepicker({
         // format:'yy-m-d h:m:s',
         minDate: 0,
         format: 'Y-m-d H:m:s',
+        onShow: function(currentTime, input) {
+            var contactMenu = input.closest('.contact_us_header');
+            if (contactMenu.length) {
+                contactMenu.closest('li.user').addClass('booking-date-picker-open');
+            }
+        },
     });
 
     $(document).on('click', '.submitbtn', function(e) {
         e.preventDefault();
-
-        $(document).find('.required').removeClass('is-invalid');
-        $(document).find('.invalid-feedback').remove();
 
         var obj = $(this);
         let requestTxt = $(this).attr('process-text');
@@ -275,6 +284,10 @@ $(document).ready(function() {
         var oldhtml = $(this).html();
 
         var form = $(this).closest("form");
+        form.find('.required').removeClass('is-invalid');
+        form.find('.invalid-feedback').remove();
+
+        var responseMessage = form.find('.respondata');
         var url = form.attr('action');
         var method = form.attr('method');
         var loader = `<span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span><span class="">${requestTxt}...</span>`;
@@ -313,20 +326,20 @@ $(document).ready(function() {
                     });
 
                     if (typeof(response.message) != "undefined") {
-                        $('.respondata').html('<p style="margin: 13px 0px 0px;color: red;font-weight: 500;">' + response.message + '</p>');
+                        responseMessage.html('<p style="margin: 13px 0px 0px;color: red;font-weight: 500;">' + response.message + '</p>').show();
 
                         window.setTimeout(function() {
-                            $('.respondata').hide();
+                            responseMessage.hide();
                         }, 5000);
                     }
 
                 } else {
                     if (typeof(response.message) != "undefined") {
                         console.log(response.message);
-                        $("#bookingform")[0].reset();
-                        $('.respondata').html('<p style="margin: 13px 0px 0px;color: green;font-weight: 500;">' + response.message + '</p>');
+                        form[0].reset();
+                        responseMessage.html('<p style="margin: 13px 0px 0px;color: green;font-weight: 500;">' + response.message + '</p>').show();
                         window.setTimeout(function() {
-                            $('.respondata').hide();
+                            responseMessage.hide();
                         }, 5000);
 
 

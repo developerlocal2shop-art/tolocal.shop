@@ -533,7 +533,7 @@
                                         </svg>
                                     </span>
                                     <span class="form-group">
-                                        <input class="form-control" name="search_string" id="search_string" type="text" value="" placeholder="{{__("message.header_search_text")}}">
+                                        <input class="form-control" name="search_string" id="search_string" type="text" value="" placeholder="Search OUR products, ENA">
                                         <i class="fa fa-microphone" style="color: #fe0536;" aria-hidden="true" id="start-recording"></i>
                                     </span>
                                 </label>
@@ -924,12 +924,16 @@
             @endif
         </div> --}}
 
-        <span class="listing-contact-item">
-            <span class="headercontact"><button id="down-to-contact" class="btn btn-success btn-sm btn-block">Contact Us</button></span>
-        </span>
+        {{-- <span class="listing-contact-item">
+            <span class="headercontact">
+                <button id="down-to-contact" class="btn btn-success btn-sm btn-block">
+                    Contact Us
+                </button>
+            </span>
+        </span> --}}
 
         <div class="col-md-12 listing-social-row">
-
+            <hr>
             <div class="left_side_breadcrumb new_social_data">
 
                 <?php
@@ -1046,8 +1050,16 @@
         </div>
     </div>
 
+    @php
+        $listingContactEmail = $data['contactData'][0]->email
+            ?? $data['mainDirectoryDetails']->email
+            ?? $data['mainDirectoryDetails']->user->email
+            ?? $data['default_email']
+            ?? '';
+    @endphp
+
     @if($data['mainDirectoryDetails']->directoryLanguage[0]->description)
-        <div class="container-fluid print_mobile" style="display: none;">
+        {{-- <div class="container-fluid print_mobile" style="display: none;">
             <div class="weoffer_comman listing-print-banner" >
                 <div class="listing-print-banner__copy listing-print-banner__copy--mobile" style="color: {{ preg_match('/^#[0-9a-fA-F]{6}$/', $data['mainDirectoryDetails']->description_text_color ?? '') ? $data['mainDirectoryDetails']->description_text_color : 'inherit' }};">
                     {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
@@ -1065,15 +1077,13 @@
                             {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
                         </a>
                     @else
-                        <a href="mailto:{{ $data['default_email'] ?? '' }}" id="down-to-contact" class="listing-print-banner__btn">
+                        <a href="mailto:{{ $listingContactEmail }}" id="down-to-contact" class="listing-print-banner__btn">
                              {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
                         </a>
                     @endif
-
-                    {{-- <div class="listing-print-banner__text">Special text only - with Link Button to change text in Possible to set colour.</div> --}}
                 </div>
             </div>
-        </div>
+        </div> --}}
     @endif
 
     <script>
@@ -1092,6 +1102,25 @@
         });
     </script>
     <style>
+        .xdsoft_datetimepicker {
+            z-index: 10002;
+        }
+
+        .main-menu ul li.booking-date-picker-open > ul.contact_us_header {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            transform: scale(1) !important;
+            right: 0;
+            left: auto;
+            width: min(360px, calc(100vw - 24px));
+            max-height: 80vh;
+            overflow-y: auto;
+            margin-left: 0 !important;
+            background: #fff;
+            z-index: 10001;
+        }
+
         .listing-print-banner__copy:not(.is-expanded) {
             max-height: 5.9em;
             overflow: hidden;
@@ -1209,7 +1238,13 @@
     <div class="container-fluid row">
 
         <?php if(!empty($data['galleryImageChunk'])){ ?>
+
             <div class="container-fluid company_gallery">
+                <div class="listing_see_all">
+                    @if(count($data['galleryImage']) > 1)
+                        <div class="see_all" data-toggle="modal" data-target="#allgalleryimages_model">See All</div>
+                    @endif
+                </div>
                 <div id="sploffer" class="owl-carousel owl-theme listing_gllary_img gallimageslength">
                     <?php foreach($data['galleryImageChunk'] as $rowgalleryres){
                         foreach($rowgalleryres as $rowgallery){
@@ -1241,13 +1276,7 @@
                 </div>
             </div>
         <?php } ?>
-        <div class="col-md-12">
-            <div class="listing_see_all">
-                @if(count($data['galleryImage']) > 1)
-                    <div class="see_all" data-toggle="modal" data-target="#allgalleryimages_model">See All</div>
-                @endif
-            </div>
-        </div>
+
     </div>
 
     <div class="container" id="listing-detail-main-content">
@@ -1272,7 +1301,7 @@
                                      {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
                                 </a>
                             @else
-                                <a href="mailto:{{ $data['default_email'] ?? '' }}" id="down-to-contact" class="listing-print-banner__btn">
+                                <a href="mailto:{{ $listingContactEmail }}" id="down-to-contact" class="listing-print-banner__btn">
                                      {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
                                 </a>
                             @endif
@@ -1302,7 +1331,7 @@
                 <?php } ?>
             </div>
 
-            <div class="col-lg-8">
+            <div class="col-lg-9">
                 <section id="description">
 
                     <?php if(!empty($data['offerData'])){ ?>
@@ -1945,15 +1974,7 @@
                         <?php /* --------------------- END EXTRA TIME AND COMMENT UPCOMING HOLIDAY DETAILS -------------------------*/ ?>
                     </div>
 
-                    <hr id="locationmap">
-                    <!-- <h3>{{__("message.location")}}</h3> -->
-                    <div id="map" class="map-full map-layout single-listing-map" style="z-index: 50;">
-                        <a class="mobile_direction_a btn-block "  target="_blank" href="https://www.google.com/maps/dir//<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>/@<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>,16z" style="margin: -35px 10px; display:none;">
-                            <img  class="direction" src="{{ url('/') }}/assets/client/images/direction.jpg" width="10%" alt="">
-                        </a>
-                        <iframe data-consent-category="functional" data-consent-src="https://maps.google.com/maps?q=<?php echo e($data['address'][0]->latitude); ?>,<?php echo e($data['address'][0]->longitude); ?>&amp;hl=es;z=14&amp;output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-                    </div>
-                    <!-- End Map -->
+                    {{-- Map section --}}
 
                     <?php if(!empty($data['assortment_links'])){ ?>
                         <hr>
@@ -2162,7 +2183,9 @@
                 <!-- /section -->
             </div>
 
-            <!-- Contact Form Base On Package-->
+            <aside class="col-lg-3 " id="sidebar">
+
+                <!-- Contact Form Base On Package-->
                 <?php
                     $notActivateForm = 0;
                     $validPhone = $data['mainDirectoryDetails']->user->is_verified ?? "blank";
@@ -2173,14 +2196,25 @@
                         $notActivateForm = 1;
                     }
                 ?>
-            <aside class="col-lg-4 " id="sidebar">
+
+                <form id="bookingform" class="contact-us-form" action="{{ route('appointment.booking') }}" method="post"  >
+                <hr id="locationmap">
+                <!-- <h3>{{__("message.location")}}</h3> -->
+                <div id="map" class="map-full map-layout single-listing-map" style="z-index: 50;">
+                    <a class="mobile_direction_a btn-block "  target="_blank" href="https://www.google.com/maps/dir//<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>/@<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>,16z" style="margin: -35px 10px; display:none;">
+                        <img  class="direction" src="{{ url('/') }}/assets/client/images/direction.jpg" width="10%" alt="">
+                    </a>
+                    <iframe data-consent-category="functional" data-consent-src="https://maps.google.com/maps?q=<?php echo e($data['address'][0]->latitude); ?>,<?php echo e($data['address'][0]->longitude); ?>&amp;hl=es;z=14&amp;output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+                </form>
+                <!-- End Map -->
 
                 <?php if($notActivateForm==0){ ?>
-                <div class="notactivate">
-                    <div class="overlay-content">Not Activated</div>
+                {{-- <div class="notactivate"> --}}
+                    {{-- <div class="overlay-content">Not Activated</div> --}}
                 <?php } ?>
 
-                    <div class="box_detail booking listing-contact-card">
+                    {{-- <div class="box_detail booking listing-contact-card">
                         @if(session()->get('status'))
                         <div class="alert alert-success">
                             {{ session()->get('status') }}
@@ -2212,12 +2246,6 @@
                             <input type="hidden" name="slug" value="clarance-hotel">
                             <input type="hidden" name="type" value="booking">
                             <input type="hidden" name="bookingComment" value="">
-                            {{-- <div class="price">
-                                 <span class="contact">
-                                    {{__("message.contact_us_title")}}
-                                </span>
-                                <div class="score"><span>Awesome<em>2 Reviews</em></span><strong>5.0</strong></div>
-                            </div> --}}
 
                             <div class="form-group" id="input-dates">
                                 <input type="hidden" name="directory_id" id="directory_ids" value="{{ $data['mainDirectoryDetails']->id }}">
@@ -2233,7 +2261,7 @@
                             </div>
                             <?php if(isset($userData->visibility_booking_date_time) && $userData->visibility_booking_date_time==1){ ?>
                                 <div class="form-group">
-                                    <input class="form-control required" title="Select date and time for the desired booking" type="text" name="booking_date" id="booking_date" required="" placeholder="Select date and time for the desired booking">
+                                    <input class="form-control required booking-date-input" title="Select date and time for the desired booking" type="text" name="booking_date" id="booking_date" required="" placeholder="Select date and time for the desired booking">
                                 </div>
                             <?php } ?>
                             <div class="form-group">
@@ -2269,11 +2297,12 @@
 
                         <a style="display:none;" href="javascript:" onclick="addToWishList('6')" class="btn_1 full-width outline wishlist" id="btn-wishlist"><i class="fa fa-heart" aria-hidden="true"></i> Add to wishlist</a>
                         <div class="text-center"><small>{{__("message.contact_us_form_text")}}</small></div>
-                    </div>
+                    </div> --}}
 
                 <?php if($notActivateForm==0){ ?>
-                </div>
+                {{-- </div> --}}
                 <?php } ?>
+
                 <ul class="share-buttons">
                     <li>
                         <?php
@@ -2291,25 +2320,10 @@
                 <hr>
                     <div class="row mb-3" >
                         <div class="col-12  listing-social-btn">
-                            <!-- <h5 class="mb-3">{{__("message.agent_details")}}</h5> -->
-                            <?php /* ?>
-                                    <div class="row mb-1">
-                                        <div class="col-md-12">
-                                            <a href="javascript:void(0)">
-                                                <img src="{{ asset('assets/client/images/user.png') }}" alt="" class="float-left mr-3" width="80">
-                                            </a>
-
-                                            <p class="m-0 pt-3"><a href="javascript:void(0)" class="">{{ isset($contactData[0]->name)?$contactData[0]->name:'' }}</a></p>
-                                            <p><small>{{__("message.listing_count")}}</small></p>
-                                        </div>
-                                    </div>
-                            <?php */ ?>
                             <a href="{{ isset($contactData[0]->website)?$contactData[0]->website:'' }}" target="blank" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-globe" aria-hidden="true"></i>
                                 {{__("message.website_contactdata")}}
                             </a>
-
                             @if($data['frontend_setting']->hide_show_vendor_contact == 'yes')
-
                             <a href="mailto:{{ isset($contactData[0]->email)?$contactData[0]->email:'' }}" target="" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-envelope" aria-hidden="true"></i>
                                 {{__("message.email_us_contactdata")}}
                             </a>
@@ -2329,7 +2343,9 @@
                             <?php }else{ if($phoneActivateorNot!=1){ ?>
                                     <a href="javascript:void(0);" target="" style="pointer-events: none;cursor: default;background-color:#b5b9b7;" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>Call </a>
                                 <?php }else{ ?>
-                                    <a href="javascript:void(0);" target="" class="btn_1 full-width outline wishlist social-button" style="width: 158px !important;" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>Call at - {{ isset($contactData[0]->phone)?$contactData[0]->phone:'' }}</a>
+                                    <a href="javascript:void(0);" target="" class="btn_1 full-width outline wishlist social-button" style="width: 158px !important;" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>
+                                        Call at - {{ isset($contactData[0]->phone)?$contactData[0]->phone:'' }}
+                                    </a>
                             <?php } }?>
                             @endif
 
@@ -2341,7 +2357,7 @@
                 if($user==1){
                     if($data['mainDirectoryDetails']->id==Auth::user()->directory_id){
                 ?>
-                    <form action="{{ route('company.booking.indexsearch') }}" method="get" class="">
+                <form action="{{ route('company.booking.indexsearch') }}" method="get" class="">
                     <div class="row">
                         <div class="col-md-5">
                             <h5 class="box-title">Booking List</h5>
@@ -2361,8 +2377,8 @@
                         </div>
 
                     </div>
-                    </form>
-                    <div class="table-wrapper">
+                </form>
+                <div class="table-wrapper">
                     <table class="table text-nowrap">
                             <thead>
                                 <tr>
@@ -2447,6 +2463,7 @@
                 </div>
                 <?php } } ?>
             </aside>
+
         </div>
         <!-- /row -->
     </div>
@@ -3833,6 +3850,29 @@
     background: rgba(255, 255, 255, 0.24);
     opacity: 1;
     transform: scale(1.06);
+}
+
+@media (min-width: 1700px) and (max-width: 2600px) {
+    #listing_banner,
+    .common_banner {
+        width: 100%;
+    }
+
+    #listing_banner .hero_in.shop_detail,
+    .common_banner .hero_in.shop_detail {
+        width: 100%;
+        height: 600px;
+        min-height: 600px;
+        max-height: 600px;
+    }
+
+    #listing_banner .hero_in.shop_detail > img,
+    .common_banner .hero_in.shop_detail > img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 }
 
 @media (max-width: 600px) {

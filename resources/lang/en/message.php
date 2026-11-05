@@ -22,7 +22,7 @@ return [
     'use'                                   =>  'Use',
 
     /*  ----------  HEADER SEARCH PAGE TEXT  ---------------------  */
-    'header_search_text'                    =>  'Search OUR products, ENA',
+    'header_search_text'                    =>  'What are you looking for...',
     'header_search_catogory_text'           =>  'All categories',
     'header_search_text_city'               =>  'Select City',
     'header_search_text_search_btn'         =>  'Search',

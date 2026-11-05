@@ -1,4 +1,5 @@
 
+
 <?php $cartdata = count(session()->get('cart', []));  ?>
     <a href="#menu" class="btn_mobile">
         <div class="hamburger hamburger--spin" id="hamburger">
@@ -88,7 +89,7 @@
             </li>
             <li class="company_detail_menu"><span><a class="notranslate" href="{{ route('blog') }}">{{ ucfirst(__("message.menu_text_blog"))}}</a></span></li>
             <li class="company_detail_menu"><span><a class="notranslate" href="{{ route('event') }}">{{ ucfirst(__("message.menu_text_event")) }}</a></span></li>
-            <li class="company_detail_menu"><span><a class="notranslate" href="{{ route('contact') }}">{{ ucfirst(__("message.menu_text_contact"))}}</a></span></li>
+
             @if(session()->has("is_lang"))
                 <li class="languageselectbox">
                     <b id="google_translate_element"></b>
@@ -171,11 +172,108 @@
             <li>
                 <span>
                     <a class="notranslate customer_club" style="cursor: pointer;" data-toggle="modal" data-target="#customer_club">
-                        {{ ucfirst(__("CUSTOMER CLUB"))}}
+                        {{ ucfirst(__("Customer Club"))}}
                     </a>
                 </span>
             </li>
             <?php } ?>
+
+            <li class="user">
+                <span>
+                    <a href="javascript:void();">
+                        <i class="fas fa-contact" aria-hidden="true"></i>
+                        {{ ucfirst(__("message.menu_text_contact"))}}
+                    </a>
+                </span>
+                <ul class="contact_us_header">
+                    <div class="box_detail booking listing-contact-card">
+                        @if(session()->get('status'))
+                            <div class="alert alert-success">
+                                {{ session()->get('status') }}
+                            </div><br />
+                        @endif
+                        <div class="listing-contact-intro">
+                            <span class="listing-contact-intro__icon" aria-hidden="true"><i class="fas fa-comments"></i></span>
+                            <div class="listing-contact-intro__copy">
+                                <h2>We're here to help</h2>
+                                <p>Send your question or booking request and the team will get back to you.</p>
+                            </div>
+                        </div>
+                        @if(!empty($bookingListingData['mainDirectoryDetails']))
+                            @php
+                                $headerBookingDirectory = $bookingListingData['mainDirectoryDetails'];
+                                $headerBookingVerification = data_get($headerBookingDirectory, 'user.is_verified') ?? 'blank';
+                                $headerBookingDisabled = in_array($headerBookingVerification, ['default', 'blank'], true);
+                                $headerBookingCategory = false;
+                                foreach (data_get($bookingListingData, 'categoriesData', []) as $headerBookingCategoryData) {
+                                    if (in_array(data_get($headerBookingCategoryData, 'slug'), ['accomendations', 'food-nightlife'], true)) {
+                                        $headerBookingCategory = true;
+                                        break;
+                                    }
+                                }
+                            @endphp
+                            <li class="contact-us-header-content {{ $headerBookingDisabled ? 'notactivate' : '' }}">
+                                @if($headerBookingDisabled)
+                                    <div class="overlay-content">Not Activated</div>
+                                @endif
+                                <form id="bookingform-header" class="contact-us-form" action="{{ route('appointment.booking') }}" method="post">
+                                    {{ csrf_field() }}
+
+                                    <input type="hidden" name="user_id" value="{{ data_get($headerBookingDirectory, 'user.id', 0) }}">
+                                    <input type="hidden" name="requester_id" value="">
+                                    <input type="hidden" name="listing_id" value="{{ data_get($headerBookingDirectory, 'id') }}">
+                                    <input type="hidden" name="listing_type" value="{{ data_get($headerBookingDirectory, 'feature_type') }}">
+                                    <input type="hidden" name="slug" value="clarance-hotel">
+                                    <input type="hidden" name="type" value="booking">
+                                    <input type="hidden" name="bookingComment" value="">
+                                    <input type="hidden" name="directory_id" value="{{ data_get($headerBookingDirectory, 'id') }}">
+
+                                    <div class="form-group">
+                                        <input class="form-control required" type="text" name="name" required placeholder="{{ __('message.placeholder_name_text') }}" autocomplete="off">
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control required" type="email" name="email" required placeholder="Enter e-mail address!">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-md-12 p-0"><b><u>Note:</u> No country code!</b></label>
+                                        <input class="form-control required" type="tel" name="booking_phone" required placeholder="Enter Valid Phone!">
+                                    </div>
+                                    @if(data_get($bookingUserData, 'visibility_booking_date_time') == 1)
+                                        <div class="form-group">
+                                            <input class="form-control required booking-date-input" title="Select date and time for the desired booking" type="text" name="booking_date" id="booking_date_header" required placeholder="Select date and time for the desired booking">
+                                        </div>
+                                    @endif
+                                    <div class="form-group">
+                                        <select class="form-control" name="service">
+                                            @foreach(data_get($bookingListingData, 'directory_services', []) as $headerBookingService)
+                                                @php $headerBookingServiceName = data_get($headerBookingService, 'name', ''); @endphp
+                                                <option value="{{ $headerBookingServiceName }}">{{ $headerBookingServiceName }}</option>
+                                            @endforeach
+                                            <option value="Contact us Content">Contact us Content</option>
+                                        </select>
+                                    </div>
+                                    @if($headerBookingCategory)
+                                        <div class="form-group">
+                                            <input class="form-control" type="number" name="adult" placeholder="{{ __('message.placeholder_no_of_adult') }}">
+                                        </div>
+                                        <div class="form-group">
+                                            <input class="form-control" type="number" name="child" placeholder="{{ __('message.placeholder_no_of_child') }}">
+                                        </div>
+                                    @endif
+                                    <div class="form-group">
+                                        <textarea rows="2" class="form-control" placeholder="{{ __('message.message_label_text') }}" name="message"></textarea>
+                                    </div>
+                                    <button type="submit" class="add_top_30 btn_1 full-width purchase submitbtn" {{ $headerBookingDisabled ? 'disabled' : '' }}>
+                                        {{ __('message.submit_button') }}
+                                    </button>
+                                    <span class="respondata" role="status" aria-live="polite"></span>
+                                </form>
+                                <div class="text-center"><small>{{__("message.contact_us_form_text")}}</small></div>
+                            </li>
+                        @endif
+                    </div>
+                </ul>
+            </li>
 
             <li class="user notification">
                 @if (Auth::check())
@@ -232,7 +330,7 @@
 
     <div class="listing-local-promo">
         <p class="listing-local-promo__text">Find MORE local shopping and relaxation HERE:</p>
-        <img src="{{ asset('assets/client/images/company_detail_logo.jpg') }}" alt="Other Local" class="company_details_logo_img">
+        <img src="{{ asset('assets/client/images/company_detail_logo.jpg') }}" alt="Other Local" class="company_details_logo_img hamburger hamburger--spin" id="hamburger">
         <button type="button" class="listing-local-search-trigger" data-toggle="modal" data-target="#listing-local-search" aria-label="Search local listings" title="Search local listings">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <circle cx="11" cy="11" r="7"></circle>

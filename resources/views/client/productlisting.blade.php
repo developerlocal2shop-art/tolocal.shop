@@ -39,6 +39,33 @@
 ?>
 </a>
 
+@if ($data['mainDirectoryDetails']->company_color)
+    <style>
+        .btn-custom { color: #fff; border-radius: 5px; font-weight: bold; background-color: {{ $data['mainDirectoryDetails']->company_color }};}
+
+        header.header_in .main-menu > ul > li span > a, header.sticky .main-menu > ul > li span > a{ color: #fff !important; }
+        span.locally_text { color: #fff !important; }
+        .goog-te-gadget-simple .VIpgJd-ZVi9od-xl07Ob-lTBxed span, b#google_translate_element div.goog-te-gadget-simple a.goog-te-menu-value:hover {  color: #000; }
+        .listing-contact-intro {
+            --listing-contact-accent: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
+        }
+        .listing-shopping-cards {
+            --shopping-card-accent: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
+        }
+        .weoffer_comman.listing-print-banner {
+            background: {{ $data['mainDirectoryDetails']->company_color ?: '#2ec1de' }};
+        }
+        .btn_1.full-width.purchase, a.btn_1.full-width.purchase {
+            background-color: {{ $data['mainDirectoryDetails']->company_color ?: '#2f4a7c' }};
+        }
+    </style>
+@else
+    <style>
+        .logo_city_name { margin: 16px 5px 14px 4px !important; color: #9d414a; }
+        .btn-custom { background-color: #2f4a7c; color: #fff; border-radius: 5px; font-weight: bold;}
+        .see_all { background-color: #2f4a7c; color: #fff; border: 1px solid #2f4a7c; }
+    </style>
+@endif
 
 <div class="sub_header_in filter_sub_blue_header sticky_header" id="shop_sub_header_bg" style="background: #f8f8f8;">
 	<div class="container-fluid" id="shop_sub_header">
@@ -504,7 +531,62 @@
 </div>
 <!-- /container  -->
 
+ <style>
+    .xdsoft_datetimepicker {
+        z-index: 10002;
+    }
 
+    .main-menu ul li.booking-date-picker-open > ul.contact_us_header {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        transform: scale(1) !important;
+        right: 0;
+        left: auto;
+        width: min(360px, calc(100vw - 24px));
+        max-height: 80vh;
+        overflow-y: auto;
+        margin-left: 0 !important;
+        background: #fff;
+        z-index: 10001;
+    }
+
+    .listing-print-banner__copy:not(.is-expanded) {
+        max-height: 5.9em;
+        overflow: hidden;
+    }
+
+    .listing-print-banner__copy.is-expanded {
+        max-height: none;
+    }
+
+    .des_seemore {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin: 10px;
+        padding: 7px 14px;
+        border: 1px solid #d5dce5;
+        border-radius: 999px;
+        background: #fff;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.4;
+        cursor: pointer;
+        transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .des_seemore:hover {
+        background: #f5f7fa;
+        border-color: #b8c2cf;
+        box-shadow: 0 2px 6px rgba(16, 24, 40, 0.08);
+    }
+
+    .des_seemore:focus-visible {
+        outline: 3px solid rgba(49, 104, 173, 0.25);
+        outline-offset: 2px;
+    }
+</style>
 <script type="text/javascript">
 
 function addToCompare(elem, id) {

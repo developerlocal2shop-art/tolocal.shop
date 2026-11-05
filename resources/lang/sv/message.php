@@ -22,7 +22,7 @@ return [
     'use'                                   =>  'Använda',
 
     /*  ----------  HEADER SEARCH PAGE TEXT  ---------------------  */
-    'header_search_text'                    =>  'Sök VÅRA produkter, ENA',
+    'header_search_text'                    =>  'Vad letar du efter...',
     'header_search_catogory_text'           =>  'Alla kategorier',
     'header_search_text_city'               =>  'Välj Stad',
     'header_search_text_search_btn'         =>  'Sök',
