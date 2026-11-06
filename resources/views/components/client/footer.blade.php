@@ -80,6 +80,7 @@ if(in_array("rydholms-dammodehus", $currenturl)){
                         <li><a href="{{ $data['socialfooterData']->instagram_link }}"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
                     </ul>
 
+
                 @php
                     $getCountry = Helper::userCityCountryName()['country'];
                     $getCity = Helper::userCityCountryName()['city'];
@@ -90,6 +91,10 @@ if(in_array("rydholms-dammodehus", $currenturl)){
                         {!! QrCode::size(70)->color(31, 56, 100)->generate(url('/').'?country='.$getCountry.'&city='.$getCity) !!}
                     </a>
                 </div>
+                <button type="button" class="footer-company-detail__install" id="install-mobile-app" aria-haspopup="dialog">
+                    <i class="fa fa-download" aria-hidden="true"></i>
+                    Download App
+                </button>
 
                 </div>
             </div>
@@ -110,6 +115,116 @@ if(in_array("rydholms-dammodehus", $currenturl)){
         </div>
     </div>
 </footer>
+<dialog class="footer-company-detail__install-dialog" id="install-mobile-app-help" aria-labelledby="install-mobile-app-title">
+    <div class="footer-company-detail__install-dialog-content">
+        <h2 id="install-mobile-app-title">Install ToLocal.shop</h2>
+        <p id="install-mobile-app-instructions"></p>
+        <button type="button" id="close-install-mobile-app-help">Got it</button>
+    </div>
+</dialog>
+<style>
+    .footer-company-detail__install {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 15px 0px;
+        padding: 5px 15px;
+        border: 0;
+        border-radius: 6px;
+        background: #2f4a7c;
+        color: #fff;
+        font: inherit;
+        cursor: pointer;
+    }
+
+    .footer-company-detail__install:hover,
+    .footer-company-detail__install:focus-visible {
+        background: #20365e;
+    }
+
+    .footer-company-detail__install-dialog {
+        width: min(90vw, 420px);
+        padding: 0;
+        border: 0;
+        border-radius: 10px;
+        color: #0f172a;
+    }
+
+    .footer-company-detail__install-dialog::backdrop {
+        background: rgba(15, 23, 42, 0.55);
+    }
+
+    .footer-company-detail__install-dialog-content {
+        padding: 24px;
+    }
+
+    .footer-company-detail__install-dialog-content h2 {
+        margin: 0 0 12px;
+        font-size: 22px;
+    }
+
+    .footer-company-detail__install-dialog-content p {
+        margin: 0 0 20px;
+        line-height: 1.6;
+    }
+
+    .footer-company-detail__install-dialog-content button {
+        padding: 8px 16px;
+        border: 0;
+        border-radius: 6px;
+        background: #2f4a7c;
+        color: #fff;
+        cursor: pointer;
+    }
+</style>
+<script>
+    (function () {
+        var installButton = document.getElementById('install-mobile-app');
+        var helpDialog = document.getElementById('install-mobile-app-help');
+        var instructions = document.getElementById('install-mobile-app-instructions');
+        var closeHelpButton = document.getElementById('close-install-mobile-app-help');
+        var deferredInstallPrompt = null;
+        var isIos = /iPhone|iPad|iPod/i.test(navigator.userAgent)
+            || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+
+        if (!installButton || !helpDialog || !instructions || !closeHelpButton) {
+            return;
+        }
+
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('{{ asset('service-worker.js') }}').catch(function (error) {
+                console.error('Service worker registration failed:', error);
+            });
+        }
+
+        window.addEventListener('beforeinstallprompt', function (event) {
+            event.preventDefault();
+            deferredInstallPrompt = event;
+        });
+
+        window.addEventListener('appinstalled', function () {
+            deferredInstallPrompt = null;
+        });
+
+        installButton.addEventListener('click', async function () {
+            if (deferredInstallPrompt) {
+                deferredInstallPrompt.prompt();
+                await deferredInstallPrompt.userChoice;
+                deferredInstallPrompt = null;
+                return;
+            }
+
+            instructions.textContent = isIos
+                ? 'In Safari, tap Share, then choose “Add to Home Screen”.'
+                : 'Open your browser menu and choose “Install app” or “Add to Home Screen”.';
+            helpDialog.showModal();
+        });
+
+        closeHelpButton.addEventListener('click', function () {
+            helpDialog.close();
+        });
+    })();
+</script>
 <!--/footer-->
 </div>
 

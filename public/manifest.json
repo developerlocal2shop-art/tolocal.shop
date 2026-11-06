@@ -1,0 +1,16 @@
+{
+    "short_name": "ToLocal.shop",
+    "name": "Localtoshop",
+    "theme_color": "#4A90E2",
+    "background_color": "#F7F8F9",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/assets/client/images/favicon.jpg",
+            "sizes": "570x570",
+            "type": "image/jpeg"
+        }
+    ],
+    "start_url": "/",
+    "scope": "/"
+}

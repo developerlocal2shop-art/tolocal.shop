@@ -9,6 +9,13 @@
         </div>
     </a>
     <div class="google_translate_mobile city_name_mobile">
+        @if ($mainDirectoryD)
+            @if (!empty($mainDirectoryD->company_logo))
+                <img src="{{ env('IMAGE_PATH') . $mainDirectoryD->company_logo }}" height="auto" alt="" class="logo_normal_center">
+            @else
+                <h2 class="notranslate company_d_title">{{ $mainDirectoryD->title }}</h2>
+            @endif
+        @endif
         <b id="google_translate_element_mobile"></b>
         <div class="logo_wrapper">
             <p class="logo_city_name">{{ session()->get('filter_city') }}</p>
@@ -154,7 +161,7 @@
             <?php } ?>
 
             {{-- @if($cartdata > 0) --}}
-            <li>
+            <li class="user">
                 <span>
                     <a href="{{ route('cart.list') }}">
                         <i class="fas fa-cart-plus" aria-hidden="true" style="float: right;margin: 5px 0px 0px 0px;position: absolute;right: 0px;font-size: 19px;"></i>
@@ -178,8 +185,9 @@
             </li>
             <?php } ?>
 
-            <li class="user">
+            <li class="user bookingformli">
                 <span>
+
                     <a href="javascript:void();">
                         <i class="fas fa-contact" aria-hidden="true"></i>
                         {{ ucfirst(__("message.menu_text_contact"))}}
@@ -329,8 +337,14 @@
     </nav>
 
     <div class="listing-local-promo">
-        <p class="listing-local-promo__text">Find MORE local shopping and relaxation HERE:</p>
-        <img src="{{ asset('assets/client/images/company_detail_logo.jpg') }}" alt="Other Local" class="company_details_logo_img hamburger hamburger--spin" id="hamburger">
+        <p class="listing-local-promo__text">
+            Find MORE local shopping and relaxation HERE:
+        </p>
+        <a href="#menu" class="btn_mobile">
+            <img src="{{ asset('assets/client/images/company_detail_logo.jpg') }}" alt="Other Local" class="company_details_logo_img hamburger hamburger--spin" role="button" tabindex="0" aria-label="Open menu">
+        </a>
+        <img src="{{ asset('assets/client/images/company_detail_logo.jpg') }}" alt="Other Local" class="company_details_logo_img company_details_logo_img_desktop" role="button" tabindex="0" aria-label="Open menu">
+
         <button type="button" class="listing-local-search-trigger" data-toggle="modal" data-target="#listing-local-search" aria-label="Search local listings" title="Search local listings">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
                 <circle cx="11" cy="11" r="7"></circle>

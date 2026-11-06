@@ -604,6 +604,7 @@
     <?php } ?>
 
     <div class="container-fluid row listing-info-row">
+
         <div class="col-md-5 schedule-info-column">
             <?php
             $totalpublicschedule = count($data['publicScheduleData']);
@@ -860,29 +861,35 @@
                 </div>
 
             </nav>
+
         </div>
+
         <div class="col-md-1">
+
         </div>
+
         <div class="col-md-2 listing-shop-column">
-        <?php //if(!empty($data['directoryProductData'])){ ?>
-            <a class="listing-info-card shop-visit-cta" target="_blank" rel="noopener noreferrer" href="{{ url('listings-product', ['id' => $data['mainDirectoryDetails']->slug]) }}">
-                <span class="shop-visit-cta__icon" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" focusable="false">
-                        <path d="M3 10v10h18V10M3 10l2-6h14l2 6M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M9 20v-6h6v6"/>
-                    </svg>
-                </span>
-                <span class="shop-visit-cta__content">
-                    <span class="shop-visit-cta__title">Visit the shop</span>
-                    <span class="shop-visit-cta__meta">{{ count($data['directoryProductData']) }} products</span>
-                </span>
-                <span class="shop-visit-cta__arrow" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" focusable="false">
-                        <path d="M5 12h14m-6-6 6 6-6 6"/>
-                    </svg>
-                </span>
-            </a>
-        <?php //} ?>
+            <?php //if(!empty($data['directoryProductData'])){ ?>
+                <a class="listing-info-card shop-visit-cta" target="_blank" rel="noopener noreferrer" href="{{ url('listings-product', ['id' => $data['mainDirectoryDetails']->slug]) }}">
+                    <span class="shop-visit-cta__icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M3 10v10h18V10M3 10l2-6h14l2 6M3 10a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0M9 20v-6h6v6"/>
+                        </svg>
+                    </span>
+                    <span class="shop-visit-cta__content">
+                        <span class="shop-visit-cta__title">Visit the shop</span>
+                        <span class="shop-visit-cta__meta">{{ count($data['directoryProductData']) }} products</span>
+                    </span>
+                    <span class="shop-visit-cta__arrow" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" focusable="false">
+                            <path d="M5 12h14m-6-6 6 6-6 6"/>
+                        </svg>
+                    </span>
+                </a>
+            <?php //} ?>
+
         </div>
+
         <div class="col-md-4 listing-address-column">
             @if($data['address'][0]->address)
                 <a class="listing-info-card listing-address-card" id="down-to-map" href="javascript:void(0);">
@@ -911,29 +918,12 @@
                         <path d="m11 13 5-5"></path>
                     </svg>
                 </button>
-                <?php } ?>
+            <?php } ?>
+
         </div>
 
-        {{-- <div class="col-md-1 functions_reload_div listing-reload-column" style="padding: 10px;">
-            @if( last(request()->segments()) == 'rydholms-dammodehus' )
-            <span id="functions_reload">
-                <a target="_blank" href="{{ url('/listings/details/rydholms-dammodehus') }}" style="#201919 !important;" class="btn-sm functions_reload">
-                    <i class="fa fa-refresh" aria-hidden="true"></i> <?php echo __('Reload'); ?>
-                </a>
-            </span>
-            @endif
-        </div> --}}
-
-        {{-- <span class="listing-contact-item">
-            <span class="headercontact">
-                <button id="down-to-contact" class="btn btn-success btn-sm btn-block">
-                    Contact Us
-                </button>
-            </span>
-        </span> --}}
-
         <div class="col-md-12 listing-social-row">
-            <hr>
+
             <div class="left_side_breadcrumb new_social_data">
 
                 <?php

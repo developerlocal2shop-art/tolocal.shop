@@ -4,6 +4,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>@yield('title')</title>
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <meta name="theme-color" content="#4A90E2">
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="ToLocal.shop">
+        <link rel="apple-touch-icon" href="{{ asset('assets/client/images/favicon.jpg') }}">
     @if (app()->environment('production'))
         <meta name="google-analytics-id" content="{{ env('GOOGLE_ANALYTICS_ID') }}">
     @endif
@@ -23,11 +28,6 @@
     @endif
         <meta name="robots" content="index, follow">
         <link rel="shortcut icon" href="{{ asset('assets/client/images/favicon.png') }}" type="image/png">
-        <link rel="apple-touch-icon" type="image/x-icon" href="{{ asset('asset/client/images/apple-touch-icon-57x57-precomposed.png') }}">
-        <link rel="apple-touch-icon" type="image/x-icon" sizes="72x72" href="{{ asset('asset/client/images/apple-touch-icon-72x72-precomposed.png') }}">
-        <link rel="apple-touch-icon" type="image/x-icon" sizes="114x114" href="{{ asset('asset/client/images/apple-touch-icon-114x114-precomposed.png') }}">
-        <link rel="apple-touch-icon" type="image/x-icon" sizes="144x144" href="{{ asset('asset/client/images/apple-touch-icon-144x144-precomposed.png') }}">
-
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/slick.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ asset('assets/client/css/slick-theme.css') }}">
         <link href="{{ asset('assets/client/css/icons/font-awesome/css/fontawesome-all.min.css') }}" rel="stylesheet">
