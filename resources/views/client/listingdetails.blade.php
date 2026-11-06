@@ -1990,7 +1990,7 @@
                             }
                         ?>
 
-                        <div class="row add_bottom_30">
+                        <div class="row add_bottom_30 amenity_section">
                             <ul style="padding: 3px 0px 0px 30px; width:100%" class="row">
                                     <?php $anemitycounter = 1;
                                     foreach($data['amenity'] as $amenityrow){
