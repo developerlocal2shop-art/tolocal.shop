@@ -90,14 +90,16 @@
 
     $currentUrl = url()->current();
     $currentUrl = explode("/",$currentUrl);
-    $defaultCurrency = Helper::defaultCurrencyData();
+
+    $defaultCurrency = Helper::defaultCurrencyDataCompanyDetail();
     if(session()->has('currency_code')){
         $currencySymbol = session()->get('currency_code')['currsymbol'];
         $currencycode = session()->get('currency_code')['currcode'];
     }else{
-        $currencySymbol = $defaultCurrency[0]->symbol;
-        $currencycode = $defaultCurrency[0]->code;
+        $currencySymbol = $defaultCurrency->symbol;
+        $currencycode = $defaultCurrency->code;
     }
+
     $bannerImage = isset($data['bannerImage'][0]->name_thumbnail)?$data['bannerImage'][0]->name_thumbnail:"";
     $templateandScheduleDaysData = isset($data['templateandScheduleDaysData'])?$data['templateandScheduleDaysData']:array();
 
@@ -891,7 +893,7 @@
         </div>
 
         <div class="col-md-4 listing-address-column">
-            @if($data['address'][0]->address)
+            @if($data['address']->address)
                 <a class="listing-info-card listing-address-card" id="down-to-map" href="javascript:void(0);">
                     <span class="listing-info-card__icon" aria-hidden="true">
                         <svg viewBox="0 0 24 24" focusable="false">
@@ -901,7 +903,7 @@
                     </span>
                     <span class="listing-info-card__content">
                         <span class="listing-info-card__title">Visit us</span>
-                        <span class="listing-info-card__meta">{{ $data['address'][0]->address }}</span>
+                        <span class="listing-info-card__meta">{{ $data['address']->address }}</span>
                     </span>
                     <span class="listing-info-card__arrow" aria-hidden="true">
                         <svg viewBox="0 0 24 24" focusable="false">
@@ -930,52 +932,52 @@
                 if (isset($data['contactData'])) {
                     $contactData = $data['contactData'];
                 ?>
-                @if(!empty($contactData[0]->facebook) || (!empty($contactData[0]->twitter)) || (!empty($contactData[0]->linkedin)) || (!empty($contactData[0]->pinterest)) || (!empty($contactData[0]->whatsapp)) || (!empty($contactData[0]->instagram)) || (!empty($contactData[0]->tiktok)) || (!empty($contactData[0]->youtube)) || (!empty($contactData[0]->snapchat)))
+                @if(!empty($contactData->facebook) || (!empty($contactData->twitter)) || (!empty($contactData->linkedin)) || (!empty($contactData->pinterest)) || (!empty($contactData->whatsapp)) || (!empty($contactData->instagram)) || (!empty($contactData->tiktok)) || (!empty($contactData->youtube)) || (!empty($contactData->snapchat)))
 
                 <div class="link-css-mobile">
                     <div class="col-md-12">
-                        @if($contactData[0]->facebook)
-                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->facebook??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                        @if($contactData->facebook)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData->facebook??'' )}}" target="_blank" class="btn btn-info btn-sm">
                             <i class="fa fa-facebook" aria-hidden="true"></i>
                             </a>
                         @endif
-                        @if($contactData[0]->twitter)
-                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->twitter??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                        @if($contactData->twitter)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData->twitter??'' )}}" target="_blank" class="btn btn-info btn-sm">
                             Twitter
                             </a>
                         @endif
-                        @if($contactData[0]->linkedin)
-                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->linkedin??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                        @if($contactData->linkedin)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData->linkedin??'' )}}" target="_blank" class="btn btn-info btn-sm">
                             <i class="fa fa-linkedin" aria-hidden="true"></i>
                             </a>
                         @endif
-                        @if($contactData[0]->pinterest)
-                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->pinterest??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                        @if($contactData->pinterest)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData->pinterest??'' )}}" target="_blank" class="btn btn-info btn-sm">
                             <i class="fa fa-pinterest" aria-hidden="true"></i>
                             </a>
                         @endif
-                        @if($contactData[0]->whatsapp)
-                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->whatsapp??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                        @if($contactData->whatsapp)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData->whatsapp??'' )}}" target="_blank" class="btn btn-info btn-sm">
                             Whatsapp
                             </a>
                         @endif
-                        @if($contactData[0]->instagram)
-                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->instagram??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                        @if($contactData->instagram)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData->instagram??'' )}}" target="_blank" class="btn btn-info btn-sm">
                             <i class="fa fa-instagram" aria-hidden="true"></i>
                             </a>
                         @endif
-                        @if($contactData[0]->tiktok)
-                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->tiktok??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                        @if($contactData->tiktok)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData->tiktok??'' )}}" target="_blank" class="btn btn-info btn-sm">
                             X
                             </a>
                         @endif
-                        @if($contactData[0]->youtube)
-                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->youtube??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                        @if($contactData->youtube)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData->youtube??'' )}}" target="_blank" class="btn btn-info btn-sm">
                                 <i class="fa fa-youtube" aria-hidden="true"></i>
                             </a>
                         @endif
-                        @if($contactData[0]->snapchat)
-                            <a href="//{{preg_replace('(^https?://)', '', $contactData[0]->snapchat??'' )}}" target="_blank" class="btn btn-info btn-sm">
+                        @if($contactData->snapchat)
+                            <a href="//{{preg_replace('(^https?://)', '', $contactData->snapchat??'' )}}" target="_blank" class="btn btn-info btn-sm">
                             Snapchat
                             </a>
                         @endif
@@ -1041,40 +1043,12 @@
     </div>
 
     @php
-        $listingContactEmail = $data['contactData'][0]->email
+        $listingContactEmail = $data['contactData']->email
             ?? $data['mainDirectoryDetails']->email
             ?? $data['mainDirectoryDetails']->user->email
             ?? $data['default_email']
             ?? '';
     @endphp
-
-    @if($data['mainDirectoryDetails']->directoryLanguage[0]->description)
-        {{-- <div class="container-fluid print_mobile" style="display: none;">
-            <div class="weoffer_comman listing-print-banner" >
-                <div class="listing-print-banner__copy listing-print-banner__copy--mobile" style="color: {{ preg_match('/^#[0-9a-fA-F]{6}$/', $data['mainDirectoryDetails']->description_text_color ?? '') ? $data['mainDirectoryDetails']->description_text_color : 'inherit' }};">
-                    {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
-                </div>
-                @if(\Illuminate\Support\Str::length($data['mainDirectoryDetails']->directoryLanguage[0]->description ?? '') > 180)
-                    <button type="button" class="listing-print-banner__toggle" aria-expanded="false" style="color: {{ preg_match('/^#[0-9a-fA-F]{6}$/', $data['mainDirectoryDetails']->description_text_color ?? '') ? $data['mainDirectoryDetails']->description_text_color : 'inherit' }};">
-                        See more
-                    </button>
-                @endif
-
-
-                <div class="listing-print-banner__cta">
-                    @if($data['mainDirectoryDetails']->description_button_link)
-                        <a href="{{ $data['mainDirectoryDetails']->description_button_link??'' }}" id="down-to-contact" class="listing-print-banner__btn">
-                            {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
-                        </a>
-                    @else
-                        <a href="mailto:{{ $listingContactEmail }}" id="down-to-contact" class="listing-print-banner__btn">
-                             {{ $data['mainDirectoryDetails']->discription_button_text??'' }}
-                        </a>
-                    @endif
-                </div>
-            </div>
-        </div> --}}
-    @endif
 
     <script>
         document.addEventListener('click', function (event) {
@@ -2147,28 +2121,27 @@
                     </a>
                 @endif
 
-                    <!-- Video File Base On Package-->
-
-                    <?php $vediolink = isset($data['mediaData'][0]->video_url)?$data['mediaData'][0]->video_url:"";
-                    if(!empty($vediolink)){
-                    ?>
+                @php
+                    $videoLink = $data['mediaData']->video_url ?? '';
+                @endphp
+                @if(!empty($videoLink))
                     <hr>
-                    <h3>{{__("message.video_text")}}  </h3>
-                    <div class="" style="text-align: center;">
-
-                        <link rel="stylesheet" href="assets/client/images/plyr/plyr.css">
+                    <h3>{{ __('message.video_text') }}</h3>
+                    <div class="text-center">
+                        <link rel="stylesheet" href="{{ asset('assets/client/images/plyr/plyr.css') }}">
                         <div class="plyr__video-embed" id="player">
-                        {{-- {{ $vediolink??'' }} --}}
-                            <?php if($vediolink!=""){ ?>
-                            <iframe width="100%" height="500" data-consent-category="marketing" data-consent-src="<?php echo e($vediolink) ?>?autoplay=1" allowfullscreen allowtransparency allow="autoplay"></iframe>
-                            <?php }else{ ?>
-                            <iframe width="100%" height="500" data-consent-category="marketing" data-consent-src="https://player.vimeo.com/video/214125425?loop=false&amp;byline=false&amp;portrait=false&amp;title=false&amp;speed=true&amp;transparent=0&amp;gesture=media" allowfullscreen allowtransparency allow="autoplay"></iframe>
-                            <?php } ?>
+                            <iframe
+                                width="100%"
+                                height="500"
+                                data-consent-category="marketing"
+                                data-consent-src="{{ $videoLink }}?autoplay=1"
+                                allowfullscreen
+                                allowtransparency
+                                allow="autoplay">
+                            </iframe>
                         </div>
                     </div>
-                    <?php } ?>
-
-
+                @endif
                 </section>
                 <!-- /section -->
             </div>
@@ -2191,107 +2164,14 @@
                 <hr id="locationmap">
                 <!-- <h3>{{__("message.location")}}</h3> -->
                 <div id="map" class="map-full map-layout single-listing-map" style="z-index: 50;">
-                    <a class="mobile_direction_a btn-block "  target="_blank" href="https://www.google.com/maps/dir//<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>/@<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>,16z" style="margin: -35px 10px; display:none;">
+                    <a class="mobile_direction_a btn-block "  target="_blank" href="https://www.google.com/maps/dir//<?php echo $data['address']->latitude; ?>,<?php echo $data['address']->longitude; ?>/@<?php echo $data['address']->latitude; ?>,<?php echo $data['address']->longitude; ?>,16z" style="margin: -35px 10px; display:none;">
                         <img  class="direction" src="{{ url('/') }}/assets/client/images/direction.jpg" width="10%" alt="">
                     </a>
-                    <iframe data-consent-category="functional" data-consent-src="https://maps.google.com/maps?q=<?php echo e($data['address'][0]->latitude); ?>,<?php echo e($data['address'][0]->longitude); ?>&amp;hl=es;z=14&amp;output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe data-consent-category="functional" data-consent-src="https://maps.google.com/maps?q=<?php echo e($data['address']->latitude); ?>,<?php echo e($data['address']->longitude); ?>&amp;hl=es;z=14&amp;output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
                 </form>
                 <!-- End Map -->
 
-                <?php if($notActivateForm==0){ ?>
-                {{-- <div class="notactivate"> --}}
-                    {{-- <div class="overlay-content">Not Activated</div> --}}
-                <?php } ?>
-
-                    {{-- <div class="box_detail booking listing-contact-card">
-                        @if(session()->get('status'))
-                        <div class="alert alert-success">
-                            {{ session()->get('status') }}
-                        </div><br />
-                        @endif
-
-                        @php $dir_cat = ''; @endphp
-                        @foreach ($data['categoriesData'] as $key => $catdata)
-                            @php
-                                if("accomendations" == $catdata->slug || "food-nightlife" == $catdata->slug){ $dir_cat = 1; }
-                            @endphp
-                        @endforeach
-
-                        <div class="listing-contact-intro">
-                            <span class="listing-contact-intro__icon" aria-hidden="true"><i class="fas fa-comments"></i></span>
-                            <div class="listing-contact-intro__copy">
-                                <h2>We're here to help</h2>
-                                <p>Send your question or booking request and the team will get back to you.</p>
-                            </div>
-                        </div>
-
-                        <form id="bookingform" class="contact-us-form" action="{{ route('appointment.booking') }}" method="post"  >
-                            {{ csrf_field() }}
-
-                            <input type="hidden" name="user_id" value="{{ $data['mainDirectoryDetails']->user?$data['mainDirectoryDetails']->user->id:0 }}">
-                            <input type="hidden" name="requester_id" value="">
-                            <input type="hidden" name="listing_id" value="{{ $data['mainDirectoryDetails']->id }}">
-                            <input type="hidden" name="listing_type" value="{{ $data['mainDirectoryDetails']->feature_type }}">
-                            <input type="hidden" name="slug" value="clarance-hotel">
-                            <input type="hidden" name="type" value="booking">
-                            <input type="hidden" name="bookingComment" value="">
-
-                            <div class="form-group" id="input-dates">
-                                <input type="hidden" name="directory_id" id="directory_ids" value="{{ $data['mainDirectoryDetails']->id }}">
-
-                                <input class="form-control required" type="text" name="name" required="" placeholder="{{__("message.placeholder_name_text")}}" autocomplete="off">
-                            </div>
-                            <div class="form-group">
-                                <input class="form-control required" type="email" name="email" required="" placeholder="Enter e-mail address!">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-md-12 p-0"><b><u>Note:</u> No country code!</b></label>
-                                <input class="form-control required" type="tel" name="booking_phone" required="" placeholder="Enter Valid Phone!">
-                            </div>
-                            <?php if(isset($userData->visibility_booking_date_time) && $userData->visibility_booking_date_time==1){ ?>
-                                <div class="form-group">
-                                    <input class="form-control required booking-date-input" title="Select date and time for the desired booking" type="text" name="booking_date" id="booking_date" required="" placeholder="Select date and time for the desired booking">
-                                </div>
-                            <?php } ?>
-                            <div class="form-group">
-                            <select class="form-control" name="service">
-                                @foreach ($data['directory_services'] as $ds_val)
-                                @php $serviceName = data_get($ds_val, 'name', ''); @endphp
-                                <option value="{{ $serviceName }}">{{ $serviceName }}</option>
-                                @endforeach
-                                <option value="Contact us Content">Contact us Content</option>
-                            </select>
-
-                            </div>
-
-                            @if($dir_cat == 1)
-                                <div class="form-group">
-                                    <input class="form-control" type="number" value="" name="adult" placeholder="{{__("message.placeholder_no_of_adult")}}">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" type="number" value="" name="child" placeholder="{{__("message.placeholder_no_of_child")}}">
-                                </div>
-                            @endif
-
-                            <div class="form-group">
-                                <label class="col-md-12 p-0">{{__("message.message_label_text")}}</label>
-                                <textarea rows="3" class="form-control" name="message"></textarea>
-                            </div>
-
-                            <button type="submit" class="add_top_30 btn_1 full-width purchase submitbtn" {{ $disbl }}>{{__("message.submit_button")}}</button>
-
-                            <span class="respondata"></span>
-
-                        </form>
-
-                        <a style="display:none;" href="javascript:" onclick="addToWishList('6')" class="btn_1 full-width outline wishlist" id="btn-wishlist"><i class="fa fa-heart" aria-hidden="true"></i> Add to wishlist</a>
-                        <div class="text-center"><small>{{__("message.contact_us_form_text")}}</small></div>
-                    </div> --}}
-
-                <?php if($notActivateForm==0){ ?>
-                {{-- </div> --}}
-                <?php } ?>
 
                 <ul class="share-buttons">
                     <li>
@@ -2310,11 +2190,11 @@
                 <hr>
                     <div class="row mb-3" >
                         <div class="col-12  listing-social-btn">
-                            <a href="{{ isset($contactData[0]->website)?$contactData[0]->website:'' }}" target="blank" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-globe" aria-hidden="true"></i>
+                            <a href="{{ isset($contactData->website)?$contactData->website:'' }}" target="blank" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-globe" aria-hidden="true"></i>
                                 {{__("message.website_contactdata")}}
                             </a>
                             @if($data['frontend_setting']->hide_show_vendor_contact == 'yes')
-                            <a href="mailto:{{ isset($contactData[0]->email)?$contactData[0]->email:'' }}" target="" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-envelope" aria-hidden="true"></i>
+                            <a href="mailto:{{ isset($contactData->email)?$contactData->email:'' }}" target="" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-envelope" aria-hidden="true"></i>
                                 {{__("message.email_us_contactdata")}}
                             </a>
                             <?php
@@ -2329,12 +2209,12 @@
                                 }
                             ?>
                             <?php if($ismobiledevice==1){ ?>
-                                <a href="tel:+{{ isset($contactData[0]->phone)?$contactData[0]->phone:'' }}" target="" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>{{__("message.call_now_contactdata")}}</a>
+                                <a href="tel:+{{ isset($contactData->phone)?$contactData->phone:'' }}" target="" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>{{__("message.call_now_contactdata")}}</a>
                             <?php }else{ if($phoneActivateorNot!=1){ ?>
                                     <a href="javascript:void(0);" target="" style="pointer-events: none;cursor: default;background-color:#b5b9b7;" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>Call </a>
                                 <?php }else{ ?>
                                     <a href="javascript:void(0);" target="" class="btn_1 full-width outline wishlist social-button" style="width: 158px !important;" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>
-                                        Call at - {{ isset($contactData[0]->phone)?$contactData[0]->phone:'' }}
+                                        Call at - {{ isset($contactData->phone)?$contactData->phone:'' }}
                                     </a>
                             <?php } }?>
                             @endif
@@ -2469,20 +2349,19 @@
         <div id="product" class="owl-carousel owl-theme listing_related_product">
             <?php
             foreach($data['relatedProductData'] as $productrow){
-              $productprice = Helper::getProductprice($productrow->id,$currencycode);
+              $productprice = Helper::getProductpriceCompany($productrow->id,$currencycode);
               $validityOfOffer = Helper::getValidityOfOffer($productrow->id);
-              //echo "<pre>"; print_r($validityOfOffer);
-              $productcurrency = isset($productprice[0]->currency_code)?$productprice[0]->currency_code:"";
-              $productSalesPrice = isset($productprice[0]->sales_price)?$productprice[0]->sales_price:0.00;
-              $productRegularPrice = isset($productprice[0]->regular_price)?$productprice[0]->regular_price:0.00;
 
-              if(!empty($validityOfOffer)){
+              $productcurrency = isset($productprice->currency_code)?$productprice->currency_code:"";
+              $productSalesPrice = isset($productprice->sales_price)?$productprice->sales_price:0.00;
+              $productRegularPrice = isset($productprice->regular_price)?$productprice->regular_price:0.00;
+
+            if(!empty($validityOfOffer)){
                 if($productRegularPrice>0 && $productSalesPrice>0){
                   $priceGoestoCart = $productSalesPrice;
                 }else{
                   $priceGoestoCart = $productRegularPrice;
                 }
-
               }else{
                 $priceGoestoCart = $productRegularPrice;
               }
@@ -2508,29 +2387,9 @@
                         <?php $imagename = Helper::getProductImage($productrow->id); ?>
                         <a href="<?php echo url("product/detail", ['id' => @$productrow->id,'slug' => @$productrow->seo_url]); ?>" class="d-block h-100 img" <?php if(!empty($imagename)){ ?> style="background-image:url('{{ env('IMAGE_PATH').'images/product/'.$imagename[0]->name_thumbnail.'.webp' }}')" <?php }else{ ?> style="background-image:url('{{ asset('assets/plugins/images/placeholder.png') }}')" <?php } ?>>
                             <div class="read_more">
-
-                                {{-- <form action="{{ route('add.to.cart',$productrow->id) }}" method="POST" enctype="multipart/form-data">
-                                    @csrf
-                                    <input type="hidden" value="{{ $productrow->id }}" name="id">
-                                    <input type="hidden" value="{{ $productrow->product_lang_name }}" name="name">
-                                    <input type="hidden" value="{{ $priceGoestoCart }}" name="price">
-                                    <input type="hidden" value="{{ $productRegularPrice }}" name="regularprice">
-                                    <input type="hidden" value="{{ isset($imagename[0]->name_thumbnail)?$imagename[0]->name_thumbnail:'' }}" name="image">
-                                    <input type="hidden" value="1" name="quantity">
-
-                                    @if ($productrow->stock > 0 && !$productrow->outofstock == 'outofstock')
-                                        <button class="btn "><i class="fa fa-shopping-bag"></i>{{__("message.add_to_cart_btn")}}</button>
-
-                                    @else
-                                        <span style=" color:red;">Out Of Stock</span>
-
-                                    @endif
-                                </form> --}}
                                 <button class="btn "><i class="fa fa-eye"></i> View More </button>
                             </div>
-                            <!-- <div class="read_more"><span> Add To Cart</span></div> -->
                             <div class="pro-icn">
-                                {{-- <a href="" class="w-c-q-icn"><i class="fa fa-heart"></i></a> --}}
                                 <a href="javascript:void(0);" productid="{{ $productrow->id }}" class="w-c-q-icn" onclick="addToWishList(this, <?php echo $productrow->id ?>)">
                                     <?php
                                     if(!in_array($productrow->id, $wislistProductId)){ ?>
@@ -2539,7 +2398,6 @@
                                         <i class="fa fa-heart" aria-hidden="true"></i>
                                     <?php } ?>
                                 </a>
-                                {{-- <a href="" class="w-c-q-icn"><i class="fa fa-shopping-bag"></i></a> --}}
                             </div>
                         </a>
                         <!-- <small>Hotel</small> -->
@@ -3233,7 +3091,7 @@
     $(document).ready(function() {
 
         $("#direction_anch").click(function() {
-            var url = "https://www.google.com/maps/dir//<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>/@<?php echo $data['address'][0]->latitude; ?>,<?php echo $data['address'][0]->longitude; ?>,16z";
+            var url = "https://www.google.com/maps/dir//<?php echo $data['address']->latitude; ?>,<?php echo $data['address']->longitude; ?>/@<?php echo $data['address']->latitude; ?>,<?php echo $data['address']->longitude; ?>,16z";
             window.open(url, '_blank');
         });
 
@@ -3696,214 +3554,215 @@
     window.onload = showPosition;
 
 </script>
+
 <style>
-#lightboxOverlay {
-    position: fixed !important;
-    background: rgba(8, 12, 20, 0.94) !important;
-    backdrop-filter: blur(5px);
-}
-
-#lightbox.lightbox {
-    position: fixed !important;
-    inset: 0 !important;
-    z-index: 100001 !important;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    box-sizing: border-box;
-    padding: 48px 76px 24px;
-}
-
-#lightbox .lb-outerContainer {
-    width: auto !important;
-    height: auto !important;
-    /* max-width: calc(100vw - 152px) !important;
-    max-height: calc(100vh - 112px) !important; */
-    overflow: visible;
-    /* background: transparent; */
-    border: 0;
-    border-radius: 10px;
-    box-shadow: 0 22px 70px rgba(0, 0, 0, 0.45);
-}
-
-#lightbox .lb-image {
-    width: 365px !important;
-    max-width: 400px!important;
-    max-height: 535px!important;
-    border: 0 !important;
-    border-radius: 10px;
-    margin: 0px -5px;
-}
-
-#lightbox .lb-nav {
-    overflow: visible;
-}
-
-#lightbox .lb-nav a.lb-prev,
-#lightbox .lb-nav a.lb-next {
-    position: absolute;
-    top: 50%;
-    width: 48px;
-    height: 48px;
-    margin-top: -24px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
-    opacity: 1;
-    transition: background-color 160ms ease, transform 160ms ease;
-}
-
-#lightbox .lb-nav a.lb-prev {
-    left: -64px;
-    float: none;
-}
-
-#lightbox .lb-nav a.lb-next {
-    right: -64px;
-    float: none;
-}
-
-#lightbox .lb-nav a.lb-prev::after,
-#lightbox .lb-nav a.lb-next::after {
-    position: absolute;
-    top: 17px;
-    width: 12px;
-    height: 12px;
-    border-top: 2px solid #fff;
-    border-right: 2px solid #fff;
-    content: "";
-}
-
-#lightbox .lb-nav a.lb-prev::after {
-    left: 19px;
-    transform: rotate(-135deg);
-}
-
-#lightbox .lb-nav a.lb-next::after {
-    right: 19px;
-    transform: rotate(45deg);
-}
-
-#lightbox .lb-nav a.lb-prev:hover,
-#lightbox .lb-nav a.lb-next:hover {
-    background: rgba(255, 255, 255, 0.24);
-    transform: scale(1.06);
-}
-
-#lightbox .lb-dataContainer {
-    width: min(600px, calc(100vw - 32px)) !important;
-    max-width: min(600px, calc(100vw - 32px)) !important;
-    padding-top: 12px;
-}
-
-#lightbox .lb-data {
-    color: rgba(255, 255, 255, 0.82);
-}
-
-#lightbox .lb-data .lb-caption {
-    color: #fff;
-    font-size: 14px;
-    line-height: 1.5;
-}
-
-#lightbox .lb-data .lb-number {
-    padding-top: 5px;
-    color: rgba(255, 255, 255, 0.62);
-}
-
-#lightbox .lb-data .lb-close {
-    position: fixed;
-    top: 18px;
-    right: 20px;
-    z-index: 1;
-    display: block;
-    width: 44px;
-    height: 44px;
-    border: 1px solid rgba(255, 255, 255, 0.22);
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.12);
-    opacity: 1;
-    text-align: center;
-    transition: background-color 160ms ease, transform 160ms ease;
-}
-
-#lightbox .lb-data .lb-close::after {
-    color: #fff;
-    content: "\00d7";
-    font-size: 32px;
-    font-weight: 300;
-    line-height: 40px;
-}
-
-#lightbox .lb-data .lb-close:hover {
-    background: rgba(255, 255, 255, 0.24);
-    opacity: 1;
-    transform: scale(1.06);
-}
-
-@media (min-width: 1700px) and (max-width: 2600px) {
-    #listing_banner,
-    .common_banner {
-        width: 100%;
+    #lightboxOverlay {
+        position: fixed !important;
+        background: rgba(8, 12, 20, 0.94) !important;
+        backdrop-filter: blur(5px);
     }
 
-    #listing_banner .hero_in.shop_detail,
-    .common_banner .hero_in.shop_detail {
-        width: 100%;
-        height: 600px;
-        min-height: 600px;
-        max-height: 600px;
-    }
-
-    #listing_banner .hero_in.shop_detail > img,
-    .common_banner .hero_in.shop_detail > img {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-}
-
-@media (max-width: 600px) {
     #lightbox.lightbox {
-        padding: 56px 52px 20px;
+        position: fixed !important;
+        inset: 0 !important;
+        z-index: 100001 !important;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        padding: 48px 76px 24px;
     }
 
-    #lightbox .lb-outerContainer,
+    #lightbox .lb-outerContainer {
+        width: auto !important;
+        height: auto !important;
+        /* max-width: calc(100vw - 152px) !important;
+        max-height: calc(100vh - 112px) !important; */
+        overflow: visible;
+        /* background: transparent; */
+        border: 0;
+        border-radius: 10px;
+        box-shadow: 0 22px 70px rgba(0, 0, 0, 0.45);
+    }
+
     #lightbox .lb-image {
-        max-width: calc(100vw - 104px) !important;
-        max-height: calc(100vh - 128px) !important;
+        width: 365px !important;
+        max-width: 400px!important;
+        max-height: 535px!important;
+        border: 0 !important;
+        border-radius: 10px;
+        margin: 0px -5px;
     }
 
-    #lightbox .lb-nav a.lb-prev {
-        left: -52px;
-    }
-
-    #lightbox .lb-nav a.lb-next {
-        right: -52px;
+    #lightbox .lb-nav {
+        overflow: visible;
     }
 
     #lightbox .lb-nav a.lb-prev,
     #lightbox .lb-nav a.lb-next {
-        width: 40px;
-        height: 40px;
-        margin-top: -20px;
+        position: absolute;
+        top: 50%;
+        width: 48px;
+        height: 48px;
+        margin-top: -24px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.12);
+        opacity: 1;
+        transition: background-color 160ms ease, transform 160ms ease;
+    }
+
+    #lightbox .lb-nav a.lb-prev {
+        left: -64px;
+        float: none;
+    }
+
+    #lightbox .lb-nav a.lb-next {
+        right: -64px;
+        float: none;
     }
 
     #lightbox .lb-nav a.lb-prev::after,
     #lightbox .lb-nav a.lb-next::after {
-        top: 13px;
+        position: absolute;
+        top: 17px;
+        width: 12px;
+        height: 12px;
+        border-top: 2px solid #fff;
+        border-right: 2px solid #fff;
+        content: "";
     }
 
     #lightbox .lb-nav a.lb-prev::after {
-        left: 16px;
+        left: 19px;
+        transform: rotate(-135deg);
     }
 
     #lightbox .lb-nav a.lb-next::after {
-        right: 16px;
+        right: 19px;
+        transform: rotate(45deg);
     }
-}
+
+    #lightbox .lb-nav a.lb-prev:hover,
+    #lightbox .lb-nav a.lb-next:hover {
+        background: rgba(255, 255, 255, 0.24);
+        transform: scale(1.06);
+    }
+
+    #lightbox .lb-dataContainer {
+        width: min(600px, calc(100vw - 32px)) !important;
+        max-width: min(600px, calc(100vw - 32px)) !important;
+        padding-top: 12px;
+    }
+
+    #lightbox .lb-data {
+        color: rgba(255, 255, 255, 0.82);
+    }
+
+    #lightbox .lb-data .lb-caption {
+        color: #fff;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    #lightbox .lb-data .lb-number {
+        padding-top: 5px;
+        color: rgba(255, 255, 255, 0.62);
+    }
+
+    #lightbox .lb-data .lb-close {
+        position: fixed;
+        top: 18px;
+        right: 20px;
+        z-index: 1;
+        display: block;
+        width: 44px;
+        height: 44px;
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.12);
+        opacity: 1;
+        text-align: center;
+        transition: background-color 160ms ease, transform 160ms ease;
+    }
+
+    #lightbox .lb-data .lb-close::after {
+        color: #fff;
+        content: "\00d7";
+        font-size: 32px;
+        font-weight: 300;
+        line-height: 40px;
+    }
+
+    #lightbox .lb-data .lb-close:hover {
+        background: rgba(255, 255, 255, 0.24);
+        opacity: 1;
+        transform: scale(1.06);
+    }
+
+    @media (min-width: 1700px) and (max-width: 2600px) {
+        #listing_banner,
+        .common_banner {
+            width: 100%;
+        }
+
+        #listing_banner .hero_in.shop_detail,
+        .common_banner .hero_in.shop_detail {
+            width: 100%;
+            height: 600px;
+            min-height: 600px;
+            max-height: 600px;
+        }
+
+        #listing_banner .hero_in.shop_detail > img,
+        .common_banner .hero_in.shop_detail > img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+
+    @media (max-width: 600px) {
+        #lightbox.lightbox {
+            padding: 56px 52px 20px;
+        }
+
+        #lightbox .lb-outerContainer,
+        #lightbox .lb-image {
+            max-width: calc(100vw - 104px) !important;
+            max-height: calc(100vh - 128px) !important;
+        }
+
+        #lightbox .lb-nav a.lb-prev {
+            left: -52px;
+        }
+
+        #lightbox .lb-nav a.lb-next {
+            right: -52px;
+        }
+
+        #lightbox .lb-nav a.lb-prev,
+        #lightbox .lb-nav a.lb-next {
+            width: 40px;
+            height: 40px;
+            margin-top: -20px;
+        }
+
+        #lightbox .lb-nav a.lb-prev::after,
+        #lightbox .lb-nav a.lb-next::after {
+            top: 13px;
+        }
+
+        #lightbox .lb-nav a.lb-prev::after {
+            left: 16px;
+        }
+
+        #lightbox .lb-nav a.lb-next::after {
+            right: 16px;
+        }
+    }
 </style>
 
 </main>

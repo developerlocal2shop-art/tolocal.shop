@@ -59,6 +59,51 @@ class Listing extends Controller
 {
 
     public  $params = ['cat' => [], 'subcat' => [], 'timeSelected' => [], 'filters' => [], 'amenity' => [], 'trademark' => [], 'tags' => [], 'search_string' => []];
+
+    public function vendorManifest($slug)
+    {
+        $vendor = DB::table('directory')
+            ->select('slug', 'title', 'company_logo', 'company_color', 'deleted')
+            ->where('slug', $slug)
+            ->first();
+
+        abort_if(!$vendor || $vendor->deleted == 1, 404);
+
+        $vendorUrl = route('listing.details', ['id' => $vendor->slug]);
+        $imagePath = trim((string) $vendor->company_logo, '/');
+
+        if ($imagePath === '') {
+            $iconUrl = asset('assets/client/images/favicon.jpg');
+        } else {
+            $imageBase = (string) env('IMAGE_PATH', '');
+            $iconUrl = preg_match('/^https?:\/\//i', $imageBase)
+                ? rtrim($imageBase, '/') . '/' . $imagePath
+                : asset(trim($imageBase, '/') . '/' . $imagePath);
+        }
+
+        $vendorName = trim((string) $vendor->title) ?: 'ToLocal.shop';
+        $themeColor = is_string($vendor->company_color) && preg_match('/^#[0-9a-f]{6}$/i', $vendor->company_color)
+            ? $vendor->company_color
+            : '#4A90E2';
+
+        return response()->json([
+            'id' => $vendorUrl,
+            'name' => $vendorName,
+            'short_name' => \Illuminate\Support\Str::limit($vendorName, 12, ''),
+            'description' => $vendorName,
+            'theme_color' => $themeColor,
+            'background_color' => '#F7F8F9',
+            'display' => 'standalone',
+            'icons' => [
+                ['src' => $iconUrl],
+            ],
+            'start_url' => $vendorUrl,
+            'scope' => url('/listings/details/'),
+        ], 200, [
+            'Content-Type' => 'application/manifest+json',
+            'Cache-Control' => 'no-cache, private',
+        ]);
+    }
     public function getIp()
     {
         foreach (array('HTTP_CLIENT_IP', 'HTTP_X_FORWARDED_FOR', 'HTTP_X_FORWARDED', 'HTTP_X_CLUSTER_CLIENT_IP', 'HTTP_FORWARDED_FOR', 'HTTP_FORWARDED', 'REMOTE_ADDR') as $key) {
@@ -1134,6 +1179,7 @@ class Listing extends Controller
                 } else {
                     $ip = $_SERVER['REMOTE_ADDR'];
                 }
+
         $uniquevisitor = ViewedListingsCounter::where('directory_id', $id)->where('visiters', $ip)->first();
         if (!$uniquevisitor) {
             $counter = new ViewedListingsCounter;
@@ -1149,7 +1195,7 @@ class Listing extends Controller
                 $q->where('language_id', '=', $language_id);
             }])->select('*')->where('id', $id)->first();
 
-        $data['address']                    = DB::table('directory_location')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['address']                    = DB::table('directory_location')->where('directory_id', $id)->first();
         $data['bannerImage']                = DB::table('directory_media_listing_image')->select('*')->where('directory_id', $id)->get()->toArray();
         $data['galleryImage']               = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->limit(20)->get()->toArray();
         $data['allgalleryImage']            = DB::table('directory_gallery_images')->select('*')->where('directory_id', $id)->orderby('id', 'desc')->get()->toArray();
@@ -1163,8 +1209,8 @@ class Listing extends Controller
         $data['directoryTypeimage']         = DB::table('directory_type')->select('*')->where('directory_id',  $id)->groupBy('block_num')->get()->toArray();
         $data['directoryTypeData']          = DB::table('directory_type')->select('*')->where('directory_id',  $id)->get()->toArray();
         $data['directoryTypeDataPosition']  = DB::table('directory_type')->select('*')->where('directory_id',  $id)->where('column_name', "position")->orderby(DB::raw('CAST(column_value AS SIGNED)'), 'ASC')->get()->toArray(); // Added by Madhulika for manage the position
-        $data['mediaData']                  = DB::table('directory_media')->select('*')->where('directory_id', $id)->get()->toArray();
-        $data['contactData']                = DB::table('directory_contact')->select('*')->where('directory_id', $id)->get()->toArray();
+        $data['mediaData']                  = DB::table('directory_media')->select('*')->where('directory_id', $id)->first();
+        $data['contactData']                = DB::table('directory_contact')->where('directory_id', $id)->first();
         $data['trademarkData']              = DB::table('directory_media_trademarks_image')->select('*')->where('directory_id', $id)->get()->toArray();
 
         $productDirctoryData                = DB::table('product')->select('product.*',
@@ -1174,34 +1220,31 @@ class Listing extends Controller
                                 'pro_trans.id AS product_lang_id', 'pro_trans.name AS product_lang_name', 'pro_trans.short_content')
                                 ->leftjoin('product_translation as pro_trans', 'product.id', '=', 'pro_trans.product_id');
 
-
         $data['relatedProductData']   = $productDirctoryData
                             ->Where('pro_trans.language_id', $language_id)
                             ->where('product.directory_id', $id)
                             ->where('product.deleted', '0')->where('product.is_free_product', 0)
                             ->where('product.status', 'Active')->groupBy('product.id')
-                            // ->orderBy('product.id', 'desc')
                             ->orderby('distance', 'desc')
                             //->having('distance', '<', 2000)
                             ->get()->take(7);
 
-        $data['directoryProductData']         = $productDirctoryData
+        $data['directoryProductData'] = $productDirctoryData
                             ->Where('pro_trans.language_id', $language_id)
                             ->where('product.directory_id', $id)
                             ->where('product.deleted', '0')->where('product.is_free_product', 0)
                             ->where('product.status', 'Active')->groupBy('product.id')
-                            // ->orderBy('product.id', 'desc')
                             ->orderby('distance', 'asc')
-                            //->having('distance', '<', 2000)
                             ->get()->toArray();
-        $data['offerData']                  = DB::table('offer')->select('*',  DB::raw("6371 * acos(cos(radians(" . $latitude . "))
-                                            * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
-                                            + sin(radians(" .$latitude. ")) * sin(radians(latitude))) AS distance"))
-                                            ->where('offer_directory_link', $id)->where('deleted', '0')
-                                            ->where('offer_expire_date', ">=", date('y-m-d'))
-                                            ->orderby('distance', 'asc')
-                                            //->having('distance', '<', 2000)
-                                            ->get()->toArray();
+
+        $data['offerData']  = DB::table('offer')->select('*',  DB::raw("6371 * acos(cos(radians(" . $latitude . "))
+                                * cos(radians(latitude)) * cos(radians(longitude) - radians(" . $longitude . "))
+                                + sin(radians(" .$latitude. ")) * sin(radians(latitude))) AS distance"))
+                                ->where('offer_directory_link', $id)->where('deleted', '0')
+                                ->where('offer_expire_date', ">=", date('y-m-d'))
+                                ->orderby('distance', 'asc')
+                                //->having('distance', '<', 2000)
+                                ->get()->toArray();
 
         $data['eventdata'] = Events::where('directory_id', $id)
                                             ->where('end_date', '>=', date('Y-m-d')) // Correct format for year is 'Y'
@@ -1221,8 +1264,6 @@ class Listing extends Controller
                                         ->orderby('distance', 'asc')
                                         //->having('distance', '<', 2000)
                                         ->get()->toArray();
-
-
 
         $data['adevertiseData'] = Advertisement::query()
             ->select([
@@ -1316,7 +1357,6 @@ class Listing extends Controller
                     ->join('directory', 'directory.id', '=', 'viewed_listings_counters.directory_id')
                     ->join('directory_location', 'directory.id', '=', 'directory_location.directory_id')
                     ->groupBy("viewed_listings_counters.directory_id")
-                    // ->orderBy("occurence", "desc")
                     ->orderby('distance', 'asc')
                     //->having('distance', '<', 2000)
                     ->get()->take(7);
@@ -1342,7 +1382,6 @@ class Listing extends Controller
                     ->join('tag_product_translations', 'company_imp_product_tags.ptag_id', '=', 'tag_product_translations.tag_id')
                     ->where('tag_product_translations.language_id', $language_id)
                     ->where('company_imp_product_tags.company_id', $id)
-                    //->orderBy('company_imp_product_tags.tags', 'ASC')
                     ->pluck('tag_product_translations.title', 'company_imp_product_tags.ptag_id')
                     ->take(10)
                     ->toArray();
@@ -1370,6 +1409,7 @@ class Listing extends Controller
         }
 
     }
+
     function group_assoc($array, $key)
     {
         $return = array();

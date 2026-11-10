@@ -157,7 +157,7 @@ if(in_array("rydholms-dammodehus", $currenturl)){
     </div>
     <dialog class="footer-company-detail__install-dialog" id="install-mobile-app-help" aria-labelledby="install-mobile-app-title">
         <div class="footer-company-detail__install-dialog-content">
-            <h2 id="install-mobile-app-title">Install ToLocal.shop</h2>
+            <h2 id="install-mobile-app-title">Install {{ $companyTitle }}</h2>
             <p id="install-mobile-app-instructions"></p>
             <button type="button" id="close-install-mobile-app-help">Got it</button>
         </div>

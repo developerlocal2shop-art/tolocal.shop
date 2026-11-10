@@ -131,6 +131,7 @@ Route::get('/load-most-viewed-listings', [Listing::class, 'loadMostViewedListing
 Route::get('/load-tree-structure-listings', [Listing::class, 'loadTreeStructureListings'])->name('load.tree.structure.listings');
 Route::get('/load-tree-structure-shop', [Listing::class, 'loadTreeStructureShop'])->name('load.tree.structure.shop');
 
+Route::get('listings/details/{slug}/manifest.webmanifest', [Listing::class, 'vendorManifest'])->name('listing.details.manifest');
 Route::get('listings/details/{id}', [Listing::class, 'details'])->name('listing.details');
 
 Route::post('listings/details/booking', [Listing::class, 'appointmentBooking'])->name('appointment.booking');

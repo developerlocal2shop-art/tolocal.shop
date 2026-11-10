@@ -3883,7 +3883,7 @@ div#company_imp_tags_div span a {
     }
     .see_more_gallery_type {
         top: 100px;
-        width: 27%;
+        width: 35%;
         background: #fff;
         border: 1px solid;
         line-height: 23px;
@@ -4289,8 +4289,6 @@ div#company_imp_tags_div span a {
     .listing-social-row {
         gap: 15px !important;
         padding: 5px 0px 0px 10px;
-        border: 1px solid #ebeef3;
-        background: #f0f4f5;
     }
     .listing-social-row {
         gap: 0px !important;
@@ -4436,7 +4434,9 @@ div#company_imp_tags_div span a {
     header {
         padding: 13px !important;
     }
-
+    #banner-foot .item, #blog-home .item, #event .item, #popular_companies .item, #shopping-card .item, #sploffer .item {
+        margin: 3px 0px 0px 32px !important;
+    }
     .headercontact {
         position: fixed;
         right: 0;
@@ -5373,10 +5373,10 @@ div#company_imp_tags_div span a {
     }
 
     .company_d_title {
-        margin: 15px;
+        margin: 7px;
         font-size: 20px;
         background: #fff;
-        padding: 0px 0px;
+        padding: 0px 8px;
     }
 
     li.company_details_logo img {
@@ -6395,11 +6395,9 @@ div#company_imp_tags_div span a {
         flex-direction: row !important;
         flex-wrap: nowrap !important;
         gap: 20px !important;
-        padding: 14px 10px 0px 10px;
-        border: 1px solid #e6eaf0;
+        padding: 5px 5px 0px 5px;
         border-radius: 12px;
-        background: #fff;
-        box-shadow: 0 3px 12px rgba(16, 24, 40, .06);
+        /* box-shadow: 0 3px 12px rgba(16, 24, 40, .06); */
     }
 
     .listing-social-row > hr {

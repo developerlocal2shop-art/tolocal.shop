@@ -840,6 +840,10 @@ class Helper {
         $price = DB::table('product_price')->select('*')->where('product_id', $id)->where('currency_code', $currencyCode)->get()->toArray();
         return $price;
     }
+    public static function getProductpriceCompany($id,$currencyCode){
+        $price = DB::table('product_price')->where('product_id', $id)->where('currency_code', $currencyCode)->first();
+        return $price;
+    }
     public static function getProductpriceId($id,$currencyCode){
         $price = DB::table('product_price')->select('*')->where('product_id', $id)->where('currency_code', $currencyCode)->first();
         return $price;
@@ -852,6 +856,10 @@ class Helper {
     }
     public static function defaultCurrencyData(){
         $baseCurrency = DB::table('currency')->select('*')->where('base_currency', 'yes')->get()->toArray();
+        return $baseCurrency;
+    }
+    public static function defaultCurrencyDataCompanyDetail(){
+        $baseCurrency = DB::table('currency')->where('base_currency', 'yes')->first();
         return $baseCurrency;
     }
     public static function checkCompanyPermissionById($company_id){

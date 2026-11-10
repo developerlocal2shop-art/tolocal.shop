@@ -4,11 +4,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <title>@yield('title')</title>
         <meta name="csrf-token" content="{{ csrf_token() }}">
+    @if (request()->routeIs('listing.details'))
+        @php
+            $vendorAppName = data_get($data, 'mainDirectoryDetails.title', 'ToLocal.shop');
+            $vendorAppLogo = data_get($data, 'mainDirectoryDetails.company_logo');
+            $vendorImageBase = (string) env('IMAGE_PATH', '');
+            $vendorAppIcon = !empty($vendorAppLogo)
+                ? (preg_match('/^https?:\/\//i', $vendorImageBase)
+                    ? rtrim($vendorImageBase, '/') . '/' . ltrim($vendorAppLogo, '/')
+                    : asset(trim($vendorImageBase, '/') . '/' . ltrim($vendorAppLogo, '/')))
+                : asset('assets/client/images/favicon.jpg');
+            $vendorThemeColor = data_get($data, 'mainDirectoryDetails.company_color');
+            $vendorThemeColor = is_string($vendorThemeColor) && preg_match('/^#[0-9a-f]{6}$/i', $vendorThemeColor)
+                ? $vendorThemeColor
+                : '#4A90E2';
+        @endphp
+        <meta name="theme-color" content="{{ $vendorThemeColor }}">
+        <link rel="manifest" href="{{ route('listing.details.manifest', ['slug' => request()->route('id')]) }}">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-title" content="{{ $vendorAppName }}">
+        <link rel="apple-touch-icon" href="{{ $vendorAppIcon }}">
+    @else
         <meta name="theme-color" content="#4A90E2">
         <link rel="manifest" href="{{ asset('manifest.json') }}">
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-title" content="ToLocal.shop">
         <link rel="apple-touch-icon" href="{{ asset('assets/client/images/favicon.jpg') }}">
+    @endif
     @if (app()->environment('production'))
         <meta name="google-analytics-id" content="{{ env('GOOGLE_ANALYTICS_ID') }}">
     @endif
