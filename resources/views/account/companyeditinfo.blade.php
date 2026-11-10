@@ -5615,6 +5615,19 @@ $instruction = $data['instruction'];
 </script>
 
 <style>
+     form#editsection {
+        margin-bottom: 200px;
+    }
+    .thumbnail img {
+        border-radius: 4px;
+        transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+    }
+    .thumbnail:hover img,
+    .thumbnail:focus-within img {
+        border-color: #ff9d07;
+        box-shadow: 0 8px 18px rgba(32, 41, 57, 0.24);
+        transform: translateY(-3px) scale(1.04);
+    }
     .custom-control.custom-checkbox input[type="checkbox"] {
         z-index: 1 !important;
     }
@@ -5704,7 +5717,7 @@ $instruction = $data['instruction'];
         display: inline-flex;
         width: 70px;
         height: 70px;
-        margin: 15px 10px;
+        margin: 17px 11px;
     }
 
     .thumbnail img {
@@ -5814,6 +5827,37 @@ $instruction = $data['instruction'];
         right: -41px;
         background-size: 100% 100%;
         background-repeat: no-repeat;
+    }
+
+    #listgallerypreview .closebtn {
+        top: -8px;
+        right: -20px;
+        z-index: 0;
+        display: flex;
+        width: 24px;
+        height: 24px;
+        align-items: center;
+        justify-content: center;
+        background: #fff;
+        border: 1px solid #e4e7ec;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(16, 24, 40, 0.18);
+        cursor: pointer;
+        transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+    }
+
+    #listgallerypreview .closebtn i {
+        font-size: 13px;
+    }
+
+    #listgallerypreview .closebtn:hover {
+        background: #dc3545;
+        border-color: #dc3545;
+        transform: scale(1.08);
+    }
+
+    #listgallerypreview .closebtn:hover i {
+        color: #fff !important;
     }
 
     .select2-container-multi {
