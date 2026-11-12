@@ -157,7 +157,7 @@ $currenturl = explode("/",$currenturl);
 <script type="text/javascript" src="{{ asset('assets/client/js/jquery.cookie.min.js') }}" @if(Request::is('/')) defer @endif></script>
 <script src="{{ asset('assets/client/js/bootstrap3-typeahead.min.js') }}" ></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js" async ></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCDWk_AYrkrQ0IewYKg25O0XjC5o1VbbGk&language=en&callback=showPosition" async ></script>
+<script src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAP_API_KEY') }}&language=en&callback=showPosition" async ></script>
 
 
 <script src="{{ asset('assets/client/js/owl.carousel.min.js') }}" @if(Request::is('/')) defer @endif></script>

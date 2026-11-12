@@ -1199,10 +1199,8 @@
         @endif
     </div> --}}
 
-    <div class="container-fluid row">
-
-        <?php if(!empty($data['galleryImageChunk'])){ ?>
-
+    <?php if(!empty($data['galleryImage'])){ ?>
+        <div class="container-fluid row">
             <div class="container-fluid company_gallery">
                 <div class="listing_see_all">
                     @if(count($data['galleryImage']) > 1)
@@ -1239,16 +1237,15 @@
                     <?php } } ?>
                 </div>
             </div>
-        <?php } ?>
-
-    </div>
+        </div>
+    <?php } ?>
 
     <div class="container" id="listing-detail-main-content">
         <div class="row">
 
             <div class="col-md-12">
 
-                @if($data['mainDirectoryDetails']->directoryLanguage[0]->description)
+                @if(!empty($data['mainDirectoryDetails']->directoryLanguage[0]->description) && $data['mainDirectoryDetails']->directoryLanguage[0]->description !== 'null')
                     <div class="weoffer_comman listing-print-banner print_desktop">
                         <div class="listing-print-banner__copy" style="color: {{ preg_match('/^#[0-9a-fA-F]{6}$/', $data['mainDirectoryDetails']->description_text_color ?? '') ? $data['mainDirectoryDetails']->description_text_color : 'inherit' }};">
                             {{ $data['mainDirectoryDetails']->directoryLanguage[0]->description }}
@@ -1790,9 +1787,9 @@
                                     <?php $j=0; foreach($val as $opnclosetime){ ?>
                                     <tr>
                                         <?php if($j==0){ ?>
-                                        <td class="notranslate" style="padding-right: 25px;">{{ ucfirst($days) }}</td>
+                                        <td style="padding-right: 25px;">{{ ucfirst($days) }}</td>
                                         <?php }else{ ?>
-                                        <td class="notranslate" style="padding-right: 25px;"></td>
+                                        <td style="padding-right: 25px;"></td>
                                         <?php } ?>
                                         <?php if($days_abb==$serverDay){
                                             if($totalexceptionschedule>0){
@@ -1825,9 +1822,9 @@
                                     <?php $j=0;foreach($val as $opnclosetime){ ?>
                                     <tr>
                                         <?php if($j==0){ ?>
-                                        <td class="notranslate" style="padding-right: 25px;">{{ ucfirst($days) }}</td>
+                                        <td style="padding-right: 25px;">{{ ucfirst($days) }}</td>
                                         <?php }else{ ?>
-                                        <td class="notranslate" style="padding-right: 25px;"></td>
+                                        <td style="padding-right: 25px;"></td>
                                         <?php } ?>
                                         <?php if($days_abb==$serverDay){
                                             if($totalexceptionschedule>0){
@@ -2190,37 +2187,68 @@
                 <hr>
                     <div class="row mb-3" >
                         <div class="col-12  listing-social-btn">
-                            <a href="{{ isset($contactData->website)?$contactData->website:'' }}" target="blank" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-globe" aria-hidden="true"></i>
-                                {{__("message.website_contactdata")}}
-                            </a>
-                            @if($data['frontend_setting']->hide_show_vendor_contact == 'yes')
-                            <a href="mailto:{{ isset($contactData->email)?$contactData->email:'' }}" target="" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-envelope" aria-hidden="true"></i>
-                                {{__("message.email_us_contactdata")}}
-                            </a>
-                            <?php
-                                $phoneActivateorNot = 0;
-                                $validPhoneno = $data['mainDirectoryDetails']->user->is_verified ?? "blank";
-                                if($validPhoneno=="default" || $validPhoneno=="blank"){
-                                    $disabl = "disabled";
-                                    $phoneActivateorNot = 0;
-                                }else{
-                                    $disabl = "";
-                                    $phoneActivateorNot = 1;
-                                }
-                            ?>
-                            <?php if($ismobiledevice==1){ ?>
-                                <a href="tel:+{{ isset($contactData->phone)?$contactData->phone:'' }}" target="" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>{{__("message.call_now_contactdata")}}</a>
-                            <?php }else{ if($phoneActivateorNot!=1){ ?>
-                                    <a href="javascript:void(0);" target="" style="pointer-events: none;cursor: default;background-color:#b5b9b7;" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>Call </a>
-                                <?php }else{ ?>
-                                    <a href="javascript:void(0);" target="" class="btn_1 full-width outline wishlist social-button" style="width: 158px !important;" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>
-                                        Call at - {{ isset($contactData->phone)?$contactData->phone:'' }}
-                                    </a>
-                            <?php } }?>
+                            @if($contactData->website)
+                                <a href="{{ isset($contactData->website)?$contactData->website:'' }}"  target="blank" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-globe" aria-hidden="true"></i>
+                                    {{__("message.website_contactdata")}}
+                                </a>
+                            @else
+                                <a  style="pointer-events: none;cursor: default;background-color:#b5b9b7;" target="blank" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-globe" aria-hidden="true"></i>
+                                    {{__("message.website_contactdata")}}
+                                </a>
                             @endif
 
+                            @if($data['frontend_setting']->hide_show_vendor_contact == 'yes')
+                                @if($data['mainDirectoryDetails']->claim_contact == 'yes')
+                                    @if($contactData->email)
+                                        <a href="mailto:{{ isset($contactData->email)?$contactData->email:'' }}" target="" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-envelope" aria-hidden="true"></i>
+                                            {{__("message.email_us_contactdata")}}
+                                        </a>
+                                    @else
+                                        <a style="pointer-events: none;cursor: default;background-color:#b5b9b7;" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-envelope" aria-hidden="true"></i>
+                                            {{__("message.email_us_contactdata")}}
+                                        </a>
+                                    @endif
+
+                                    <?php
+                                        $phoneActivateorNot = 0;
+                                        $validPhoneno = $data['mainDirectoryDetails']->user->is_verified ?? "blank";
+                                        if($validPhoneno=="default" || $validPhoneno=="blank"){
+                                            $disabl = "disabled";
+                                            $phoneActivateorNot = 0;
+                                        }else{
+                                            $disabl = "";
+                                            $phoneActivateorNot = 1;
+                                        }
+                                    ?>
+                                    <?php if($ismobiledevice==1){ ?>
+                                        <a href="tel:+{{ isset($contactData->phone)?$contactData->phone:'' }}" target="" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>{{__("message.call_now_contactdata")}}</a>
+                                    <?php }else{ if($phoneActivateorNot!=1){ ?>
+                                            <a href="javascript:void(0);" target="" style="pointer-events: none;cursor: default;background-color:#b5b9b7;" class="btn_1 full-width outline wishlist social-button" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>Call </a>
+                                        <?php }else{ ?>
+                                            <a href="javascript:void(0);" target="" class="btn_1 full-width outline wishlist social-button" style="width: 158px !important;" id="btn-wishlist-social"><i class="fa fa-phone" aria-hidden="true"></i>
+                                                Call at - {{ isset($contactData->phone)?$contactData->phone:'' }}
+                                            </a>
+                                    <?php } } ?>
+                                @endif
+                            @endif
                         </div>
                     </div>
+
+                    @if($data['mainDirectoryDetails']->claim_contact == 'yes')
+                        <section class="listing-claim-card" aria-labelledby="listing-claim-title">
+                            <div class="listing-claim-card__heading">
+                                <span class="listing-claim-card__icon" aria-hidden="true"><i class="fa fa-check-circle"></i></span>
+                                <h3 id="listing-claim-title">Incorrect or incomplete information?</h3>
+                            </div>
+                            <p>Contact us at info@tolocal.shop Take control of this page if you run the business.</p>
+                            <p> Provide your email address, mobile number, and organization registration number via {{ $contactData->email??'' }} </p>
+                            <p> We will help you set up an advantageous membership tailored to your needs. </p>
+                            <a class="listing-claim-card__button" href="mailto:info@tolocal.shop">
+                                <i class="fa fa-envelope" aria-hidden="true"></i>
+                                info@tolocal.shop
+                            </a>
+                        </section>
+                    @endif
 
                 <?php
                 $user = auth()->guard('web')->check();
@@ -2230,13 +2258,11 @@
                 <form action="{{ route('company.booking.indexsearch') }}" method="get" class="">
                     <div class="row">
                         <div class="col-md-5">
-                            <h5 class="box-title">Booking List</h5>
-
+                            <h6 class="box-title">Booking List</h6>
                         </div>
 
                         <div class="col-md-7">
                             <div class="d-md-flex">
-
                                 <div class="input-group mb-3">
                                     <input type="text"  name="searchtext" id="search" value="" class="form-control" placeholder="Search" aria-label="Search" aria-describedby="basic-addon2">
                                     <div class="input-group-append">
@@ -2252,7 +2278,6 @@
                     <table class="table text-nowrap">
                             <thead>
                                 <tr>
-
                                     <th class="border-top-0">S.No</th>
                                     <th class="border-top-0">Name | Email | Phone</th>
                                     <th class="border-top-0">Booking Date</th>
@@ -2274,7 +2299,6 @@
                                 @endphp
                                     <tr>
                                         <td>{{ $i++ }} </td>
-
                                         <td>
                                             {!! Str::words($bookingdatarow->name, 3, '...') !!}
                                             <br>
@@ -2282,7 +2306,6 @@
                                             <br>
                                             {{ $bookingdatarow->phone }}
                                         </td>
-
                                         <td>
                                             <?php
                                             if($bookingdatarow->booking_date){
@@ -2298,7 +2321,6 @@
                                                 ?>
                                                         {{ $creatingDateandTime[0]??'' }}:
                                                         {{ $creatingDateandTime[1]??'' }}
-
                                             <?php } } ?>
                                         </td>
 
@@ -2316,12 +2338,9 @@
                                         @endif
                                             <a class="btn btn-primary btn-sm" href="{{ route('company.booking.edit',$bookingdatarow->id) }}">EDIT</a>
                                             <a class="btn btn-danger btn-sm show_confirm" href="{{ route('company.booking.destroy',$bookingdatarow->id) }}">DELETE</a>
-
                                         </td>
                                     </tr>
                                 @endforeach
-
-
 
                             <?php }else{ ?>
                                     <tr>

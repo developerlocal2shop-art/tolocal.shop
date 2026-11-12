@@ -123,6 +123,8 @@ if(in_array("rydholms-dammodehus", $currenturl)){
                     <p>{{ $companyLocation->address??'' }}</p>
                 @endif
 
+            @if($data['mainDirectoryDetails']->claim_contact == 'yes')
+
                 @if(!empty($companyContact))
                     <p>
                         <a href="tel:{{ preg_replace('/[^0-9+]/', '', $companyContact->phone??'') }}">
@@ -137,6 +139,7 @@ if(in_array("rydholms-dammodehus", $currenturl)){
                     </p>
                 @endif
 
+            @endif
                 <button type="button" class="footer-company-detail__install" id="install-mobile-app" aria-haspopup="dialog">
                     <i class="fa fa-download" aria-hidden="true"></i>
                     Download App

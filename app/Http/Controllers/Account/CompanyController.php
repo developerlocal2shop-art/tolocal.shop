@@ -2843,7 +2843,7 @@ class CompanyController extends Controller
         $name_en = $request->input('name_en');
         $seo_en = $request->input('seo_en');
         $activeTab = strtolower((string) $request->input('active_tab', ''));
-        //dd($activeTab);
+        $claim_contact = $request->input('claim_contact')??'no';
 
         $description_en = $request->input('description_en');
         $weoffer_en = $request->input('weoffer_en');
@@ -2873,6 +2873,7 @@ class CompanyController extends Controller
                 'description_text_color'        => $request->input('description_text_color'),
                 'feature_type'                  => $request->input('featuretype'),
                 'company_color'                 => $request->input('company_color'),
+                'claim_contact'                 => $claim_contact,
                 'google_analytics_id'           => $request->input('google_ana_id'),
                 'is_normaltemplate'             => $request->input('normaldays'),
                 'is_normaltemplate_id'          => $request->input('normaldaytemplateselect'),

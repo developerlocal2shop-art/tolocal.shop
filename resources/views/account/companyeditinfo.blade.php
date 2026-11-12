@@ -7,57 +7,58 @@
     $getFeatureLinksValue = Helper::getFeatureUsesValue('links');
     $getFeatureAmenitiesValue = Helper::getFeatureUsesValue('amenities');
 
-if (isset($data['basicData'])) {
-$basicData = $data['basicData'];
-}else{
- $basicData = '';
-}
-if (isset($data['basicAndTraslationData'])) {
-$basicAndTraslationData = $data['basicAndTraslationData'];
-}
-if (isset($data['locationData'])) {
-$locationData = $data['locationData'];
-}
-if (isset($data['amenityData'])) {
+    if (isset($data['basicData'])) {
+    $basicData = $data['basicData'];
+    }else{
+    $basicData = '';
+    }
+    if (isset($data['basicAndTraslationData'])) {
+    $basicAndTraslationData = $data['basicAndTraslationData'];
+    }
+    if (isset($data['locationData'])) {
+    $locationData = $data['locationData'];
+    }
+    if (isset($data['amenityData'])) {
 
-$amenityid = (isset($data['amenityData'][0]->amenities_id) ? $data['amenityData'][0]->amenities_id : "");
-$amenityData = explode(',', $amenityid);
-}
+    $amenityid = (isset($data['amenityData'][0]->amenities_id) ? $data['amenityData'][0]->amenities_id : "");
+    $amenityData = explode(',', $amenityid);
+    }
 
-if (isset($data['mediaData'])) {
-$mediaData = $data['mediaData'];
-}
-if (isset($data['seoAndTraslationData'])) {
-$seoAndTraslationData = $data['seoAndTraslationData'];
-}
-if (isset($data['directoryTypeData'])) {
-$directoryTypeData = $data['directoryTypeData'];
-}
-if (isset($data['directoryTypeDatainreverse'])) {
-$directoryTypeDatainreverse = $data['directoryTypeDatainreverse'];
-}
-if (isset($data['contactData'])) {
-$contactData = $data['contactData'];
-}
-if (isset($data['scheduleData'])) {
-$scheduleData = $data['scheduleData'];
-}
-if (isset($data['websitelink'])) {
-$websitelink = $data['websitelink'];
-}
-if (isset($data['assortlink'])) {
-$assortlink = $data['assortlink'];
-}
-if (isset($data['amenityData'])) {
-$amenity = $data['amenityData'];
-}
-if (isset($data['amenityselectedDataAccordingToAmenityCat'])) {
-$amenityselectedDataAccordingToAmenityCat = $data['amenityselectedDataAccordingToAmenityCat'];
-}
-if (isset($data['instruction'])) {
-$instruction = $data['instruction'];
-}
+    if (isset($data['mediaData'])) {
+    $mediaData = $data['mediaData'];
+    }
+    if (isset($data['seoAndTraslationData'])) {
+    $seoAndTraslationData = $data['seoAndTraslationData'];
+    }
+    if (isset($data['directoryTypeData'])) {
+    $directoryTypeData = $data['directoryTypeData'];
+    }
+    if (isset($data['directoryTypeDatainreverse'])) {
+    $directoryTypeDatainreverse = $data['directoryTypeDatainreverse'];
+    }
+    if (isset($data['contactData'])) {
+    $contactData = $data['contactData'];
+    }
+    if (isset($data['scheduleData'])) {
+    $scheduleData = $data['scheduleData'];
+    }
+    if (isset($data['websitelink'])) {
+    $websitelink = $data['websitelink'];
+    }
+    if (isset($data['assortlink'])) {
+    $assortlink = $data['assortlink'];
+    }
+    if (isset($data['amenityData'])) {
+    $amenity = $data['amenityData'];
+    }
+    if (isset($data['amenityselectedDataAccordingToAmenityCat'])) {
+    $amenityselectedDataAccordingToAmenityCat = $data['amenityselectedDataAccordingToAmenityCat'];
+    }
+    if (isset($data['instruction'])) {
+    $instruction = $data['instruction'];
+    }
 @endphp
+
 <style>
     div#dirtype input.typecat {
         left: -11px;
@@ -205,60 +206,6 @@ $instruction = $data['instruction'];
         <x-client.company_account_menu />
     </div>
 </div>
-<!-- /sub_header -->
-<!-- Gallery Image Modal -->
-{{-- <div class="modal fade"  id="allgalleryimages_model" tabindex="-1" role="dialog" style="top:50px;" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">All Gallery Images</h5>
-                <button type="button" class="close modal_header_close_btn" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12 listgallerypreview_b" id="listgallerypreview_b">
-                        @php
-                        $mediadirct_id = isset($mediaData[0]->directory_id)? $mediaData[0]->directory_id : "";
-                        $imagenamegal = App\Http\Controllers\Admin\Directory\DirectoryController::getallgalImage($mediadirct_id);
-                        @endphp
-                        <?php
-                        if (!empty($imagenamegal)) { $last_position = end($imagenamegal);?>
-                        @foreach($imagenamegal as $imagenamerow)
-                        <div class="thumbnail" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
-                            <!-- @if($imagenamerow->name_thumbnail)
-                                <img src="{{env('IMAGE_PATH').'files/directory/'.$imagenamerow->name_thumbnail }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
-                            @else
-                                <img src="{{ asset('assets/plugins/images/placeholder.png') }}" id="preview-gal-img" alt="directory-img" width="70px" height="70px" class="previewBlocks" />
-                            @endif -->
-
-                            @if($imagenamerow->name_thumbnail)
-                                <div class="thumbnail" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
-                                    <img src="{{env('IMAGE_PATH').'images/directory/'.$imagenamerow->name_thumbnail.'.webp' }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
-                                    <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
-                                </div>
-                            @else
-                                <div class="thumbnail" data-position="{{ $imagenamerow->position }}" data-galimages="{{ $imagenamerow->name_thumbnail }}">
-                                    <img src="{{ asset('assets/plugins/images/placeholder.png') }}" data-id="{{ $imagenamerow->id }}" data-value="gal">
-                                    <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span>
-                                </div>
-                            @endif
-
-                            <!-- <span class="closebtn"><i class="fas fa-trash" style="color:#ff0505; " aria-hidden="true"></i></span> -->
-                        </div>
-                        @endforeach
-
-                        <?php } ?>
-
-                        <input type="hidden" id="lastpositiongallValue" value="<?php echo isset($last_position->position)?$last_position->position:'-1'  ?>" />
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
 
 <div class="modal fade listing_detail_gallery" id="type_galleryModal" role="dialog"  >
     <div class="modal-dialog modal-xl modal-lg">
@@ -626,7 +573,7 @@ $instruction = $data['instruction'];
                                             </div>
                                             <div class="col-md-3">
                                                 @if (!empty($basicData->company_logo))
-                                                <img src="{{env('IMAGE_PATH').'/'.$basicData->company_logo }}" width="130px">
+                                                <img src="{{env('IMAGE_PATH').''.$basicData->company_logo }}" width="130px">
                                                 @else
                                                 <img src="{{ asset('assets/images/comp.jpg') }}" width="130px" alt="" >
                                                 @endif
@@ -664,7 +611,7 @@ $instruction = $data['instruction'];
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <div class="form-group mb-4">
                                                         <label class="col-md-12 p-0">Name<span class="notranslate" style="color:red;">*</span></label>
                                                         <div class="col-md-12 border-bottom p-0">
@@ -673,6 +620,7 @@ $instruction = $data['instruction'];
                                                         <span class="text-danger">@error('name'){{$message}} @enderror</span>
                                                     </div>
                                                 </div>
+
                                                 <div class="col-md-3">
                                                     <div class="form-group mb-4">
                                                         <label class="col-md-12 p-0" style="display: inline-flex;">Phone Number<span style="color:red;">*</span>
@@ -687,6 +635,17 @@ $instruction = $data['instruction'];
                                                         <span class="text-danger">@error('phone_number'){{$message}} @enderror</span>
                                                     </div>
                                                 </div>
+
+                                                <div class="col-md-1">
+                                                    <div class="form-group mb-4">
+                                                        <label class="col-md-12 p-0"> Claim </label>
+                                                        <div class="col-md-12 border-bottom p-0">
+                                                            <input type="checkbox" name="claim_contact" value="yes"  @if($basicData->claim_contact == 'yes') checked @endif style="margin: 17px 0px;">
+                                                        </div>
+                                                        <span class="text-danger">@error('claim_contact'){{$message}} @enderror</span>
+                                                    </div>
+                                                </div>
+
                                             </div>
 
                                             <hr style="height:2px;color:#8898aa">

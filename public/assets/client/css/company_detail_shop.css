@@ -294,6 +294,40 @@ div#listing_banner .hero_in {
     object-fit: contain !important;
 }
 
+
+.logo_city_name {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 7px;
+    box-sizing: border-box;
+    width: fit-content !important;
+    max-width: calc(100vw - 32px);
+    margin: 4px 0 0px 0px !important;
+    padding: 3px 13px !important;
+    overflow: hidden;
+    border: 1px solid #dce5ef;
+    border-radius: 999px;
+    background: #fff !important;
+    box-shadow: 0 2px 6px rgba(20, 42, 70, 0.12);
+    color: #294365 !important;
+    font-family: inherit !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 1.3px !important;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.logo_city_name::before {
+    flex: 0 0 7px;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #138a8a;
+    content: "";
+}
 #shopcarddata .listing-shopping-card__body {
     display: flex;
     flex: 1;
@@ -594,10 +628,7 @@ div#listing_banner .hero_in {
     line-height: 1.55;
     text-shadow: 0 1px 5px rgba(0, 0, 0, 0.55);
 }
-.logo_city_name {
-    margin: 11px 0px 10px 5px !important;
-    font-size: 25px !important;
-}
+
 .city_name_mobile {
     display: none;
 }
@@ -1327,7 +1358,7 @@ span.locally_text {
 }
 
 nav#menu ul {
-    margin: 0px -3px !important;
+    margin: 0px -27px !important;
 }
 
 div#public_holiday_model {
@@ -3009,7 +3040,7 @@ header {
     width: auto;
     font-family: fantasy;
     border-radius: 25px;
-    padding: 1px 15px;
+    padding: 1px 8px;
 }
 
 .company_d_title_mobile {
@@ -3727,7 +3758,7 @@ div#company_imp_tags_div span a {
 
     header.header.listing-detail-header #menu.main-menu>ul>li.nav-item.dropdown>.dropdown-menu {
         position: absolute !important;
-        top: 90% !important;
+        top: 75% !important;
         width: 98vw !important;
         max-width: none !important;
         box-sizing: border-box;
@@ -3784,7 +3815,7 @@ div#company_imp_tags_div span a {
         margin: 0;
         color: #5a5959;
         font-size: clamp(18px, 2vw, 26px);
-        font-weight: 700;
+        font-weight: 500;
         line-height: 1.2;
     }
 
@@ -4297,11 +4328,9 @@ div#company_imp_tags_div span a {
         display: none;
     }
     .logo_city_name {
-        margin: 5px 0px 0px 10px !important;
-        font-size: 20px !important;
-        text-align: center !important;
-        width: auto;
-        padding: 2px;
+        margin: 5px 0 8px 10px !important;
+        padding: 5px 9px !important;
+        font-size: 13px !important;
     }
     .city_name_mobile {
         display: block;
@@ -6387,6 +6416,82 @@ div#company_imp_tags_div span a {
     }
 }
 
+.listing-claim-card {
+    margin: 18px 0;
+    padding: 18px;
+    border: 1px solid #dfe6ef;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #f8fbff, #fff 72%);
+    box-shadow: 0 5px 16px rgba(29, 55, 87, .08);
+}
+
+.listing-claim-card__heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.listing-claim-card__icon {
+    display: inline-flex;
+    flex: 0 0 34px;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    background: #e8f4f3;
+    color: #138a8a;
+    font-size: 16px;
+}
+
+.listing-claim-card__heading h3 {
+    margin: 0;
+    color: #263b53;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.listing-claim-card p {
+    margin: 0 0 5px;
+    color: #596779;
+    font-size: 13px;
+    line-height: 1.6;
+    border-bottom: 1px solid #f3f0f0;
+}
+
+.listing-claim-card__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: 9px;
+    background: #1d5e9d;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.35;
+    text-align: center;
+    text-decoration: none;
+    transition: background-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+
+.listing-claim-card__button:hover,
+.listing-claim-card__button:focus {
+    background: #174b7e;
+    color: #fff;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(29, 94, 157, .24);
+}
+
+.listing-claim-card__button:focus-visible {
+    outline: 3px solid rgba(29, 94, 157, .3);
+    outline-offset: 3px;
+}
+
 @media (max-width: 991px) {
 
     .listing-social-row {
@@ -6826,9 +6931,9 @@ div#company_imp_tags_div span a {
         width: 200px;
     }
     .logo_city_name {
-        margin: 7px 0px 0px 0px !important;
-        font-size: 15px !important;
-        padding: 2px;
+        margin: 5px 0 8px 0 !important;
+        padding: 4px 8px !important;
+        font-size: 12px !important;
     }
     #listing_banner .listing-banner-caption {
         bottom: 25px;
