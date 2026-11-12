@@ -1067,6 +1067,9 @@ const startRecordingButton = document.getElementById('start-recording');
 			if(isset($key) && $key == 0){
 			?>
 
+            // alert($newLatitude);
+            // alert($newLongitude);
+
 			['<a href="javascript:void();"> <b style="text-transform: uppercase; color:#d93025;">My Location</b> </a>', {{ $newLatitude }}, {{ $newLongitude }}, {{ $mi }}],
 
 			<?php
