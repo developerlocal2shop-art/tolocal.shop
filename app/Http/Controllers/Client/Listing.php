@@ -350,10 +350,7 @@ class Listing extends Controller
 
                 if (!empty($filterData['searchstringUrls']) && array_filter($filterData['searchstringUrls'], 'strlen') !== []) {
                     $searchTerm = $filterData['searchstringUrls'][0];
-
                         $query->where('dt.title', 'like', '%' . $searchTerm . '%');
-                        //$query->orWhere('directory_location.address', 'like', '%' . $searchTerm . '%');
-
                         $query->orWhereRaw("
                             TRIM(
                                 REGEXP_REPLACE(
@@ -444,7 +441,7 @@ class Listing extends Controller
                 }
                 if (!empty($timeSelectedUrls)) {
 
-                    $user_ip = request()->ip();//getenv('REMOTE_ADDR');
+                    $user_ip = request()->ip(); //getenv('REMOTE_ADDR');
                     $geoData = Helper::userCurrentLocationDetailsOnIpAddress($user_ip);
                     if($user_ip=='127.0.0.1' || $user_ip=='::1' || $user_ip=='localhost' ){
                         $timezone = 'Asia/Kolkata';

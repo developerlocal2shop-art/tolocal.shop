@@ -985,6 +985,18 @@ const startRecordingButton = document.getElementById('start-recording');
                     document.getElementById("long").value = positionInfo2;
                     setCookie('latitude', positionInfo1, 7);
                     setCookie('longitude', positionInfo2, 7);
+                    var hasSelectedLocation = @json(
+                        session()->has('latitude_city')
+                        || session()->has('url_city_name')
+                        || request()->filled('city_name')
+                    );
+                    var renderedLatitude = Number(@json($latitude_session));
+                    var renderedLongitude = Number(@json($longitude_session));
+                    var shouldReloadForLocation = !hasSelectedLocation
+                        && (!Number.isFinite(renderedLatitude)
+                            || !Number.isFinite(renderedLongitude)
+                            || Math.abs(renderedLatitude - positionInfo1) > 0.01
+                            || Math.abs(renderedLongitude - positionInfo2) > 0.01);
 
                     var geocoder = new google.maps.Geocoder();
                     var latlng = new google.maps.LatLng(positionInfo1, positionInfo2);
@@ -1012,21 +1024,23 @@ const startRecordingButton = document.getElementById('start-recording');
                         }
                     });
 
-                    setTimeout(function () {
-                        callAjax(positionInfo1, positionInfo2);
-                    }, 2000);
-
-                    function callAjax(lati, long) {
+                    function callAjax(lati, long, reloadForLocation) {
                         var form = $("form#latlongform");
                         $.ajax({
                             url: form.attr("action"),
                             type: "get",
                             data: { lati, long },
                             success: function (response) {
-                                //console.log("Ajax response:", response);
+                                if (reloadForLocation) {
+                                    window.location.reload();
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Unable to update location:", error);
                             },
                         });
                     }
+                    callAjax(positionInfo1, positionInfo2, shouldReloadForLocation);
                 },
                 function (error) {
                     console.error("Geolocation error:", error);
@@ -1097,6 +1111,8 @@ const startRecordingButton = document.getElementById('start-recording');
 
 		var infowindow = new google.maps.InfoWindow();
 		var bounds     = new google.maps.LatLngBounds();
+		var myLocationPosition = null;
+		var companyPositions = [];
 
 		//for (i = 0; i < locations.length; i++) {
 		$.each(locations, function(i, value) {
@@ -1120,6 +1136,9 @@ const startRecordingButton = document.getElementById('start-recording');
 							scale: 10 // Adjust the scale as needed
 						};
 					}
+					myLocationPosition = marker.getPosition();
+				} else {
+					companyPositions.push(marker.getPosition());
 		        }
 
 			bounds.extend(marker.position);
@@ -1141,18 +1160,21 @@ const startRecordingButton = document.getElementById('start-recording');
 
 		});
 
-		@if ($latitude_session)
-			var selectedPositionlatlong = new google.maps.LatLng({{ $latitude_session }},{{ $longitude_session }});// madhulika for focus on the right map based on the selected location
-		@else
-			var selectedPositionlatlong = '';
-		@endif
+		if (myLocationPosition) {
+			$.each(companyPositions, function(i, companyPosition) {
+				new google.maps.Polyline({
+					path: [myLocationPosition, companyPosition],
+					geodesic: true,
+					strokeColor: '#1a73e8',
+					strokeOpacity: 0.8,
+					strokeWeight: 3,
+					clickable: false,
+					map: map
+				});
+			});
+		}
 
 		map.fitBounds(bounds);
-		var listener = google.maps.event.addListener(map, "idle", function () {
-			map.setZoom(14);
-			map.setCenter(selectedPositionlatlong);
-			google.maps.event.removeListener(listener);
-		});
 	}
 	window.onload = showPosition;
 

@@ -4125,7 +4125,7 @@ div#company_imp_tags_div span a {
     }
     b#google_translate_element_mobile {
         float: right;
-        margin: -5px 30px;
+        margin: -3px 10px;
     }
     .listing-local-promo__text {
         max-width: 155px;
@@ -6559,11 +6559,11 @@ div#company_imp_tags_div span a {
 
     .listing-social-row #listinglikedtotal {
         display: inline-flex !important;
-        min-height: 38px;
+        min-height: 20px;
         align-items: center;
         justify-content: center;
-        gap: 6px;
-        padding: 8px 12px !important;
+        gap: 5px;
+        padding: 5px 10px !important;
         border: 1px solid #cfe5df !important;
         border-radius: 999px !important;
         background: #f0f8f5 !important;

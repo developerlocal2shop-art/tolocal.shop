@@ -69,6 +69,7 @@ storage/framework/views
 /public/*
 !/public/.htaccess
 !/public/manifest.json
+!/public/service-worker.js
 !/public/assets/
 /public/assets/*
 !/public/assets/client/
