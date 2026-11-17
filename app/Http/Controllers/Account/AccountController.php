@@ -10,6 +10,7 @@ use App\Mail\PrizeCodeVendorMail;
 use App\Mail\ShoppingWinnerStatusMail;
 use App\Models\Advertisement;
 use App\Models\AdvertisementAnswers;
+use App\Models\AdvertisementQuestions;
 use App\Models\Affiliate;
 use App\Models\CompetitionWinners;
 use App\Models\CustomerClubs;
@@ -418,17 +419,22 @@ class AccountController extends Controller
         $request->validate([
             'competition_id'   => 'required|integer',
             'question_id'      => 'required|integer',
+            'answer_text'      => 'required|string|max:1000',
             //'reply_description'=> 'required|string|max:2000',
         ]);
         // try {
 
             $competition = Advertisement::findOrFail($request->competition_id);
-            $answer = AdvertisementAnswers::where('advertisement_id', $request->competition_id)
-                        ->where('question_id', $request->question_id)
-                        ->where('customer_id', Auth::id())
-                        ->first();
-
-            if (!$answer) { return response()->json(['status'  => 'error','message' => 'Answer not found.'], 404); }
+            $question = AdvertisementQuestions::where('advertisement_id', $competition->id)
+                ->findOrFail($request->question_id);
+            $answer = AdvertisementAnswers::firstOrNew([
+                'advertisement_id' => $competition->id,
+                'question_id'      => $question->id,
+                'customer_id'      => Auth::id(),
+            ]);
+            if (!$answer->exists) {
+                $answer->vendor_id = $question->company_id;
+            }
             do {
                 $prizeCode = Helper::generatePrizeCode();
             } while (
@@ -438,15 +444,15 @@ class AccountController extends Controller
 
             $auto_response_msg = 'you will get exclusive discout by using prize code on physical shop';
 
-            // Update answer
-            $answer->update([
+            $answer->fill([
+                'answer'              => $request->answer_text,
                 'is_correct'        => 1,
                 'prize_code'        => $prizeCode,
                 'exp_date'          => $competition->end_date,
                 'reply_description' => $request->reply_description??'',
                 'auto_reply_response' => $auto_response_msg,
                 'auto_reply_status' => '1',
-            ]);
+            ])->save();
 
             // Save winner
             CompetitionWinners::create([

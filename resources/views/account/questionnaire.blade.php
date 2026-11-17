@@ -480,7 +480,7 @@ if(session()->has('currency_code')){
                                                 <input type="hidden" name="questions[{{ $questionNumber }}][question_id]"
                                                     value="{{ $que->id }}">
                                                 <input type="hidden" name="directory_id[{{ $questionNumber }}]" value="{{ $que->company_id }}">
-                                                <textarea name="questions[{{ $questionNumber }}][answer_text]"
+                                                <textarea id="answer_text_{{ $que->id }}" name="questions[{{ $questionNumber }}][answer_text]"
                                                     class="form-control {{ $answer->answer ?? '' ? 'id_answered' : '' }}"  rows="2" >{{ $answer->answer ?? '' }}</textarea>
 
                                                 @error("questions.$questionNumber.answer_text")
@@ -623,7 +623,7 @@ if(session()->has('currency_code')){
             <div class="modal-body">
                 <form id="replyForm">
                     <div class="form-group">
-                        <label for="reply_title"><b>Answer :</b> <span class="answer_class"> </span></label>
+                        {{-- <label for="reply_title"><b>Answer :</b> <span class="answer_class"> </span></label> --}}
                         <input type="hidden" id="answer_val" name="answer_val" >
                         <input type="hidden" id="competition_id" name="competition_id" >
                         <input type="hidden" id="question_id" name="question_id" >
@@ -679,7 +679,7 @@ if(session()->has('currency_code')){
         function updateReplyButtons() {
             $("textarea[name^='questions']").each(function() {
                 var hasAnswer = $(this).val().trim() !== "";
-                $(this).closest('.form-group').find('.reply-btn').toggle(hasAnswer);
+                //$(this).closest('.form-group').find('.reply-btn').toggle(hasAnswer);
             });
         }
 
@@ -702,14 +702,16 @@ if(session()->has('currency_code')){
             var answer = $(this).data('answer') || '';
             var discountAmount = $(this).data('discountamount') || '';
 
+            $('#answer_text_' + questionId).val('Utilized');
             $('#reply_to').val(replyTo);
             $('#competition_id').val(competitionId);
             $('#question_id').val(questionId);
             $('#discount_amount').val(discountAmount);
 
-            $('#replyModalLabel').html('<b>Reply for Question: </b> ' + questionNumber);
-            $('#answer_val').val(answer);
-            $('.answer_class').text(answer);
+            $('#replyModalLabel').html('<b>Utilize Question: </b> ' + questionNumber);
+            //$('#answer_val').val(answer);
+            $('#answer_val').val('Utilized');
+            //$('.answer_class').text(answer);
 
             $('#reply_description').val('');
 
@@ -725,6 +727,7 @@ if(session()->has('currency_code')){
             var payload = {
                 competition_id: $('#competition_id').val(),
                 question_id: $('#question_id').val(),
+                answer_text: $('#answer_text_' + $('#question_id').val()).val(),
                 reply_description: $('#reply_description').val(),
                 discount_amount: $('#discount_amount').val(),
                 _token: '{{ csrf_token() }}'
