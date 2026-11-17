@@ -17,7 +17,7 @@ $user = auth()->user();
         <div class="">
             <div class="col-lg-12">
 
-                @if(session()->get('msg'))
+                @if(Session::has('msg'))
                 <div class="alert alert-success">
                     {{ session()->get('msg') }}
                 </div><br />

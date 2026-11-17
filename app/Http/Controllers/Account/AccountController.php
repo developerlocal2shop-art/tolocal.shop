@@ -198,7 +198,7 @@ class AccountController extends Controller
         $validated = $request->validate([
             'offer_id' => 'required|integer',
             'vendor_id' => 'nullable|integer',
-            'reply_description' => 'nullable|string',
+            'description' => 'nullable|string',
             'prize_amount' => 'nullable|numeric',
             'voucher_code' => 'nullable|string|max:100',
             'type' => 'nullable|string|max:50',
@@ -228,7 +228,7 @@ class AccountController extends Controller
             'offer_id' => $validated['offer_id'],
             'customer_id' => Auth::id(),
             'vendor_id' => $validated['vendor_id'] ?? null,
-            'description' => trim($validated['reply_description']),
+            'description' => trim($validated['description']),
             'discount_type' => $discount_type,
             'prize_amount' => $prizeAmount,
             'voucher_code' => $voucherCode,
@@ -248,7 +248,7 @@ class AccountController extends Controller
             'vendor_name' => $vendorUser ? trim(($vendorUser->name ?? '') . ' ' . ($vendorUser->last_name ?? '')) ?: ($vendorUser->name ?? 'Vendor') : 'Vendor',
             'vendor_email' => $vendorUser->email ?? null,
             'offer_title' => $shoppingCard->title ?? 'Shopping card offer',
-            'description' => trim($validated['reply_description']),
+            'description' => trim($validated['description']),
             'prize_type' => $shoppingCard->discount_selectedvalue ?? 0,
             'prize_amount' => $shoppingCard->discount_firstvalue ?? 0,
             'voucher_code' => $voucherCode,
@@ -353,7 +353,7 @@ class AccountController extends Controller
                 ->where('id', $advertisementId)
                 ->first();
 
-            //dd($advertisement);
+            //dd($advertisementId, $user_id);
 
             $is_competitionWinners = CompetitionWinners::where('advertisement_id', $request->advertisementid)->where('customer_id', $user_id)->count();
 

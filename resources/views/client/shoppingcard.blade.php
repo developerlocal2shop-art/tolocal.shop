@@ -136,6 +136,36 @@ $bannerImage = isset($data['bannerImage'][0]->name_thumbnail)?$data['bannerImage
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="shoppingcard-login-modal" tabindex="-1" role="dialog" aria-labelledby="shoppingcard-login-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="shoppingcard-login-title">Log in to view this offer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="shoppingcard-login-form" method="post" action="{{ route('LoginPost') }}">
+                    @csrf
+                    <input type="hidden" name="fromCheckoutPage" value="0">
+                    <input type="hidden" name="redirect_to" value="{{ route('account.shopping.valid.offer', ['company' => encrypt($data['offerData']->directory_link ?? 0)], false) }}">
+                    <div class="form-group">
+                        <label for="shoppingcard-login-email">{{ __('message.email_id_text') }}</label>
+                        <input id="shoppingcard-login-email" class="form-control" type="email" name="email" required autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="shoppingcard-login-password">{{ __('message.password_text') }}</label>
+                        <input id="shoppingcard-login-password" class="form-control" type="password" name="password" required autocomplete="current-password">
+                    </div>
+                    <div id="shoppingcard-login-error" class="alert alert-danger" role="alert" aria-live="polite" hidden></div>
+                    <button class="btn btn-primary" type="submit">{{ __('message.login_title') }}</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Main page -->
 <main>
     <div class="common_banner">
@@ -525,14 +555,51 @@ $bannerImage = isset($data['bannerImage'][0]->name_thumbnail)?$data['bannerImage
 
         function handleShoppingcardOffer(button) {
             @if(!auth()->check())
-                toastr.warning('Please login as user then you can use offer');
-                setTimeout(function() {
-                    window.location.href = '{{ url('login') }}';
-                }, 1500);
+                $('#shoppingcard-login-modal').modal('show');
                 return false;
             @endif
             return true;
         }
+
+        document.getElementById('shoppingcard-login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var form = event.currentTarget;
+            var errorElement = document.getElementById('shoppingcard-login-error');
+            errorElement.hidden = true;
+            errorElement.textContent = '';
+
+            fetch(form.action, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: new FormData(form),
+                credentials: 'same-origin'
+            }).then(function(response) {
+                return response.json().then(function(data) {
+                    return { response: response, data: data };
+                });
+            }).then(function(result) {
+                if (result.response.ok && result.data.redirect) {
+                    window.location.href = result.data.redirect;
+                    return;
+                }
+
+                var messages = [];
+                if (result.data.errors) {
+                    Object.keys(result.data.errors).forEach(function(key) {
+                        messages = messages.concat(result.data.errors[key]);
+                    });
+                }
+                errorElement.textContent = messages.join(' ') || 'Unable to log in. Please check your details and try again.';
+                errorElement.hidden = false;
+            }).catch(function() {
+                errorElement.textContent = 'Unable to log in right now. Please try again.';
+                errorElement.hidden = false;
+            });
+        });
     </script>
     <!-- This map-category.php file has all the fucntions for showing the map, marker, map info and all the popup markups -->
     <script type="text/javascript">

@@ -218,7 +218,7 @@
     function reloadAfterConsent() {
         setTimeout(function () {
             window.location.reload();
-        }, 2000);
+        }, 5000);
     }
 
     function savePreferences(nextConsent) {

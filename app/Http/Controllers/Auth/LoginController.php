@@ -225,6 +225,19 @@ class LoginController extends Controller
                             ]);
                         }
 
+                        $redirectTo = $request->input('redirect_to');
+                        $shoppingOfferPath = route('account.shopping.valid.offer', [], false);
+                        if (is_string($redirectTo) && (
+                            $redirectTo === $shoppingOfferPath ||
+                            strpos($redirectTo, $shoppingOfferPath . '?') === 0
+                        )) {
+                            if ($request->expectsJson()) {
+                                return response()->json(['redirect' => $redirectTo]);
+                            }
+
+                            return redirect()->to($redirectTo);
+                        }
+
                         if($request->fromCheckoutPage==1){
                             return redirect(route('checkout'));
                         }else{

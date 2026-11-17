@@ -86,6 +86,8 @@ class Pages extends Controller
         $longitude = session('logitude');
         $city_name = $request->get('city');
 
+        //dd($city_name, $latitude, $longitude, $defaultLatitude, $defaultLongitude);
+
         if ($city_name && ($city_latlong = $this->getLatLongByCity($city_name))) {
             $latitude  = $city_latlong['latitude'];
             $longitude = $city_latlong['longitude'];
@@ -442,20 +444,35 @@ class Pages extends Controller
 
     public function setCitySession(Request $request)
     {
+        //dd($request->all());
         $city_name = $request->input('city_name');
         $getCountryByCityName = Helper::getCountryByCityName($city_name);
 
-        $latitude = $request->session()->get('latitude_city')
-            ?? $request->session()->get('latitude')
-            ?? '57.107118';
-        $longitude = $request->session()->get('logitude_city')
-            ?? $request->session()->get('logitude')
-            ?? '12.252091';
+        $latitude = $request->input('latitude');
+        $longitude = $request->input('longitude');
+        $hasValidCoordinates = is_numeric($latitude)
+            && is_numeric($longitude)
+            && $latitude >= -90
+            && $latitude <= 90
+            && $longitude >= -180
+            && $longitude <= 180;
 
-        $getLatLog = $this->get_lat_long($city_name);
-        if (isset($getLatLog[0], $getLatLog[1])) {
-            $latitude       =       $getLatLog[0];
-            $longitude      =       $getLatLog[1];
+        if ($hasValidCoordinates) {
+            $latitude = (float) $latitude;
+            $longitude = (float) $longitude;
+        } else {
+            $latitude = $request->session()->get('latitude_city')
+                ?? $request->session()->get('latitude')
+                ?? '57.107118';
+            $longitude = $request->session()->get('logitude_city')
+                ?? $request->session()->get('logitude')
+                ?? '12.252091';
+
+            $getLatLog = $this->get_lat_long($city_name);
+            if (isset($getLatLog[0], $getLatLog[1])) {
+                $latitude = $getLatLog[0];
+                $longitude = $getLatLog[1];
+            }
         }
         $request->session()->forget('latitude_city');
         $request->session()->forget('logitude_city');
@@ -535,6 +552,7 @@ class Pages extends Controller
 
     function getLatLongByCity($city)
     {
+        //dd($city);
         try {
             $city = urlencode($city);
             $apiKey = env('GOOGLE_MAP_API_KEY');

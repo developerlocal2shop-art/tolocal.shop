@@ -6425,11 +6425,48 @@ div#company_imp_tags_div span a {
     box-shadow: 0 5px 16px rgba(29, 55, 87, .08);
 }
 
+.listing-claim-card > summary {
+    list-style: none;
+}
+
+.listing-claim-card > summary::-webkit-details-marker {
+    display: none;
+}
+
 .listing-claim-card__heading {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 0;
+    cursor: pointer;
+}
+
+.listing-claim-card__title {
+    flex: 1;
+    color: #263b53;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.25;
+}
+
+.listing-claim-card__toggle {
+    flex: 0 0 auto;
+    color: #1d5e9d;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.listing-claim-card__toggle--less,
+.listing-claim-card[open] .listing-claim-card__toggle--more {
+    display: none;
+}
+
+.listing-claim-card[open] .listing-claim-card__toggle--less {
+    display: inline;
+}
+
+.listing-claim-card__content {
+    padding-top: 10px;
 }
 
 .listing-claim-card__icon {
@@ -6443,14 +6480,6 @@ div#company_imp_tags_div span a {
     background: #e8f4f3;
     color: #138a8a;
     font-size: 16px;
-}
-
-.listing-claim-card__heading h3 {
-    margin: 0;
-    color: #263b53;
-    font-size: 14px;
-    font-weight: 600;
-    line-height: 1.25;
 }
 
 .listing-claim-card p {

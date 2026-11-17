@@ -3,6 +3,58 @@
     background-color: #fff;
     border-bottom: 1px solid #ededed;
 }
+
+.hero_single .hero-search-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 51px;
+    padding: 20px 5px;
+    border: 0;
+    border-radius: 0 4px 4px 0;
+    /* background: linear-gradient(135deg, #ff6a00, #f4511e); */
+    background: #fff;
+    color: #fff;
+    font-size: 19px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+.col-lg-2.select_city_home.notranslate {
+    border-right: 1px solid #ccc;
+    padding-right: 5px;
+}
+ .hero_single .hero-search-button:hover {
+    /* background: linear-gradient(135deg, #ed5b00, #d84315); */
+    /* box-shadow: 0 4px 12px rgba(212, 67, 21, 0.28); */
+    color: linear-gradient(135deg, #ed5b00, #d84315);
+ }
+ button#dir_btn i {
+    color: #d84315;
+    font-size: 23px;
+    margin: 0px 70px;
+}
+ .hero_single .hero-search-button:focus-visible {
+    outline: 3px solid rgba(255, 106, 0, 0.4);
+    outline-offset: 2px;
+ }
+ @media (max-width: 767.98px) {
+    .hero_single .hero-search-button {
+        width: 30%;
+        min-height: 34px;
+        margin-left: auto;
+        border-radius: 4px;
+    }
+    button#dir_btn i {
+        color: #d84315;
+        font-size: 23px;
+        margin: 1px 135px 7px 18px;
+    }
+    .col-lg-2.select_city_home.notranslate {
+        border-right: none;
+        padding-right: 0px;
+    }
+ }
 </style>
 <div id="page">
 
@@ -71,7 +123,9 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-2 notranslate">
-                                    <input id="dir_btn" type="submit" value='{{__("message.header_search_text_search_btn")}}'>
+                                    <button id="dir_btn" class="hero-search-button" type="submit" aria-label='{{__("message.header_search_text_search_btn")}}' title='{{__("message.header_search_text_search_btn")}}'>
+                                        <i class="fa fa-search" aria-hidden="true"></i>
+                                    </button>
                                 </div>
                             </div>
                         </form>

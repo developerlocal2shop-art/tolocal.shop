@@ -222,7 +222,11 @@ class Listing extends Controller
             }
         }
 
-        $city_name = $request->input('city_name');
+        $city_name = $request->filled('city_name')
+            ? $request->input('city_name')
+            : (session('url_city_name') ?: session('filter_city'));
+
+        //dd($city_name, session('url_city_name'), session('filter_city'));
 
         $url_city_name = session()->get('url_city_name');
         if ($url_city_name) {
@@ -269,9 +273,10 @@ class Listing extends Controller
             }
         }
 
-
         $latitude        =       "'$latitude1'";
         $longitude       =       "'$longitude1'";
+
+        //dd($latitude, $longitude, $city_name, session()->get('url_latitude') );
 
         $substringToRemove = "'";
         $latitude_session = $this->removeSubstring($latitude, $substringToRemove);

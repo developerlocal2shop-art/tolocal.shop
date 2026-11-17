@@ -2235,19 +2235,23 @@
                     </div>
 
                     @if($data['mainDirectoryDetails']->claim_contact == 'yes')
-                        <section class="listing-claim-card" aria-labelledby="listing-claim-title">
-                            <div class="listing-claim-card__heading">
+                        <details class="listing-claim-card" aria-labelledby="listing-claim-title">
+                            <summary class="listing-claim-card__heading">
                                 <span class="listing-claim-card__icon" aria-hidden="true"><i class="fa fa-check-circle"></i></span>
-                                <h3 id="listing-claim-title">Incorrect or incomplete information?</h3>
+                                <span class="listing-claim-card__title" id="listing-claim-title">Incorrect or incomplete information?</span>
+                                <span class="listing-claim-card__toggle listing-claim-card__toggle--more">See more</span>
+                                <span class="listing-claim-card__toggle listing-claim-card__toggle--less">See less</span>
+                            </summary>
+                            <div class="listing-claim-card__content">
+                                <p>Contact us at info@tolocal.shop Take control of this page if you run the business.</p>
+                                <p> Provide your email address, mobile number, and organization registration number via info@tolocal.shop </p>
+                                <p> We will help you set up an advantageous membership tailored to your needs. </p>
+                                <a class="listing-claim-card__button" href="mailto:info@tolocal.shop">
+                                    <i class="fa fa-envelope" aria-hidden="true"></i>
+                                    info@tolocal.shop
+                                </a>
                             </div>
-                            <p>Contact us at info@tolocal.shop Take control of this page if you run the business.</p>
-                            <p> Provide your email address, mobile number, and organization registration number via info@tolocal.shop </p>
-                            <p> We will help you set up an advantageous membership tailored to your needs. </p>
-                            <a class="listing-claim-card__button" href="mailto:info@tolocal.shop">
-                                <i class="fa fa-envelope" aria-hidden="true"></i>
-                                info@tolocal.shop
-                            </a>
-                        </section>
+                        </details>
                     @endif
 
                 <?php

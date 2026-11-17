@@ -387,7 +387,7 @@ if(session()->has('currency_code')){
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="replyModalLabel">Reply to shoppingcard offer</h5>
+                <h5 class="modal-title" id="replyModalLabel">Utilize shoppingcard offer</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -401,7 +401,7 @@ if(session()->has('currency_code')){
                         <input type="hidden" id="reply_for" name="reply_for" >
                     </div>
                     <div class="form-group">
-                        <label for="reply_to">Reply To</label>
+                        <label for="reply_to">To</label>
                         <input type="text" id="reply_to" name="reply_to" class="form-control reply_to" readonly>
                     </div>
                     <div class="form-group">
@@ -571,7 +571,7 @@ if(session()->has('currency_code')){
                                                             data-vendor-id="{{ $row->directory_link }}"
                                                             data-reply-for="{{ $row->title }}"
                                                             aria-label="Reply for shoppingcard offer {{ $row->title }}">
-                                                            Reply
+                                                            Utilize
                                                         </button>
                                                         @php } @endphp
                                                     </td>
@@ -627,7 +627,7 @@ $(document).ready(function() {
         $('#offer_id').val(offerId);
         $('#vendor_id').val(vendorId);
 
-        $('#replyModalLabel').html('<b>Reply for : </b> ' + replyFor);
+        $('#replyModalLabel').html('<b>Utilize for : </b> ' + replyFor);
         $('#reply_description').val('');
         $('#replyModal').modal('show');
     });

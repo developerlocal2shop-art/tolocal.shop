@@ -1002,26 +1002,60 @@ const startRecordingButton = document.getElementById('start-recording');
                     var latlng = new google.maps.LatLng(positionInfo1, positionInfo2);
 
                     geocoder.geocode({ location: latlng }, function (results, status) {
-                        var session_city = "{{ session()->get('filter_city') }}";
+                        var sessionCity = @json(session()->get('filter_city'));
 
-                        if (!session_city || session_city === 'Not found') {
-                            if (status === google.maps.GeocoderStatus.OK && results) {
-                                // Get city from results
-                                let city;
-                                for (let i = 0; i <= 2; i++) {
-                                    if (results[i]?.plus_code) {
-                                        const cityDetails = results[i].plus_code.compound_code.split(",");
-                                        city = cityDetails[0]?.split(" ")[1];
+                        if (sessionCity && sessionCity !== 'Not found') {
+                            $(".select_city_home #select2-city_name-container").text(sessionCity);
+                            return;
+                        }
+
+                        if (status !== google.maps.GeocoderStatus.OK || !results) {
+                            return;
+                        }
+
+                        var city = '';
+                        var cityTypes = [
+                            'locality',
+                            'postal_town',
+                            'administrative_area_level_3',
+                            'administrative_area_level_2'
+                        ];
+
+                        for (var i = 0; i < cityTypes.length && !city; i++) {
+                            for (var j = 0; j < results.length && !city; j++) {
+                                var components = results[j].address_components || [];
+                                for (var k = 0; k < components.length; k++) {
+                                    if (components[k].types.indexOf(cityTypes[i]) !== -1) {
+                                        city = components[k].long_name;
                                         break;
                                     }
                                 }
-                                if (city) {
-                                    $(".select_city_home #select2-city_name-container").text(city);
-                                }
                             }
-                        } else {
-                            $(".select_city_home #select2-city_name-container").text(session_city);
                         }
+
+                        if (!city) {
+                            return;
+                        }
+
+                        $(".select_city_home #select2-city_name-container").text(city);
+
+                        $.ajax({
+                            url: "{{ url('/setCityinSession') }}",
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                city_name: city,
+                                latitude: positionInfo1,
+                                longitude: positionInfo2,
+                                _token: '{{ csrf_token() }}'
+                            },
+                            success: function () {
+                                window.location.reload();
+                            },
+                            error: function (xhr, status, error) {
+                                console.error("Unable to update current city:", error);
+                            }
+                        });
                     });
 
                     function callAjax(lati, long, reloadForLocation) {

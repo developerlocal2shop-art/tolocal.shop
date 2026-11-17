@@ -534,7 +534,7 @@ if(session()->has('currency_code')){
                                                             data-question="{{ $que->question_text }}"
                                                             data-answer="{{ optional($answer)->answer }}"
                                                             aria-label="Reply for question {{ $questionNumber }}">
-                                                            Reply
+                                                            Utilize
                                                         </button>
                                                     @endif
                                                 </div>
@@ -615,7 +615,7 @@ if(session()->has('currency_code')){
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="replyModalLabel">Reply to Question</h5>
+                <h5 class="modal-title" id="replyModalLabel">Utilize Question</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -630,7 +630,7 @@ if(session()->has('currency_code')){
                         <input type="hidden" id="discount_amount" name="discount_amount" >
                     </div>
                     <div class="form-group">
-                        <label for="reply_to">Reply To</label>
+                        <label for="reply_to">Utilize To</label>
                         <input type="text" id="reply_to" name="reply_to" class="form-control" readonly>
                     </div>
 
@@ -642,7 +642,7 @@ if(session()->has('currency_code')){
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Send Reply</button>
+                <button type="button" class="btn btn-primary">Send Utilize Request</button>
             </div>
         </div>
     </div>
